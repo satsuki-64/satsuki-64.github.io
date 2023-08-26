@@ -1,6 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Lecture 11：操作系统上的进程</title>
+    <url>/2023/08/5b1cbd3ab6e9.html</url>
+    <content><![CDATA[<blockquote>
+<pre><code>1. 操作系统启动后做了什么？
+2. 操作系统如何管理进程？
+</code></pre>
+</blockquote>
+<span id="more"></span>
+<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
+<p><strong>Linux进入之后加载第一个程序的代码：</strong><br>![[Pasted image 20230223142644.png]]</p>
+<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230223142425.png]]</p>
+<h3 id="11-1-2-最小Linux实现"><a href="#11-1-2-最小Linux实现" class="headerlink" title="11.1.2 最小Linux实现"></a>11.1.2 最小Linux实现</h3><p>最小Linux的树状结构：<br>![[Pasted image 20230223142955.png]]<br>initramfs打包选项：<br>![[Pasted image 20230223143107.png]]<br>Linux 运行：</p>
+<ol>
+<li>无图形界面</li>
+<li>128m内存</li>
+<li>linux内核</li>
+<li>将initramfs<br>![[Pasted image 20230223143146.png]]<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
+</ol>
+<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
+<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
+<ol>
+<li>当中有更多挂载的磁盘</li>
+<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
+</ol>
+<p><strong>系统调用的三大类型</strong></p>
+<ol>
+<li>进程管理</li>
+<li>文件管理</li>
+<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
+</ol>
+<hr>
+<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
+<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
+<ul>
+<li>完全一致的进程<ul>
+<li>两个进程在内存上一模一样，寄存器一样</li>
+<li>只有返回的值不一样：<ul>
+<li>每一个进程都有一个唯一的编号</li>
+<li>除了编号之外一切相同</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
+<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
+<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
+<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
+<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
+<ul>
+<li>line buffer<ul>
+<li>直接把每一行buffer输出出来</li>
+</ul>
+</li>
+<li>full buffer<ul>
+<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
+</ul>
+</li>
+</ul>
+<p>fork的问题：多个线程下，fork的行为问题</p>
+<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
+<p>使用代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
+<ul>
+<li>环境变量<ul>
+<li>PATH<ul>
+<li>程序执行路径的环境变量</li>
+</ul>
+</li>
+<li>PWD<ul>
+<li>当前路径</li>
+</ul>
+</li>
+<li>HOME<ul>
+<li>HOME目录</li>
+</ul>
+</li>
+<li>DISPLAY<ul>
+<li>图形输出</li>
+</ul>
+</li>
+<li>PS1<ul>
+<li>shell提示符</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
+<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
+<hr>
+<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
+<ul>
+<li>问题<ul>
+<li>多线程的程序，exit的行为如何？</li>
+<li>是所有线程结束还是只结束调用的线程？</li>
+</ul>
+</li>
+<li>多种exit<ul>
+<li>stdlib当中的exit</li>
+<li>glibc当中的_exit(0)</li>
+<li>syscall(SES_exit,0)</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>进程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CLR执行模型</title>
     <url>/2023/08/afbde0776d8b.html</url>
     <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
@@ -162,130 +286,6 @@
       <tags>
         <tag>操作系统</tag>
         <tag>状态机</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 11：操作系统上的进程</title>
-    <url>/2023/08/5b1cbd3ab6e9.html</url>
-    <content><![CDATA[<blockquote>
-<pre><code>1. 操作系统启动后做了什么？
-2. 操作系统如何管理进程？
-</code></pre>
-</blockquote>
-<span id="more"></span>
-<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
-<p><strong>Linux进入之后加载第一个程序的代码：</strong><br>![[Pasted image 20230223142644.png]]</p>
-<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230223142425.png]]</p>
-<h3 id="11-1-2-最小Linux实现"><a href="#11-1-2-最小Linux实现" class="headerlink" title="11.1.2 最小Linux实现"></a>11.1.2 最小Linux实现</h3><p>最小Linux的树状结构：<br>![[Pasted image 20230223142955.png]]<br>initramfs打包选项：<br>![[Pasted image 20230223143107.png]]<br>Linux 运行：</p>
-<ol>
-<li>无图形界面</li>
-<li>128m内存</li>
-<li>linux内核</li>
-<li>将initramfs<br>![[Pasted image 20230223143146.png]]<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
-</ol>
-<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
-<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
-<ol>
-<li>当中有更多挂载的磁盘</li>
-<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
-</ol>
-<p><strong>系统调用的三大类型</strong></p>
-<ol>
-<li>进程管理</li>
-<li>文件管理</li>
-<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
-</ol>
-<hr>
-<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
-<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
-<ul>
-<li>完全一致的进程<ul>
-<li>两个进程在内存上一模一样，寄存器一样</li>
-<li>只有返回的值不一样：<ul>
-<li>每一个进程都有一个唯一的编号</li>
-<li>除了编号之外一切相同</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
-<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
-<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
-<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
-<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
-<ul>
-<li>line buffer<ul>
-<li>直接把每一行buffer输出出来</li>
-</ul>
-</li>
-<li>full buffer<ul>
-<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
-</ul>
-</li>
-</ul>
-<p>fork的问题：多个线程下，fork的行为问题</p>
-<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
-<p>使用代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
-<ul>
-<li>环境变量<ul>
-<li>PATH<ul>
-<li>程序执行路径的环境变量</li>
-</ul>
-</li>
-<li>PWD<ul>
-<li>当前路径</li>
-</ul>
-</li>
-<li>HOME<ul>
-<li>HOME目录</li>
-</ul>
-</li>
-<li>DISPLAY<ul>
-<li>图形输出</li>
-</ul>
-</li>
-<li>PS1<ul>
-<li>shell提示符</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
-<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
-<hr>
-<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
-<ul>
-<li>问题<ul>
-<li>多线程的程序，exit的行为如何？</li>
-<li>是所有线程结束还是只结束调用的线程？</li>
-</ul>
-</li>
-<li>多种exit<ul>
-<li>stdlib当中的exit</li>
-<li>glibc当中的_exit(0)</li>
-<li>syscall(SES_exit,0)</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>进程</tag>
       </tags>
   </entry>
 </search>
