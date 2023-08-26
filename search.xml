@@ -1,66 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C#类型与成员基础</title>
-    <url>/2023/08/467da2d5b317.html</url>
-    <content><![CDATA[<p><strong>元数据和类型成员</strong><br>元数据：</p>
-<ul>
-<li>元数据是所有语言都生成和使用的公共信息，正式由于有了元数据，才可以实现不同语言所编写的代码之间的无缝互相交互；</li>
-<li>无论什么编程语言，CLR编译器都需要能够处理源代码，并为每种成员生成元数据和IL代码；</li>
-<li>CLR的保证：所有编程语言生成的元数据格式一致；利用这些元数据，决定了类型在运行时的行为，实现了编程语言类型与对象的无缝集成；CLR成员的方向<span id="more"></span>
-<strong>类型中各类成员</strong><br>常量：</li>
-<li>常量指的是数据值恒定不变的符号，这种符号是的代码更易阅读和维护；</li>
-<li>常量总是与类型关联，不与类型的实例关联；</li>
-<li>常量逻辑上总是静态成员；<br>字段：</li>
-<li>字段表示只读或者可读可写数据值；</li>
-<li>字段可以是静态的，静态字段被认为是类型的一部分<br>实例构造器：</li>
-<li>实例构造器是将新对象的<strong>实例字段</strong>初始化为良好初始状态的特殊方法；<br>类型构造器：</li>
-<li>类型构造器是将类型的静态字段初始化为良好状态的特殊方法；<br>方法：</li>
-<li>方法是更改或查询类型或者对象状态的函数；<br>操作符重载：</li>
-<li>操作符重载实际上是一种方法；</li>
-<li>操作符重载不是CLS（公共语言规范）的一部分，并不是所有语言都支持操作符重载<br>属性：</li>
-<li>属性允许使用简单的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏；<br>事件：</li>
-<li>事件包含两个方法，允许静态或者实例方法登记或者注销对于该事件的关注；</li>
-<li>实例事件：允许对象向一个或多个静态或者实例方法发送通知；</li>
-<li>静态事件：允许类型向一个或多个静态或者实例方法发送通知；</li>
-</ul>
-<p>可以使用ILDasm.exe来访问元数据；</p>
-<h2 id="6-2-类型可见性"><a href="#6-2-类型可见性" class="headerlink" title="6.2 类型可见性"></a>6.2 类型可见性</h2><p><strong>类型可见性基本概念</strong><br>定义文件访问范围：</p>
-<ul>
-<li>public：被public修饰的类型，表示不仅对定义程序集中的所有代码可见，还对其他程序集中的代码可见；</li>
-<li>internal：被internal修饰的类型，仅对定义程序集中的所有代码可见，对其他程序集中的代码不可见；</li>
-<li>不显式指明可见性时，编译器默认为其指定为internal；</li>
-</ul>
-<p><strong>友元程序集</strong><br>什么是友元程序集：</p>
-<ul>
-<li>当不希望将自己的程序集当中的代码全部设置为public，但有又和其他程序集的团队进行合作开发的需求，可以将其设置为友元程序集；<br>设置方法：</li>
-<li>生成程序集时，用System.Runtime.ComplierServices当中的InternalsVisbleTo特性表明它认为是友元的程序集<figure class="highlight c#"><table><tr><td class="code"><pre><span class="line">[<span class="meta">assembly.InternalsVisibleTo(<span class="string">&quot;目标程序集名称&quot;</span>,PublicKey = ...)</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SomeClass</span>&#123;&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="6-3-成员的可访问性"><a href="#6-3-成员的可访问性" class="headerlink" title="6.3 成员的可访问性"></a>6.3 成员的可访问性</h2><p><strong>成员可访问性</strong><br>![[Pasted image 20230331180319.png]]</p>
-<p><strong>引用合法与可访问性</strong><br>在运行时将IL代码编译成本机CPU代码时，JIT编译器也会确保字段和方法的引用合法；通过对IL代码进行验证，可确保被引用成员的可访问性在运行时能够得到正确兑现；</p>
-<h2 id="6-5-分部类"><a href="#6-5-分部类" class="headerlink" title="6.5 分部类"></a>6.5 分部类</h2><p><strong>分部类介绍</strong><br>简介：</p>
-<ul>
-<li>partial关键字告诉C#编译器：类、结构或者接口的定义源代码可能分散到一个或多个源代码文件当中；<br>使用分部类原因：</li>
-<li>源代码控制：用于方便程序员将它从源代码控制系统中签出以进行修改，没有其他程序员可以同时访问修改这个类型，减少代码控制时的冲突；</li>
-<li>将一个文件中的类或结构分成不同逻辑单元：有时会创建一个类型来包含多个功能，此时可以使用分部类来在一个源代码文件当中，分开编写一个类的功能，从而方便进行模块化管理；<br>分部类与CLR：</li>
-<li>CLR对分部类一无所知，分部类完全由C#编译器实现；</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
     <title>CLR执行模型</title>
-    <url>/2023/08/6fd9f2a72a4f.html</url>
-    <content><![CDATA[<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+    <url>/2023/08/afbde0776d8b.html</url>
+    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
 <ol>
 <li>内存管理</li>
 <li>程序集加载</li>
 <li>安全性</li>
 <li>异常处理</li>
-<li>线程同步</li>
+<li>线程同步<span id="more"></span></li>
 </ol>
-<span id="more"></span>
-
-<p>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</p>
+<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
+</ol>
 <p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
 <p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
 <ol>
@@ -93,85 +51,241 @@
 <p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
 ]]></content>
       <categories>
-        <category>C#</category>
+        <category>CSharp</category>
       </categories>
       <tags>
         <tag>C#</tag>
+        <tag>CLR</tag>
         <tag>编译原理</tag>
       </tags>
   </entry>
   <entry>
-    <title>TestNew</title>
-    <url>/2023/08/9ffe8e4f0e36.html</url>
-    <content><![CDATA[<h2 id="Part-One"><a href="#Part-One" class="headerlink" title="Part One"></a>Part One</h2><p>你好<br>Hello，World</p>
+    <title>Lecture 10：状态机模型的应用</title>
+    <url>/2023/08/f8b821c31d0a.html</url>
+    <content><![CDATA[<ul>
+<li>状态机的确定性<ul>
+<li>概念<ul>
+<li>每一个状态都有一个确定的下一个状态</li>
+<li>不确定的状态机，状态之后会有不同的分支状态</li>
+</ul>
+</li>
+<li>宏观物理世界<ul>
+<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
+<li>例子：Game Of Life</li>
+</ul>
+</li>
+<li>微观物理世界<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="10-1-状态机模型的物理世界应用"><a href="#10-1-状态机模型的物理世界应用" class="headerlink" title="10.1 状态机模型的物理世界应用"></a>10.1 状态机模型的物理世界应用</h2><h3 id="10-1-1-世界状态的确定性分析"><a href="#10-1-1-世界状态的确定性分析" class="headerlink" title="10.1.1 世界状态的确定性分析"></a>10.1.1 世界状态的确定性分析</h3><ul>
+<li>状态机的确定性<ul>
+<li>概念<ul>
+<li>每一个状态都有一个确定的下一个状态</li>
+<li>不确定的状态机，状态之后会有不同的分支状态</li>
+</ul>
+</li>
+<li>宏观物理世界<ul>
+<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
+<li>例子：Game Of Life</li>
+</ul>
+</li>
+<li>微观物理世界</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-1-2-状态机模型的应用"><a href="#10-1-2-状态机模型的应用" class="headerlink" title="10.1.2 状态机模型的应用"></a>10.1.2 状态机模型的应用</h3><h2 id="在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原"><a href="#在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原" class="headerlink" title="在决定性的数学公理体系下，状态机模型的使用1. 数学严谨的体系下，解释平行宇宙2. 细胞的状态分析与还原"></a>在决定性的数学公理体系下，状态机模型的使用<br>1. 数学严谨的体系下，解释平行宇宙<br>2. 细胞的状态分析与还原</h2><h2 id="10-2-状态机模型下的编译器和现代CPU"><a href="#10-2-状态机模型下的编译器和现代CPU" class="headerlink" title="10.2 状态机模型下的编译器和现代CPU"></a>10.2 状态机模型下的编译器和现代CPU</h2><h3 id="10-2-1-编译器模型"><a href="#10-2-1-编译器模型" class="headerlink" title="10.2.1 编译器模型"></a>10.2.1 编译器模型</h3><h2 id="编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay"><a href="#编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay" class="headerlink" title="编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）### 10.2.2 编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多### 10.2.3 查看状态机执行程序执行 &#x3D; 状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。+ 查看所有的状态机行为    + 方法：使用GDB进行调试        + 单步调试        + 反汇编调试    + 通过调试器展示的状态的一部分        + 寄存器        + 内存        + 变量状态机视角下，Debug可进行的行为：1. 复制当前状态机的状态2. 回溯状态机的上一个状态3. 进入状态机的下一个状态4. 记录一个状态机的完整执行+ 状态机的状态回溯    + 概念：        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走        + 每次状态切换时更改的内容有效    + 例子：        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现+ 记录状态机的完整执行    + 决定性程序：        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来    + 拥有系统调用、Random的程序：        + 待记录内容：        + 1. 指令数        + 2. 结果        + 3. n份以上内容    + 可使用此功能        + 指令：            + rr record        + 想记录下函数的全部行为：            + 需要知道从上一条指令到下一条指令有多少决定性的指 令            + 程序的io            + 程序的中断        + 程序可以完整的记录程序的执行            + 例子：老游戏的replay"></a>编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）<br>在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）<br>### 10.2.2 编译器优化的正确性<br><strong>核心：源代码状态机和二进制状态机的可观测行为的一致性</strong><br>例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多<br>### 10.2.3 查看状态机执行<br>程序执行 &#x3D; 状态机执行<br>例子：通过strace观测系统调用的行为以及所花费的时间。<br>+ 查看所有的状态机行为<br>    + 方法：使用GDB进行调试<br>        + 单步调试<br>        + 反汇编调试<br>    + 通过调试器展示的状态的一部分<br>        + 寄存器<br>        + 内存<br>        + 变量<br>状态机视角下，Debug可进行的行为：<br>1. 复制当前状态机的状态<br>2. 回溯状态机的上一个状态<br>3. 进入状态机的下一个状态<br>4. 记录一个状态机的完整执行<br>+ 状态机的状态回溯<br>    + 概念：<br>        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走<br>        + 每次状态切换时更改的内容有效<br>    + 例子：<br>        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现<br>+ 记录状态机的完整执行<br>    + 决定性程序：<br>        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来<br>    + 拥有系统调用、Random的程序：<br>        + 待记录内容：<br>        + 1. 指令数<br>        + 2. 结果<br>        + 3. n份以上内容<br>    + 可使用此功能<br>        + 指令：<br>            + rr record<br>        + 想记录下函数的全部行为：<br>            + 需要知道从上一条指令到下一条指令有多少决定性的指 令<br>            + 程序的io<br>            + 程序的中断<br>        + 程序可以完整的记录程序的执行<br>            + 例子：老游戏的replay</h2><h2 id="10-3-状态机与性能分析"><a href="#10-3-状态机与性能分析" class="headerlink" title="10.3 状态机与性能分析"></a>10.3 状态机与性能分析</h2><h3 id="10-3-1-采样状态机的执行"><a href="#10-3-1-采样状态机的执行" class="headerlink" title="10.3.1 采样状态机的执行"></a>10.3.1 采样状态机的执行</h3><h2 id="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：-Pasted-image-20230222163118-png-将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-Pasted-image-20230222163358-png-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解"><a href="#每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：-Pasted-image-20230222163118-png-将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-Pasted-image-20230222163358-png-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解" class="headerlink" title="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature optimization is the root of all exil.问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要+ 性能优化的时机    + 分析程序在时间和空间上的调用    + 时间    + 空间### 10.3.2 Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断+ 中断    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出#### 10.3.2.1 基于gcc进行性能摘要输出当前程序性能摘要：结果：![[Pasted image 20230222163118.png]]将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：![[Pasted image 20230222163358.png]]### 10.3.3 实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上+ 工业界面到的性能优化    + 实际情况：木桶效应    + 每个部分都已经优化到了局部最优解"></a>每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。<br><em>性能分析的核心原则：Premature optimization is the root of all exil.</em><br>问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要<br>+ 性能优化的时机<br>    + 分析程序在时间和空间上的调用<br>    + 时间<br>    + 空间<br>### 10.3.2 Profiler和性能摘要<br><strong>单点调试的问题：</strong><br>当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。<br>实现此步骤的方法是：中断<br>+ 中断<br>    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出<br>#### 10.3.2.1 基于gcc进行性能摘要<br>输出当前程序性能摘要：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf stat ./a.out </span><br></pre></td></tr></table></figure><br>结果：<br>![[Pasted image 20230222163118.png]]<br>将整个程序的Profiler记录，并打开报告：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf record ./a.out</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure><br>获得的每一条指令的时间：<br>![[Pasted image 20230222163358.png]]<br>### 10.3.3 实际中的性能优化<br>百分之八十的时间都消耗在了百分之二十的代码上<br>+ 工业界面到的性能优化<br>    + 实际情况：木桶效应<br>    + 每个部分都已经优化到了局部最优解</h2><h2 id="10-4-状态机与程序验证"><a href="#10-4-状态机与程序验证" class="headerlink" title="10.4 状态机与程序验证"></a>10.4 状态机与程序验证</h2><h3 id="10-4-1-现在的Model-Check工具"><a href="#10-4-1-现在的Model-Check工具" class="headerlink" title="10.4.1 现在的Model Check工具"></a>10.4.1 现在的Model Check工具</h3><p>概念：状态机模型可以用于证明程序的正确性。使用bfs便利所有的状态，再使用execute给定一个并发程序的调度。<br>例子：for程序的并发Bug<br>**学术界的Model Check工具</p>
+<ol>
+<li>NASA的Java PathFinder：把Model Check扩充到了所有的Java代码</li>
+<li>Spin：只可以使用其自己定义的语言</li>
+<li>TLA Plus：用于亚马逊的并发式程序的正确性验证</li>
+</ol>
+<ul>
+<li>现在的Model Check在分布式系统上的应用<ul>
+<li>并发系统：<ul>
+<li>分布式系统也是一种并发系统，但是其问题更大</li>
+<li>并发系统假设其所有的节点都能够正常工作</li>
+</ul>
+</li>
+<li>分布式系统<ul>
+<li>在分布式系统中，必须假设所有的节点都可能出错（丢失）</li>
+<li>在节点丢失的情况下还能进行tutorial</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-4-2-Model-Check可以做什么"><a href="#10-4-2-Model-Check可以做什么" class="headerlink" title="10.4.2 Model Check可以做什么"></a>10.4.2 Model Check可以做什么</h3><p>当探索不确定性程序的执行时，Model Check可以检查任何程序的执行；<br>Model Check可以检测当前不确定程序的任何一种可能性，并检查出Bug。</p>
+<ul>
+<li>不确定<ul>
+<li>输入不确定</li>
+<li>随机函数不确定<br>面对不确定性程序，可以检测程序的所有可能性空间<br><strong>问题：程序的状态空间太大</strong></li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>如何将这个状态的可能性减少？</li>
+<li>如何将状态合并？</li>
+<li>如何将状态往后延迟？</li>
+</ol>
+<ul>
+<li>状态坍缩<ul>
+<li>将大量可能性的状态转换为分支，延迟状态的展开，将状态合并，直到发现Bug再将其反向展开</li>
+<li>分支成立：<ul>
+<li>再检测有没有分支<ul>
+<li>分支成立：<ul>
+<li>在检测有没有分支：<ul>
+<li>分支成立：<ul>
+<li>当前红色的状态是否可达？</li>
+<li>用约束求解器来计算</li>
+<li>计算出当前程序的状态，此状态为Bug</li>
+</ul>
+</li>
+<li>分支不成立：</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分支不成立：</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分支不成立：</li>
+</ul>
+</li>
+</ul>
 ]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>状态机</tag>
+      </tags>
   </entry>
   <entry>
-    <title>未命名</title>
-    <url>/2023/08/2aa7e169ee90.html</url>
-    <content><![CDATA[<p>测试添加内容</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2023/08/b601c284e406.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>测试</title>
-    <url>/2023/08/6e10a8e61016.html</url>
-    <content><![CDATA[<p>这里是</p>
+    <title>Lecture 11：操作系统上的进程</title>
+    <url>/2023/08/5b1cbd3ab6e9.html</url>
+    <content><![CDATA[<blockquote>
+<pre><code>1. 操作系统启动后做了什么？
+2. 操作系统如何管理进程？
+</code></pre>
+</blockquote>
 <span id="more"></span>
+<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
+<p><strong>Linux进入之后加载第一个程序的代码：</strong><br>![[Pasted image 20230223142644.png]]</p>
+<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230223142425.png]]</p>
+<h3 id="11-1-2-最小Linux实现"><a href="#11-1-2-最小Linux实现" class="headerlink" title="11.1.2 最小Linux实现"></a>11.1.2 最小Linux实现</h3><p>最小Linux的树状结构：<br>![[Pasted image 20230223142955.png]]<br>initramfs打包选项：<br>![[Pasted image 20230223143107.png]]<br>Linux 运行：</p>
+<ol>
+<li>无图形界面</li>
+<li>128m内存</li>
+<li>linux内核</li>
+<li>将initramfs<br>![[Pasted image 20230223143146.png]]<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
+</ol>
+<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
+<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
+<ol>
+<li>当中有更多挂载的磁盘</li>
+<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
+</ol>
+<p><strong>系统调用的三大类型</strong></p>
+<ol>
+<li>进程管理</li>
+<li>文件管理</li>
+<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
+</ol>
+<hr>
+<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
+<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
+<ul>
+<li>完全一致的进程<ul>
+<li>两个进程在内存上一模一样，寄存器一样</li>
+<li>只有返回的值不一样：<ul>
+<li>每一个进程都有一个唯一的编号</li>
+<li>除了编号之外一切相同</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
+<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
+<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>正文</p>
+<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
+<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
+<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
+<ul>
+<li>line buffer<ul>
+<li>直接把每一行buffer输出出来</li>
+</ul>
+</li>
+<li>full buffer<ul>
+<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
+</ul>
+</li>
+</ul>
+<p>fork的问题：多个线程下，fork的行为问题</p>
+<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
+<p>使用代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
+<ul>
+<li>环境变量<ul>
+<li>PATH<ul>
+<li>程序执行路径的环境变量</li>
+</ul>
+</li>
+<li>PWD<ul>
+<li>当前路径</li>
+</ul>
+</li>
+<li>HOME<ul>
+<li>HOME目录</li>
+</ul>
+</li>
+<li>DISPLAY<ul>
+<li>图形输出</li>
+</ul>
+</li>
+<li>PS1<ul>
+<li>shell提示符</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
+<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
+<hr>
+<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
+<ul>
+<li>问题<ul>
+<li>多线程的程序，exit的行为如何？</li>
+<li>是所有线程结束还是只结束调用的线程？</li>
+</ul>
+</li>
+<li>多种exit<ul>
+<li>stdlib当中的exit</li>
+<li>glibc当中的_exit(0)</li>
+<li>syscall(SES_exit,0)</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>CSharp</category>
+        <category>操作系统</category>
       </categories>
-  </entry>
-  <entry>
-    <title>未命名</title>
-    <url>/2023/08/c4821a1f05ec.html</url>
-    <content><![CDATA[<p>现在来编写一些测试的内容</p>
-]]></content>
-      <categories>
-        <category>Part One</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>测试文章</title>
-    <url>/2023/08/3cc31015724b.html</url>
-    <content><![CDATA[<p>问问</p>
-<span id="more"></span>
-<p>这里是正文</p>
-]]></content>
-      <categories>
-        <category>Unity</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Unity测试效果</title>
-    <url>/2023/08/47ce33c55086.html</url>
-    <content><![CDATA[<p>这个正文</p>
-<span id="more"></span>
-<p>这个是正文</p>
-]]></content>
-      <categories>
-        <category>Unity</category>
-        <category>Lua</category>
-      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>进程</tag>
+      </tags>
   </entry>
 </search>

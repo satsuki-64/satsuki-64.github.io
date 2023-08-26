@@ -20,27 +20,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="现在来编写一些测试的内容">
+    <meta name="description" content="将源代码编译成托管模块定义：公共语言运行时（Common Language Runtime，CLR）描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：  内存管理 程序集加载 安全性 异常处理 线程同步">
 <meta property="og:type" content="article">
-<meta property="og:title" content="未命名">
-<meta property="og:url" content="http://example.com/2023/08/c4821a1f05ec.html">
+<meta property="og:title" content="CLR执行模型">
+<meta property="og:url" content="http://example.com/2023/08/afbde0776d8b.html">
 <meta property="og:site_name" content="Satsuki的博客">
-<meta property="og:description" content="现在来编写一些测试的内容">
+<meta property="og:description" content="将源代码编译成托管模块定义：公共语言运行时（Common Language Runtime，CLR）描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：  内存管理 程序集加载 安全性 异常处理 线程同步">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-08-26T19:40:28.000Z">
-<meta property="article:modified_time" content="2023-08-26T19:42:31.030Z">
+<meta property="article:published_time" content="2023-08-26T20:00:25.000Z">
+<meta property="article:modified_time" content="2023-08-26T20:00:58.579Z">
 <meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="CLR">
+<meta property="article:tag" content="编译原理">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2023/08/c4821a1f05ec.html">
+<link rel="canonical" href="http://example.com/2023/08/afbde0776d8b.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/08/c4821a1f05ec.html","path":"2023/08/c4821a1f05ec.html","title":"未命名"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/08/afbde0776d8b.html","path":"2023/08/afbde0776d8b.html","title":"CLR执行模型"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>未命名 | Satsuki的博客</title>
+<title>CLR执行模型 | Satsuki的博客</title>
   
 
 
@@ -127,7 +130,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -140,6 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E5%B0%86%E6%BA%90%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91%E6%88%90%E6%89%98%E7%AE%A1%E6%A8%A1%E5%9D%97"><span class="nav-text">1.1 将源代码编译成托管模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%B0%86%E6%89%98%E7%AE%A1%E6%A8%A1%E5%9D%97%E5%90%88%E5%B9%B6%E6%88%90%E7%A8%8B%E5%BA%8F%E9%9B%86"><span class="nav-text">1.2 将托管模块合并成程序集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%8A%A0%E8%BD%BD%E5%85%AC%E5%85%B1%E8%AF%AD%E8%A8%80%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="nav-text">1.3 加载公共语言运行时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E9%9B%86%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-text">1.4 执行程序集的代码</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -154,18 +158,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -203,7 +207,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/c4821a1f05ec.html">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/afbde0776d8b.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo.png">
@@ -216,12 +220,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="未命名 | Satsuki的博客">
+      <meta itemprop="name" content="CLR执行模型 | Satsuki的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          未命名
+          CLR执行模型
         </h1>
 
         <div class="post-meta-container">
@@ -233,7 +237,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-08-27 03:40:28 / 修改时间：03:42:31" itemprop="dateCreated datePublished" datetime="2023-08-27T03:40:28+08:00">2023-08-27</time>
+      <time title="创建时间：2023-08-27 04:00:25 / 修改时间：04:00:58" itemprop="dateCreated datePublished" datetime="2023-08-27T04:00:25+08:00">2023-08-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -241,7 +245,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Part-One/" itemprop="url" rel="index"><span itemprop="name">Part One</span></a>
+          <a href="/categories/CSharp/" itemprop="url" rel="index"><span itemprop="name">CSharp</span></a>
         </span>
     </span>
 
@@ -254,7 +258,52 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>现在来编写一些测试的内容</p>
+    <div class="post-body" itemprop="articleBody"><p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<span id="more"></span></li>
+</ol>
+<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
+</ol>
+<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
+<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
+<ol>
+<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
+<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
+<li>元数据：源代码的定义数据，源代码的引用数据</li>
+<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
+<li></li>
+</ol>
+<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
+<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
+<ol>
+<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
+<li>程序集是重用、安全性以及版本控制的最小单元；</li>
+<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
+</ol>
+<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
+<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
+<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
+<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
+<p><strong>加载CLR</strong></p>
+<ol>
+<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
+<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
+<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
+</ol>
+<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
+<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
+<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
+<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
 
     </div>
 
@@ -263,19 +312,21 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/CLR/" rel="tag"># CLR</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag"># 编译原理</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/08/2aa7e169ee90.html" rel="prev" title="未命名">
-                  <i class="fa fa-angle-left"></i> 未命名
+                <a href="/2023/08/5b1cbd3ab6e9.html" rel="prev" title="Lecture 11：操作系统上的进程">
+                  <i class="fa fa-angle-left"></i> Lecture 11：操作系统上的进程
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/08/47ce33c55086.html" rel="next" title="Unity测试效果">
-                  Unity测试效果 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -308,7 +359,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共3k字</span>
+  <span class="post-count">博客全站共5.2k字</span>
 </div>
     </div>
   </footer>
