@@ -7,8 +7,8 @@
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
 <link rel="stylesheet" href="/css/main.css">
@@ -20,27 +20,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="元数据和类型成员元数据：  元数据是所有语言都生成和使用的公共信息，正式由于有了元数据，才可以实现不同语言所编写的代码之间的无缝互相交互； 无论什么编程语言，CLR编译器都需要能够处理源代码，并为每种成员生成元数据和IL代码； CLR的保证：所有编程语言生成的元数据格式一致；利用这些元数据，决定了类型在运行时的行为，实现了编程语言类型与对象的无缝集成；CLR成员的方向">
+    <meta name="description" content="1.1 将源代码编译成托管模块定义：公共语言运行时（Common Language Runtime，CLR）描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：  内存管理 程序集加载 安全性 异常处理 线程同步">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C#类型与成员基础">
-<meta property="og:url" content="http://example.com/2023/08/27/C-%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%88%90%E5%91%98%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:title" content="CLR执行模型">
+<meta property="og:url" content="http://example.com/2023/08/6fd9f2a72a4f.html">
 <meta property="og:site_name" content="Satsuki的博客">
-<meta property="og:description" content="元数据和类型成员元数据：  元数据是所有语言都生成和使用的公共信息，正式由于有了元数据，才可以实现不同语言所编写的代码之间的无缝互相交互； 无论什么编程语言，CLR编译器都需要能够处理源代码，并为每种成员生成元数据和IL代码； CLR的保证：所有编程语言生成的元数据格式一致；利用这些元数据，决定了类型在运行时的行为，实现了编程语言类型与对象的无缝集成；CLR成员的方向">
+<meta property="og:description" content="1.1 将源代码编译成托管模块定义：公共语言运行时（Common Language Runtime，CLR）描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：  内存管理 程序集加载 安全性 异常处理 线程同步">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-08-26T18:02:12.000Z">
-<meta property="article:modified_time" content="2023-08-26T18:02:50.673Z">
+<meta property="article:published_time" content="2023-08-26T16:52:48.000Z">
+<meta property="article:modified_time" content="2023-08-26T18:01:36.709Z">
 <meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="编译原理">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2023/08/27/C-%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%88%90%E5%91%98%E5%9F%BA%E7%A1%80/">
+<link rel="canonical" href="http://example.com/2023/08/6fd9f2a72a4f.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/08/27/C-%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%88%90%E5%91%98%E5%9F%BA%E7%A1%80/","path":"2023/08/27/C-类型与成员基础/","title":"C#类型与成员基础"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/08/6fd9f2a72a4f.html","path":"2023/08/6fd9f2a72a4f.html","title":"CLR执行模型"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>C#类型与成员基础 | Satsuki的博客</title>
+<title>CLR执行模型 | Satsuki的博客</title>
   
 
 
@@ -140,7 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E7%B1%BB%E5%9E%8B%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-text">6.2 类型可见性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E6%88%90%E5%91%98%E7%9A%84%E5%8F%AF%E8%AE%BF%E9%97%AE%E6%80%A7"><span class="nav-text">6.3 成员的可访问性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5-%E5%88%86%E9%83%A8%E7%B1%BB"><span class="nav-text">6.5 分部类</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E5%B0%86%E6%BA%90%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91%E6%88%90%E6%89%98%E7%AE%A1%E6%A8%A1%E5%9D%97"><span class="nav-text">1.1 将源代码编译成托管模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%B0%86%E6%89%98%E7%AE%A1%E6%A8%A1%E5%9D%97%E5%90%88%E5%B9%B6%E6%88%90%E7%A8%8B%E5%BA%8F%E9%9B%86"><span class="nav-text">1.2 将托管模块合并成程序集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%8A%A0%E8%BD%BD%E5%85%AC%E5%85%B1%E8%AF%AD%E8%A8%80%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="nav-text">1.3 加载公共语言运行时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E9%9B%86%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-text">1.4 执行程序集的代码</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -204,7 +206,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/27/C-%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%88%90%E5%91%98%E5%9F%BA%E7%A1%80/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/6fd9f2a72a4f.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo.png">
@@ -217,12 +219,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="C#类型与成员基础 | Satsuki的博客">
+      <meta itemprop="name" content="CLR执行模型 | Satsuki的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C#类型与成员基础
+          CLR执行模型
         </h1>
 
         <div class="post-meta-container">
@@ -234,7 +236,16 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-08-27 02:02:12 / 修改时间：02:02:50" itemprop="dateCreated datePublished" datetime="2023-08-27T02:02:12+08:00">2023-08-27</time>
+      <time title="创建时间：2023-08-27 00:52:48 / 修改时间：02:01:36" itemprop="dateCreated datePublished" datetime="2023-08-27T00:52:48+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C#</span></a>
+        </span>
     </span>
 
   
@@ -246,48 +257,47 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p><strong>元数据和类型成员</strong><br>元数据：</p>
-<ul>
-<li>元数据是所有语言都生成和使用的公共信息，正式由于有了元数据，才可以实现不同语言所编写的代码之间的无缝互相交互；</li>
-<li>无论什么编程语言，CLR编译器都需要能够处理源代码，并为每种成员生成元数据和IL代码；</li>
-<li>CLR的保证：所有编程语言生成的元数据格式一致；利用这些元数据，决定了类型在运行时的行为，实现了编程语言类型与对象的无缝集成；CLR成员的方向<span id="more"></span>
-<strong>类型中各类成员</strong><br>常量：</li>
-<li>常量指的是数据值恒定不变的符号，这种符号是的代码更易阅读和维护；</li>
-<li>常量总是与类型关联，不与类型的实例关联；</li>
-<li>常量逻辑上总是静态成员；<br>字段：</li>
-<li>字段表示只读或者可读可写数据值；</li>
-<li>字段可以是静态的，静态字段被认为是类型的一部分<br>实例构造器：</li>
-<li>实例构造器是将新对象的<strong>实例字段</strong>初始化为良好初始状态的特殊方法；<br>类型构造器：</li>
-<li>类型构造器是将类型的静态字段初始化为良好状态的特殊方法；<br>方法：</li>
-<li>方法是更改或查询类型或者对象状态的函数；<br>操作符重载：</li>
-<li>操作符重载实际上是一种方法；</li>
-<li>操作符重载不是CLS（公共语言规范）的一部分，并不是所有语言都支持操作符重载<br>属性：</li>
-<li>属性允许使用简单的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏；<br>事件：</li>
-<li>事件包含两个方法，允许静态或者实例方法登记或者注销对于该事件的关注；</li>
-<li>实例事件：允许对象向一个或多个静态或者实例方法发送通知；</li>
-<li>静态事件：允许类型向一个或多个静态或者实例方法发送通知；</li>
-</ul>
-<p>可以使用ILDasm.exe来访问元数据；</p>
-<h2 id="6-2-类型可见性"><a href="#6-2-类型可见性" class="headerlink" title="6.2 类型可见性"></a>6.2 类型可见性</h2><p><strong>类型可见性基本概念</strong><br>定义文件访问范围：</p>
-<ul>
-<li>public：被public修饰的类型，表示不仅对定义程序集中的所有代码可见，还对其他程序集中的代码可见；</li>
-<li>internal：被internal修饰的类型，仅对定义程序集中的所有代码可见，对其他程序集中的代码不可见；</li>
-<li>不显式指明可见性时，编译器默认为其指定为internal；</li>
-</ul>
-<p><strong>友元程序集</strong><br>什么是友元程序集：</p>
-<ul>
-<li>当不希望将自己的程序集当中的代码全部设置为public，但有又和其他程序集的团队进行合作开发的需求，可以将其设置为友元程序集；<br>设置方法：</li>
-<li>生成程序集时，用System.Runtime.ComplierServices当中的InternalsVisbleTo特性表明它认为是友元的程序集<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">assembly.InternalsVisibleTo(<span class="string">&quot;目标程序集名称&quot;</span>,PublicKey = ...)</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SomeClass</span>&#123;&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="6-3-成员的可访问性"><a href="#6-3-成员的可访问性" class="headerlink" title="6.3 成员的可访问性"></a>6.3 成员的可访问性</h2><p><strong>成员可访问性</strong><br>![[Pasted image 20230331180319.png]]</p>
-<p><strong>引用合法与可访问性</strong><br>在运行时将IL代码编译成本机CPU代码时，JIT编译器也会确保字段和方法的引用合法；通过对IL代码进行验证，可确保被引用成员的可访问性在运行时能够得到正确兑现；</p>
-<h2 id="6-5-分部类"><a href="#6-5-分部类" class="headerlink" title="6.5 分部类"></a>6.5 分部类</h2><p><strong>分部类介绍</strong><br>简介：</p>
-<ul>
-<li>partial关键字告诉C#编译器：类、结构或者接口的定义源代码可能分散到一个或多个源代码文件当中；<br>使用分部类原因：</li>
-<li>源代码控制：用于方便程序员将它从源代码控制系统中签出以进行修改，没有其他程序员可以同时访问修改这个类型，减少代码控制时的冲突；</li>
-<li>将一个文件中的类或结构分成不同逻辑单元：有时会创建一个类型来包含多个功能，此时可以使用分部类来在一个源代码文件当中，分开编写一个类的功能，从而方便进行模块化管理；<br>分部类与CLR：</li>
-<li>CLR对分部类一无所知，分部类完全由C#编译器实现；</li>
-</ul>
+    <div class="post-body" itemprop="articleBody"><h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步</li>
+</ol>
+<span id="more"></span>
+
+<p>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</p>
+<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
+<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
+<ol>
+<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
+<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
+<li>元数据：源代码的定义数据，源代码的引用数据</li>
+<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
+<li></li>
+</ol>
+<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
+<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
+<ol>
+<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
+<li>程序集是重用、安全性以及版本控制的最小单元；</li>
+<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
+</ol>
+<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
+<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
+<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
+<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
+<p><strong>加载CLR</strong></p>
+<ol>
+<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
+<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
+<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
+</ol>
+<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
+<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
+<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
+<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
 
     </div>
 
@@ -296,16 +306,23 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag"># 编译原理</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/08/27/CLR%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B/" rel="prev" title="CLR执行模型">
-                  <i class="fa fa-angle-left"></i> CLR执行模型
+                <a href="/2023/08/9ffe8e4f0e36.html" rel="prev" title="TestNew">
+                  <i class="fa fa-angle-left"></i> TestNew
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2023/08/467da2d5b317.html" rel="next" title="C#类型与成员基础">
+                  C#类型与成员基础 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -336,6 +353,10 @@
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>-->
 
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共3k字</span>
+</div>
     </div>
   </footer>
 
