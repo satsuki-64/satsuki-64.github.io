@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2F4F4F" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="网络游戏开发挑战 网络协议 网络开发问题   网络架构 游戏同步 状态同步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GameEngine：网络游戏的架构基础">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/08/008f5eb4980f.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="网络游戏开发挑战 网络协议 网络开发问题   网络架构 游戏同步 状态同步">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="file:///C:/Users/SWGZH/AppData/Local/Temp/12afb65f-163e-4459-8b9f-7eae5ef032cb.jpg">
+<meta property="og:image" content="file:///C:/Users/SWGZH/AppData/Local/Temp/0bbc6676-5554-4c40-9887-0261b165f4c6.jpg">
+<meta property="og:image" content="file:///C:/Users/SWGZH/AppData/Local/Temp/405e6a53-704d-4a69-a8b8-ef82390cb7a0.jpg">
+<meta property="article:published_time" content="2023-08-27T06:10:59.000Z">
+<meta property="article:modified_time" content="2023-08-27T06:12:53.070Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="游戏引擎">
+<meta property="article:tag" content="网络开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="file:///C:/Users/SWGZH/AppData/Local/Temp/12afb65f-163e-4459-8b9f-7eae5ef032cb.jpg">
+
+
+<link rel="canonical" href="https://satsuki-64.github.io/2023/08/008f5eb4980f.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/08/008f5eb4980f.html","path":"2023/08/008f5eb4980f.html","title":"GameEngine：网络游戏的架构基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GameEngine：网络游戏的架构基础 | Satsuki的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  <a target="_blank" rel="noopener" href="https://github.com/satsuki-64" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Satsuki的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE"><span class="nav-text">2. 网络协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE"><span class="nav-text">2.1 网络协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84"><span class="nav-text">网络架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B8%E6%88%8F%E5%90%8C%E6%AD%A5"><span class="nav-text">游戏同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5"><span class="nav-text">状态同步</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Satsuki"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Satsuki</p>
+  <div class="site-description" itemprop="description">向着黄昏与自由迁徙</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/satsuki-64" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;satsuki-64" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15079296601@163.com" title="E-Mail → 15079296601@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/1472895664" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;1472895664" rel="noopener me" target="_blank">Bilibili</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/008f5eb4980f.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GameEngine：网络游戏的架构基础 | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GameEngine：网络游戏的架构基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-27 14:10:59 / 修改时间：14:12:53" itemprop="dateCreated datePublished" datetime="2023-08-27T14:10:59+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/" itemprop="url" rel="index"><span itemprop="name">游戏引擎</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><ul>
+<li>网络游戏开发挑战<ul>
+<li>网络协议</li>
+<li>网络开发问题</li>
+</ul>
+</li>
+<li>网络架构</li>
+<li>游戏同步</li>
+<li>状态同步<span id="more"></span></li>
+</ul>
+<h3 id="2-网络协议"><a href="#2-网络协议" class="headerlink" title="2. 网络协议"></a>2. 网络协议</h3><h3 id="2-1-网络协议"><a href="#2-1-网络协议" class="headerlink" title="2.1 网络协议"></a>2.1 网络协议</h3><ul>
+<li><p>核心：<strong>解决两台电脑之间的信息传递</strong></p>
+</li>
+<li><p>分层：本质：将复杂问题进行分层抽象，忽略其底层实现细节</p>
+</li>
+<li><p>OSI模型：网络七层模型</p>
+</li>
+<li><p>网络游戏编程通常只需要Socket-Based</p>
+</li>
+<li><p>TCP协议</p>
+</li>
+<li><p>协议特点</p>
+</li>
+<li><p>特点一：通过三次握手保证信息的正确性</p>
+</li>
+<li><p>特点二：保证数据的顺序；前面的包和后背的包顺序保持</p>
+</li>
+<li><p>特点三：可以进行流量控制|网关对TCP友好</p>
+</li>
+<li><p>特点四：TCP的Header文件大小大</p>
+</li>
+<li><p>确认接受</p>
+</li>
+<li><p>发送ACK内容</p>
+</li>
+<li><p>拥塞控制</p>
+</li>
+<li><p>不稳定的公网出现时，网络会出现波动，但也保证了网络不崩溃</p>
+</li>
+<li><p>UDP协议</p>
+</li>
+<li><p>本质：<strong>是一个端到端的协议，越简单越好</strong></p>
+</li>
+<li><p>特点</p>
+</li>
+<li><p>特点一：不需要建立长时间连接</p>
+</li>
+<li><p>特点二：不断发送</p>
+</li>
+<li><p>特点三：不进行流量控制</p>
+</li>
+<li><p>特点四：Header文件小</p>
+</li>
+<li><p>协议选择</p>
+</li>
+<li><p>对时间不敏感的游戏，可以使用TCP</p>
+</li>
+<li><p>对时间敏感的游戏，可以使用UDP</p>
+</li>
+<li><p>但是大型的MMO，通常都是复合协议|两者混着使用</p>
+</li>
+<li><p>不同的使用场合，使用不同协议完成</p>
+</li>
+<li><p>补充</p>
+</li>
+<li><p>游戏引擎是个工程科学，实用性至上</p>
+</li>
+<li><p>可靠的UDP</p>
+</li>
+<li><p>游戏服务器和其他服务器应用场合区别</p>
+</li>
+<li><p>保证消息传递的Ordering顺序</p>
+</li>
+<li><p>速度也得非常快</p>
+</li>
+<li><p>而且可以实现群发</p>
+</li>
+<li><p>ARQ</p>
+</li>
+<li><p>简介：自动回复的丢包检测|当发生丢包的时候，会告诉程序现在丢包了</p>
+</li>
+<li><p>滑动窗口协议:滑动窗口中的数据依次进行发送，当收到了后续窗口中的数据时，即前面的数据已经成功接收</p>
+</li>
+<li><p>Stop And Wait ARQ：等待ACK后再发送下一个|速度很慢，效率很低</p>
+</li>
+<li><p>Go-Back-N ARQ：如果发现一个包丢了之后，只把这个窗口里面的数据重新发送一遍</p>
+</li>
+<li><p>特点：十分使用</p>
+</li>
+<li><p>Selective Repeat ARQ：只通知丢了的包，因此连接更加的稳定</p>
+</li>
+<li><p>FEC</p>
+<ul>
+<li>Forward Error Correction</li>
+<li>简介：收到了包，不管它，继续往前走，然后再重新找回被丢失的包|用额外的数据传输量来解决</li>
+<li>异或运算校验法：专门有值储存校验值。如果多个数据里面只丢掉一个，则可以轻松发现丢掉的数据并且恢复</li>
+<li>Reed-Solomon Codes:冗余信息矩阵惩罚判断数据存放</li>
+<li>获得的信息乘以对应矩阵的逆就可以得到其原本结果</li>
+<li><img src="file:///C:/Users/SWGZH/AppData/Local/Temp/12afb65f-163e-4459-8b9f-7eae5ef032cb.jpg"><img src="file:///C:/Users/SWGZH/AppData/Local/Temp/0bbc6676-5554-4c40-9887-0261b165f4c6.jpg"></li>
+</ul>
+</li>
+<li><p>时钟对齐</p>
+<ul>
+<li>RTT</li>
+<li>简介：发出一个包之后，多久可以收回到包</li>
+<li>注意：其和Ping概念上十分相近，但是不同。Ping更加偏向于传输层</li>
+</ul>
+</li>
+<li><p>NTP</p>
+<ul>
+<li>Network Time Protocol</li>
+<li>GPS的实现：在天上有二十四颗卫星，每一颗都有极其准确的电子钟。你的GPS会接受它的信号，很精准的对其相位差，利用三角定位法算出其定位是多少，算出其位置</li>
+<li>定时的问题：任何内容的传输速度不能超过光速</li>
+<li>Time Server Stratums：你和服务器来对时间</li>
+</ul>
+</li>
+<li><p>RPC</p>
+<ul>
+<li>问题：</li>
+<li><ol>
+<li>Socket 编程还有很多问题|当很多要回调的函数|数据要打包成数据包发送给别人，十分的复杂</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>客户端之间通信的时候，操作系统不同|IOS和Pai不同，且服务器通常在Linux上。而且数据有些是大端放置，有些是小端放置。数据的解码会有问题</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>简介：</p>
+<ul>
+<li>让程序员只编写逻辑代码，剩下的怎么把消息打包这些，怎么进行处理都不管它。加密和解密都不用管，只要实现业务逻辑</li>
+</ul>
+</li>
+<li><p>概念一：界面定义语言 | IDL：Interface Definition Language</p>
+</li>
+<li><p>简介：所有网络通信的数据，都通过IDL定义好然后进行传输</p>
+</li>
+<li><p>RPC Stubs:每个RPC当中没有信息时，call了一个错误的RPC时，会有Stub Compiler来进行。</p>
+</li>
+<li><p>概念二：RPC包的发送路径</p>
+</li>
+<li><p><img src="file:///C:/Users/SWGZH/AppData/Local/Temp/405e6a53-704d-4a69-a8b8-ef82390cb7a0.jpg"></p>
+</li>
+</ul>
+<h2 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h2><ul>
+<li><p>P2P架构</p>
+</li>
+<li><p>简介：早期游戏都是P2P类型，在局域网内进行</p>
+</li>
+<li><p>特点：不防止作弊、简单</p>
+</li>
+<li><p>P2P With Host Server</p>
+</li>
+<li><p>简介：有主机的P2P模式</p>
+</li>
+<li><p>特点：开发商不需要花钱去维护服务器|现在很多沙盒游戏依然是这样（服务商提供服务器的检索服务，而不提供房间服务器）</p>
+</li>
+<li><p>专用服务器</p>
+</li>
+<li><p>简介：<strong>在服务器段维护统一的服务器，保证玩家统一稳定的链接</strong></p>
+</li>
+<li><p>补充：现代网络有很多的网络提供商家以及十分复杂的拓扑结构，因此很多游戏会自己接入服务商提供更好的网络服务|允许设置更告诉的端口</p>
+</li>
+</ul>
+<h2 id="游戏同步"><a href="#游戏同步" class="headerlink" title="游戏同步"></a>游戏同步</h2><blockquote>
+<p>Game Synchronization</p>
+<p>核心矛盾：<strong>信息的实时性与信息的有效性之间的矛盾</strong></p>
+</blockquote>
+<ul>
+<li><p>问题：</p>
+</li>
+<li><p>1.网络多玩家的情况下，玩家的输入、逻辑该放在什么地方处理</p>
+</li>
+<li><p>2.游戏之间平行世界二档同步</p>
+</li>
+<li><p>快照同步 | Snapshot Synchronization</p>
+</li>
+<li><p>简介：客户端只负责把玩家的输入发给服务器，服务器负责所有游戏逻辑的处理，服务器生成这一刻的游戏的快照，然后把快照发给所有的客户端玩家</p>
+</li>
+<li><p>特点：</p>
+</li>
+<li><p>1.结构干净 | 代码十分的清晰</p>
+</li>
+<li><p>2.消耗十分多的算力 （现在客户端的算力越来越强，被浪费掉）</p>
+</li>
+<li><p>3.服务器端和客户端的帧数可以不同</p>
+</li>
+<li><p>4.服务器端的帧数更低</p>
+</li>
+<li><p>5.对于带宽的要求很高</p>
+</li>
+<li><p>快照压缩</p>
+</li>
+<li><p>简介：很多快照里面数据在前后快照之间并不会发生变化，因此可以在打包Delta的时候进行优化</p>
+</li>
+<li><p>用途：减少传输的数据量</p>
+</li>
+<li><p>帧同步 | Lockstep Origin</p>
+</li>
+<li><p>简介：所有的信息一致性的进行传输，然后一致性的进行处理</p>
+</li>
+<li><p>实现：无论有多少客户端，将客户端的信息一致发给服务器，再统一的进行分发</p>
+</li>
+<li><p>实现步骤一：Initialization</p>
+</li>
+<li><p>概念：确保数据的一致高度相同，不允许任何的不同|偏差</p>
+</li>
+<li><p>原因：因为游戏是复杂系统，只要有一点的偏差，偏差就会累计然后放大 | 因此需要高度一致</p>
+</li>
+<li><p>实现步骤二：Deterministic</p>
+</li>
+<li><p>概念：确认收到了所有人的输入之后，统一的将其进行分发，然后同时开始模拟下一帧的行为</p>
+</li>
+<li><p>优点：概念清晰，公平</p>
+</li>
+<li><p>缺点：当有客户端的信息拖拉，会导致其他客户端的进程被拖慢</p>
+</li>
+<li><p>帧同步优化方案 | Bucket Synchronization</p>
+</li>
+<li><p>概念：就算有客户端的数据没有被及时的上传上来也不理会，继续其他客户端的常规进程，放弃其未上传的数据（扔掉数据或者延迟处理）</p>
+</li>
+<li><p>优点：保证网络的实时性</p>
+</li>
+<li><p>缺点：可能导致部分玩家的输入的失效</p>
+</li>
+<li><p>信息一致性 | Deterministic Difficulties</p>
+</li>
+<li><p>问题</p>
+</li>
+<li><p>1.数据容器|浮点数|算法|数学库|物理模拟|逻辑执行顺序|随机数 是否能保持一致|确定性，只有运算的一致性保持，才可以保证同步的完全一致</p>
+</li>
+<li><p>2.现实世界并不完全一致|并不是牛顿式的完全一致性|不确定性原则当中的例子</p>
+</li>
+<li><p>问题：数学函数与查表法</p>
+</li>
+<li><p>很多复杂数学结果通过查表实现，但数学结构的表格可能不一致</p>
+</li>
+<li><p>问题：定点数引擎</p>
+</li>
+<li><p>在某些特定的游戏场合里面使用定点数引擎</p>
+</li>
+<li><p>把其中最核心的部分业务放在定点数引擎中</p>
+</li>
+<li><p>问题：随机数</p>
+</li>
+<li><p>概念：分布式系统中随机数统一问题</p>
+</li>
+<li><p>实现：客户端和服务器同步时，需要先把随机数的生成的种子进行同步</p>
+</li>
+<li><p>实现：游戏引擎中的随机数种子在游戏生成的时候全部都会同步好</p>
+</li>
+<li><p>帧同步中的调试问题</p>
+</li>
+<li><p>原则：不停的将游戏的状态存储下来</p>
+</li>
+<li><p>比如没过五帧使用checksum将游戏的状态信息记录</p>
+</li>
+<li><p>网络延迟与抖动问题</p>
+</li>
+<li><p>实现：各个节点生成大量的Buffer，把帧数据提前进行缓存</p>
+</li>
+<li><p>问题一：服务器对客户端传输的帧波荡</p>
+</li>
+<li><p>解决一：客户端有很多渲染帧，当网络出现问题时，画面不会因此出现抖动</p>
+</li>
+<li><p>问题二：断线通连</p>
+</li>
+<li><p>解决二：对游戏状态会有快照储存在磁盘中，在游戏恢复的时候，只要去追自己断线期间所经过的帧数。并且可以以更大的算了去处理断线帧的逻辑，将渲染的算力转移至此。</p>
+</li>
+<li><p>延申：观战模式；对关键帧照快照，进而甚至可以实现回放</p>
+</li>
+<li><p>帧同步问题</p>
+</li>
+<li><p>问题一：作弊问题</p>
+</li>
+<li><p>问题：客户端只是接收数据，但是可以在其中更改其数据与逻辑</p>
+</li>
+<li><p>解决：服务器对比数据</p>
+</li>
+<li><p>问题二：信息暴露问题</p>
+</li>
+<li><p>问题：别人使用外挂获得更多场景的信息</p>
+</li>
+<li><p>问题三：信息一致性难以同步</p>
+</li>
+<li><p>问题四：断线后重连的追帧花费大</p>
+</li>
+<li><p>优势一：可以实现对打击操作敏感的游戏，因为帧同步的实现的一致性</p>
+</li>
+<li><p>优势二：方便实现游戏录屏</p>
+</li>
+</ul>
+<h2 id="状态同步"><a href="#状态同步" class="headerlink" title="状态同步"></a>状态同步</h2><blockquote>
+<p>大部分的MMORPG和社区类游戏使用状态同步</p>
+<p>核心：<strong>将用户的状态信息储存进去，包括部分关键性信息</strong></p>
+<p>服务器端会在其上面维护一个完整的全信息宇宙，安全更高</p>
+</blockquote>
+<ul>
+<li><p>权威服务器与命令</p>
+</li>
+<li><p>服务器：服务器说你不对，你就不对。同时客户端中有一个决定者</p>
+</li>
+<li><p>动作实例</p>
+</li>
+<li><p>一：客户端发送命令</p>
+</li>
+<li><p>二：服务器接受命令</p>
+</li>
+<li><p>概念1：服务器计算命令结果，把计算的结果发送到全部的客户端</p>
+</li>
+<li><p>概念2：每个人提出自己的动作，服务器判定动作是否有效，最后再把动作发送下去</p>
+</li>
+<li><p>三：服务器将命令发送给所有客户端</p>
+</li>
+<li><p>Client Side Prediction</p>
+</li>
+<li><p>例子：守望先锋</p>
+</li>
+<li><p>概念：客户端永远先于服务器半个RTT的时间，并且具有一个缓冲帧，并利用本地的预测（进行平滑的插值算法）</p>
+</li>
+<li><p>概念：Server Reconciliation</p>
+</li>
+<li><p>不只是存当前的状态，还要把之前一点的状态也储存下来，然后进行比对，如果比对核实则表示其正确</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/" rel="tag"><i class="fa fa-tag"></i> 游戏引擎</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> 网络开发</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/3d8a9bfbeeea.html" rel="prev" title="Lecture 15：Fork的应用">
+                  <i class="fa fa-angle-left"></i> Lecture 15：Fork的应用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/08/48bbf0e2388d.html" rel="next" title="Game Engine：GPU驱动的几何管线">
+                  Game Engine：GPU驱动的几何管线 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Satsuki</span>
+  </div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共20.6k字</span>
+</div>
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

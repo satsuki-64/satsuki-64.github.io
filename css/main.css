@@ -38,7 +38,7 @@
     --table-row-odd-bg-color: #282828;
     --table-row-hover-bg-color: #363636;
     --menu-item-bg-color: #555;
-    --theme-color: #222;
+    --theme-color: #2f4f4f;
     --btn-default-bg: #222;
     --btn-default-color: #ccc;
     --btn-default-border-color: #555;
@@ -380,15 +380,13 @@ td {
   margin-top: 4px;
 }
 .toggle.toggle-arrow :first-child {
-  left: 50%;
   top: 2px;
-  transform: rotate(45deg);
+  transform: rotate(-45deg);
   width: 50%;
 }
 .toggle.toggle-arrow :last-child {
-  left: 50%;
   top: -2px;
-  transform: rotate(-45deg);
+  transform: rotate(45deg);
   width: 50%;
 }
 .toggle.toggle-close :nth-child(2) {
@@ -396,11 +394,11 @@ td {
 }
 .toggle.toggle-close :first-child {
   top: 6px;
-  transform: rotate(45deg);
+  transform: rotate(-45deg);
 }
 .toggle.toggle-close :last-child {
   top: -6px;
-  transform: rotate(-45deg);
+  transform: rotate(45deg);
 }
 /*!
   Theme: Default
@@ -706,8 +704,8 @@ pre code {
   margin-bottom: 20px;
   padding: 1em;
   position: relative;
-  border: 1px solid #eee;
-  border-left-width: 5px;
+  background: #f5f5f5;
+  border: 1px solid transparent;
 }
 .post-body .note summary {
   cursor: pointer;
@@ -732,64 +730,82 @@ pre code {
   margin-bottom: 0;
 }
 .post-body .note.default {
-  border-left-color: #777;
+  background: #f3f3f3;
+  border-color: #e1e1e1;
+  color: #666;
 }
-.post-body .note.default h2,
-.post-body .note.default h3,
-.post-body .note.default h4,
-.post-body .note.default h5,
-.post-body .note.default h6 {
-  color: #777;
+.post-body .note.default a:not(.btn) {
+  border-bottom-color: #666;
+  color: #666;
+}
+.post-body .note.default a:not(.btn):hover {
+  border-bottom-color: #454545;
+  color: #454545;
 }
 .post-body .note.primary {
-  border-left-color: #6f42c1;
-}
-.post-body .note.primary h2,
-.post-body .note.primary h3,
-.post-body .note.primary h4,
-.post-body .note.primary h5,
-.post-body .note.primary h6 {
+  background: #f3daff;
+  border-color: #e1c2ff;
   color: #6f42c1;
 }
-.post-body .note.info {
-  border-left-color: #428bca;
+.post-body .note.primary a:not(.btn) {
+  border-bottom-color: #6f42c1;
+  color: #6f42c1;
 }
-.post-body .note.info h2,
-.post-body .note.info h3,
-.post-body .note.info h4,
-.post-body .note.info h5,
-.post-body .note.info h6 {
-  color: #428bca;
+.post-body .note.primary a:not(.btn):hover {
+  border-bottom-color: #453298;
+  color: #453298;
+}
+.post-body .note.info {
+  background: #d9edf7;
+  border-color: #b3e5ef;
+  color: #31708f;
+}
+.post-body .note.info a:not(.btn) {
+  border-bottom-color: #31708f;
+  color: #31708f;
+}
+.post-body .note.info a:not(.btn):hover {
+  border-bottom-color: #215761;
+  color: #215761;
 }
 .post-body .note.success {
-  border-left-color: #5cb85c;
+  background: #dff0d8;
+  border-color: #d0e6be;
+  color: #3c763d;
 }
-.post-body .note.success h2,
-.post-body .note.success h3,
-.post-body .note.success h4,
-.post-body .note.success h5,
-.post-body .note.success h6 {
-  color: #5cb85c;
+.post-body .note.success a:not(.btn) {
+  border-bottom-color: #3c763d;
+  color: #3c763d;
+}
+.post-body .note.success a:not(.btn):hover {
+  border-bottom-color: #32562c;
+  color: #32562c;
 }
 .post-body .note.warning {
-  border-left-color: #f0ad4e;
+  background: #fcf4e3;
+  border-color: #fae4cd;
+  color: #8a6d3b;
 }
-.post-body .note.warning h2,
-.post-body .note.warning h3,
-.post-body .note.warning h4,
-.post-body .note.warning h5,
-.post-body .note.warning h6 {
-  color: #f0ad4e;
+.post-body .note.warning a:not(.btn) {
+  border-bottom-color: #8a6d3b;
+  color: #8a6d3b;
+}
+.post-body .note.warning a:not(.btn):hover {
+  border-bottom-color: #714f30;
+  color: #714f30;
 }
 .post-body .note.danger {
-  border-left-color: #d9534f;
+  background: #f2dfdf;
+  border-color: #ebcdd2;
+  color: #a94442;
 }
-.post-body .note.danger h2,
-.post-body .note.danger h3,
-.post-body .note.danger h4,
-.post-body .note.danger h5,
-.post-body .note.danger h6 {
-  color: #d9534f;
+.post-body .note.danger a:not(.btn) {
+  border-bottom-color: #a94442;
+  color: #a94442;
+}
+.post-body .note.danger a:not(.btn):hover {
+  border-bottom-color: #84333f;
+  color: #84333f;
 }
 .post-body .tabs {
   margin-bottom: 20px;
@@ -1328,11 +1344,11 @@ pre code {
   opacity: 0.6;
   position: fixed;
   z-index: 30;
-  right: 30px;
+  left: 30px;
 }
 @media (max-width: 991px) {
   .sidebar-toggle {
-    right: 20px;
+    left: 20px;
   }
 }
 .sidebar-toggle:hover {
@@ -1348,15 +1364,13 @@ pre code {
 }
 @media (any-hover: hover) {
   body:not(.sidebar-active) .sidebar-toggle:hover :first-child {
-    left: 50%;
     top: 2px;
-    transform: rotate(45deg);
+    transform: rotate(-45deg);
     width: 50%;
   }
   body:not(.sidebar-active) .sidebar-toggle:hover :last-child {
-    left: 50%;
     top: -2px;
-    transform: rotate(-45deg);
+    transform: rotate(45deg);
     width: 50%;
   }
 }
@@ -1365,11 +1379,11 @@ pre code {
 }
 .sidebar-active .sidebar-toggle :first-child {
   top: 6px;
-  transform: rotate(45deg);
+  transform: rotate(-45deg);
 }
 .sidebar-active .sidebar-toggle :last-child {
   top: -6px;
-  transform: rotate(-45deg);
+  transform: rotate(45deg);
 }
 .post-toc {
   font-size: 0.875em;
@@ -1426,6 +1440,30 @@ pre code {
 .site-state-item-name {
   color: #999;
   font-size: 0.8125em;
+}
+.sidebar-post-related {
+  font-size: 0.8125em;
+  padding: 18px 0 0 0;
+}
+.popular-posts {
+  margin: 0;
+  padding: 1em 0;
+  text-align: left;
+}
+.popular-posts .popular-posts-item {
+  display: block;
+}
+.popular-posts .popular-posts-item .popular-posts-link {
+  border-bottom: 0;
+  display: block;
+  padding: 5px 20px;
+  transition: background 0.2s ease-in-out;
+}
+.popular-posts .popular-posts-item .popular-posts-link:hover {
+  background: var(--menu-item-bg-color);
+}
+.popular-posts .popular-posts-item .popular-posts-time {
+  color: #999;
 }
 .footer {
   color: #999;
@@ -1515,7 +1553,7 @@ pre code {
   opacity: 0.6;
   position: fixed;
   z-index: 30;
-  right: 30px;
+  left: 30px;
 }
 .back-to-top span {
   margin-right: 8px;
@@ -1527,7 +1565,7 @@ pre code {
 }
 @media (max-width: 991px) {
   .back-to-top {
-    right: 20px;
+    left: 20px;
   }
 }
 .back-to-top:hover {
@@ -2379,6 +2417,7 @@ header.header {
   justify-content: space-between;
   margin: 0 auto;
   width: calc(100% - 20px);
+  flex-direction: row-reverse;
 }
 @media (max-width: 767px) {
   .main {
@@ -2404,7 +2443,7 @@ header.header {
 .main-inner {
   border-radius: initial;
   box-sizing: border-box;
-  width: calc(100% - 252px);
+  width: calc(100% - 320px);
 }
 @media (max-width: 991px) {
   .main-inner {
@@ -2413,7 +2452,7 @@ header.header {
   }
 }
 .footer-inner {
-  padding-left: 252px;
+  padding-right: 320px;
 }
 @media (max-width: 991px) {
   .footer-inner {
@@ -2423,7 +2462,7 @@ header.header {
   }
 }
 .column {
-  width: 240px;
+  width: 300px;
 }
 @media (max-width: 991px) {
   .column {
@@ -2534,7 +2573,7 @@ header.header {
 .sidebar {
   position: -webkit-sticky;
   position: sticky;
-  top: 12px;
+  top: 20px;
 }
 @media (max-width: 991px) {
   .sidebar {
@@ -2547,8 +2586,8 @@ header.header {
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12), 0 -1px 0.5px 0 rgba(0,0,0,0.09);
   box-sizing: border-box;
   color: var(--text-color);
-  margin-top: 12px;
-  max-height: calc(100vh - 24px);
+  margin-top: 20px;
+  max-height: calc(100vh - 40px);
   visibility: hidden;
 }
 .site-state-item {
@@ -2608,7 +2647,7 @@ header.header {
 .main-inner .post-block:not(:first-child):not(:first-child) {
   border-radius: initial;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12), 0 -1px 0.5px 0 rgba(0,0,0,0.09);
-  margin-top: 12px;
+  margin-top: 20px;
 }
 @media (min-width: 768px) and (max-width: 991px) {
   .main-inner .post-block:not(:first-child):not(:first-child) {
@@ -2626,7 +2665,7 @@ header.header {
 .main-inner .pagination {
   border-radius: initial;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12), 0 -1px 0.5px 0 rgba(0,0,0,0.09);
-  margin-top: 12px;
+  margin-top: 20px;
 }
 @media (min-width: 768px) and (max-width: 991px) {
   .main-inner .tabs-comment,
@@ -2681,12 +2720,12 @@ header.header {
     padding: 8px;
   }
   .posts-expand .post-button {
-    margin: 12px 0;
+    margin: 20px 0;
   }
   .post-block {
-    padding: 12px;
+    padding: 20px;
   }
   .comments {
-    padding: 10px 12px;
+    padding: 10px 20px;
   }
 }

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2F4F4F" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lecture 12：进程的地址空间">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/08/d03400aa93d7.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-27T06:04:16.000Z">
+<meta property="article:modified_time" content="2023-08-27T06:05:11.865Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="进程">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://satsuki-64.github.io/2023/08/d03400aa93d7.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/08/d03400aa93d7.html","path":"2023/08/d03400aa93d7.html","title":"Lecture 12：进程的地址空间"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Lecture 12：进程的地址空间 | Satsuki的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  <a target="_blank" rel="noopener" href="https://github.com/satsuki-64" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Satsuki的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#12-1-%E5%8A%A8-%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5%E7%A8%8B%E5%BA%8F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">12.1 动&#x2F;静态链接程序地址空间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#12-1-1-%E6%9C%80%E5%B0%8FC%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">12.1.1 最小C程序的地址空间</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#12-1-1-1-%E5%B0%86strace%E4%BF%A1%E6%81%AF%E4%BB%A5Vim%E6%89%93%E5%BC%80"><span class="nav-text">12.1.1.1 将strace信息以Vim打开</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-1-2-%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">12.1.2 静态链接程序的地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-1-3-%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">12.1.3 动态链接程序的地址空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-2-%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86"><span class="nav-text">12.2 进程的地址空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-1-VDSO%E3%80%81%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E4%B8%8E%E9%9D%9E%E9%99%B7%E5%85%A5%E5%BC%8F%E8%B0%83%E7%94%A8"><span class="nav-text">12.2.1 VDSO、系统调用与非陷入式调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-2-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-text">12.2.2 系统调用的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-3-mmap"><span class="nav-text">12.2.3 mmap()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-4-%E7%A8%8B%E5%BA%8F%E5%9F%BA%E4%BA%8Emmap%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%A1%8C%E4%B8%BA"><span class="nav-text">12.2.4 程序基于mmap的加载行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-5-%E5%BA%94%E7%94%A8%EF%BC%9A%E4%BD%BF%E7%94%A8mmap%E7%94%B3%E8%AF%B7%E5%A4%A7%E5%86%85%E5%AD%98"><span class="nav-text">12.2.5 应用：使用mmap申请大内存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-3-%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E7%9A%84%E9%9A%94%E7%A6%BB"><span class="nav-text">12.3 地址空间的隔离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#12-3-1-%E8%80%81%E6%B8%B8%E6%88%8F%E4%BF%AE%E6%94%B9%E5%99%A8%E5%AE%9E%E7%8E%B0"><span class="nav-text">12.3.1 老游戏修改器实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-3-2-%E6%8C%89%E9%94%AE%E7%B2%BE%E7%81%B5-%E5%8F%98%E9%80%9F%E9%BD%BF%E8%BD%AE"><span class="nav-text">12.3.2 按键精灵&amp;变速齿轮</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-3-3-%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5"><span class="nav-text">12.3.3 代码注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#12-3-3-1-%E4%BB%A3%E7%A0%81%E7%83%AD%E6%9B%B4%E6%96%B0%E5%8E%9F%E7%90%86"><span class="nav-text">12.3.3.1 代码热更新原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-3-3-2-%E5%9F%BA%E4%BA%8E%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9A%84%E6%B8%B8%E6%88%8F%E5%A4%96%E6%8C%82"><span class="nav-text">12.3.3.2 基于人工智能的游戏外挂</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-3-4-%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4Hack%E7%9A%84%E6%94%BB%E4%B8%8E%E9%98%B2"><span class="nav-text">12.3.4 地址空间Hack的攻与防</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Satsuki"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Satsuki</p>
+  <div class="site-description" itemprop="description">向着黄昏与自由迁徙</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/satsuki-64" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;satsuki-64" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15079296601@163.com" title="E-Mail → 15079296601@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/1472895664" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;1472895664" rel="noopener me" target="_blank">Bilibili</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/d03400aa93d7.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Lecture 12：进程的地址空间 | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lecture 12：进程的地址空间
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-27 14:04:16 / 修改时间：14:05:11" itemprop="dateCreated datePublished" datetime="2023-08-27T14:04:16+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
+<span id="more"></span>
+<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
+<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
+
+<p>查看某一个进程地址空间代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
+<p>当中的37491为进程的id。</p>
+<p><strong>查看结果：</strong><br>![[Pasted image 20230224190930.png]]</p>
+<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong><br>当中一条系统调用：<br>![[Pasted image 20230224191620.png]]<br>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</p>
+<p><strong>37491进程更详细的信息：</strong><br>![[Pasted image 20230224191818.png]]<br>相关手册：<code>mam 5 proc</code></p>
+<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br>![[Pasted image 20230224192252.png]]<br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
+<p>将以上读取的信息和其ELF信息比较着来看：<br>![[Pasted image 20230224192640.png]]</p>
+<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
+<hr>
+<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
+<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
+<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
+<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
+<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
+<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
+<p><strong>定义：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
+<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
+<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br>![[Pasted image 20230227174912.png]]</p>
+<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
+<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
+<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
+<ul>
+<li>第一步：获得游戏进程的PID（进程号）</li>
+<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
+<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
+<li>第四步：遍历此段内存，找到关键词数据</li>
+<li>第五步：修改被关键字标记的内存</li>
+</ul>
+<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
+<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
+<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
+<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
+<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
+              <a href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 进程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/afbde0776d8b.html" rel="prev" title="CLR执行模型">
+                  <i class="fa fa-angle-left"></i> CLR执行模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/08/3dbfbd52ee49.html" rel="next" title="Lecture 13：系统调用与Shell">
+                  Lecture 13：系统调用与Shell <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Satsuki</span>
+  </div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共20.6k字</span>
+</div>
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
