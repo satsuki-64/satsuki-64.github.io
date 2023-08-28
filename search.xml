@@ -1,8 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>CLR执行模型</title>
-    <url>/2023/08/afbde0776d8b.html</url>
+    <title>【CSharp系列】托管堆与垃圾回收（1）--托管堆</title>
+    <url>/2023/08/925fb84e3e31.html</url>
+    <content><![CDATA[<ul>
+<li><ol>
+<li>为什么要有托管堆</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>什么是托管堆</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>垃圾回收算法</li>
+</ol>
+<ul>
+<li><ol>
+<li>引用计数算法</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>引用跟踪算法<span id="more"></span></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-为什么要有托管堆"><a href="#1-为什么要有托管堆" class="headerlink" title="1.为什么要有托管堆"></a>1.为什么要有托管堆</h1><h2 id="1-1-面向对象与资源分配"><a href="#1-1-面向对象与资源分配" class="headerlink" title="1.1 面向对象与资源分配"></a>1.1 面向对象与资源分配</h2><p><strong>面向对象中的资源</strong><br>概念：在面向对象的环境中，任何一种类型都代表了计算机中可供程序使用的一种资源。如果要使用这种资源，就需要为这种资源分配一定的内存；</p>
+<p><strong>资源分配步骤</strong></p>
+<ul>
+<li>第一步<ul>
+<li>调用IL代码<code>newobj</code>，为代表资源的类型分配内存；</li>
+<li>此步骤通常由new操作符来触发并完成；</li>
+</ul>
+</li>
+<li>第二步<ul>
+<li>根据类型的状态设置，初始化内存，设置资源的初始状态并使得此资源可用；</li>
+<li>由类型的实例构造函数来设置初始状态；</li>
+</ul>
+</li>
+<li>第三步<ul>
+<li>访问类型的成员来使用此资源</li>
+</ul>
+</li>
+<li>第四步<ul>
+<li>摧毁资源的状态，以进行垃圾的清理</li>
+</ul>
+</li>
+<li>第五步<ul>
+<li>由GC回收期释放内存</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-为什么需要托管堆来进行垃圾回收"><a href="#1-2-为什么需要托管堆来进行垃圾回收" class="headerlink" title="1.2 为什么需要托管堆来进行垃圾回收"></a>1.2 为什么需要托管堆来进行垃圾回收</h2><p><strong>C++中的例子</strong><br>在需要程序员手动管理内存的语言中（比如当C++不使用shareptr或其他基于对象的指针时），程序员经常会产生两种错误：</p>
+<ol>
+<li>忘记释放不再需要的内存，进而造成内存泄漏；</li>
+<li>尝试使用已经释放的内存，造成安全漏洞；<br>由于这两种错误经常是在程序运行时才能发现，因此程序发生异常时调试困难。</li>
+</ol>
+<p><strong>解决方法：可验证的、类型安全的代码</strong><br>在资源分配阶段中的【第四步】，此步骤若不是由程序员来完成，而是交给程序的托管堆和垃圾回收器来自动进行时，此时程序就能进一步的保证安全；</p>
+<ul>
+<li>托管堆会自动完成垃圾的回收，并且当需要手动进行回收时，托管堆还提供了一个简化的模型；</li>
+</ul>
+<p><strong>补充：需要特殊清理的类型</strong><br>部分包装了本机资源的类型，比如对文件、Socket、数据库连接资源的类型，可能无法使用自动进行的垃圾回收，而是需要程序员使用GC的手动触发；</p>
+<h1 id="2-什么是托管堆"><a href="#2-什么是托管堆" class="headerlink" title="2.什么是托管堆"></a>2.什么是托管堆</h1><h2 id="2-1-托管堆基本概念"><a href="#2-1-托管堆基本概念" class="headerlink" title="2.1 托管堆基本概念"></a>2.1 托管堆基本概念</h2><p><strong>托管堆</strong><br>在C#中，托管堆是一种用于存储和管理托管对象（即运行在CLR中的对象）的内存区域。它是CLR的一部分，为托管对象提供动态内存分配和释放的功能。托管堆是一种自动化内存管理机制，它通过垃圾回收器自动回收不再使用的对象，从而释放内存并确保内存的正确使用。</p>
+<p><strong>NextObjPtr</strong><br>CLR会在程序的托管堆中管理一个指针NextObjPtr，此指针会一直指向下一个对象在队中分配的位置。在最开始时，此指针指向地址空间的基地址；</p>
+<p><strong>内存自动扩张</strong><br>在一个区域的内存备非垃圾对象填满之后，CLR会自动分配更多的区域。此过程会一直进行，直到进程的地址空间被填满；</p>
+<h2 id="2-2-CLR中的new行为"><a href="#2-2-CLR中的new行为" class="headerlink" title="2.2 CLR中的new行为"></a>2.2 CLR中的new行为</h2><p><strong>执行行为</strong><br>C#的new操作符将导致CLR执行以下步骤：</p>
+<ul>
+<li>第一步<ul>
+<li>计算类型的字段(包括从基类型继承的字段)所需的字节数。</li>
+</ul>
+</li>
+<li>第二步<ul>
+<li>加上对象额外所需的两部分开销所需的字节数；</li>
+<li>每个对象都有两个开销字段：<ul>
+<li>类型对象指针</li>
+<li>同步块索引</li>
+</ul>
+</li>
+<li>对于32位应用程序，这两个字段各自需要 32位，所以每个对象要增加8字节。对于64位应用程序，这两个字段各自需要64位，所以每个对象要增加16字节；</li>
+</ul>
+</li>
+<li>第三步<ul>
+<li>检查阶段：<ul>
+<li>CLR检查区域中是否有分配对象所需的字节数。如果托管堆有足够的可用空间，就在NextObiPtr 指针指向的地址处放入对象，为对象分配的字节会被清零；</li>
+</ul>
+</li>
+<li>调用阶段<ul>
+<li>调用类型的构造器，为类型构造器中的this参数传递当前NextObiPtr指向的对象，new操作符返回对象引用；</li>
+<li>在返回这个引用之前，NextObjiPtr指针的值会加上对象占用的字节数来得到一个新值，即下个对象放入托管堆时的地址。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>分配之后的内存，在空间中形式如下简图：<br><img src="/../../image/Pasted%20image%2020230828103459.png" alt="新初始化的托管堆，其中构造了3个对象"></p>
+<h2 id="2-3-托管堆与空间局部化"><a href="#2-3-托管堆与空间局部化" class="headerlink" title="2.3 托管堆与空间局部化"></a>2.3 托管堆与空间局部化</h2><p><strong>空间局部化</strong><br>由于托管堆的分配是在指针之上加一个值，因此其分配的速度非常的快；差不多同时分配的对象彼此间有较强的联系，而且经常差不多在同一时间访问；</p>
+<ul>
+<li><strong>由于托管堆在内存中连续分配这些对象，所以会因为引用的“局部化”(locality)而获得性能上的提升</strong></li>
+</ul>
+<p><strong>具体的优点</strong></p>
+<ul>
+<li>优点一<ul>
+<li>进程的工作集会非常小，应用程序只需使用很少的内存，从而提高了速度；</li>
+</ul>
+</li>
+<li>优点二<ul>
+<li>代码使用的对象可以全部驻留在 CPU 的缓存中。应用程序能以非常快的速度访问这些对象，因为CPU在执行大多数操作不会因Cache Miss而被迫访问较慢的 RAM；</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-垃圾回收算法"><a href="#3-垃圾回收算法" class="headerlink" title="3.垃圾回收算法"></a>3.垃圾回收算法</h1><p>在应用程序调用new操作符创建对象时，可能会没有足够地址空间来分配该对象，此时CLR就需要执行垃圾回收。</p>
+<h2 id="3-1-引用计数算法"><a href="#3-1-引用计数算法" class="headerlink" title="3.1 引用计数算法"></a>3.1 引用计数算法</h2><p><strong>什么是引用计数算法</strong><br>对于对象生存期的管理，有些系统使用的是引用计数算法；<em>比如微软的COM</em></p>
+<p><strong>算法内容</strong><br>堆上的每个对象都维护着一个内存字段，用于统计程序中多少部分正在使用对象。随着每一部分到达代码中某个不再需要对象的地方，就递减对象的计数字段。当计数字段变成0，对象就可以从内存中删除；</p>
+<p><strong>算法问题：循环引用</strong><br>在一些GUI应用程序中，窗口对象将容纳对子UI对象的引用，而子UI对象将容纳对父窗口对象的引用；<br>这种引用会阻止两个对象的计数器达到 0，所以两个对象永远不会删除，即使应用程序本身不再需要窗口。</p>
+<ul>
+<li>CLR不使用引用计数算法，而是使用<strong>引用跟踪算法</strong>；</li>
+</ul>
+<h2 id="3-2-引用跟踪算法"><a href="#3-2-引用跟踪算法" class="headerlink" title="3.2 引用跟踪算法"></a>3.2 引用跟踪算法</h2><p><strong>算法特点</strong><br>引用跟踪算法只关心引用类型的变量，不关心值类型变量。因为只有引用类型的变量才能引用堆上的对象，而值类型变量直接包含值类型实例本身。</p>
+<p><strong>基础概念：根</strong><br>在CLR中，将所有引用类型的变量称为<strong>根</strong>；<br>引用类型变量可以在许多场合使用：</p>
+<ul>
+<li>类的静态字段</li>
+<li>类的实例字段</li>
+<li>方法参数</li>
+<li>局部变量<br>这些内容都可以成为根。</li>
+</ul>
+<h3 id="3-2-1-算法实现"><a href="#3-2-1-算法实现" class="headerlink" title="3.2.1 算法实现"></a>3.2.1 算法实现</h3><p><strong>第一阶段：暂停阶段</strong><br>暂停进程中的所有线程。这防止线程在CLR检查期间访问对象并更改其状态；</p>
+<p><strong>第二阶段：标记阶段</strong></p>
+<ul>
+<li>CLR 遍历堆中的所有对象，将同步块索引字段中的一位设为 0；<em>当此位设为 0 时，表示此对象应该被删除；为 1 时表示不用删除；</em></li>
+<li>设置为 0 之后，表明所有对象都应删除。然后，CLR 检查所有活动根，查看它们引用了哪些对象。如果一个根包含null，CLR忽略这个根并继续检查下个根；</li>
+<li>任何根如果引用了堆上的对象，CLR 都会标记那个对象，也就是将该对象的同步块索引中的位设为 1。一个对象被标记后，CLR 会检查那个对象中的根，标记它们引用的对象。如果发现对象已经标记，就不重新检查对象的字段。这就避免了因为循环引用而产生死循环。</li>
+<li>全部检查完毕后，堆中的对象要么已标记，要么未标记。<ul>
+<li>已标记的对象不能被垃圾回收，因为至少有一个根在引用它。这种对象是<strong>可达reachable</strong>的对象。因为应用程序代码可通过仍在引用它的变量抵达它；</li>
+<li>未标记的对象是<strong>不可达unreachable</strong>的，因为应用程序中不存在使对象能被再次访问的根；</li>
+</ul>
+</li>
+</ul>
+<p>图示为回收之前的托管堆：<br><img src="/../../image/Pasted%20image%2020230828105510.png" alt="回收之前的托管堆"></p>
+<p><strong>第三阶段：压缩阶段</strong><br>CLR对堆中已标记的对象进行“内存位置的转移，压缩所有幸存下来的对象，使它们占用连续的内存空间，如图所示：<br><img src="/../../image/Pasted%20image%2020230828105609.png" alt="垃圾回收之后的托管堆"></p>
+<ul>
+<li>压缩的好处：<ul>
+<li>所有幸存对象在内存中紧挨在一起，恢复了引用的“局部化”，减小了应用程序的工作集，从而提升了将来访问这些对象时的性能；</li>
+<li>解决了原生堆的空间碎片化问题；</li>
+</ul>
+</li>
+<li>内存偏移<ul>
+<li>在内存中移动了对象之后有一个问题待解决：引用幸存对象的根现在引用的还是对象最初在内存中的位置，而非移动之后的位置；</li>
+<li>CLR要从每个根减去所引用的对象在内存中偏移的字节数，保证每个根还是引用和之前一样的对象–只是对象在内存中变换了位置；</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>CSharp</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
+        <tag>垃圾回收</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【CSharp系列】1. CLR执行模型</title>
+    <url>/2023/08/5aed3da140f6.html</url>
     <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
 <ol>
 <li>内存管理</li>
@@ -57,109 +219,6 @@
         <tag>C#</tag>
         <tag>CLR</tag>
         <tag>编译原理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【商业系列】商业计划书大纲与内容</title>
-    <url>/2023/08/efa8d1f054ea.html</url>
-    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
-<ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析</li>
-<li>5、 商业模式</li>
-<li>6、 战略规划<span id="more"></span></li>
-</ul>
-<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容<ul>
-<li>1、项目介绍</li>
-<li>2、核心优势</li>
-</ul>
-</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析<ul>
-<li>1、 市场分析</li>
-<li>2、 竞品分析</li>
-</ul>
-</li>
-<li>5、 商业模式<ul>
-<li>1、 商业模式介绍</li>
-<li>2、 相关数据</li>
-</ul>
-</li>
-<li>6、 战略规划<ul>
-<li>1、 战略目标</li>
-<li>2、 实现路径</li>
-</ul>
-</li>
-</ul>
-<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
-<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
-<ol>
-<li>核心业务内容</li>
-<li>核心优势</li>
-</ol>
-<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
-<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
-<ul>
-<li>分析方法<ul>
-<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
-<li><ol>
-<li>增长型项目（还没开始或刚开始）</li>
-</ol>
-<ul>
-<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>运营型项目（已经开始）</li>
-</ol>
-<ul>
-<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
-<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
-<ul>
-<li>流量矩阵：<ul>
-<li>自媒体流量（自带宣传流量）</li>
-<li>开发团队（丰富开发经验）</li>
-<li>项目案例（Unity3D）</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
-<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
-<ul>
-<li>真实的数据，但是是部分的真实</li>
-</ul>
-<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
-<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
-<ol>
-<li>项目如何盈利？</li>
-<li>项目的流量模式？</li>
-<li>获客转化的路径？</li>
-<li>是否具有可持续性？</li>
-<li>增长的空间以及可能？</li>
-</ol>
-<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
-<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
-<ol>
-<li>确定战略目标，展现当前项目的发展前景</li>
-<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
-</ol>
-]]></content>
-      <categories>
-        <category>商业</category>
-      </categories>
-      <tags>
-        <tag>商业</tag>
-        <tag>创业</tag>
       </tags>
   </entry>
   <entry>
@@ -266,6 +325,336 @@
       <tags>
         <tag>操作系统</tag>
         <tag>状态机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 11：操作系统上的进程</title>
+    <url>/2023/08/5b1cbd3ab6e9.html</url>
+    <content><![CDATA[<blockquote>
+<pre><code>1. 操作系统启动后做了什么？
+2. 操作系统如何管理进程？
+</code></pre>
+</blockquote>
+<span id="more"></span>
+<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
+<p><strong>Linux进入之后加载第一个程序的代码：</strong><br>![[Pasted image 20230223142644.png]]</p>
+<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230223142425.png]]</p>
+<h3 id="11-1-2-最小Linux实现"><a href="#11-1-2-最小Linux实现" class="headerlink" title="11.1.2 最小Linux实现"></a>11.1.2 最小Linux实现</h3><p>最小Linux的树状结构：<br>![[Pasted image 20230223142955.png]]<br>initramfs打包选项：<br>![[Pasted image 20230223143107.png]]<br>Linux 运行：</p>
+<ol>
+<li>无图形界面</li>
+<li>128m内存</li>
+<li>linux内核</li>
+<li>将initramfs<br>![[Pasted image 20230223143146.png]]<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
+</ol>
+<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
+<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
+<ol>
+<li>当中有更多挂载的磁盘</li>
+<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
+</ol>
+<p><strong>系统调用的三大类型</strong></p>
+<ol>
+<li>进程管理</li>
+<li>文件管理</li>
+<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
+</ol>
+<hr>
+<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
+<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
+<ul>
+<li>完全一致的进程<ul>
+<li>两个进程在内存上一模一样，寄存器一样</li>
+<li>只有返回的值不一样：<ul>
+<li>每一个进程都有一个唯一的编号</li>
+<li>除了编号之外一切相同</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
+<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
+<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
+<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
+<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
+<ul>
+<li>line buffer<ul>
+<li>直接把每一行buffer输出出来</li>
+</ul>
+</li>
+<li>full buffer<ul>
+<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
+</ul>
+</li>
+</ul>
+<p>fork的问题：多个线程下，fork的行为问题</p>
+<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
+<p>使用代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
+<ul>
+<li>环境变量<ul>
+<li>PATH<ul>
+<li>程序执行路径的环境变量</li>
+</ul>
+</li>
+<li>PWD<ul>
+<li>当前路径</li>
+</ul>
+</li>
+<li>HOME<ul>
+<li>HOME目录</li>
+</ul>
+</li>
+<li>DISPLAY<ul>
+<li>图形输出</li>
+</ul>
+</li>
+<li>PS1<ul>
+<li>shell提示符</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
+<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
+<hr>
+<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
+<ul>
+<li>问题<ul>
+<li>多线程的程序，exit的行为如何？</li>
+<li>是所有线程结束还是只结束调用的线程？</li>
+</ul>
+</li>
+<li>多种exit<ul>
+<li>stdlib当中的exit</li>
+<li>glibc当中的_exit(0)</li>
+<li>syscall(SES_exit,0)</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>进程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 14：C标准库的实现</title>
+    <url>/2023/08/68a724658d83.html</url>
+    <content><![CDATA[<p>操作系统内核对外面提供的API就是Syscall，而当中和用户交互的就是Shell。而在Shell的外面，OS提供了一个框架性程序，帮助开发者实现应用程序（因为没有人愿意在没有库函数的情况下，直接使用汇编、系统调用来制作应用程序）</p>
+<blockquote>
+<p>· 在系统调用之上构建可以普遍使用的标准库：libc</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="14-1-系统调用的封装"><a href="#14-1-系统调用的封装" class="headerlink" title="14.1 系统调用的封装"></a>14.1 系统调用的封装</h2><h3 id="14-1-1-熟悉又陌生的libc"><a href="#14-1-1-熟悉又陌生的libc" class="headerlink" title="14.1.1 熟悉又陌生的libc"></a>14.1.1 熟悉又陌生的libc</h3><p><strong>为什么需要libc</strong><br>虽然不借助任何的库函数也可以写程序，但是在自己写的时候还是要进行封装（一些固定的功能）。<br>裸奔式的编程是不可行的，即使是实现最简单的程序也有很多可以重用的部分。</p>
+<h3 id="14-1-2-libc提供的类型系统"><a href="#14-1-2-libc提供的类型系统" class="headerlink" title="14.1.2 libc提供的类型系统"></a>14.1.2 libc提供的类型系统</h3><p><strong>第一种：类型系统</strong><br>问题：size of int 是多少大小？C语言编译器可以将其实现为八字节，也可以是四字节<br>解释：这种不同字节大小的类型，在进行跨平台交叉编译时，其移植性具有很大的障碍，因为其在不同平台上大小可能不同。<br>方法：libc标准库专门提供对应的标准基本类型</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>在使用的时候，直接使用标注上字节大小的int或bool:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int32_t</span> a;</span><br><span class="line">	<span class="type">uint64_t</span> x;</span><br><span class="line">	<span class="type">intptr_t</span> ptr;<span class="comment">//可以保证，把这个指针cast成一个int之后不会丢失任何的数据</span></span><br><span class="line">	<span class="comment">//intptr_t ptr = (intptr_t)main;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是使用int替代intptr_t时，可能会丢失信息。</p>
+<p>常见、在freestanding下也可以使用的定义：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">stddef.h -&gt; <span class="type">size_t</span></span><br><span class="line">stdint.h -&gt; <span class="type">int32_t</span>,<span class="type">uint64_t</span></span><br><span class="line">stdbool.h -&gt; <span class="type">bool</span>,<span class="literal">true</span>,<span class="literal">false</span></span><br><span class="line"><span class="type">float</span>.h</span><br><span class="line">limits.h</span><br><span class="line">stdarg.h</span><br></pre></td></tr></table></figure>
+<p>系统syscall使用到的stdarg.h；当系统调用的函数在传递参数时，其当中参数的设计：<br>![[Pasted image 20230307124449.png]]<br>仿照系统的函数写的代码：<br>![[Pasted image 20230307124836.png]]</p>
+<p>另一个问题：long type<br>long type32位机上是四字节，在其他机器上可能是八字节；</p>
+<h3 id="14-1-3-libc对系统调用的封装"><a href="#14-1-3-libc对系统调用的封装" class="headerlink" title="14.1.3 libc对系统调用的封装"></a>14.1.3 libc对系统调用的封装</h3><p><strong>对execve()系统调用的封装</strong><br>execve()并不好用，平时使用的时候使用麻烦。<br>比如execve()的第一个路径必须为是一个合法的路径，可以是相对路径，但必须是合法的路径：<code>../../../../../../.././bin/echo</code><br>execve如果不给合法的路径，其会直接拒绝用户，但用户想要实现的是找到path当中的echo，而不是找完全准确的那个path。<br>平时写代码可能会用：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">execlp(<span class="string">&quot;echo&quot;</span>,<span class="string">&quot;echo&quot;</span>,<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;OS course&quot;</span>,<span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//打印结果：hello OS course</span></span><br></pre></td></tr></table></figure>
+<p>用静态的方式编译，然后查看其系统调用：<br>![[Pasted image 20230307131337.png]]<br>execve会尝试每一个path当中的路径，然后直到成功找到那个程序，然后使用execve进程reset。这当中也介绍了更高情商的API：execlp<br><em>补充：在看手册的时候，手册当中经常会有很大的引用，比如在execve的手册当中，其当中可以看到SEE ALSO，顺着这些引用往下看就可以算是实现了一次文献调研</em><br>libc就是对在系统调用的基础上，面向人类易用性进行的封装。</p>
+<h3 id="14-1-4-libc对string、数组的封装"><a href="#14-1-4-libc对string、数组的封装" class="headerlink" title="14.1.4 libc对string、数组的封装"></a>14.1.4 libc对string、数组的封装</h3><p><strong>main函数中的参数</strong><br>main函数会有三个参数。当中有一个数组：<code>char *argv[]*</code></p>
+<p>memset实现：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memset</span><span class="params">(<span class="type">void</span>* s <span class="type">int</span> c,<span class="type">size_t</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		((<span class="type">char</span>*)s)[i] = c;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>memset对于数据竞争的态度：直接不管你，谁最后把数据写进去，内存单元就是哪个进程的，并且标准库只对“标准库内部数据”的线程安全性负责。<br>使用clang对其进行编译后的结果：</p>
+<p><strong>补充：libc实现的复杂性</strong><br>对于libc的实现者而言，因为Libc会被很多人调用，因此其正确性必须得得到验证。并且作为Libc，其必须得跑得快，而且还得兼顾各种的机器，在不同机器上面跑的快不快……<br>在多个线程使用其时，会不会产生数据竞争，是不是还得考虑安全……新的机制来了，当前代码还得支持。</p>
+<p><em>补：现在的C语言 &#x3D; 大号的汇编语言 + 大家还能接受的API的标准</em></p>
+<h3 id="14-1-5-其他的例子"><a href="#14-1-5-其他的例子" class="headerlink" title="14.1.5 其他的例子"></a>14.1.5 其他的例子</h3><p>数学库的实现：过于复杂，比如浮点数的性质，比如在接近0的时候如何保证精度。而OS要对纯粹的计算进行封装。</p>
+<hr>
+<h2 id="14-2-文件描述符与进程封装"><a href="#14-2-文件描述符与进程封装" class="headerlink" title="14.2 文件描述符与进程封装"></a>14.2 文件描述符与进程封装</h2><p>操作系统中存在大量的对象，比如终端、对于Shell来说连接的终端。libc的职责之一，就是对于这些常见对象的封装</p>
+<h3 id="14-2-1-什么是文件描述符"><a href="#14-2-1-什么是文件描述符" class="headerlink" title="14.2.1 什么是文件描述符"></a>14.2.1 什么是文件描述符</h3><p>文件描述符就是一个打开的文件，而Linux当中一切都是文件，因此可以使用文件描述符来打开一切对象。因此Libc必须要对文件描述符进行一定的封装。 </p>
+<p>例：往文件系统里面写文件的一段代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">FILE* fp = fopen(<span class="string">&quot;a.txt&quot;</span>,<span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="built_in">fprintf</span>(fp,<span class="string">&quot;Hello,OS world\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>使用gcc编译：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -g a.c &amp;&amp; ./a.out</span><br></pre></td></tr></table></figure>
+<p>其系统调用的过程：<br>![[Pasted image 20230307171635.png]]<br>这是OS视角下，当前程序的行为。但也可以从用户的视角来看一下，这个代码发生的行为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">p *fp</span><br></pre></td></tr></table></figure>
+<p>对文件描述符的指针解引用，得出的结果（部分）：<br>![[Pasted image 20230307171858.png]]<br>由此可以看到：FILE* 背后就是封装了一个文件描述符。同时一个FILE只能返回一个文件描述符，要么是读口要么是写口。<br>装填了值之后，fp解引用会变成这样：<br>![[Pasted image 20230307172411.png]]<br>可以清晰的看到libc为其设置的不同区域的大小以及对应的内容。</p>
+<p>popen和pclose的设计具有缺陷（或者说相比于现代的语言，不易用）</p>
+<h3 id="14-2-2-其他进程-操作系统功能"><a href="#14-2-2-其他进程-操作系统功能" class="headerlink" title="14.2.2 其他进程&#x2F;操作系统功能"></a>14.2.2 其他进程&#x2F;操作系统功能</h3><p><strong>错误信息处理</strong><br>所有的API都有可能失败，此时Shell可能会发出一个error message，比如“No Such file or directory”。并且不止是这一个错误发出了这个信息，还有很多的其他err message都是这个，是不是背后有一个共通的错误反应的内容？<br>因为这背后都使用了一样的libc当中的错误处理代码，一代一代的传承出来（除非有一个打破者，比如rust出现）</p>
+<p><strong>环境变量</strong><br>可以自己实现env.c这样的命令，借助Linux提供的env.c机制，可以实现非常简单的env环境变量实现。<br>在C语言当中可以使用环境变量：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">char</span>** environ;</span><br></pre></td></tr></table></figure>
+<p>而这些环境变量在执行之前就已经有值，这些值是谁设置的？如何查看这些内容？<br>可以使用gdb调试，从starti开始执行。<br>先编译一下env.c代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc env.c -g -static</span><br></pre></td></tr></table></figure>
+<p>受用gdb使用时，最开始starti时没有值，再往下执行后，可以看到时__libc_start_main()给其赋值<br>gdb断点查看：<br>![[Pasted image 20230308165300.png]]</p>
+<h2 id="14-3-地址空间的封装"><a href="#14-3-地址空间的封装" class="headerlink" title="14.3 地址空间的封装"></a>14.3 地址空间的封装</h2><h3 id="14-3-1-内存分配行为"><a href="#14-3-1-内存分配行为" class="headerlink" title="14.3.1 内存分配行为"></a>14.3.1 内存分配行为</h3><p><strong>简介</strong><br>libc的一个非常重要的功能之一就是内存管理，而这块主要就是malloc和free，任何的应用程序都需要大量的分配内存。</p>
+<p><strong>行为分析</strong><br>在一个大区间中维护互不相交的区间的集合，大区间由mmap来实现，mmap基于当前进程的地址空间，从当中挖去一大块内存。<br>在一个左闭右开的区间，维护一个数据结构，这些被分配的内存互相不相交，在这片内存当中进行malloc和free，可以往一片空区分配内存，或者将已经分配的内存释放掉。因此malloc和free就是区间管理。</p>
+<p><strong>内存分配的效率问题</strong><br>当想要在设计内存管理的时候，使用类似红黑树、B+树类似的算法思路想要去实现算法复杂度的log(n)时，就已经陷入误区。<br>在OS上，在多处理器的方案下，光是想要实现安全性就够困难了。</p>
+<p><strong>任何脱离workflow的性能优化都是耍流氓</strong>，在考虑性能之前，需要先考虑需要什么样的性能。</p>
+<h3 id="14-3-2-内存管理workflow分析"><a href="#14-3-2-内存管理workflow分析" class="headerlink" title="14.3.2 内存管理workflow分析"></a>14.3.2 内存管理workflow分析</h3><p><strong>指导思想</strong><br>内存被分配出来就是为了被使用的，O(n)大小的对象分配至少需要有相对应数量级的读写操作，不然就是性能Bug。<br>必须是在需要对应的对象，需要那么多的内存时才分配那部分内存。</p>
+<p><strong>问题</strong></p>
+<ul>
+<li>越小的对象创建&#x2F;分配越频繁<ul>
+<li>字符串、临时对象等</li>
+<li>生存周期可长可短</li>
+</ul>
+</li>
+<li>较为频繁的分配中等大小的对象<ul>
+<li>较大的数组、复杂的对象</li>
+<li>更长的生命周期</li>
+</ul>
+</li>
+<li>低频率的大对象<ul>
+<li>巨大的容器、分配器</li>
+<li>很长的生存周期</li>
+</ul>
+</li>
+<li>挑战：并行化的分配问题<ul>
+<li>所有的分配都会在处理器上发生，而处理器是并发、相互高度用总线连接的</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-3-3-内存问题的两种方案"><a href="#14-3-3-内存问题的两种方案" class="headerlink" title="14.3.3 内存问题的两种方案"></a>14.3.3 内存问题的两种方案</h3><p>设置两套系统：</p>
+<ul>
+<li>fast path<ul>
+<li>性能好，并行度好，覆盖大部分情况</li>
+<li>可以很快的解决问题，但是有小概率失败</li>
+</ul>
+</li>
+<li>slow path<ul>
+<li>性能没那么好，但是要求把事情做好</li>
+</ul>
+</li>
+<li>人的fast系统和slow系统<ul>
+<li>直觉式的反应系统和推力式的反应系统</li>
+</ul>
+</li>
+</ul>
+<p><strong>Malloc：Fast Path设计</strong><br>简介：使得所有的CPU都可以并行的申请内存<br>实现：想实现更快的分配，因此不能进行上锁，如果此时有两个线程，此时可以以page的方式，在page的基础上维护一个空闲链表，当一个page分配完了，再从全局的page当中分配一个page，往其上一把锁，然后把这个page返回给需要的地方。<br>当快速的在page上分配内存时是fast path，但是当内存不够，分配更多的page时，此时是slow path。通过这种设计实现slow path的访问变少，性能变好。<br>如果不想在page上使用链表维护时，还可以设置最小的分配单元位32b、64b、…4kb，此时有一个64kb的page，在此page上有个Header，除了这个Header之外，在这个Page上就是一堆16b的对象（或者其他格式），可以为每个分配的大小单独分配结构。</p>
+<p><strong>小内存的分段设计</strong><br>基于一个个Segregation上进行分配，每个slab里面的对象大小都一致，每个线程都在本地拥有立即分配完成的权限。</p>
+<p><strong>大内存的大锁设计</strong><br>需要分配大内存时，此时就是使用线段树，将一串区域切分成树，然后变成了一个算法问题。使用一把大锁保证其安全。</p>
+<h2 id="14-4-总结"><a href="#14-4-总结" class="headerlink" title="14.4 总结"></a>14.4 总结</h2><h3 id="14-4-1-相关手册"><a href="#14-4-1-相关手册" class="headerlink" title="14.4.1 相关手册"></a>14.4.1 相关手册</h3><p><strong>Libc手册</strong><br>The GNU C Library</p>
+<p>Libc的实现：Newlib</p>
+<h3 id="14-4-2-从C走向世界"><a href="#14-4-2-从C走向世界" class="headerlink" title="14.4.2 从C走向世界"></a>14.4.2 从C走向世界</h3><p>基于C，可以实现C++的编译器<br>基于C++，可以实现C++标准库<br>基于C++，可以是西安OpenJDK<br>基于C++，可以实现JS，进而实现整个浏览器当中的世界</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>C语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【商业系列】商业计划书大纲与内容</title>
+    <url>/2023/08/efa8d1f054ea.html</url>
+    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
+<ul>
+<li>1、 团队简介</li>
+<li>2、 项目内容</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析</li>
+<li>5、 商业模式</li>
+<li>6、 战略规划<span id="more"></span></li>
+</ul>
+<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
+<li>1、 团队简介</li>
+<li>2、 项目内容<ul>
+<li>1、项目介绍</li>
+<li>2、核心优势</li>
+</ul>
+</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析<ul>
+<li>1、 市场分析</li>
+<li>2、 竞品分析</li>
+</ul>
+</li>
+<li>5、 商业模式<ul>
+<li>1、 商业模式介绍</li>
+<li>2、 相关数据</li>
+</ul>
+</li>
+<li>6、 战略规划<ul>
+<li>1、 战略目标</li>
+<li>2、 实现路径</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
+<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
+<ol>
+<li>核心业务内容</li>
+<li>核心优势</li>
+</ol>
+<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
+<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
+<ul>
+<li>分析方法<ul>
+<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
+<li><ol>
+<li>增长型项目（还没开始或刚开始）</li>
+</ol>
+<ul>
+<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
+</ul>
+</li>
+<li><ol start="2">
+<li>运营型项目（已经开始）</li>
+</ol>
+<ul>
+<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
+<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
+<ul>
+<li>流量矩阵：<ul>
+<li>自媒体流量（自带宣传流量）</li>
+<li>开发团队（丰富开发经验）</li>
+<li>项目案例（Unity3D）</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
+<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
+<ul>
+<li>真实的数据，但是是部分的真实</li>
+</ul>
+<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
+<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
+<ol>
+<li>项目如何盈利？</li>
+<li>项目的流量模式？</li>
+<li>获客转化的路径？</li>
+<li>是否具有可持续性？</li>
+<li>增长的空间以及可能？</li>
+</ol>
+<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
+<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
+<ol>
+<li>确定战略目标，展现当前项目的发展前景</li>
+<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
+</ol>
+]]></content>
+      <categories>
+        <category>商业</category>
+      </categories>
+      <tags>
+        <tag>商业</tag>
+        <tag>创业</tag>
       </tags>
   </entry>
   <entry>
@@ -396,233 +785,6 @@
 <p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
 <h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
 <h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>进程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 14：C标准库的实现</title>
-    <url>/2023/08/68a724658d83.html</url>
-    <content><![CDATA[<p>操作系统内核对外面提供的API就是Syscall，而当中和用户交互的就是Shell。而在Shell的外面，OS提供了一个框架性程序，帮助开发者实现应用程序（因为没有人愿意在没有库函数的情况下，直接使用汇编、系统调用来制作应用程序）</p>
-<blockquote>
-<p>· 在系统调用之上构建可以普遍使用的标准库：libc</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="14-1-系统调用的封装"><a href="#14-1-系统调用的封装" class="headerlink" title="14.1 系统调用的封装"></a>14.1 系统调用的封装</h2><h3 id="14-1-1-熟悉又陌生的libc"><a href="#14-1-1-熟悉又陌生的libc" class="headerlink" title="14.1.1 熟悉又陌生的libc"></a>14.1.1 熟悉又陌生的libc</h3><p><strong>为什么需要libc</strong><br>虽然不借助任何的库函数也可以写程序，但是在自己写的时候还是要进行封装（一些固定的功能）。<br>裸奔式的编程是不可行的，即使是实现最简单的程序也有很多可以重用的部分。</p>
-<h3 id="14-1-2-libc提供的类型系统"><a href="#14-1-2-libc提供的类型系统" class="headerlink" title="14.1.2 libc提供的类型系统"></a>14.1.2 libc提供的类型系统</h3><p><strong>第一种：类型系统</strong><br>问题：size of int 是多少大小？C语言编译器可以将其实现为八字节，也可以是四字节<br>解释：这种不同字节大小的类型，在进行跨平台交叉编译时，其移植性具有很大的障碍，因为其在不同平台上大小可能不同。<br>方法：libc标准库专门提供对应的标准基本类型</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br></pre></td></tr></table></figure>
-<p>在使用的时候，直接使用标注上字节大小的int或bool:</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int32_t</span> a;</span><br><span class="line">	<span class="type">uint64_t</span> x;</span><br><span class="line">	<span class="type">intptr_t</span> ptr;<span class="comment">//可以保证，把这个指针cast成一个int之后不会丢失任何的数据</span></span><br><span class="line">	<span class="comment">//intptr_t ptr = (intptr_t)main;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果是使用int替代intptr_t时，可能会丢失信息。</p>
-<p>常见、在freestanding下也可以使用的定义：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">stddef.h -&gt; <span class="type">size_t</span></span><br><span class="line">stdint.h -&gt; <span class="type">int32_t</span>,<span class="type">uint64_t</span></span><br><span class="line">stdbool.h -&gt; <span class="type">bool</span>,<span class="literal">true</span>,<span class="literal">false</span></span><br><span class="line"><span class="type">float</span>.h</span><br><span class="line">limits.h</span><br><span class="line">stdarg.h</span><br></pre></td></tr></table></figure>
-<p>系统syscall使用到的stdarg.h；当系统调用的函数在传递参数时，其当中参数的设计：<br>![[Pasted image 20230307124449.png]]<br>仿照系统的函数写的代码：<br>![[Pasted image 20230307124836.png]]</p>
-<p>另一个问题：long type<br>long type32位机上是四字节，在其他机器上可能是八字节；</p>
-<h3 id="14-1-3-libc对系统调用的封装"><a href="#14-1-3-libc对系统调用的封装" class="headerlink" title="14.1.3 libc对系统调用的封装"></a>14.1.3 libc对系统调用的封装</h3><p><strong>对execve()系统调用的封装</strong><br>execve()并不好用，平时使用的时候使用麻烦。<br>比如execve()的第一个路径必须为是一个合法的路径，可以是相对路径，但必须是合法的路径：<code>../../../../../../.././bin/echo</code><br>execve如果不给合法的路径，其会直接拒绝用户，但用户想要实现的是找到path当中的echo，而不是找完全准确的那个path。<br>平时写代码可能会用：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">execlp(<span class="string">&quot;echo&quot;</span>,<span class="string">&quot;echo&quot;</span>,<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;OS course&quot;</span>,<span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//打印结果：hello OS course</span></span><br></pre></td></tr></table></figure>
-<p>用静态的方式编译，然后查看其系统调用：<br>![[Pasted image 20230307131337.png]]<br>execve会尝试每一个path当中的路径，然后直到成功找到那个程序，然后使用execve进程reset。这当中也介绍了更高情商的API：execlp<br><em>补充：在看手册的时候，手册当中经常会有很大的引用，比如在execve的手册当中，其当中可以看到SEE ALSO，顺着这些引用往下看就可以算是实现了一次文献调研</em><br>libc就是对在系统调用的基础上，面向人类易用性进行的封装。</p>
-<h3 id="14-1-4-libc对string、数组的封装"><a href="#14-1-4-libc对string、数组的封装" class="headerlink" title="14.1.4 libc对string、数组的封装"></a>14.1.4 libc对string、数组的封装</h3><p><strong>main函数中的参数</strong><br>main函数会有三个参数。当中有一个数组：<code>char *argv[]*</code></p>
-<p>memset实现：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memset</span><span class="params">(<span class="type">void</span>* s <span class="type">int</span> c,<span class="type">size_t</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		((<span class="type">char</span>*)s)[i] = c;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>memset对于数据竞争的态度：直接不管你，谁最后把数据写进去，内存单元就是哪个进程的，并且标准库只对“标准库内部数据”的线程安全性负责。<br>使用clang对其进行编译后的结果：</p>
-<p><strong>补充：libc实现的复杂性</strong><br>对于libc的实现者而言，因为Libc会被很多人调用，因此其正确性必须得得到验证。并且作为Libc，其必须得跑得快，而且还得兼顾各种的机器，在不同机器上面跑的快不快……<br>在多个线程使用其时，会不会产生数据竞争，是不是还得考虑安全……新的机制来了，当前代码还得支持。</p>
-<p><em>补：现在的C语言 &#x3D; 大号的汇编语言 + 大家还能接受的API的标准</em></p>
-<h3 id="14-1-5-其他的例子"><a href="#14-1-5-其他的例子" class="headerlink" title="14.1.5 其他的例子"></a>14.1.5 其他的例子</h3><p>数学库的实现：过于复杂，比如浮点数的性质，比如在接近0的时候如何保证精度。而OS要对纯粹的计算进行封装。</p>
-<hr>
-<h2 id="14-2-文件描述符与进程封装"><a href="#14-2-文件描述符与进程封装" class="headerlink" title="14.2 文件描述符与进程封装"></a>14.2 文件描述符与进程封装</h2><p>操作系统中存在大量的对象，比如终端、对于Shell来说连接的终端。libc的职责之一，就是对于这些常见对象的封装</p>
-<h3 id="14-2-1-什么是文件描述符"><a href="#14-2-1-什么是文件描述符" class="headerlink" title="14.2.1 什么是文件描述符"></a>14.2.1 什么是文件描述符</h3><p>文件描述符就是一个打开的文件，而Linux当中一切都是文件，因此可以使用文件描述符来打开一切对象。因此Libc必须要对文件描述符进行一定的封装。 </p>
-<p>例：往文件系统里面写文件的一段代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">FILE* fp = fopen(<span class="string">&quot;a.txt&quot;</span>,<span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="built_in">fprintf</span>(fp,<span class="string">&quot;Hello,OS world\n&quot;</span>);</span><br></pre></td></tr></table></figure>
-<p>使用gcc编译：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -g a.c &amp;&amp; ./a.out</span><br></pre></td></tr></table></figure>
-<p>其系统调用的过程：<br>![[Pasted image 20230307171635.png]]<br>这是OS视角下，当前程序的行为。但也可以从用户的视角来看一下，这个代码发生的行为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">p *fp</span><br></pre></td></tr></table></figure>
-<p>对文件描述符的指针解引用，得出的结果（部分）：<br>![[Pasted image 20230307171858.png]]<br>由此可以看到：FILE* 背后就是封装了一个文件描述符。同时一个FILE只能返回一个文件描述符，要么是读口要么是写口。<br>装填了值之后，fp解引用会变成这样：<br>![[Pasted image 20230307172411.png]]<br>可以清晰的看到libc为其设置的不同区域的大小以及对应的内容。</p>
-<p>popen和pclose的设计具有缺陷（或者说相比于现代的语言，不易用）</p>
-<h3 id="14-2-2-其他进程-操作系统功能"><a href="#14-2-2-其他进程-操作系统功能" class="headerlink" title="14.2.2 其他进程&#x2F;操作系统功能"></a>14.2.2 其他进程&#x2F;操作系统功能</h3><p><strong>错误信息处理</strong><br>所有的API都有可能失败，此时Shell可能会发出一个error message，比如“No Such file or directory”。并且不止是这一个错误发出了这个信息，还有很多的其他err message都是这个，是不是背后有一个共通的错误反应的内容？<br>因为这背后都使用了一样的libc当中的错误处理代码，一代一代的传承出来（除非有一个打破者，比如rust出现）</p>
-<p><strong>环境变量</strong><br>可以自己实现env.c这样的命令，借助Linux提供的env.c机制，可以实现非常简单的env环境变量实现。<br>在C语言当中可以使用环境变量：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">char</span>** environ;</span><br></pre></td></tr></table></figure>
-<p>而这些环境变量在执行之前就已经有值，这些值是谁设置的？如何查看这些内容？<br>可以使用gdb调试，从starti开始执行。<br>先编译一下env.c代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc env.c -g -static</span><br></pre></td></tr></table></figure>
-<p>受用gdb使用时，最开始starti时没有值，再往下执行后，可以看到时__libc_start_main()给其赋值<br>gdb断点查看：<br>![[Pasted image 20230308165300.png]]</p>
-<h2 id="14-3-地址空间的封装"><a href="#14-3-地址空间的封装" class="headerlink" title="14.3 地址空间的封装"></a>14.3 地址空间的封装</h2><h3 id="14-3-1-内存分配行为"><a href="#14-3-1-内存分配行为" class="headerlink" title="14.3.1 内存分配行为"></a>14.3.1 内存分配行为</h3><p><strong>简介</strong><br>libc的一个非常重要的功能之一就是内存管理，而这块主要就是malloc和free，任何的应用程序都需要大量的分配内存。</p>
-<p><strong>行为分析</strong><br>在一个大区间中维护互不相交的区间的集合，大区间由mmap来实现，mmap基于当前进程的地址空间，从当中挖去一大块内存。<br>在一个左闭右开的区间，维护一个数据结构，这些被分配的内存互相不相交，在这片内存当中进行malloc和free，可以往一片空区分配内存，或者将已经分配的内存释放掉。因此malloc和free就是区间管理。</p>
-<p><strong>内存分配的效率问题</strong><br>当想要在设计内存管理的时候，使用类似红黑树、B+树类似的算法思路想要去实现算法复杂度的log(n)时，就已经陷入误区。<br>在OS上，在多处理器的方案下，光是想要实现安全性就够困难了。</p>
-<p><strong>任何脱离workflow的性能优化都是耍流氓</strong>，在考虑性能之前，需要先考虑需要什么样的性能。</p>
-<h3 id="14-3-2-内存管理workflow分析"><a href="#14-3-2-内存管理workflow分析" class="headerlink" title="14.3.2 内存管理workflow分析"></a>14.3.2 内存管理workflow分析</h3><p><strong>指导思想</strong><br>内存被分配出来就是为了被使用的，O(n)大小的对象分配至少需要有相对应数量级的读写操作，不然就是性能Bug。<br>必须是在需要对应的对象，需要那么多的内存时才分配那部分内存。</p>
-<p><strong>问题</strong></p>
-<ul>
-<li>越小的对象创建&#x2F;分配越频繁<ul>
-<li>字符串、临时对象等</li>
-<li>生存周期可长可短</li>
-</ul>
-</li>
-<li>较为频繁的分配中等大小的对象<ul>
-<li>较大的数组、复杂的对象</li>
-<li>更长的生命周期</li>
-</ul>
-</li>
-<li>低频率的大对象<ul>
-<li>巨大的容器、分配器</li>
-<li>很长的生存周期</li>
-</ul>
-</li>
-<li>挑战：并行化的分配问题<ul>
-<li>所有的分配都会在处理器上发生，而处理器是并发、相互高度用总线连接的</li>
-</ul>
-</li>
-</ul>
-<h3 id="14-3-3-内存问题的两种方案"><a href="#14-3-3-内存问题的两种方案" class="headerlink" title="14.3.3 内存问题的两种方案"></a>14.3.3 内存问题的两种方案</h3><p>设置两套系统：</p>
-<ul>
-<li>fast path<ul>
-<li>性能好，并行度好，覆盖大部分情况</li>
-<li>可以很快的解决问题，但是有小概率失败</li>
-</ul>
-</li>
-<li>slow path<ul>
-<li>性能没那么好，但是要求把事情做好</li>
-</ul>
-</li>
-<li>人的fast系统和slow系统<ul>
-<li>直觉式的反应系统和推力式的反应系统</li>
-</ul>
-</li>
-</ul>
-<p><strong>Malloc：Fast Path设计</strong><br>简介：使得所有的CPU都可以并行的申请内存<br>实现：想实现更快的分配，因此不能进行上锁，如果此时有两个线程，此时可以以page的方式，在page的基础上维护一个空闲链表，当一个page分配完了，再从全局的page当中分配一个page，往其上一把锁，然后把这个page返回给需要的地方。<br>当快速的在page上分配内存时是fast path，但是当内存不够，分配更多的page时，此时是slow path。通过这种设计实现slow path的访问变少，性能变好。<br>如果不想在page上使用链表维护时，还可以设置最小的分配单元位32b、64b、…4kb，此时有一个64kb的page，在此page上有个Header，除了这个Header之外，在这个Page上就是一堆16b的对象（或者其他格式），可以为每个分配的大小单独分配结构。</p>
-<p><strong>小内存的分段设计</strong><br>基于一个个Segregation上进行分配，每个slab里面的对象大小都一致，每个线程都在本地拥有立即分配完成的权限。</p>
-<p><strong>大内存的大锁设计</strong><br>需要分配大内存时，此时就是使用线段树，将一串区域切分成树，然后变成了一个算法问题。使用一把大锁保证其安全。</p>
-<h2 id="14-4-总结"><a href="#14-4-总结" class="headerlink" title="14.4 总结"></a>14.4 总结</h2><h3 id="14-4-1-相关手册"><a href="#14-4-1-相关手册" class="headerlink" title="14.4.1 相关手册"></a>14.4.1 相关手册</h3><p><strong>Libc手册</strong><br>The GNU C Library</p>
-<p>Libc的实现：Newlib</p>
-<h3 id="14-4-2-从C走向世界"><a href="#14-4-2-从C走向世界" class="headerlink" title="14.4.2 从C走向世界"></a>14.4.2 从C走向世界</h3><p>基于C，可以实现C++的编译器<br>基于C++，可以实现C++标准库<br>基于C++，可以是西安OpenJDK<br>基于C++，可以实现JS，进而实现整个浏览器当中的世界</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>C语言</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 11：操作系统上的进程</title>
-    <url>/2023/08/5b1cbd3ab6e9.html</url>
-    <content><![CDATA[<blockquote>
-<pre><code>1. 操作系统启动后做了什么？
-2. 操作系统如何管理进程？
-</code></pre>
-</blockquote>
-<span id="more"></span>
-<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
-<p><strong>Linux进入之后加载第一个程序的代码：</strong><br>![[Pasted image 20230223142644.png]]</p>
-<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230223142425.png]]</p>
-<h3 id="11-1-2-最小Linux实现"><a href="#11-1-2-最小Linux实现" class="headerlink" title="11.1.2 最小Linux实现"></a>11.1.2 最小Linux实现</h3><p>最小Linux的树状结构：<br>![[Pasted image 20230223142955.png]]<br>initramfs打包选项：<br>![[Pasted image 20230223143107.png]]<br>Linux 运行：</p>
-<ol>
-<li>无图形界面</li>
-<li>128m内存</li>
-<li>linux内核</li>
-<li>将initramfs<br>![[Pasted image 20230223143146.png]]<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
-</ol>
-<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
-<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
-<ol>
-<li>当中有更多挂载的磁盘</li>
-<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
-</ol>
-<p><strong>系统调用的三大类型</strong></p>
-<ol>
-<li>进程管理</li>
-<li>文件管理</li>
-<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
-</ol>
-<hr>
-<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
-<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
-<ul>
-<li>完全一致的进程<ul>
-<li>两个进程在内存上一模一样，寄存器一样</li>
-<li>只有返回的值不一样：<ul>
-<li>每一个进程都有一个唯一的编号</li>
-<li>除了编号之外一切相同</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
-<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
-<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
-<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
-<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
-<ul>
-<li>line buffer<ul>
-<li>直接把每一行buffer输出出来</li>
-</ul>
-</li>
-<li>full buffer<ul>
-<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
-</ul>
-</li>
-</ul>
-<p>fork的问题：多个线程下，fork的行为问题</p>
-<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
-<p>使用代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
-<ul>
-<li>环境变量<ul>
-<li>PATH<ul>
-<li>程序执行路径的环境变量</li>
-</ul>
-</li>
-<li>PWD<ul>
-<li>当前路径</li>
-</ul>
-</li>
-<li>HOME<ul>
-<li>HOME目录</li>
-</ul>
-</li>
-<li>DISPLAY<ul>
-<li>图形输出</li>
-</ul>
-</li>
-<li>PS1<ul>
-<li>shell提示符</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
-<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
-<hr>
-<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
-<ul>
-<li>问题<ul>
-<li>多线程的程序，exit的行为如何？</li>
-<li>是所有线程结束还是只结束调用的线程？</li>
-</ul>
-</li>
-<li>多种exit<ul>
-<li>stdlib当中的exit</li>
-<li>glibc当中的_exit(0)</li>
-<li>syscall(SES_exit,0)</li>
-</ul>
-</li>
-</ul>
 ]]></content>
       <categories>
         <category>操作系统</category>
