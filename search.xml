@@ -1,65 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>【CSharp系列】1. CLR执行模型</title>
-    <url>/2023/08/5aed3da140f6.html</url>
-    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步<span id="more"></span></li>
-</ol>
-<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
-</ol>
-<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
-<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
-<ol>
-<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
-<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
-<li>元数据：源代码的定义数据，源代码的引用数据</li>
-<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
-<li></li>
-</ol>
-<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
-<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
-<ol>
-<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
-<li>程序集是重用、安全性以及版本控制的最小单元；</li>
-<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
-</ol>
-<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
-<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
-<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
-<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
-<p><strong>加载CLR</strong></p>
-<ol>
-<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
-<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
-<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
-</ol>
-<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
-<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
-<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
-<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
-]]></content>
-      <categories>
-        <category>CSharp</category>
-      </categories>
-      <tags>
-        <tag>CSharp</tag>
-        <tag>CLR</tag>
-        <tag>编译原理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</title>
     <url>/2023/08/4b26dd1d757b.html</url>
     <content><![CDATA[<ul>
@@ -398,6 +339,65 @@
       </tags>
   </entry>
   <entry>
+    <title>【CSharp系列】1. CLR执行模型</title>
+    <url>/2023/08/5aed3da140f6.html</url>
+    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<span id="more"></span></li>
+</ol>
+<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
+</ol>
+<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
+<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
+<ol>
+<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
+<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
+<li>元数据：源代码的定义数据，源代码的引用数据</li>
+<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
+<li></li>
+</ol>
+<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
+<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
+<ol>
+<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
+<li>程序集是重用、安全性以及版本控制的最小单元；</li>
+<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
+</ol>
+<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
+<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
+<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
+<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
+<p><strong>加载CLR</strong></p>
+<ol>
+<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
+<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
+<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
+</ol>
+<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
+<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
+<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
+<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
+]]></content>
+      <categories>
+        <category>CSharp</category>
+      </categories>
+      <tags>
+        <tag>CSharp</tag>
+        <tag>CLR</tag>
+        <tag>编译原理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【商业系列】商业计划书大纲与内容</title>
     <url>/2023/08/efa8d1f054ea.html</url>
     <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
@@ -607,6 +607,130 @@
       </tags>
   </entry>
   <entry>
+    <title>Lecture 11：操作系统上的进程</title>
+    <url>/2023/08/5b1cbd3ab6e9.html</url>
+    <content><![CDATA[<blockquote>
+<pre><code>1. 操作系统启动后做了什么？
+2. 操作系统如何管理进程？
+</code></pre>
+</blockquote>
+<span id="more"></span>
+<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
+<p><strong>Linux进入之后加载第一个程序的代码：</strong><br>![[Pasted image 20230223142644.png]]</p>
+<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230223142425.png]]</p>
+<h3 id="11-1-2-最小Linux实现"><a href="#11-1-2-最小Linux实现" class="headerlink" title="11.1.2 最小Linux实现"></a>11.1.2 最小Linux实现</h3><p>最小Linux的树状结构：<br>![[Pasted image 20230223142955.png]]<br>initramfs打包选项：<br>![[Pasted image 20230223143107.png]]<br>Linux 运行：</p>
+<ol>
+<li>无图形界面</li>
+<li>128m内存</li>
+<li>linux内核</li>
+<li>将initramfs<br>![[Pasted image 20230223143146.png]]<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
+</ol>
+<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
+<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
+<ol>
+<li>当中有更多挂载的磁盘</li>
+<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
+</ol>
+<p><strong>系统调用的三大类型</strong></p>
+<ol>
+<li>进程管理</li>
+<li>文件管理</li>
+<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
+</ol>
+<hr>
+<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
+<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
+<ul>
+<li>完全一致的进程<ul>
+<li>两个进程在内存上一模一样，寄存器一样</li>
+<li>只有返回的值不一样：<ul>
+<li>每一个进程都有一个唯一的编号</li>
+<li>除了编号之外一切相同</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
+<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
+<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
+<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
+<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
+<ul>
+<li>line buffer<ul>
+<li>直接把每一行buffer输出出来</li>
+</ul>
+</li>
+<li>full buffer<ul>
+<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
+</ul>
+</li>
+</ul>
+<p>fork的问题：多个线程下，fork的行为问题</p>
+<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
+<p>使用代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
+<ul>
+<li>环境变量<ul>
+<li>PATH<ul>
+<li>程序执行路径的环境变量</li>
+</ul>
+</li>
+<li>PWD<ul>
+<li>当前路径</li>
+</ul>
+</li>
+<li>HOME<ul>
+<li>HOME目录</li>
+</ul>
+</li>
+<li>DISPLAY<ul>
+<li>图形输出</li>
+</ul>
+</li>
+<li>PS1<ul>
+<li>shell提示符</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
+<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
+<hr>
+<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
+<ul>
+<li>问题<ul>
+<li>多线程的程序，exit的行为如何？</li>
+<li>是所有线程结束还是只结束调用的线程？</li>
+</ul>
+</li>
+<li>多种exit<ul>
+<li>stdlib当中的exit</li>
+<li>glibc当中的_exit(0)</li>
+<li>syscall(SES_exit,0)</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>进程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Lecture 12：进程的地址空间</title>
     <url>/2023/08/d03400aa93d7.html</url>
     <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
@@ -741,130 +865,6 @@
       <tags>
         <tag>操作系统</tag>
         <tag>Shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 11：操作系统上的进程</title>
-    <url>/2023/08/5b1cbd3ab6e9.html</url>
-    <content><![CDATA[<blockquote>
-<pre><code>1. 操作系统启动后做了什么？
-2. 操作系统如何管理进程？
-</code></pre>
-</blockquote>
-<span id="more"></span>
-<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
-<p><strong>Linux进入之后加载第一个程序的代码：</strong><br>![[Pasted image 20230223142644.png]]</p>
-<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230223142425.png]]</p>
-<h3 id="11-1-2-最小Linux实现"><a href="#11-1-2-最小Linux实现" class="headerlink" title="11.1.2 最小Linux实现"></a>11.1.2 最小Linux实现</h3><p>最小Linux的树状结构：<br>![[Pasted image 20230223142955.png]]<br>initramfs打包选项：<br>![[Pasted image 20230223143107.png]]<br>Linux 运行：</p>
-<ol>
-<li>无图形界面</li>
-<li>128m内存</li>
-<li>linux内核</li>
-<li>将initramfs<br>![[Pasted image 20230223143146.png]]<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
-</ol>
-<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
-<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
-<ol>
-<li>当中有更多挂载的磁盘</li>
-<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
-</ol>
-<p><strong>系统调用的三大类型</strong></p>
-<ol>
-<li>进程管理</li>
-<li>文件管理</li>
-<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
-</ol>
-<hr>
-<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
-<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
-<ul>
-<li>完全一致的进程<ul>
-<li>两个进程在内存上一模一样，寄存器一样</li>
-<li>只有返回的值不一样：<ul>
-<li>每一个进程都有一个唯一的编号</li>
-<li>除了编号之外一切相同</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
-<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
-<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
-<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
-<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
-<ul>
-<li>line buffer<ul>
-<li>直接把每一行buffer输出出来</li>
-</ul>
-</li>
-<li>full buffer<ul>
-<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
-</ul>
-</li>
-</ul>
-<p>fork的问题：多个线程下，fork的行为问题</p>
-<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
-<p>使用代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
-<ul>
-<li>环境变量<ul>
-<li>PATH<ul>
-<li>程序执行路径的环境变量</li>
-</ul>
-</li>
-<li>PWD<ul>
-<li>当前路径</li>
-</ul>
-</li>
-<li>HOME<ul>
-<li>HOME目录</li>
-</ul>
-</li>
-<li>DISPLAY<ul>
-<li>图形输出</li>
-</ul>
-</li>
-<li>PS1<ul>
-<li>shell提示符</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
-<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
-<hr>
-<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
-<ul>
-<li>问题<ul>
-<li>多线程的程序，exit的行为如何？</li>
-<li>是所有线程结束还是只结束调用的线程？</li>
-</ul>
-</li>
-<li>多种exit<ul>
-<li>stdlib当中的exit</li>
-<li>glibc当中的_exit(0)</li>
-<li>syscall(SES_exit,0)</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>进程</tag>
       </tags>
   </entry>
   <entry>
