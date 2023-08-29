@@ -1,65 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>【CSharp系列】1. CLR执行模型</title>
-    <url>/2023/08/5aed3da140f6.html</url>
-    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步<span id="more"></span></li>
-</ol>
-<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
-</ol>
-<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
-<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
-<ol>
-<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
-<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
-<li>元数据：源代码的定义数据，源代码的引用数据</li>
-<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
-<li></li>
-</ol>
-<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
-<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
-<ol>
-<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
-<li>程序集是重用、安全性以及版本控制的最小单元；</li>
-<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
-</ol>
-<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
-<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
-<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
-<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
-<p><strong>加载CLR</strong></p>
-<ol>
-<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
-<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
-<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
-</ol>
-<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
-<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
-<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
-<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
-]]></content>
-      <categories>
-        <category>CSharp</category>
-      </categories>
-      <tags>
-        <tag>C#</tag>
-        <tag>CLR</tag>
-        <tag>编译原理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</title>
     <url>/2023/08/4b26dd1d757b.html</url>
     <content><![CDATA[<ul>
@@ -216,617 +157,350 @@
         <category>CSharp</category>
       </categories>
       <tags>
-        <tag>C#</tag>
+        <tag>CSharp</tag>
         <tag>垃圾回收</tag>
         <tag>算法</tag>
       </tags>
   </entry>
   <entry>
-    <title>【商业系列】商业计划书大纲与内容</title>
-    <url>/2023/08/efa8d1f054ea.html</url>
-    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
-<ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析</li>
-<li>5、 商业模式</li>
-<li>6、 战略规划<span id="more"></span></li>
-</ul>
-<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容<ul>
-<li>1、项目介绍</li>
-<li>2、核心优势</li>
-</ul>
-</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析<ul>
-<li>1、 市场分析</li>
-<li>2、 竞品分析</li>
-</ul>
-</li>
-<li>5、 商业模式<ul>
-<li>1、 商业模式介绍</li>
-<li>2、 相关数据</li>
-</ul>
-</li>
-<li>6、 战略规划<ul>
-<li>1、 战略目标</li>
-<li>2、 实现路径</li>
-</ul>
-</li>
-</ul>
-<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
-<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
+    <title>【CSharp系列】1. CLR执行模型</title>
+    <url>/2023/08/5aed3da140f6.html</url>
+    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
 <ol>
-<li>核心业务内容</li>
-<li>核心优势</li>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<span id="more"></span></li>
 </ol>
-<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
-<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
-<ul>
-<li>分析方法<ul>
-<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
-<li><ol>
-<li>增长型项目（还没开始或刚开始）</li>
-</ol>
-<ul>
-<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>运营型项目（已经开始）</li>
-</ol>
-<ul>
-<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
-<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
-<ul>
-<li>流量矩阵：<ul>
-<li>自媒体流量（自带宣传流量）</li>
-<li>开发团队（丰富开发经验）</li>
-<li>项目案例（Unity3D）</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
-<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
-<ul>
-<li>真实的数据，但是是部分的真实</li>
-</ul>
-<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
-<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
+<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
 <ol>
-<li>项目如何盈利？</li>
-<li>项目的流量模式？</li>
-<li>获客转化的路径？</li>
-<li>是否具有可持续性？</li>
-<li>增长的空间以及可能？</li>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
 </ol>
-<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
-<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
+<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
+<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
 <ol>
-<li>确定战略目标，展现当前项目的发展前景</li>
-<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
+<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
+<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
+<li>元数据：源代码的定义数据，源代码的引用数据</li>
+<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
+<li></li>
 </ol>
+<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
+<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
+<ol>
+<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
+<li>程序集是重用、安全性以及版本控制的最小单元；</li>
+<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
+</ol>
+<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
+<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
+<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
+<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
+<p><strong>加载CLR</strong></p>
+<ol>
+<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
+<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
+<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
+</ol>
+<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
+<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
+<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
+<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
 ]]></content>
       <categories>
-        <category>商业</category>
+        <category>CSharp</category>
       </categories>
       <tags>
-        <tag>商业</tag>
-        <tag>创业</tag>
+        <tag>CSharp</tag>
+        <tag>CLR</tag>
+        <tag>编译原理</tag>
       </tags>
   </entry>
   <entry>
-    <title>Game Engine：网络游戏的架构基础</title>
-    <url>/2023/08/008f5eb4980f.html</url>
+    <title>【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</title>
+    <url>/2023/08/2d466e9f916b.html</url>
+    <content><![CDATA[<span id="more"></span>
+<h1 id="1-垃圾回收的基本假设"><a href="#1-垃圾回收的基本假设" class="headerlink" title="1.垃圾回收的基本假设"></a>1.垃圾回收的基本假设</h1><p>由于CLR的GC是基于代的垃圾回收器算法，因此其对代码做出了以下几点假设：</p>
+<ul>
+<li><ol>
+<li>对象越新，生存期越短；</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>对象越老，生存期越长；</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>回收堆的一部分，速度快于回收整个堆；<br>以上假设对于大部分的现代应用程序都成立，其影响了下面GC算法的实现。</li>
+</ol>
+</li>
+</ul>
+<h1 id="2-垃圾回收算法"><a href="#2-垃圾回收算法" class="headerlink" title="2.垃圾回收算法"></a>2.垃圾回收算法</h1><h2 id="2-1-初始化堆与第0代对象"><a href="#2-1-初始化堆与第0代对象" class="headerlink" title="2.1 初始化堆与第0代对象"></a>2.1 初始化堆与第0代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>预算容量<ul>
+<li>CLR初始化时，为第0代对象选择一个预算容量。</li>
+</ul>
+</li>
+<li>启动垃圾回收<ul>
+<li>如果分配一个新对象造成第0代超过预算，就必须立马就启动一次垃圾回收。</li>
+<li>假设此时初始化时分配的对象刚好用完第0代的空间，那么分配下一个对象就必须启动垃圾回收。</li>
+</ul>
+</li>
+<li>压缩对象<ul>
+<li>垃圾回收器判断对象C和E是垃圾，所以会压缩对象D，使之与对象B相邻。</li>
+</ul>
+</li>
+<li>进入第1代<ul>
+<li>在垃圾回收中存活的对象A，B和D现在成为第1代对象。第1代对象已经经历了垃圾回收器的一次检查；</li>
+<li>此时第0代不包含任何对象，当下一次再分配内存时，新对象会被继续分配到第0代之中；</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>初始化堆：<br><img src="/../../image/Pasted%20image%2020230829101037.png"></p>
+<p>启动垃圾回收+压缩对象+进入第1代：<br><img src="/../../image/Pasted%20image%2020230829101102.png"></p>
+<h2 id="2-2-从第0代对象到第1代对象"><a href="#2-2-从第0代对象到第1代对象" class="headerlink" title="2.2 从第0代对象到第1代对象"></a>2.2 从第0代对象到第1代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>继续分配<ul>
+<li>新分配的对象继续进入第0代；</li>
+<li>部分对象（包含第1代与第0代）在程序运行时，逐渐变得不可达；</li>
+</ul>
+</li>
+<li>启动垃圾回收<ul>
+<li>新对象造成第0代超出预算；</li>
+</ul>
+</li>
+<li>决定GC检查代<ul>
+<li>垃圾回收器必须决定检查哪些代。开始一次垃圾回收时，垃圾回收器除了检查第0代时，还会检查第1代占用了多少内存。</li>
+<li>在下图中，由于第1代占用的内存远少于预算，所以垃圾回收器只检查第0代中的对象；</li>
+</ul>
+</li>
+</ul>
+<p><strong>基本假设与基于代的GC</strong></p>
+<ul>
+<li>假设一：对象越新，生存期越短<ul>
+<li>因为新的对象在第0代中，并且第0代包含更多垃圾的可能性很大，在GC时能回收更多的内存；</li>
+<li>即<strong>对象越新，生存期越短</strong></li>
+<li>并且由于忽略了第1代中的对象，所以加快了垃圾回收速度</li>
+</ul>
+</li>
+<li>假设三：回收堆的一部分，速度快于回收整个堆<ul>
+<li>忽略第1代中的对象能提升垃圾回收器的性能。对性能有更大提振作用的是：现在不必遍历托管堆中的每个对象；</li>
+<li>如果根或对象引用了老一代的某个对象，垃圾回收器就可以忽略老对象内部的所有引用，能在更短的时间内构造好可达对象图；</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>产生新对象，垃圾产生：<br><img src="/../../image/Pasted%20image%2020230829101709.png"></p>
+<p>垃圾回收，对象压缩：<br><img src="/../../image/Pasted%20image%2020230829101728.png"></p>
+<h2 id="2-3-从第1代对象到第2代对象"><a href="#2-3-从第1代对象到第2代对象" class="headerlink" title="2.3 从第1代对象到第2代对象"></a>2.3 从第1代对象到第2代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>全部预算已满<ul>
+<li>假定第1代的增长导致它的所有对象占用了全部预算。此时应用程序继续运行并分配对象，使第0代对象达到它的预算容量；</li>
+<li>此时由于第0代已满，必须进行垃圾回收；</li>
+<li>此次垃圾回收时发现第1代占用太多空间，导致全部预算用完（并且第1代当中已经有很多对象变得不可达）；</li>
+<li>此次垃圾回收需要堆第0代以及第1代对象进行回收；</li>
+</ul>
+</li>
+<li>产生第2代<ul>
+<li>经过垃圾回收，产生第2代对象；第0代继续空余出来；</li>
+<li><strong>只有在第1代超出预算时才会检查第1代中的对象</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>托管堆与代</strong></p>
+<ul>
+<li>3代托管堆<ul>
+<li>托管堆只支持三代：第0代、第1代和第2代，没有第3代。</li>
+</ul>
+</li>
+<li>代与预算<ul>
+<li>CLR初始化时，会为每一代选择预算；</li>
+</ul>
+</li>
+<li>CLR 的垃圾回收器是自调节的<ul>
+<li>垃圾回收器会在执行垃圾回收的过程中了解应用程序的行为；<ul>
+<li>假定应用程序构造了许多对象，但每个对象用的时间都很短。在这种情况下，对第0代的垃圾回收会回收大量内存；</li>
+<li>事实上，第0代的所有对象都可能被回收；</li>
+</ul>
+</li>
+<li><strong>当GC发现回收0代后存活下来的对象很少，就可能减少第0代的预算，反之增加预算</strong>。这种启发式的算法对第1代以及第2代通用适用；</li>
+<li>每当垃圾回收进行后，会检查存活下来的对象多少，进而增大或减小这些代的预算；</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-垃圾回收触发条件"><a href="#3-垃圾回收触发条件" class="headerlink" title="3.垃圾回收触发条件"></a>3.垃圾回收触发条件</h1><p><strong>垃圾回收可以有以下几种触发条件</strong></p>
+<ol>
+<li>CLR检测垃圾回收超出代的预算；</li>
+<li>代码显示调用System.GC的静态方法Collect；</li>
+<li>Windows报告低内存情况；</li>
+<li>CLR卸载AppDomain；</li>
+<li>CLR关闭；</li>
+</ol>
+<p><strong>强制垃圾回收</strong><br>System.GC类型允许应用程序对垃圾回收器进行一些直接控制。可以用Collect进行强制垃圾回收，但大部分情况下不推荐。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Collect</span>(<span class="params">Int32 generation,GCCollectionMode mode,Boolean blocking</span>)</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>generation<ul>
+<li>表示回收第几代的垃圾</li>
+</ul>
+</li>
+<li>GCCollectionMode<ul>
+<li>Default：不传递任何符号名称；</li>
+<li>Forced：强制回收指定的代(以及低于它的所有代)；</li>
+<li>Optimized：只有在能释放大量内存或者能减少碎片化的前提下，才执行回收（强制执行Collect时，尽可能使用这种模式）；</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-1-监视垃圾回收内存使用"><a href="#3-1-监视垃圾回收内存使用" class="headerlink" title="3.1 监视垃圾回收内存使用"></a>3.1 监视垃圾回收内存使用</h2><p><strong>监视用方法</strong></p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function">Int32 <span class="title">CollectionCount</span>(<span class="params">Int32 generation</span>)</span>;</span><br><span class="line"><span class="function">Int64 <span class="title">GetTotalMemory</span>(<span class="params">Boolean forceFullCollection</span>)</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="4-大对象"><a href="#4-大对象" class="headerlink" title="4.大对象"></a>4.大对象</h1><p><strong>什么是大对象</strong><br>在CLR当中，将对象分为大对象和小对象，大于85000字节的对象是大对象；</p>
+<p><strong>大对象特点</strong></p>
+<ul>
+<li>大对象在进程地址空间其他地方分配；</li>
+<li>目前的GC不压缩大对象；</li>
+<li>大对象总是第2代的，不可能为第0、1代；</li>
+</ul>
+<h1 id="5-垃圾回收模式"><a href="#5-垃圾回收模式" class="headerlink" title="5.垃圾回收模式"></a>5.垃圾回收模式</h1><p><strong>两种基本的GC模式</strong></p>
+<ul>
+<li>工作站模式<ul>
+<li>该模式针对客户端应用程序优化GC；</li>
+<li><strong>CLR默认以工作站模式运行</strong></li>
+<li>GC造成的延时很低，应用程序的线程挂起时间短，并且GC假定机器上运行的其他应用程序都不会消耗太多的CPU资源；</li>
+</ul>
+</li>
+<li>服务器模式<ul>
+<li>该模式针对服务器端应用程序优化GC；</li>
+<li>被优化的主要是吞吐量和资源利用。GC假定机器上没有运行其他应用程序，并假定机器的所有CPU都可用来辅助完成GC；</li>
+<li>该模式造成托管堆被拆分成几个区域，每个CPU一个；</li>
+<li>开始垃圾回收时，垃圾回收器在每个CPU上都运行一个特殊线程，每个线程都和其他线程并发回收它自己的区域；</li>
+<li>这个功能要求应用程序在多CPU计算机上运行使线程能真正地同时工作，从而获得性能的提升。</li>
+</ul>
+</li>
+</ul>
+<p><strong>切换工作模式</strong><br>GCLatencyMode定义四种模式：</p>
+<ol>
+<li>Batch：服务器GC模式的默认值，关闭并发GC；</li>
+<li>Interactive：工作站GC模式的默认值，打开并发GC；</li>
+<li>LowLatency：此模式时，GC将全力避免第2代垃圾的回收。更容易抛出内存溢出异常；</li>
+<li>SustainedLowLatency；</li>
+</ol>
+]]></content>
+      <categories>
+        <category>CSharp</category>
+      </categories>
+      <tags>
+        <tag>CSharp</tag>
+        <tag>垃圾回收</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 10：状态机模型的应用</title>
+    <url>/2023/08/f8b821c31d0a.html</url>
     <content><![CDATA[<ul>
-<li>网络游戏开发挑战<ul>
-<li>网络协议</li>
-<li>网络开发问题</li>
+<li>状态机的确定性<ul>
+<li>概念<ul>
+<li>每一个状态都有一个确定的下一个状态</li>
+<li>不确定的状态机，状态之后会有不同的分支状态</li>
 </ul>
 </li>
-<li>网络架构</li>
-<li>游戏同步</li>
-<li>状态同步<span id="more"></span></li>
-</ul>
-<h3 id="2-网络协议"><a href="#2-网络协议" class="headerlink" title="2. 网络协议"></a>2. 网络协议</h3><h3 id="2-1-网络协议"><a href="#2-1-网络协议" class="headerlink" title="2.1 网络协议"></a>2.1 网络协议</h3><ul>
-<li><p>核心：<strong>解决两台电脑之间的信息传递</strong></p>
-</li>
-<li><p>分层：本质：将复杂问题进行分层抽象，忽略其底层实现细节</p>
-</li>
-<li><p>OSI模型：网络七层模型</p>
-</li>
-<li><p>网络游戏编程通常只需要Socket-Based</p>
-</li>
-<li><p>TCP协议</p>
-</li>
-<li><p>协议特点</p>
-</li>
-<li><p>特点一：通过三次握手保证信息的正确性</p>
-</li>
-<li><p>特点二：保证数据的顺序；前面的包和后背的包顺序保持</p>
-</li>
-<li><p>特点三：可以进行流量控制|网关对TCP友好</p>
-</li>
-<li><p>特点四：TCP的Header文件大小大</p>
-</li>
-<li><p>确认接受</p>
-</li>
-<li><p>发送ACK内容</p>
-</li>
-<li><p>拥塞控制</p>
-</li>
-<li><p>不稳定的公网出现时，网络会出现波动，但也保证了网络不崩溃</p>
-</li>
-<li><p>UDP协议</p>
-</li>
-<li><p>本质：<strong>是一个端到端的协议，越简单越好</strong></p>
-</li>
-<li><p>特点</p>
-</li>
-<li><p>特点一：不需要建立长时间连接</p>
-</li>
-<li><p>特点二：不断发送</p>
-</li>
-<li><p>特点三：不进行流量控制</p>
-</li>
-<li><p>特点四：Header文件小</p>
-</li>
-<li><p>协议选择</p>
-</li>
-<li><p>对时间不敏感的游戏，可以使用TCP</p>
-</li>
-<li><p>对时间敏感的游戏，可以使用UDP</p>
-</li>
-<li><p>但是大型的MMO，通常都是复合协议|两者混着使用</p>
-</li>
-<li><p>不同的使用场合，使用不同协议完成</p>
-</li>
-<li><p>补充</p>
-</li>
-<li><p>游戏引擎是个工程科学，实用性至上</p>
-</li>
-<li><p>可靠的UDP</p>
-</li>
-<li><p>游戏服务器和其他服务器应用场合区别</p>
-</li>
-<li><p>保证消息传递的Ordering顺序</p>
-</li>
-<li><p>速度也得非常快</p>
-</li>
-<li><p>而且可以实现群发</p>
-</li>
-<li><p>ARQ</p>
-</li>
-<li><p>简介：自动回复的丢包检测|当发生丢包的时候，会告诉程序现在丢包了</p>
-</li>
-<li><p>滑动窗口协议:滑动窗口中的数据依次进行发送，当收到了后续窗口中的数据时，即前面的数据已经成功接收</p>
-</li>
-<li><p>Stop And Wait ARQ：等待ACK后再发送下一个|速度很慢，效率很低</p>
-</li>
-<li><p>Go-Back-N ARQ：如果发现一个包丢了之后，只把这个窗口里面的数据重新发送一遍</p>
-</li>
-<li><p>特点：十分使用</p>
-</li>
-<li><p>Selective Repeat ARQ：只通知丢了的包，因此连接更加的稳定</p>
-</li>
-<li><p>FEC</p>
-<ul>
-<li>Forward Error Correction</li>
-<li>简介：收到了包，不管它，继续往前走，然后再重新找回被丢失的包|用额外的数据传输量来解决</li>
-<li>异或运算校验法：专门有值储存校验值。如果多个数据里面只丢掉一个，则可以轻松发现丢掉的数据并且恢复</li>
-<li>Reed-Solomon Codes:冗余信息矩阵惩罚判断数据存放</li>
-<li>获得的信息乘以对应矩阵的逆就可以得到其原本结果</li>
-<li><img src="file:///C:/Users/SWGZH/AppData/Local/Temp/12afb65f-163e-4459-8b9f-7eae5ef032cb.jpg"><img src="file:///C:/Users/SWGZH/AppData/Local/Temp/0bbc6676-5554-4c40-9887-0261b165f4c6.jpg"></li>
+<li>宏观物理世界<ul>
+<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
+<li>例子：Game Of Life</li>
 </ul>
 </li>
-<li><p>时钟对齐</p>
-<ul>
-<li>RTT</li>
-<li>简介：发出一个包之后，多久可以收回到包</li>
-<li>注意：其和Ping概念上十分相近，但是不同。Ping更加偏向于传输层</li>
+<li>微观物理世界<span id="more"></span></li>
 </ul>
 </li>
-<li><p>NTP</p>
-<ul>
-<li>Network Time Protocol</li>
-<li>GPS的实现：在天上有二十四颗卫星，每一颗都有极其准确的电子钟。你的GPS会接受它的信号，很精准的对其相位差，利用三角定位法算出其定位是多少，算出其位置</li>
-<li>定时的问题：任何内容的传输速度不能超过光速</li>
-<li>Time Server Stratums：你和服务器来对时间</li>
+</ul>
+<h2 id="10-1-状态机模型的物理世界应用"><a href="#10-1-状态机模型的物理世界应用" class="headerlink" title="10.1 状态机模型的物理世界应用"></a>10.1 状态机模型的物理世界应用</h2><h3 id="10-1-1-世界状态的确定性分析"><a href="#10-1-1-世界状态的确定性分析" class="headerlink" title="10.1.1 世界状态的确定性分析"></a>10.1.1 世界状态的确定性分析</h3><ul>
+<li>状态机的确定性<ul>
+<li>概念<ul>
+<li>每一个状态都有一个确定的下一个状态</li>
+<li>不确定的状态机，状态之后会有不同的分支状态</li>
 </ul>
 </li>
-<li><p>RPC</p>
-<ul>
-<li>问题：</li>
-<li><ol>
-<li>Socket 编程还有很多问题|当很多要回调的函数|数据要打包成数据包发送给别人，十分的复杂</li>
+<li>宏观物理世界<ul>
+<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
+<li>例子：Game Of Life</li>
+</ul>
+</li>
+<li>微观物理世界</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-1-2-状态机模型的应用"><a href="#10-1-2-状态机模型的应用" class="headerlink" title="10.1.2 状态机模型的应用"></a>10.1.2 状态机模型的应用</h3><p>这里不知道为什么会出现问题。。。</p>
+<h2 id="在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原"><a href="#在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原" class="headerlink" title="在决定性的数学公理体系下，状态机模型的使用1. 数学严谨的体系下，解释平行宇宙2. 细胞的状态分析与还原"></a>在决定性的数学公理体系下，状态机模型的使用<br>1. 数学严谨的体系下，解释平行宇宙<br>2. 细胞的状态分析与还原</h2><h2 id="10-2-状态机模型下的编译器和现代CPU"><a href="#10-2-状态机模型下的编译器和现代CPU" class="headerlink" title="10.2 状态机模型下的编译器和现代CPU"></a>10.2 状态机模型下的编译器和现代CPU</h2><h3 id="10-2-1-编译器模型"><a href="#10-2-1-编译器模型" class="headerlink" title="10.2.1 编译器模型"></a>10.2.1 编译器模型</h3><h2 id="编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay"><a href="#编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay" class="headerlink" title="编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）### 10.2.2 编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多### 10.2.3 查看状态机执行程序执行 &#x3D; 状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。+ 查看所有的状态机行为    + 方法：使用GDB进行调试        + 单步调试        + 反汇编调试    + 通过调试器展示的状态的一部分        + 寄存器        + 内存        + 变量状态机视角下，Debug可进行的行为：1. 复制当前状态机的状态2. 回溯状态机的上一个状态3. 进入状态机的下一个状态4. 记录一个状态机的完整执行+ 状态机的状态回溯    + 概念：        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走        + 每次状态切换时更改的内容有效    + 例子：        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现+ 记录状态机的完整执行    + 决定性程序：        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来    + 拥有系统调用、Random的程序：        + 待记录内容：        + 1. 指令数        + 2. 结果        + 3. n份以上内容    + 可使用此功能        + 指令：            + rr record        + 想记录下函数的全部行为：            + 需要知道从上一条指令到下一条指令有多少决定性的指 令            + 程序的io            + 程序的中断        + 程序可以完整的记录程序的执行            + 例子：老游戏的replay"></a>编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）<br>在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）<br>### 10.2.2 编译器优化的正确性<br><strong>核心：源代码状态机和二进制状态机的可观测行为的一致性</strong><br>例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多<br>### 10.2.3 查看状态机执行<br>程序执行 &#x3D; 状态机执行<br>例子：通过strace观测系统调用的行为以及所花费的时间。<br>+ 查看所有的状态机行为<br>    + 方法：使用GDB进行调试<br>        + 单步调试<br>        + 反汇编调试<br>    + 通过调试器展示的状态的一部分<br>        + 寄存器<br>        + 内存<br>        + 变量<br>状态机视角下，Debug可进行的行为：<br>1. 复制当前状态机的状态<br>2. 回溯状态机的上一个状态<br>3. 进入状态机的下一个状态<br>4. 记录一个状态机的完整执行<br>+ 状态机的状态回溯<br>    + 概念：<br>        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走<br>        + 每次状态切换时更改的内容有效<br>    + 例子：<br>        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现<br>+ 记录状态机的完整执行<br>    + 决定性程序：<br>        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来<br>    + 拥有系统调用、Random的程序：<br>        + 待记录内容：<br>        + 1. 指令数<br>        + 2. 结果<br>        + 3. n份以上内容<br>    + 可使用此功能<br>        + 指令：<br>            + rr record<br>        + 想记录下函数的全部行为：<br>            + 需要知道从上一条指令到下一条指令有多少决定性的指 令<br>            + 程序的io<br>            + 程序的中断<br>        + 程序可以完整的记录程序的执行<br>            + 例子：老游戏的replay</h2><h2 id="10-3-状态机与性能分析"><a href="#10-3-状态机与性能分析" class="headerlink" title="10.3 状态机与性能分析"></a>10.3 状态机与性能分析</h2><h3 id="10-3-1-采样状态机的执行"><a href="#10-3-1-采样状态机的执行" class="headerlink" title="10.3.1 采样状态机的执行"></a>10.3.1 采样状态机的执行</h3><h2 id="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：-Pasted-image-20230222163118-png-将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-Pasted-image-20230222163358-png-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解"><a href="#每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：-Pasted-image-20230222163118-png-将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-Pasted-image-20230222163358-png-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解" class="headerlink" title="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature optimization is the root of all exil.问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要+ 性能优化的时机    + 分析程序在时间和空间上的调用    + 时间    + 空间### 10.3.2 Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断+ 中断    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出#### 10.3.2.1 基于gcc进行性能摘要输出当前程序性能摘要：结果：![[Pasted image 20230222163118.png]]将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：![[Pasted image 20230222163358.png]]### 10.3.3 实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上+ 工业界面到的性能优化    + 实际情况：木桶效应    + 每个部分都已经优化到了局部最优解"></a>每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。<br><em>性能分析的核心原则：Premature optimization is the root of all exil.</em><br>问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要<br>+ 性能优化的时机<br>    + 分析程序在时间和空间上的调用<br>    + 时间<br>    + 空间<br>### 10.3.2 Profiler和性能摘要<br><strong>单点调试的问题：</strong><br>当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。<br>实现此步骤的方法是：中断<br>+ 中断<br>    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出<br>#### 10.3.2.1 基于gcc进行性能摘要<br>输出当前程序性能摘要：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf stat ./a.out </span><br></pre></td></tr></table></figure><br>结果：<br>![[Pasted image 20230222163118.png]]<br>将整个程序的Profiler记录，并打开报告：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf record ./a.out</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure><br>获得的每一条指令的时间：<br>![[Pasted image 20230222163358.png]]<br>### 10.3.3 实际中的性能优化<br>百分之八十的时间都消耗在了百分之二十的代码上<br>+ 工业界面到的性能优化<br>    + 实际情况：木桶效应<br>    + 每个部分都已经优化到了局部最优解</h2><h2 id="10-4-状态机与程序验证"><a href="#10-4-状态机与程序验证" class="headerlink" title="10.4 状态机与程序验证"></a>10.4 状态机与程序验证</h2><h3 id="10-4-1-现在的Model-Check工具"><a href="#10-4-1-现在的Model-Check工具" class="headerlink" title="10.4.1 现在的Model Check工具"></a>10.4.1 现在的Model Check工具</h3><p>概念：状态机模型可以用于证明程序的正确性。使用bfs便利所有的状态，再使用execute给定一个并发程序的调度。<br>例子：for程序的并发Bug<br>**学术界的Model Check工具</p>
+<ol>
+<li>NASA的Java PathFinder：把Model Check扩充到了所有的Java代码</li>
+<li>Spin：只可以使用其自己定义的语言</li>
+<li>TLA Plus：用于亚马逊的并发式程序的正确性验证</li>
 </ol>
+<ul>
+<li>现在的Model Check在分布式系统上的应用<ul>
+<li>并发系统：<ul>
+<li>分布式系统也是一种并发系统，但是其问题更大</li>
+<li>并发系统假设其所有的节点都能够正常工作</li>
+</ul>
 </li>
-<li><ol start="2">
-<li>客户端之间通信的时候，操作系统不同|IOS和Pai不同，且服务器通常在Linux上。而且数据有些是大端放置，有些是小端放置。数据的解码会有问题</li>
+<li>分布式系统<ul>
+<li>在分布式系统中，必须假设所有的节点都可能出错（丢失）</li>
+<li>在节点丢失的情况下还能进行tutorial</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-4-2-Model-Check可以做什么"><a href="#10-4-2-Model-Check可以做什么" class="headerlink" title="10.4.2 Model Check可以做什么"></a>10.4.2 Model Check可以做什么</h3><p>当探索不确定性程序的执行时，Model Check可以检查任何程序的执行；<br>Model Check可以检测当前不确定程序的任何一种可能性，并检查出Bug。</p>
+<ul>
+<li>不确定<ul>
+<li>输入不确定</li>
+<li>随机函数不确定<br>面对不确定性程序，可以检测程序的所有可能性空间<br><strong>问题：程序的状态空间太大</strong></li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>如何将这个状态的可能性减少？</li>
+<li>如何将状态合并？</li>
+<li>如何将状态往后延迟？</li>
 </ol>
-</li>
-</ul>
-</li>
-<li><p>简介：</p>
 <ul>
-<li>让程序员只编写逻辑代码，剩下的怎么把消息打包这些，怎么进行处理都不管它。加密和解密都不用管，只要实现业务逻辑</li>
+<li>状态坍缩<ul>
+<li>将大量可能性的状态转换为分支，延迟状态的展开，将状态合并，直到发现Bug再将其反向展开</li>
+<li>分支成立：<ul>
+<li>再检测有没有分支<ul>
+<li>分支成立：<ul>
+<li>在检测有没有分支：<ul>
+<li>分支成立：<ul>
+<li>当前红色的状态是否可达？</li>
+<li>用约束求解器来计算</li>
+<li>计算出当前程序的状态，此状态为Bug</li>
 </ul>
 </li>
-<li><p>概念一：界面定义语言 | IDL：Interface Definition Language</p>
-</li>
-<li><p>简介：所有网络通信的数据，都通过IDL定义好然后进行传输</p>
-</li>
-<li><p>RPC Stubs:每个RPC当中没有信息时，call了一个错误的RPC时，会有Stub Compiler来进行。</p>
-</li>
-<li><p>概念二：RPC包的发送路径</p>
-</li>
-<li><p><img src="file:///C:/Users/SWGZH/AppData/Local/Temp/405e6a53-704d-4a69-a8b8-ef82390cb7a0.jpg"></p>
+<li>分支不成立：</li>
+</ul>
 </li>
 </ul>
-<h2 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h2><ul>
-<li><p>P2P架构</p>
 </li>
-<li><p>简介：早期游戏都是P2P类型，在局域网内进行</p>
-</li>
-<li><p>特点：不防止作弊、简单</p>
-</li>
-<li><p>P2P With Host Server</p>
-</li>
-<li><p>简介：有主机的P2P模式</p>
-</li>
-<li><p>特点：开发商不需要花钱去维护服务器|现在很多沙盒游戏依然是这样（服务商提供服务器的检索服务，而不提供房间服务器）</p>
-</li>
-<li><p>专用服务器</p>
-</li>
-<li><p>简介：<strong>在服务器段维护统一的服务器，保证玩家统一稳定的链接</strong></p>
-</li>
-<li><p>补充：现代网络有很多的网络提供商家以及十分复杂的拓扑结构，因此很多游戏会自己接入服务商提供更好的网络服务|允许设置更告诉的端口</p>
+<li>分支不成立：</li>
+</ul>
 </li>
 </ul>
-<h2 id="游戏同步"><a href="#游戏同步" class="headerlink" title="游戏同步"></a>游戏同步</h2><blockquote>
-<p>Game Synchronization</p>
-<p>核心矛盾：<strong>信息的实时性与信息的有效性之间的矛盾</strong></p>
-</blockquote>
-<ul>
-<li><p>问题：</p>
 </li>
-<li><p>1.网络多玩家的情况下，玩家的输入、逻辑该放在什么地方处理</p>
-</li>
-<li><p>2.游戏之间平行世界二档同步</p>
-</li>
-<li><p>快照同步 | Snapshot Synchronization</p>
-</li>
-<li><p>简介：客户端只负责把玩家的输入发给服务器，服务器负责所有游戏逻辑的处理，服务器生成这一刻的游戏的快照，然后把快照发给所有的客户端玩家</p>
-</li>
-<li><p>特点：</p>
-</li>
-<li><p>1.结构干净 | 代码十分的清晰</p>
-</li>
-<li><p>2.消耗十分多的算力 （现在客户端的算力越来越强，被浪费掉）</p>
-</li>
-<li><p>3.服务器端和客户端的帧数可以不同</p>
-</li>
-<li><p>4.服务器端的帧数更低</p>
-</li>
-<li><p>5.对于带宽的要求很高</p>
-</li>
-<li><p>快照压缩</p>
-</li>
-<li><p>简介：很多快照里面数据在前后快照之间并不会发生变化，因此可以在打包Delta的时候进行优化</p>
-</li>
-<li><p>用途：减少传输的数据量</p>
-</li>
-<li><p>帧同步 | Lockstep Origin</p>
-</li>
-<li><p>简介：所有的信息一致性的进行传输，然后一致性的进行处理</p>
-</li>
-<li><p>实现：无论有多少客户端，将客户端的信息一致发给服务器，再统一的进行分发</p>
-</li>
-<li><p>实现步骤一：Initialization</p>
-</li>
-<li><p>概念：确保数据的一致高度相同，不允许任何的不同|偏差</p>
-</li>
-<li><p>原因：因为游戏是复杂系统，只要有一点的偏差，偏差就会累计然后放大 | 因此需要高度一致</p>
-</li>
-<li><p>实现步骤二：Deterministic</p>
-</li>
-<li><p>概念：确认收到了所有人的输入之后，统一的将其进行分发，然后同时开始模拟下一帧的行为</p>
-</li>
-<li><p>优点：概念清晰，公平</p>
-</li>
-<li><p>缺点：当有客户端的信息拖拉，会导致其他客户端的进程被拖慢</p>
-</li>
-<li><p>帧同步优化方案 | Bucket Synchronization</p>
-</li>
-<li><p>概念：就算有客户端的数据没有被及时的上传上来也不理会，继续其他客户端的常规进程，放弃其未上传的数据（扔掉数据或者延迟处理）</p>
-</li>
-<li><p>优点：保证网络的实时性</p>
-</li>
-<li><p>缺点：可能导致部分玩家的输入的失效</p>
-</li>
-<li><p>信息一致性 | Deterministic Difficulties</p>
-</li>
-<li><p>问题</p>
-</li>
-<li><p>1.数据容器|浮点数|算法|数学库|物理模拟|逻辑执行顺序|随机数 是否能保持一致|确定性，只有运算的一致性保持，才可以保证同步的完全一致</p>
-</li>
-<li><p>2.现实世界并不完全一致|并不是牛顿式的完全一致性|不确定性原则当中的例子</p>
-</li>
-<li><p>问题：数学函数与查表法</p>
-</li>
-<li><p>很多复杂数学结果通过查表实现，但数学结构的表格可能不一致</p>
-</li>
-<li><p>问题：定点数引擎</p>
-</li>
-<li><p>在某些特定的游戏场合里面使用定点数引擎</p>
-</li>
-<li><p>把其中最核心的部分业务放在定点数引擎中</p>
-</li>
-<li><p>问题：随机数</p>
-</li>
-<li><p>概念：分布式系统中随机数统一问题</p>
-</li>
-<li><p>实现：客户端和服务器同步时，需要先把随机数的生成的种子进行同步</p>
-</li>
-<li><p>实现：游戏引擎中的随机数种子在游戏生成的时候全部都会同步好</p>
-</li>
-<li><p>帧同步中的调试问题</p>
-</li>
-<li><p>原则：不停的将游戏的状态存储下来</p>
-</li>
-<li><p>比如没过五帧使用checksum将游戏的状态信息记录</p>
-</li>
-<li><p>网络延迟与抖动问题</p>
-</li>
-<li><p>实现：各个节点生成大量的Buffer，把帧数据提前进行缓存</p>
-</li>
-<li><p>问题一：服务器对客户端传输的帧波荡</p>
-</li>
-<li><p>解决一：客户端有很多渲染帧，当网络出现问题时，画面不会因此出现抖动</p>
-</li>
-<li><p>问题二：断线通连</p>
-</li>
-<li><p>解决二：对游戏状态会有快照储存在磁盘中，在游戏恢复的时候，只要去追自己断线期间所经过的帧数。并且可以以更大的算了去处理断线帧的逻辑，将渲染的算力转移至此。</p>
-</li>
-<li><p>延申：观战模式；对关键帧照快照，进而甚至可以实现回放</p>
-</li>
-<li><p>帧同步问题</p>
-</li>
-<li><p>问题一：作弊问题</p>
-</li>
-<li><p>问题：客户端只是接收数据，但是可以在其中更改其数据与逻辑</p>
-</li>
-<li><p>解决：服务器对比数据</p>
-</li>
-<li><p>问题二：信息暴露问题</p>
-</li>
-<li><p>问题：别人使用外挂获得更多场景的信息</p>
-</li>
-<li><p>问题三：信息一致性难以同步</p>
-</li>
-<li><p>问题四：断线后重连的追帧花费大</p>
-</li>
-<li><p>优势一：可以实现对打击操作敏感的游戏，因为帧同步的实现的一致性</p>
-</li>
-<li><p>优势二：方便实现游戏录屏</p>
-</li>
+<li>分支不成立：</li>
 </ul>
-<h2 id="状态同步"><a href="#状态同步" class="headerlink" title="状态同步"></a>状态同步</h2><blockquote>
-<p>大部分的MMORPG和社区类游戏使用状态同步</p>
-<p>核心：<strong>将用户的状态信息储存进去，包括部分关键性信息</strong></p>
-<p>服务器端会在其上面维护一个完整的全信息宇宙，安全更高</p>
-</blockquote>
-<ul>
-<li><p>权威服务器与命令</p>
-</li>
-<li><p>服务器：服务器说你不对，你就不对。同时客户端中有一个决定者</p>
-</li>
-<li><p>动作实例</p>
-</li>
-<li><p>一：客户端发送命令</p>
-</li>
-<li><p>二：服务器接受命令</p>
-</li>
-<li><p>概念1：服务器计算命令结果，把计算的结果发送到全部的客户端</p>
-</li>
-<li><p>概念2：每个人提出自己的动作，服务器判定动作是否有效，最后再把动作发送下去</p>
-</li>
-<li><p>三：服务器将命令发送给所有客户端</p>
-</li>
-<li><p>Client Side Prediction</p>
-</li>
-<li><p>例子：守望先锋</p>
-</li>
-<li><p>概念：客户端永远先于服务器半个RTT的时间，并且具有一个缓冲帧，并利用本地的预测（进行平滑的插值算法）</p>
-</li>
-<li><p>概念：Server Reconciliation</p>
-</li>
-<li><p>不只是存当前的状态，还要把之前一点的状态也储存下来，然后进行比对，如果比对核实则表示其正确</p>
 </li>
 </ul>
 ]]></content>
       <categories>
-        <category>游戏引擎</category>
+        <category>操作系统</category>
       </categories>
       <tags>
-        <tag>游戏引擎</tag>
-        <tag>网络开发</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Game Engine：引擎事件系统</title>
-    <url>/2023/08/012b0cbd9bce.html</url>
-    <content><![CDATA[<p>引擎事件系统框架编写</p>
-<span id="more"></span>
-
-<h2 id="1-事件类型基础"><a href="#1-事件类型基础" class="headerlink" title="1.事件类型基础"></a>1.事件类型基础</h2><h3 id="1-1-事件类型枚举"><a href="#1-1-事件类型枚举" class="headerlink" title="1.1 事件类型枚举"></a>1.1 事件类型枚举</h3><p>描述事件系统的基础事件类型，用枚举表示。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">EventType</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,</span><br><span class="line">	AppTick, AppUpdate, AppRender,</span><br><span class="line">	KeyPressed, KeyReleased,</span><br><span class="line">	MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-2-事件分类"><a href="#1-2-事件分类" class="headerlink" title="1.2 事件分类"></a>1.2 事件分类</h3><p>定义了事件分类，并且可以向0进行过滤、偏移；</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">EventCategory</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	EventCategoryApplication = <span class="built_in">BIT</span>(<span class="number">0</span>),</span><br><span class="line">	EventCategoryInput = <span class="built_in">BIT</span>(<span class="number">1</span>),</span><br><span class="line">	EventCategoryKeyboard = <span class="built_in">BIT</span>(<span class="number">2</span>),</span><br><span class="line">	EventCategoryMouse = <span class="built_in">BIT</span>(<span class="number">3</span>),</span><br><span class="line">	EventCategoryMouseButton = <span class="built_in">BIT</span>(<span class="number">4</span>)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BIT的定义如下：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BIT(x) (1 &lt;&lt; x)</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-Event基类设计"><a href="#2-Event基类设计" class="headerlink" title="2.Event基类设计"></a>2.Event基类设计</h2><ul>
-<li>内容：<ul>
-<li>m_Handled：用于表示此内容是否已经被处理过；</li>
-<li>IsInCategory：现在处理的事件，是否是属于类型的部分；使用此方法快速的进行过滤； </li>
-<li>GetName：仅用在Debug模式；</li>
-<li>ToString：默认输出名字，也可以继承后修改以及扩展此行为；<ul>
-<li>实现细节：stringstream的性能很差，但目前Debug模式可以先不考虑；</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> Event</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">EventDispatcher</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> EventType <span class="title">GetEventType</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">const</span> <span class="type">char</span>* <span class="title">GetName</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">GetCategoryFlags</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> <span class="built_in">GetName</span>(); &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">IsInCategory</span><span class="params">(EventCategory category)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">GetCategoryFlags</span>() &amp; category;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="type">bool</span> m_Handled = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-1-抽象函数的实现宏"><a href="#2-1-抽象函数的实现宏" class="headerlink" title="2.1 抽象函数的实现宏"></a>2.1 抽象函数的实现宏</h3><p>因为在Event当中有抽象函数需要实现，每一个子类都需要手动进行实现的话会导致浪费。可以将其写成一个宏函数，在子类当中只需传入类型，既可以自动实现其子类的抽象函数的实现；</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> EVENT_CLASS_TYPE(type) static EventType GetStaticType() &#123; return EventType::##type; &#125;\</span></span><br><span class="line"><span class="meta">								virtual EventType GetEventType() const override &#123; return GetStaticType(); &#125;\</span></span><br><span class="line"><span class="meta">								virtual const char* GetName() const override &#123; return #type; &#125;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-KeyEvent类设计"><a href="#3-KeyEvent类设计" class="headerlink" title="3.KeyEvent类设计"></a>3.KeyEvent类设计</h2><p><strong>KeyEvent概念</strong><br>需要处理案件的事件。并且按键的事件至少具有以下三种状态：</p>
-<ol>
-<li>第一次按下</li>
-<li>按下中</li>
-<li>第一次抬起<br>KeyEvent需要能够处理并表达这三种状态。</li>
-</ol>
-<p><strong>继承</strong><br>KeyEvent是其他更多按键事件的父类，是Event类的子类；</p>
-<p><strong>KeyEvent代码</strong><br>此代码的内容类似于是抽象类，只是用于提供继承；不能实例化一个Key Event；</p>
-<ul>
-<li>内容：<ul>
-<li>构造函数：构造函数被设置为protected，表示此类作用为提供继承；</li>
-<li>Get Key Code：返回KeyCode数值；<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetKeyCode</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_KeyCode; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryKeyboard | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">KeyEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">m_KeyCode</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_KeyCode;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<p><strong>EVENT_CLASS_CATEGORY内容</strong><br>因为KeyBoard键盘输入同时也是一般Input的一种，因此其进行分类时同属于这两种类型；</p>
-<h3 id="3-1-KeyPressedEvent类设计"><a href="#3-1-KeyPressedEvent类设计" class="headerlink" title="3.1 KeyPressedEvent类设计"></a>3.1 KeyPressedEvent类设计</h3><p>此类是一个可以被实际实例化的类；</p>
-<p><strong>构造函数</strong><br>此类的构造函数传入repeatCount，表示此按键的重复次数。当此数值不为0时，此内容表示当前Event在被重复按下；</p>
-<p><strong>ToString重写</strong><br>输出”KeyPressedEvent: “ 加上 KeyCode 的数值；</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyPressedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyPressedEvent</span>(<span class="type">int</span> keycode, <span class="type">int</span> repeatCount)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode), <span class="built_in">m_RepeatCount</span>(repeatCount) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetRepeatCount</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_RepeatCount; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyPressedEvent: &quot;</span> &lt;&lt; m_KeyCode &lt;&lt; <span class="string">&quot; (&quot;</span> &lt;&lt; m_RepeatCount &lt;&lt; <span class="string">&quot; repeats)&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyPressed)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">int</span> m_RepeatCount;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-2-KeyReleasedEvent类设计"><a href="#3-2-KeyReleasedEvent类设计" class="headerlink" title="3.2 KeyReleasedEvent类设计"></a>3.2 KeyReleasedEvent类设计</h3><p>和Pressed类基本一致，只不过没有repeatCount的计数内容；</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyReleasedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyReleasedEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyReleasedEvent: &quot;</span> &lt;&lt; m_KeyCode;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="4-EventDispatcher"><a href="#4-EventDispatcher" class="headerlink" title="4.EventDispatcher"></a>4.EventDispatcher</h2><p><strong>作用</strong><br>让我们可以实际的去发布一个事件，基于需要发布事件的类型；<br>创建一个Dispatcher的实例，并且拥有一个Event的引用。在这个Dispatcher中拥有一个Dispatch()方法，可以接受一个EventFn函数。然后如果类型一致，可以实际的在Dispatch中运行这个EventFn的函数。</p>
-<p><strong>构造函数</strong><br>Event基类作为参数，接受各种事件类型，赋值在私有的Event变量上；</p>
-<p><strong>Dispatch()方法</strong><br>在此方法内需要使用上Event，进行判断泛型传入的类型T的事件类型，和当前Dispatch中存储的Event的类型是否一致（通过GetEventType()方法，调用GetStaticType()方法）；<br>一致时，会调用EventFn中存储的函数，并返回bool；</p>
-<p><strong>EventFn函数</strong><br>使用std的function，并且返回bool类型，接受T&amp;引用（可以为任何类型的Event）作为参数；</p>
-<ul>
-<li>补充：<strong>std::function()</strong><ul>
-<li>可以把std::function看做一个函数对象，用于表示并存储函数这个抽象概念。</li>
-<li>std::function的实例可以存储、复制和调用任何可调用对象（函数指针，类成员函数指针，bind表达式等等），存储的可调用对象称为std::function的目标，若std::function不含目标，则称它为空</li>
-</ul>
-</li>
-</ul>
-<p>代码：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">EventDispatcher</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">	<span class="keyword">using</span> EventFn = std::function&lt;<span class="built_in">bool</span>(T&amp;)&gt;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">EventDispatcher</span>(Event&amp; event)</span><br><span class="line">		: <span class="built_in">m_Event</span>(event)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">	<span class="type">bool</span> <span class="title">Dispatch</span><span class="params">(EventFn&lt;T&gt; func)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (m_Event.<span class="built_in">GetEventType</span>() == T::<span class="built_in">GetStaticType</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			m_Event.m_Handled = <span class="built_in">func</span>(*(T*)&amp;m_Event);</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Event&amp; m_Event;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="5-MouseEvent设计"><a href="#5-MouseEvent设计" class="headerlink" title="5.MouseEvent设计"></a>5.MouseEvent设计</h2><p><strong>MouseMovedEvent</strong><br>传入x、y表示两个坐标位置，用于存储鼠标移动事件所需要的信息；<br>同理MouseScrolledEvent。<br>下面内容基本类似，主要关注构造函数中传入的参数的差别，代表了此种类型事件所实际需要使用到的数据。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseMovedEvent : <span class="keyword">public</span> Event</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="built_in">MouseMovedEvent</span>(<span class="type">float</span> x, <span class="type">float</span> y)</span><br><span class="line">			: <span class="built_in">m_MouseX</span>(x), <span class="built_in">m_MouseY</span>(y) &#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetX</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseX; &#125;</span><br><span class="line">		<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetY</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseY; &#125;</span><br><span class="line"></span><br><span class="line">		<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">		</span>&#123;</span><br><span class="line">			std::stringstream ss;</span><br><span class="line">			ss &lt;&lt; <span class="string">&quot;MouseMovedEvent: &quot;</span> &lt;&lt; m_MouseX &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_MouseY;</span><br><span class="line">			<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">EVENT_CLASS_TYPE</span>(MouseMoved)</span><br><span class="line">			<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">		<span class="type">float</span> m_MouseX, m_MouseY;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseScrolledEvent : <span class="keyword">public</span> Event</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="built_in">MouseScrolledEvent</span>(<span class="type">float</span> xOffset, <span class="type">float</span> yOffset)</span><br><span class="line">			: <span class="built_in">m_XOffset</span>(xOffset), <span class="built_in">m_YOffset</span>(yOffset) &#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetXOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_XOffset; &#125;</span><br><span class="line">		<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetYOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_YOffset; &#125;</span><br><span class="line"></span><br><span class="line">		<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">		</span>&#123;</span><br><span class="line">			std::stringstream ss;</span><br><span class="line">			ss &lt;&lt; <span class="string">&quot;MouseScrolledEvent: &quot;</span> &lt;&lt; <span class="built_in">GetXOffset</span>() &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; <span class="built_in">GetYOffset</span>();</span><br><span class="line">			<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">EVENT_CLASS_TYPE</span>(MouseScrolled)</span><br><span class="line">			<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">		<span class="type">float</span> m_XOffset, m_YOffset;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonEvent : <span class="keyword">public</span> Event</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetMouseButton</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Button; &#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line">	<span class="keyword">protected</span>:</span><br><span class="line">		<span class="built_in">MouseButtonEvent</span>(<span class="type">int</span> button)</span><br><span class="line">			: <span class="built_in">m_Button</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="type">int</span> m_Button;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonPressedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="built_in">MouseButtonPressedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">			: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">		</span>&#123;</span><br><span class="line">			std::stringstream ss;</span><br><span class="line">			ss &lt;&lt; <span class="string">&quot;MouseButtonPressedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">			<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonPressed)</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonReleasedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="built_in">MouseButtonReleasedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">			: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">		</span>&#123;</span><br><span class="line">			std::stringstream ss;</span><br><span class="line">			ss &lt;&lt; <span class="string">&quot;MouseButtonReleasedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">			<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonReleased)</span><br><span class="line">	&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-ApplicationEvent设计"><a href="#6-ApplicationEvent设计" class="headerlink" title="6.ApplicationEvent设计"></a>6.ApplicationEvent设计</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowResizeEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowResizeEvent</span>(<span class="type">unsigned</span> <span class="type">int</span> width, <span class="type">unsigned</span> <span class="type">int</span> height)</span><br><span class="line">		: <span class="built_in">m_Width</span>(width), <span class="built_in">m_Height</span>(height) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetWidth</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Width; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetHeight</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Height; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;WindowResizeEvent: &quot;</span> &lt;&lt; m_Width &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_Height;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowResize)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> m_Width, m_Height;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowCloseEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowCloseEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowClose)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppTickEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppTickEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppTick)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppUpdateEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppUpdateEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppUpdate)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppRenderEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppRenderEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppRender)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>游戏引擎</category>
-      </categories>
-      <tags>
-        <tag>游戏引擎</tag>
-        <tag>事件</tag>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Game Engine：GPU驱动的几何管线</title>
-    <url>/2023/08/48bbf0e2388d.html</url>
-    <content><![CDATA[<p>传统渲染问题：<br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。</p>
-<span id="more"></span>
-<h2 id="1-传统渲染管线"><a href="#1-传统渲染管线" class="headerlink" title="1 传统渲染管线"></a>1 传统渲染管线</h2><h3 id="1-1-传统渲染问题"><a href="#1-1-传统渲染问题" class="headerlink" title="1.1 传统渲染问题"></a>1.1 传统渲染问题</h3><p><strong>核心：所有的需求是在CPU那端发起</strong><br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。<br><strong>Draw Graphics API</strong><br>传统渲染管线跑现代游戏无法满足，现代CPU得先把数据准备好，然后再把数据给到GPU；</p>
-<h3 id="1-2-Compute-Shader与GPU驱动管线"><a href="#1-2-Compute-Shader与GPU驱动管线" class="headerlink" title="1.2 Compute Shader与GPU驱动管线"></a>1.2 Compute Shader与GPU驱动管线</h3><p><strong>Compute Shader核心概念</strong><br>计算机不需要再CPU和GPU中来回导数据，所有的计算都在GPU的内部；<br>方法：</p>
-<ol>
-<li>在GPU中内置一些计算模块，很多计算直接在GPU中完成；把很多只有在CPU中才可以做的通用计算放到GPU上面；</li>
-<li>单个Draw Call可以绘制多个Mesh；</li>
-</ol>
-<p><strong>更加进阶的状态：GPU驱动Render管线</strong><br>GPU控制什么对象该被实际的渲染，包括Lod Selection，Visibility Culling On GPU<br>CPU不触碰GPU的数据，尽量让CPU不那么忙；</p>
-<p><strong>GPU驱动Render管线在材质中应用</strong><br>在《刺客信条大革命》中大场景的渲染，大场景当中有大量不可见的物体以及材质；</p>
-<ul>
-<li>解决方法<ul>
-<li>对每个游戏世界中的物体，按照其Mesh把其分成无数个小的Clusters，计算这个小Clusters是否被遮挡</li>
-<li>因为这种小粒度的Cluster在GPU中可以被批量处理，因此实际上性能更高，对于三角形有尽可能高的利用率；</li>
-</ul>
-</li>
-</ul>
-<p><strong>GPU驱动Pipeline概述</strong><br>流程图：<br><img src="/../../image/Pasted%20image%2020230827161631.png"></p>
-<p>CPU阶段进行粗略的Culling，在GPU阶段进行更加精细的Culling，每一个物体被分成不同的Cluster，然后打包进一个非常大的Index Buffer当中。最后一个Draw Call一次性完成计算。<br>核心：通过前面GPU一大堆的计算，一次性将不可见的几何完成绘制；</p>
-<p><strong>Work in CPU Side</strong><br>在CPU端只需要</p>
-<h2 id="2-Occlusion-Culling与相机以及阴影"><a href="#2-Occlusion-Culling与相机以及阴影" class="headerlink" title="2 Occlusion Culling与相机以及阴影"></a>2 Occlusion Culling与相机以及阴影</h2><p>如何将观测或者光照不到的地方的渲染变得尽可能廉价；</p>
-<p><strong>核心概念</strong><br>对于所有基于Cluster渲染的管线而言，Occlusion的计算都是十分关键的部分；<br>而Occlusion的基本思想，就是尽可能快速且低成本的基于当前相机的位置构建index buffer，类似于形成了一层幕布；当想渲染任何一个物体的时候，使用cluster渲染时使用这个index buffer在GPU中快速进行测试，快速将不需要渲染的部分剔除掉；</p>
-<h3 id="2-1-Occlusion-Depth-Generation"><a href="#2-1-Occlusion-Depth-Generation" class="headerlink" title="2.1 Occlusion Depth Generation"></a>2.1 Occlusion Depth Generation</h3><p>遮挡深度生成：这个根据场景生成的Depth Buffer可以被重用；</p>
-<p><strong>深度Pre-Pass与最好的Occluders在完整的像素当中</strong></p>
-<ol>
-<li>选择最好的occluders通过艺术资源或者heuristic</li>
-<li>重新计算occluder</li>
-<li>合并以及重投影与十六分之一的像素版本；</li>
-<li>生成Z-Buffer用于GPU Culling计算；</li>
-</ol>
-<p><strong>两个阶段的Occlusion Culling</strong><br>第一阶段：把上一帧里面的所有物体，依据Z buffer数据测试一遍，对所有通过上一帧Z-Buffer的物体先绘制一遍；把可能可见的物体先跑一遍得出画面；<br>问题：此时得出的z很有可能是错误的，此时应该把所有认为可能不可见的物体也测试一遍Z-Buffer<br>第二阶段：在第一阶段过滤完之后，重新再测试一遍被忽略掉的物体，从而减少大量的渲染量，准确并且高效完成；<br><img src="/../../image/Pasted%20image%2020230827161702.png"></p>
-<h3 id="2-2-可视化内容处理渲染管线"><a href="#2-2-可视化内容处理渲染管线" class="headerlink" title="2.2 可视化内容处理渲染管线"></a>2.2 可视化内容处理渲染管线</h3><p><strong>Visiblity Buffer</strong><br>Visiblity Buffer是一种新的越来越瘦关注的Buffer；<br>如果使用传统的Shading，每一次渲染都需要全部进行处理，处理的数据量非常大，因此可以把这些Texture可以全部打包放到一个Shading当中</p>
-<p><strong>Deferred Shading 与 G-Buffer 存在的意义与问题</strong><br>Deffered Shading：在Deferred Shader中处理很多三角形的场景时，其不会保证优先绘制靠近相机的物体，因此对于同一个像素可能会渲染十几次，因为在这个像素上可能会有多个物体在其射线上；<br>大量的对G-Buffer的读写会产生大量的性能浪费；</p>
-<p><strong>Visiblity Buffer</strong><br>解决方法：在第一帧渲染的时候，就只把几何数据渲染进去，而不是把Texture等其他数据全部在第一帧弄进去；在获得了这些几何体的位置信息后，再将其手动的把每个顶点该有的信息输入进去；<br>Shading阶段时，把几何体的每个像素位置拿到，反算出来其像素点应该有的反射率等信息，接下来对其进行Shading；<br>其非常适合在场景当中有大量的小物体，而且这些物体经常会被其他物体遮挡住；</p>
-<p><strong>Visiblity Buffer与Deferred Shading结合</strong><br>将Visiblity和G-Buffer结合，G-Buffer的数据可以来自于传统渲染管线，也可以来自于Visiblity Buffer渲染管线；</p>
-<h2 id="3-Nanite"><a href="#3-Nanite" class="headerlink" title="3 Nanite"></a>3 Nanite</h2><h3 id="3-1-前言"><a href="#3-1-前言" class="headerlink" title="3.1 前言"></a>3.1 前言</h3><p><strong>要解决的问题</strong><br>每个做Render的目标：在虚拟世界中还原现实世界，但现实世界中具有无限的几何细节。实时渲染的人希望在游戏当中实现无限的几何细节；</p>
-<p><strong>Nanite基本的源头：Virtual Texture</strong><br>在真实的游戏场景当中拥有大量的texture，在游戏引擎中提出Virtual Texture的思想，即在游戏当中、离Camera的Texture精度高，离Camera远的Texture精度低；即先形成一大张的Virtual Texture；</p>
-<p><strong>进一步推到：把几何Geometry也变成Virtual Map</strong><br>需要有一个方法把几何也变成Virtual Map；但这个过程十分困难，因为几何信息的处理比Texture困难很多；</p>
-<ul>
-<li>Voxels方法？<ul>
-<li>难以表达高精度内容</li>
-<li>数据量惊人</li>
-<li>而且目前主流的艺术资产都不是基于Voxel表达的</li>
-</ul>
-</li>
-<li>Subdivision Surfaces？<ul>
-<li>增加几何的精细度</li>
-<li>在实时给几何体细分表面</li>
-</ul>
-</li>
-<li>Map-Based Method?<ul>
-<li>难以表达表面特性</li>
-<li>基于硬件的加密几何</li>
-</ul>
-</li>
-</ul>
-<p><strong>最后结果：基于三角形的几何构建</strong></p>
-<h3 id="3-2-Virtual-Geometry"><a href="#3-2-Virtual-Geometry" class="headerlink" title="3.2 Virtual Geometry"></a>3.2 Virtual Geometry</h3><p><strong>Nanite中的几何表达</strong><br>无论增加多少的几何复杂度，屏幕上能够展示的几何数量终归是有限的，有像素上有一个或两个三角形就够了；<br>可以通过屏幕像素的精度来决定几何物体的精度；</p>
-<ul>
-<li>基于Cluster的几何表达<ul>
-<li>将几何体分成不同的Cluster</li>
-<li>让其根据View来决定Cluster的精度，不同的LOD在Cluster中具有不同的精度</li>
-<li>对于屏幕空间最大化的利用<br><img src="/../../image/Pasted%20image%2020230827161729.png"></li>
-</ul>
-</li>
-</ul>
-<p><strong>Nanite的Cluster细分方法</strong><br>根据View的距离情况，根据LOD进行Cluster的简化，将其合成一份Cluster；<br>因此可以在游戏进行时，可以根据View距离加载不同的LOD；<br><strong>Cluster合并的问题</strong><br>不同LOD等级的物体之间衔接的时候会有问题，即本来是根据同一LOD构建出的几何体现在有部分表面其Cluster变成其他LOD是，分界处衔接有问题；<br>解决方法：把边给锁住；在边缘一直锁着LOD0的边；但是锁边的时候这些边的三角形数量也很高；并且因为人眼对于高频的信号感受力很强，因此对于这种边缘处突然出现的高频信号会有反应；</p>
-<p><strong>对Cluster合并问题的解决：Cluster Group</strong><br>只缩Cluster Group的边，里面的Cluster再随意的去简化；<br>保证了在LOD切换的时候，不会在衔接处明显变化；<br>其希望被锁住的LOD的边在切换的时候不会注意到被缩边的Cluster Group;<br>如图是Cluster Group在不同LOD时变化：<br>乱中有序：底层的Cluster上层可能有多个，并且不会和上层的所有Cluster都产生关系；<br><img src="/../../image/Pasted%20image%2020230827161745.png"></p>
-<h3 id="3-3-QEM"><a href="#3-3-QEM" class="headerlink" title="3.3 QEM"></a>3.3 QEM</h3><p>形成Cluster Group的流水线；<br><strong>LOD Selection For Cluster Group In Paralllel</strong><br>能不能让LOD的Selection可不可以被并行化，从左到右或者从右到左的遍历都有可能是不稳定的；<br>把Cluster节点组成的树状的LOD，变成数组的线性的LOD（通过把Cluster其对应父节点的信息存储进来）</p>
-<ul>
-<li>希望是独立的决策</li>
-</ul>
-]]></content>
-      <categories>
-        <category>游戏引擎</category>
-      </categories>
-      <tags>
-        <tag>游戏引擎</tag>
-        <tag>技术美术</tag>
+        <tag>操作系统</tag>
+        <tag>状态机</tag>
       </tags>
   </entry>
   <entry>
@@ -954,112 +628,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Lecture 10：状态机模型的应用</title>
-    <url>/2023/08/f8b821c31d0a.html</url>
-    <content><![CDATA[<ul>
-<li>状态机的确定性<ul>
-<li>概念<ul>
-<li>每一个状态都有一个确定的下一个状态</li>
-<li>不确定的状态机，状态之后会有不同的分支状态</li>
-</ul>
-</li>
-<li>宏观物理世界<ul>
-<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
-<li>例子：Game Of Life</li>
-</ul>
-</li>
-<li>微观物理世界<span id="more"></span></li>
-</ul>
-</li>
-</ul>
-<h2 id="10-1-状态机模型的物理世界应用"><a href="#10-1-状态机模型的物理世界应用" class="headerlink" title="10.1 状态机模型的物理世界应用"></a>10.1 状态机模型的物理世界应用</h2><h3 id="10-1-1-世界状态的确定性分析"><a href="#10-1-1-世界状态的确定性分析" class="headerlink" title="10.1.1 世界状态的确定性分析"></a>10.1.1 世界状态的确定性分析</h3><ul>
-<li>状态机的确定性<ul>
-<li>概念<ul>
-<li>每一个状态都有一个确定的下一个状态</li>
-<li>不确定的状态机，状态之后会有不同的分支状态</li>
-</ul>
-</li>
-<li>宏观物理世界<ul>
-<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
-<li>例子：Game Of Life</li>
-</ul>
-</li>
-<li>微观物理世界</li>
-</ul>
-</li>
-</ul>
-<h3 id="10-1-2-状态机模型的应用"><a href="#10-1-2-状态机模型的应用" class="headerlink" title="10.1.2 状态机模型的应用"></a>10.1.2 状态机模型的应用</h3><p>这里不知道为什么会出现问题。。。</p>
-<h2 id="在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原"><a href="#在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原" class="headerlink" title="在决定性的数学公理体系下，状态机模型的使用1. 数学严谨的体系下，解释平行宇宙2. 细胞的状态分析与还原"></a>在决定性的数学公理体系下，状态机模型的使用<br>1. 数学严谨的体系下，解释平行宇宙<br>2. 细胞的状态分析与还原</h2><h2 id="10-2-状态机模型下的编译器和现代CPU"><a href="#10-2-状态机模型下的编译器和现代CPU" class="headerlink" title="10.2 状态机模型下的编译器和现代CPU"></a>10.2 状态机模型下的编译器和现代CPU</h2><h3 id="10-2-1-编译器模型"><a href="#10-2-1-编译器模型" class="headerlink" title="10.2.1 编译器模型"></a>10.2.1 编译器模型</h3><h2 id="编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay"><a href="#编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay" class="headerlink" title="编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）### 10.2.2 编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多### 10.2.3 查看状态机执行程序执行 &#x3D; 状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。+ 查看所有的状态机行为    + 方法：使用GDB进行调试        + 单步调试        + 反汇编调试    + 通过调试器展示的状态的一部分        + 寄存器        + 内存        + 变量状态机视角下，Debug可进行的行为：1. 复制当前状态机的状态2. 回溯状态机的上一个状态3. 进入状态机的下一个状态4. 记录一个状态机的完整执行+ 状态机的状态回溯    + 概念：        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走        + 每次状态切换时更改的内容有效    + 例子：        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现+ 记录状态机的完整执行    + 决定性程序：        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来    + 拥有系统调用、Random的程序：        + 待记录内容：        + 1. 指令数        + 2. 结果        + 3. n份以上内容    + 可使用此功能        + 指令：            + rr record        + 想记录下函数的全部行为：            + 需要知道从上一条指令到下一条指令有多少决定性的指 令            + 程序的io            + 程序的中断        + 程序可以完整的记录程序的执行            + 例子：老游戏的replay"></a>编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）<br>在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）<br>### 10.2.2 编译器优化的正确性<br><strong>核心：源代码状态机和二进制状态机的可观测行为的一致性</strong><br>例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多<br>### 10.2.3 查看状态机执行<br>程序执行 &#x3D; 状态机执行<br>例子：通过strace观测系统调用的行为以及所花费的时间。<br>+ 查看所有的状态机行为<br>    + 方法：使用GDB进行调试<br>        + 单步调试<br>        + 反汇编调试<br>    + 通过调试器展示的状态的一部分<br>        + 寄存器<br>        + 内存<br>        + 变量<br>状态机视角下，Debug可进行的行为：<br>1. 复制当前状态机的状态<br>2. 回溯状态机的上一个状态<br>3. 进入状态机的下一个状态<br>4. 记录一个状态机的完整执行<br>+ 状态机的状态回溯<br>    + 概念：<br>        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走<br>        + 每次状态切换时更改的内容有效<br>    + 例子：<br>        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现<br>+ 记录状态机的完整执行<br>    + 决定性程序：<br>        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来<br>    + 拥有系统调用、Random的程序：<br>        + 待记录内容：<br>        + 1. 指令数<br>        + 2. 结果<br>        + 3. n份以上内容<br>    + 可使用此功能<br>        + 指令：<br>            + rr record<br>        + 想记录下函数的全部行为：<br>            + 需要知道从上一条指令到下一条指令有多少决定性的指 令<br>            + 程序的io<br>            + 程序的中断<br>        + 程序可以完整的记录程序的执行<br>            + 例子：老游戏的replay</h2><h2 id="10-3-状态机与性能分析"><a href="#10-3-状态机与性能分析" class="headerlink" title="10.3 状态机与性能分析"></a>10.3 状态机与性能分析</h2><h3 id="10-3-1-采样状态机的执行"><a href="#10-3-1-采样状态机的执行" class="headerlink" title="10.3.1 采样状态机的执行"></a>10.3.1 采样状态机的执行</h3><h2 id="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：-Pasted-image-20230222163118-png-将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-Pasted-image-20230222163358-png-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解"><a href="#每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：-Pasted-image-20230222163118-png-将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-Pasted-image-20230222163358-png-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解" class="headerlink" title="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature optimization is the root of all exil.问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要+ 性能优化的时机    + 分析程序在时间和空间上的调用    + 时间    + 空间### 10.3.2 Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断+ 中断    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出#### 10.3.2.1 基于gcc进行性能摘要输出当前程序性能摘要：结果：![[Pasted image 20230222163118.png]]将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：![[Pasted image 20230222163358.png]]### 10.3.3 实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上+ 工业界面到的性能优化    + 实际情况：木桶效应    + 每个部分都已经优化到了局部最优解"></a>每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。<br><em>性能分析的核心原则：Premature optimization is the root of all exil.</em><br>问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要<br>+ 性能优化的时机<br>    + 分析程序在时间和空间上的调用<br>    + 时间<br>    + 空间<br>### 10.3.2 Profiler和性能摘要<br><strong>单点调试的问题：</strong><br>当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。<br>实现此步骤的方法是：中断<br>+ 中断<br>    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出<br>#### 10.3.2.1 基于gcc进行性能摘要<br>输出当前程序性能摘要：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf stat ./a.out </span><br></pre></td></tr></table></figure><br>结果：<br>![[Pasted image 20230222163118.png]]<br>将整个程序的Profiler记录，并打开报告：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf record ./a.out</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure><br>获得的每一条指令的时间：<br>![[Pasted image 20230222163358.png]]<br>### 10.3.3 实际中的性能优化<br>百分之八十的时间都消耗在了百分之二十的代码上<br>+ 工业界面到的性能优化<br>    + 实际情况：木桶效应<br>    + 每个部分都已经优化到了局部最优解</h2><h2 id="10-4-状态机与程序验证"><a href="#10-4-状态机与程序验证" class="headerlink" title="10.4 状态机与程序验证"></a>10.4 状态机与程序验证</h2><h3 id="10-4-1-现在的Model-Check工具"><a href="#10-4-1-现在的Model-Check工具" class="headerlink" title="10.4.1 现在的Model Check工具"></a>10.4.1 现在的Model Check工具</h3><p>概念：状态机模型可以用于证明程序的正确性。使用bfs便利所有的状态，再使用execute给定一个并发程序的调度。<br>例子：for程序的并发Bug<br>**学术界的Model Check工具</p>
-<ol>
-<li>NASA的Java PathFinder：把Model Check扩充到了所有的Java代码</li>
-<li>Spin：只可以使用其自己定义的语言</li>
-<li>TLA Plus：用于亚马逊的并发式程序的正确性验证</li>
-</ol>
-<ul>
-<li>现在的Model Check在分布式系统上的应用<ul>
-<li>并发系统：<ul>
-<li>分布式系统也是一种并发系统，但是其问题更大</li>
-<li>并发系统假设其所有的节点都能够正常工作</li>
-</ul>
-</li>
-<li>分布式系统<ul>
-<li>在分布式系统中，必须假设所有的节点都可能出错（丢失）</li>
-<li>在节点丢失的情况下还能进行tutorial</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="10-4-2-Model-Check可以做什么"><a href="#10-4-2-Model-Check可以做什么" class="headerlink" title="10.4.2 Model Check可以做什么"></a>10.4.2 Model Check可以做什么</h3><p>当探索不确定性程序的执行时，Model Check可以检查任何程序的执行；<br>Model Check可以检测当前不确定程序的任何一种可能性，并检查出Bug。</p>
-<ul>
-<li>不确定<ul>
-<li>输入不确定</li>
-<li>随机函数不确定<br>面对不确定性程序，可以检测程序的所有可能性空间<br><strong>问题：程序的状态空间太大</strong></li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>如何将这个状态的可能性减少？</li>
-<li>如何将状态合并？</li>
-<li>如何将状态往后延迟？</li>
-</ol>
-<ul>
-<li>状态坍缩<ul>
-<li>将大量可能性的状态转换为分支，延迟状态的展开，将状态合并，直到发现Bug再将其反向展开</li>
-<li>分支成立：<ul>
-<li>再检测有没有分支<ul>
-<li>分支成立：<ul>
-<li>在检测有没有分支：<ul>
-<li>分支成立：<ul>
-<li>当前红色的状态是否可达？</li>
-<li>用约束求解器来计算</li>
-<li>计算出当前程序的状态，此状态为Bug</li>
-</ul>
-</li>
-<li>分支不成立：</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>分支不成立：</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>分支不成立：</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>状态机</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Lecture 12：进程的地址空间</title>
     <url>/2023/08/d03400aa93d7.html</url>
     <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
@@ -1120,6 +688,245 @@
       <tags>
         <tag>操作系统</tag>
         <tag>进程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 13：系统调用与Shell</title>
+    <url>/2023/08/3dbfbd52ee49.html</url>
+    <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
+<h3 id="13-1-2-早期的Shell"><a href="#13-1-2-早期的Shell" class="headerlink" title="13.1.2 早期的Shell"></a>13.1.2 早期的Shell</h3><p><strong>概念：</strong><br>早期的OS没有复杂结构，系统调用就像是库函数，那个时代的Shell就是命令行终端机。<br>核心：<strong>Shell就是一门把用户指令翻译为系统调用的编程语言</strong></p>
+<p>手册：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man sh</span><br></pre></td></tr></table></figure>
+<p>这是一个非常简单的手册，包含很多shell的内容，建立对UNIX Shell的基础认识。</p>
+<h2 id="13-2-复刻简易UNIX"><a href="#13-2-复刻简易UNIX" class="headerlink" title="13.2 复刻简易UNIX"></a>13.2 复刻简易UNIX</h2><h3 id="13-2-1-简易UNIX代码初设置"><a href="#13-2-1-简易UNIX代码初设置" class="headerlink" title="13.2.1 简易UNIX代码初设置"></a>13.2.1 简易UNIX代码初设置</h3><p>早期的计算机设计由于性能低下，设计不能太消耗性能以及复杂<br>代码：<a href="http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c</a><br>零库函数依赖、可以作为最小可用的Linux的init程序<br>由于其链接任何库函数，因此可以ffreestanding</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -c -ffreestanding sh-xv6.c -g -O2</span><br><span class="line">ld sh-xv6.o -o sh</span><br></pre></td></tr></table></figure>
+<p>第一行是将其编译，然后第二行将其静态链接<br>当使用反汇编模式进行调试时，直接从_Start()，用C写的这个函数处开始执行。此程序可以直接以命令行的形式进行运行。<br>![[Pasted image 20230827140800.png]]</p>
+<h3 id="12-2-2-第一步：读取命令"><a href="#12-2-2-第一步：读取命令" class="headerlink" title="12.2.2 第一步：读取命令"></a>12.2.2 第一步：读取命令</h3><p>代码：<br>解析：不停的getcmd()来获得用户的输入，这其中直接使用read的系统调用</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nread = <span class="built_in">syscall</span>(SYS_read,<span class="number">0</span>,buf,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>一直读到换行符才停止：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(*(buf++)==<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+<p>将命令读取到buf缓冲区里</p>
+<h3 id="12-2-3-第二步：可能性-解释执行命令"><a href="#12-2-3-第二步：可能性-解释执行命令" class="headerlink" title="12.2.3 第二步：可能性|解释执行命令"></a>12.2.3 第二步：可能性|解释执行命令</h3><p>代码：<br>![[Pasted image 20230301181806.png]]<br>解析：<br>首先判断是不是一条’cd’命令，并且其当中不能有空格<br>使用系统调用，读取buf+3之后的数据</p>
+<h3 id="12-2-4-第二步：可能性-新进程创建"><a href="#12-2-4-第二步：可能性-新进程创建" class="headerlink" title="12.2.4 第二步：可能性|新进程创建"></a>12.2.4 第二步：可能性|新进程创建</h3><p>解析：可能性|如果不是cd命令，此时创建一个新的进程，在新的进程里面把进程解析</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">syscall</span>(SYS_fork) == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">runcmd</span>(<span class="built_in">parsecmd</span>(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230301183132.png]]<br>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
+<ul>
+<li>命令与管道<ul>
+<li>管道和命令关系<ul>
+<li>管道的左边和右边都可以任意复杂：   </li>
+<li>可以是一个很长的式子：<code>(echo a;each b;echo c;echo d)|wc -l</code></li>
+<li>把管道左边的输出作为右边的输入，这就是管道的形式语义。</li>
+</ul>
+</li>
+<li>管道解析<ul>
+<li>pipe()创建一个管道，管道返回两个描述符：</li>
+<li>pipe[0]是读口，pipe[1]是写口</li>
+<li>之后会使用fork创建两个新的进程，这两个新的进程完全复制的父进程的状态，因此此时这三个进程完全共享管道，并且共进共出。</li>
+<li>之后将p[0]的文件描述符关闭，后背又将p[1]的文件描述符关掉</li>
+<li>之后再进行Fork，子进程编号为1的进程指向管道的左边，Fork出来的子进程再进行上述出现的行为</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>管道行为图解：<br>![[Pasted image 20230303165535.png]]</p>
+<h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
+<p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
+<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程<br>常用指令：<br>![[Pasted image 20230303170448.png]]<br><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
+<h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
+<p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
+<p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
+<h3 id="13-3-2-现代Shell展望"><a href="#13-3-2-现代Shell展望" class="headerlink" title="13.3.2 现代Shell展望"></a>13.3.2 现代Shell展望</h3><p>现代的Shell功能不变，都是人和机器之间的API，但是其形式可以发生变化</p>
+<ul>
+<li>界面自带StackOverflow？</li>
+<li>结合神经网络？</li>
+<li>智能补全？</li>
+<li>POPL20</li>
+</ul>
+<h2 id="13-4-终端与任务控制"><a href="#13-4-终端与任务控制" class="headerlink" title="13.4 终端与任务控制"></a>13.4 终端与任务控制</h2><h3 id="13-4-1-终端机制"><a href="#13-4-1-终端机制" class="headerlink" title="13.4.1 终端机制"></a>13.4.1 终端机制</h3><p>问题：为什么有时候使用Ctrl + C可以退出程序，有时候不可以？为什么有些进程可以退出，当管道创建了很多个进程时，使用Ctrl + C 将退出哪个进程？如果时Fork了一个Shell，那使用Ctrl + C 是不是要退出Shell？tmux是怎么实现的？</p>
+<p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
+<p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
+<h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
+<p><strong>信号处理程序：</strong><br>![[Pasted image 20230303173129.png]]<br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
+<h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
+<p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 15：Fork的应用</title>
+    <url>/2023/08/3d8a9bfbeeea.html</url>
+    <content><![CDATA[<p>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象</p>
+<span id="more"></span>
+<blockquote>
+<p>前言：从这节课开始，会逐渐进入到如何实现OS相关的内容，即往OS的内核来走</p>
+</blockquote>
+<h2 id="15-1-fork-行为的补充解释"><a href="#15-1-fork-行为的补充解释" class="headerlink" title="15.1 fork()行为的补充解释"></a>15.1 fork()行为的补充解释</h2><h3 id="15-1-1-操作系统的状态机"><a href="#15-1-1-操作系统的状态机" class="headerlink" title="15.1.1  操作系统的状态机"></a>15.1.1  操作系统的状态机</h3><p><strong>概念复习</strong><br>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象（行为类似于指针共享）<br>Execve：进程执行了Execve，状态机就会被重置，但是在重置之后，OS当中的对象还在，因此即使状态被重置，这个指向依然存在，比如其打开的文件描述符依然存在。</p>
+<h3 id="15-1-2-文件描述符"><a href="#15-1-2-文件描述符" class="headerlink" title="15.1.2 文件描述符"></a>15.1.2 文件描述符</h3><p><strong>概念</strong><br><strong>文件描述符就是一个指向操作系统内对象的指针</strong>，只能通过OS运行的方式去访问这些对象。但是对于一个文本对象，write一个对象的时候，应该是具有一个文件内的偏移量，进而可以使得两个write写入的内容不是被覆盖，而是都可以被写入。</p>
+<p>文件描述符可以通过Open来得到，比如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">open(<span class="string">&quot;a.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>此时会获得一个文件描述符，并且指向这个 a.txt 对象<br>在使用Open打开文件描述符时，可以使用一个O_APPEND的方式写入。不管文件的数量多少，都会以file offset的方式在文件的末尾进行追加。</p>
+<p><strong>文件描述符的复制</strong><br>代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;a.txt&quot;</span>,O_WROLY | O_CREAT);<span class="comment">//用creat打开，如果不存在就被创造</span></span><br><span class="line">assert(fd &gt; <span class="number">0</span>);</span><br><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line">assert(pid&gt;<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(pid == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;World&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>完整代码：<br>![[Pasted image 20230315124639.png]]</p>
+<ul>
+<li><p>问题一：文件偏移量的管理<br>以上代码的结果，是Hello被World覆盖掉，还是两者都被输出？即当两个相同状态的进程进行write时，其两者用于相同的文件描述符的前提下，两者是共享偏移量还是其他行为？ </p>
+</li>
+<li><p>问题二：dup复制文件描述符<br><strong>什么是dup</strong><br>假设原本存在一个fd为3的文件描述符，指向了OS中的一个对象。当使用了dup之后，此时会再出现一个文件描述符，其fd为4，同样也指向了此OS中的一个对象。<br>但是如果带有文件偏移量，那此时究竟应该是共享offset，还是独立offset？</p>
+</li>
+</ul>
+<h2 id="15-2-fork的实现"><a href="#15-2-fork的实现" class="headerlink" title="15.2 fork的实现"></a>15.2 fork的实现</h2><h3 id="15-2-1-fork设计的问题"><a href="#15-2-1-fork设计的问题" class="headerlink" title="15.2.1 fork设计的问题"></a>15.2.1 fork设计的问题</h3><p>创建副本这件事情的代价很大，进程可能有很大的地址空间，如果此时对一个非常大的地址空间fork一份，并且在这之后立马就execve，此时就会产生十分大的性能浪费，此时OS会怎么应对这种状况？</p>
+<p><strong>OS中的进程地址空间设计</strong><br>每一个进程会有一个地址空间，并且在地址空间当中会进行分页（MMU），而进程其本身拥有的只是一个映射表。映射表提供了相关的信息，表示不同的内容会映射到分页之后的哪个页面，所以概念上进程拥有这些页面，其实实际上依然是由OS控制着所有这些内容。</p>
+<h3 id="15-2-2-共享只读设计"><a href="#15-2-2-共享只读设计" class="headerlink" title="15.2.2 共享只读设计"></a>15.2.2 共享只读设计</h3><p>当一个进程拥有两个页面时，内容如下：<br>![[Lecture 15：Fork的应用 2023-03-15 17.06.04.excalidraw]]<br>当指向了一个fork之后，其状态如下;<br>![[Lecture 15：Fork的应用 2023-03-15 17.07.24.excalidraw]]<br>此时这两个进程都同时指向了一个可写的页面，因此Old进程可以写，New进程也可以写。但是此时OS会偷偷的抹掉这个可写的权限，进而可能发生缺页中断（段错误）。但如果OS发现，这个缺页中断只是被偷偷抹掉的，此时OS会将此页引用计数减1，然后将其拷贝一份到另外的可写权限的空间，从而把读写的权限重新还给NEW进程。<br>![[Lecture 15：Fork的应用 2023-03-15 17.12.48.excalidraw]]<br><strong>优点：</strong><br>这种设计Copy on Write的设计，当遇到非常大的地址空间中需要映射的内容时，有时可以不需要为其创建新的内容，只有在使用时才产生这种Copy On Write。<br><strong>例子：libc</strong><br>整个OS里面，只有一份libc的副本，OS当中有很多的进程，此时这些不同的进程都是指向同一个libc。</p>
+<p><strong>代码证明Copy On Write</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NPROC 1000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MB 128</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SIZE (MB * (1 &lt;&lt; 20))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> xstr(s) str(s)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> str(s) #s</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">char</span> *data = <span class="built_in">malloc</span>(SIZE); <span class="comment">// 128MB shared memory</span></span><br><span class="line">  <span class="built_in">memset</span>(data, <span class="string">&#x27;_&#x27;</span>, SIZE);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; NPROC - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// NPROC processes go here</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">asm</span> <span class="title function_">volatile</span><span class="params">(<span class="string">&quot;.fill 1048576 * &quot;</span> xstr(MB) <span class="string">&quot;, 1, 0x90&quot;</span>)</span>; <span class="comment">// 128MB shared code</span></span><br><span class="line"></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> idx = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span> fd = open(<span class="string">&quot;/dev/urandom&quot;</span>, O_RDONLY); assert(fd &gt; <span class="number">0</span>);</span><br><span class="line">  read(fd, &amp;idx, <span class="keyword">sizeof</span>(idx));</span><br><span class="line">  close(fd);</span><br><span class="line">  idx %= <span class="number">1048576</span> * MB;</span><br><span class="line"></span><br><span class="line">  data[idx] = <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;pid = %d, write data[%u]\n&quot;</span>, getpid(), idx);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    sleep(<span class="number">1</span>); <span class="comment">// not terminate</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行了这个代码之后，在OS当中有1000个进程在进行，并且上述代码在SO中，每个都要求分配了128MB的内存。但是OS并没有Crash掉，实际只是用了1GB左右的内存。这就是Copy On Write的实现。</p>
+<p><strong>关于进程内存占有量</strong><br>由此推导出一个结论：证明一个进程用的多少的内存就是一个伪命题。如果简单的将一个进程映射的内存之和相加作为其内存大小，mmap可以映射一大片的内存（比如20T内存），但是这些内存是按需使用的，其只是做了一个映射，然后使用时只会用多少分配多少，并且还有很多内存是共享的（Libc）。</p>
+<h2 id="15-3-状态机的复制"><a href="#15-3-状态机的复制" class="headerlink" title="15.3 状态机的复制"></a>15.3 状态机的复制</h2><h3 id="15-3-1-状态机视角"><a href="#15-3-1-状态机视角" class="headerlink" title="15.3.1 状态机视角"></a>15.3.1 状态机视角</h3><p><strong>概念：平行宇宙与fork</strong><br>物理世界上不同的粒子状态，可以定义出不同时间下的状态。如果此时要进行时间穿越，此时行为就是将未来的部分状态带到过去，并且从此状态开始进行分叉，而这个分叉就是fork()。<br>OS运行开发者使用fork()实现平行宇宙。</p>
+<h3 id="15-3-2-fork与并行化"><a href="#15-3-2-fork与并行化" class="headerlink" title="15.3.2 fork与并行化"></a>15.3.2 fork与并行化</h3><p><strong>例子1：码交换搜索问题</strong><br>和不同的部分进行交换，就会进入不同的状态。可以使用状态机的视角，将所有的状态进行探索。<br>![[Lecture 15：Fork的应用 2023-03-16 16.57.00.excalidraw]]</p>
+<p><strong>例子2：基于fork的dfs</strong><br>原本的dfs会使用深度遍历进行探索，然后使用回溯法回到原本的状态，回溯的过程十分耗时。而如果基于fork，使用状态机的视角来进行迁移，则可以只会跳回到初始状态（通过使用exit()来实现）。<br>其启示是：可以使用fork实现dfs；使用fork来进入不同的状态，并且联合OS来帮助进行管理，此时进入新的状态后原本的平行宇宙也可以被消除掉，每探索完一个平行宇宙都将其删除掉。<br>并且，还可以创造多个平行宇宙，并行的得到所有状态，然后程序结束。</p>
+<h3 id="15-3-3-fork与跳过初始化"><a href="#15-3-3-fork与跳过初始化" class="headerlink" title="15.3.3 fork与跳过初始化"></a>15.3.3 fork与跳过初始化</h3><p><strong>问题</strong><br>假设你的NEMU需要启动很多份elf头文件，而如果NEMU进行初始化要花很多的时间（比如花费大量时间来初始化一片128MB的内存），此时如果为每个elf来进行启动就会产生大量消耗，此时可以按照以下行为分析：<br>![[Lecture 15：Fork的应用 2023-03-16 17.29.53.excalidraw]]<br><strong>处理方法</strong><br>此时可以只执行一次nemu_init()的内容，之后只需要每进来一个需要启动的内容，就fork一份，然后找到没有处理的文件，将其进行处理，就可以完成操作。并且因为只进行一次init，因此可以加速程序执行第一个文件的速度。</p>
+<p><strong>跳过初始化的实际应用</strong><br>应用：安卓应用的秒启动</p>
+<ul>
+<li>简介：每一个安卓的程序都会通过以上的跳过初始化的方式进行启动。</li>
+<li>原理：安卓应用是一个Java程序，而Java是运行在JVM虚拟机上面，对于安卓而言是一个Android Runtime（自己实现的虚拟机）。而安卓和Java都会有一个十分大的标准库，如果每一个程序是采取冷启动，即从0开始执行整个Java程序，不可能几秒内完成加载，此时就是使用了跳过初始化的思想，所有的Java程序只进行初始化一次。</li>
+<li>Zygote Process：会有一个所有Android程序的父进程，名称为Zygote Process。其会完成所有必要的安卓程序的必要的类的加载，此时如果开始了一个新的程序，只要在init之后的状态基础之上fork一份即可完成创建。</li>
+<li>一次加载，全员使用<br>应用：Chrome浏览器</li>
+<li>简介：Chrome可以成功的原因之一，就是其速度非常的快。</li>
+<li>原理：Chrome当中，每一个网页就是一个进程，使用跳过初始化的思想来进行网页的快速加载</li>
+</ul>
+<p><strong>核心：只要是从一个状态出发，需要很多个副本的，都可以使用fork。</strong></p>
+<h3 id="15-3-4-fork与备份"><a href="#15-3-4-fork与备份" class="headerlink" title="15.3.4 fork与备份"></a>15.3.4 fork与备份</h3><p><strong>简介：</strong><br>要是我们可以对有Bug的程序总是能在任何状态“试一试”，然后试错了还能回到过去，就好了。<br><strong>概念：</strong><br>当过去某个节点发生了一个Bug，我们能否回到过去，在产生一次这个Bug?特别是出现并发Bug，此类Bug或许十分难以重现，拥有此存档机制就可以去复现过去状态下的Bug。<br>![[Lecture 15：Fork的应用 2023-03-17 17.46.14.excalidraw]]<br>在任何状态下，可以使用fork()开启另一条平行宇宙，然后在此基础上进行存档。然后如果顺着正常的路径进行执行，但是之后在这主分支之上发生了Crash，此时就可以拿回之前的存档，从之前的存档开始。<br>![[Lecture 15：Fork的应用 2023-03-17 21.24.34.excalidraw]]<br>然后拿回了之前的存档后，从此存档开始执行，并且需要更改一些环境。很多Bug都是由于环境导致的（比如许多的并发Bug）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.27.15.excalidraw]]<br>这就是可以进行容错的机制。如果有轻量级的快照，就可以使用平行宇宙来复查一些Bug。甚至如果是想要还原并发这种Bug，甚至不需要复杂的Fork的快照，只需要有一个Setjmp寄存器的快照。</p>
+<h2 id="15-4-对于Fork的讨论"><a href="#15-4-对于Fork的讨论" class="headerlink" title="15.4 对于Fork的讨论"></a>15.4 对于Fork的讨论</h2><h3 id="15-4-1-A-Fork-in-the-road"><a href="#15-4-1-A-Fork-in-the-road" class="headerlink" title="15.4.1 A Fork() in the road"></a>15.4.1 A Fork() in the road</h3><p><strong>简介：</strong><br>对于Unix Fork的批评。<br><strong>概述：</strong><br>fork使用的最舒服的时候，就是在一个简单的管道模型当中。但是随着OS发展，进程不止是有地址空间和文件描述符，但是之后进程会有信号（fork之后，发信号是两个都发，还是只发一个？），线程，进程间通信对象，ptrace等等。<br>fork的开发者对于这些问题进行了修复，但是结果就是导致现在的fork十分的复杂。比如出现线程之后。</p>
+<p><strong>这些都是由进程拥有了一些更加复杂的对象所引发出的问题。</strong></p>
+<h3 id="15-4-2-线程对于Fork的影响"><a href="#15-4-2-线程对于Fork的影响" class="headerlink" title="15.4.2 线程对于Fork的影响"></a>15.4.2 线程对于Fork的影响</h3><p><strong>线程概述</strong><br>在一个进程当中，会有一片地址空间，两个不同的线程共享这些地址空间，所有的页面都是共享的（因为页面是由OS持有的）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.43.41.excalidraw]]<br><strong>问题</strong><br>此时如果fork了一份这个进程，这当中的这些线程会怎么样？</p>
+<p><strong>分析</strong><br>首先，肯定是进程当中的某一个线程执行了fork，在执行了fork之后，是对应进程复制，另一个进程消失，还是两者都被复制？<br>正确答案是 只复制执行了fork的进程。<br>![[Lecture 15：Fork的应用 2023-03-17 21.47.35.excalidraw]]</p>
+<h3 id="15-4-3-更安全的创建一个进程"><a href="#15-4-3-更安全的创建一个进程" class="headerlink" title="15.4.3 更安全的创建一个进程"></a>15.4.3 更安全的创建一个进程</h3><p><strong>创建进程：POSIX Spawn</strong><br>代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">posix_spawn</span></span><br><span class="line"><span class="params">(</span></span><br><span class="line"><span class="params"><span class="type">pid_t</span> *pid,</span></span><br><span class="line"><span class="params"><span class="type">char</span> *path,</span></span><br><span class="line"><span class="params"><span class="type">posix_spawnattr_t</span> *attrp,</span></span><br><span class="line"><span class="params"><span class="type">char</span>* argv[],</span></span><br><span class="line"><span class="params"><span class="type">char</span>* envp[]</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+<p>其是一个在fork发明出来之后的API，比fork更加的简单。</p>
+<p>Fork的七宗罪：<br>![[Pasted image 20230317215942.png]]</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>Fork</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【商业系列】商业计划书大纲与内容</title>
+    <url>/2023/08/efa8d1f054ea.html</url>
+    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
+<ul>
+<li>1、 团队简介</li>
+<li>2、 项目内容</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析</li>
+<li>5、 商业模式</li>
+<li>6、 战略规划<span id="more"></span></li>
+</ul>
+<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
+<li>1、 团队简介</li>
+<li>2、 项目内容<ul>
+<li>1、项目介绍</li>
+<li>2、核心优势</li>
+</ul>
+</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析<ul>
+<li>1、 市场分析</li>
+<li>2、 竞品分析</li>
+</ul>
+</li>
+<li>5、 商业模式<ul>
+<li>1、 商业模式介绍</li>
+<li>2、 相关数据</li>
+</ul>
+</li>
+<li>6、 战略规划<ul>
+<li>1、 战略目标</li>
+<li>2、 实现路径</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
+<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
+<ol>
+<li>核心业务内容</li>
+<li>核心优势</li>
+</ol>
+<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
+<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
+<ul>
+<li>分析方法<ul>
+<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
+<li><ol>
+<li>增长型项目（还没开始或刚开始）</li>
+</ol>
+<ul>
+<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
+</ul>
+</li>
+<li><ol start="2">
+<li>运营型项目（已经开始）</li>
+</ol>
+<ul>
+<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
+<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
+<ul>
+<li>流量矩阵：<ul>
+<li>自媒体流量（自带宣传流量）</li>
+<li>开发团队（丰富开发经验）</li>
+<li>项目案例（Unity3D）</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
+<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
+<ul>
+<li>真实的数据，但是是部分的真实</li>
+</ul>
+<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
+<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
+<ol>
+<li>项目如何盈利？</li>
+<li>项目的流量模式？</li>
+<li>获客转化的路径？</li>
+<li>是否具有可持续性？</li>
+<li>增长的空间以及可能？</li>
+</ol>
+<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
+<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
+<ol>
+<li>确定战略目标，展现当前项目的发展前景</li>
+<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
+</ol>
+]]></content>
+      <categories>
+        <category>商业</category>
+      </categories>
+      <tags>
+        <tag>商业</tag>
+        <tag>创业</tag>
       </tags>
   </entry>
   <entry>
@@ -1226,139 +1033,170 @@
       </tags>
   </entry>
   <entry>
-    <title>Lecture 15：Fork的应用</title>
-    <url>/2023/08/3d8a9bfbeeea.html</url>
-    <content><![CDATA[<p>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象</p>
+    <title>Game Engine：引擎事件系统</title>
+    <url>/2023/08/e672ea9950c8.html</url>
+    <content><![CDATA[<p>引擎事件系统框架编写</p>
 <span id="more"></span>
-<blockquote>
-<p>前言：从这节课开始，会逐渐进入到如何实现OS相关的内容，即往OS的内核来走</p>
-</blockquote>
-<h2 id="15-1-fork-行为的补充解释"><a href="#15-1-fork-行为的补充解释" class="headerlink" title="15.1 fork()行为的补充解释"></a>15.1 fork()行为的补充解释</h2><h3 id="15-1-1-操作系统的状态机"><a href="#15-1-1-操作系统的状态机" class="headerlink" title="15.1.1  操作系统的状态机"></a>15.1.1  操作系统的状态机</h3><p><strong>概念复习</strong><br>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象（行为类似于指针共享）<br>Execve：进程执行了Execve，状态机就会被重置，但是在重置之后，OS当中的对象还在，因此即使状态被重置，这个指向依然存在，比如其打开的文件描述符依然存在。</p>
-<h3 id="15-1-2-文件描述符"><a href="#15-1-2-文件描述符" class="headerlink" title="15.1.2 文件描述符"></a>15.1.2 文件描述符</h3><p><strong>概念</strong><br><strong>文件描述符就是一个指向操作系统内对象的指针</strong>，只能通过OS运行的方式去访问这些对象。但是对于一个文本对象，write一个对象的时候，应该是具有一个文件内的偏移量，进而可以使得两个write写入的内容不是被覆盖，而是都可以被写入。</p>
-<p>文件描述符可以通过Open来得到，比如：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">open(<span class="string">&quot;a.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
-<p>此时会获得一个文件描述符，并且指向这个 a.txt 对象<br>在使用Open打开文件描述符时，可以使用一个O_APPEND的方式写入。不管文件的数量多少，都会以file offset的方式在文件的末尾进行追加。</p>
-<p><strong>文件描述符的复制</strong><br>代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;a.txt&quot;</span>,O_WROLY | O_CREAT);<span class="comment">//用creat打开，如果不存在就被创造</span></span><br><span class="line">assert(fd &gt; <span class="number">0</span>);</span><br><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line">assert(pid&gt;<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(pid == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;World&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>完整代码：<br>![[Pasted image 20230315124639.png]]</p>
-<ul>
-<li><p>问题一：文件偏移量的管理<br>以上代码的结果，是Hello被World覆盖掉，还是两者都被输出？即当两个相同状态的进程进行write时，其两者用于相同的文件描述符的前提下，两者是共享偏移量还是其他行为？ </p>
-</li>
-<li><p>问题二：dup复制文件描述符<br><strong>什么是dup</strong><br>假设原本存在一个fd为3的文件描述符，指向了OS中的一个对象。当使用了dup之后，此时会再出现一个文件描述符，其fd为4，同样也指向了此OS中的一个对象。<br>但是如果带有文件偏移量，那此时究竟应该是共享offset，还是独立offset？</p>
+<h2 id="1-事件类型基础"><a href="#1-事件类型基础" class="headerlink" title="1.事件类型基础"></a>1.事件类型基础</h2><h3 id="1-1-事件类型枚举"><a href="#1-1-事件类型枚举" class="headerlink" title="1.1 事件类型枚举"></a>1.1 事件类型枚举</h3><p>描述事件系统的基础事件类型，用枚举表示。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">EventType</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,</span><br><span class="line">	AppTick, AppUpdate, AppRender,</span><br><span class="line">	KeyPressed, KeyReleased,</span><br><span class="line">	MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-事件分类"><a href="#1-2-事件分类" class="headerlink" title="1.2 事件分类"></a>1.2 事件分类</h3><p>定义了事件分类，并且可以向0进行过滤、偏移；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">EventCategory</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	EventCategoryApplication = <span class="built_in">BIT</span>(<span class="number">0</span>),</span><br><span class="line">	EventCategoryInput = <span class="built_in">BIT</span>(<span class="number">1</span>),</span><br><span class="line">	EventCategoryKeyboard = <span class="built_in">BIT</span>(<span class="number">2</span>),</span><br><span class="line">	EventCategoryMouse = <span class="built_in">BIT</span>(<span class="number">3</span>),</span><br><span class="line">	EventCategoryMouseButton = <span class="built_in">BIT</span>(<span class="number">4</span>)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BIT的定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BIT(x) (1 &lt;&lt; x)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Event基类设计"><a href="#2-Event基类设计" class="headerlink" title="2.Event基类设计"></a>2.Event基类设计</h2><ul>
+<li>内容：<ul>
+<li>m_Handled：用于表示此内容是否已经被处理过；</li>
+<li>IsInCategory：现在处理的事件，是否是属于类型的部分；使用此方法快速的进行过滤； </li>
+<li>GetName：仅用在Debug模式；</li>
+<li>ToString：默认输出名字，也可以继承后修改以及扩展此行为；<ul>
+<li>实现细节：stringstream的性能很差，但目前Debug模式可以先不考虑；</li>
+</ul>
 </li>
 </ul>
-<h2 id="15-2-fork的实现"><a href="#15-2-fork的实现" class="headerlink" title="15.2 fork的实现"></a>15.2 fork的实现</h2><h3 id="15-2-1-fork设计的问题"><a href="#15-2-1-fork设计的问题" class="headerlink" title="15.2.1 fork设计的问题"></a>15.2.1 fork设计的问题</h3><p>创建副本这件事情的代价很大，进程可能有很大的地址空间，如果此时对一个非常大的地址空间fork一份，并且在这之后立马就execve，此时就会产生十分大的性能浪费，此时OS会怎么应对这种状况？</p>
-<p><strong>OS中的进程地址空间设计</strong><br>每一个进程会有一个地址空间，并且在地址空间当中会进行分页（MMU），而进程其本身拥有的只是一个映射表。映射表提供了相关的信息，表示不同的内容会映射到分页之后的哪个页面，所以概念上进程拥有这些页面，其实实际上依然是由OS控制着所有这些内容。</p>
-<h3 id="15-2-2-共享只读设计"><a href="#15-2-2-共享只读设计" class="headerlink" title="15.2.2 共享只读设计"></a>15.2.2 共享只读设计</h3><p>当一个进程拥有两个页面时，内容如下：<br>![[Lecture 15：Fork的应用 2023-03-15 17.06.04.excalidraw]]<br>当指向了一个fork之后，其状态如下;<br>![[Lecture 15：Fork的应用 2023-03-15 17.07.24.excalidraw]]<br>此时这两个进程都同时指向了一个可写的页面，因此Old进程可以写，New进程也可以写。但是此时OS会偷偷的抹掉这个可写的权限，进而可能发生缺页中断（段错误）。但如果OS发现，这个缺页中断只是被偷偷抹掉的，此时OS会将此页引用计数减1，然后将其拷贝一份到另外的可写权限的空间，从而把读写的权限重新还给NEW进程。<br>![[Lecture 15：Fork的应用 2023-03-15 17.12.48.excalidraw]]<br><strong>优点：</strong><br>这种设计Copy on Write的设计，当遇到非常大的地址空间中需要映射的内容时，有时可以不需要为其创建新的内容，只有在使用时才产生这种Copy On Write。<br><strong>例子：libc</strong><br>整个OS里面，只有一份libc的副本，OS当中有很多的进程，此时这些不同的进程都是指向同一个libc。</p>
-<p><strong>代码证明Copy On Write</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NPROC 1000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MB 128</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SIZE (MB * (1 &lt;&lt; 20))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> xstr(s) str(s)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> str(s) #s</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">char</span> *data = <span class="built_in">malloc</span>(SIZE); <span class="comment">// 128MB shared memory</span></span><br><span class="line">  <span class="built_in">memset</span>(data, <span class="string">&#x27;_&#x27;</span>, SIZE);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; NPROC - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// NPROC processes go here</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">asm</span> <span class="title function_">volatile</span><span class="params">(<span class="string">&quot;.fill 1048576 * &quot;</span> xstr(MB) <span class="string">&quot;, 1, 0x90&quot;</span>)</span>; <span class="comment">// 128MB shared code</span></span><br><span class="line"></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> idx = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span> fd = open(<span class="string">&quot;/dev/urandom&quot;</span>, O_RDONLY); assert(fd &gt; <span class="number">0</span>);</span><br><span class="line">  read(fd, &amp;idx, <span class="keyword">sizeof</span>(idx));</span><br><span class="line">  close(fd);</span><br><span class="line">  idx %= <span class="number">1048576</span> * MB;</span><br><span class="line"></span><br><span class="line">  data[idx] = <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;pid = %d, write data[%u]\n&quot;</span>, getpid(), idx);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    sleep(<span class="number">1</span>); <span class="comment">// not terminate</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行了这个代码之后，在OS当中有1000个进程在进行，并且上述代码在SO中，每个都要求分配了128MB的内存。但是OS并没有Crash掉，实际只是用了1GB左右的内存。这就是Copy On Write的实现。</p>
-<p><strong>关于进程内存占有量</strong><br>由此推导出一个结论：证明一个进程用的多少的内存就是一个伪命题。如果简单的将一个进程映射的内存之和相加作为其内存大小，mmap可以映射一大片的内存（比如20T内存），但是这些内存是按需使用的，其只是做了一个映射，然后使用时只会用多少分配多少，并且还有很多内存是共享的（Libc）。</p>
-<h2 id="15-3-状态机的复制"><a href="#15-3-状态机的复制" class="headerlink" title="15.3 状态机的复制"></a>15.3 状态机的复制</h2><h3 id="15-3-1-状态机视角"><a href="#15-3-1-状态机视角" class="headerlink" title="15.3.1 状态机视角"></a>15.3.1 状态机视角</h3><p><strong>概念：平行宇宙与fork</strong><br>物理世界上不同的粒子状态，可以定义出不同时间下的状态。如果此时要进行时间穿越，此时行为就是将未来的部分状态带到过去，并且从此状态开始进行分叉，而这个分叉就是fork()。<br>OS运行开发者使用fork()实现平行宇宙。</p>
-<h3 id="15-3-2-fork与并行化"><a href="#15-3-2-fork与并行化" class="headerlink" title="15.3.2 fork与并行化"></a>15.3.2 fork与并行化</h3><p><strong>例子1：码交换搜索问题</strong><br>和不同的部分进行交换，就会进入不同的状态。可以使用状态机的视角，将所有的状态进行探索。<br>![[Lecture 15：Fork的应用 2023-03-16 16.57.00.excalidraw]]</p>
-<p><strong>例子2：基于fork的dfs</strong><br>原本的dfs会使用深度遍历进行探索，然后使用回溯法回到原本的状态，回溯的过程十分耗时。而如果基于fork，使用状态机的视角来进行迁移，则可以只会跳回到初始状态（通过使用exit()来实现）。<br>其启示是：可以使用fork实现dfs；使用fork来进入不同的状态，并且联合OS来帮助进行管理，此时进入新的状态后原本的平行宇宙也可以被消除掉，每探索完一个平行宇宙都将其删除掉。<br>并且，还可以创造多个平行宇宙，并行的得到所有状态，然后程序结束。</p>
-<h3 id="15-3-3-fork与跳过初始化"><a href="#15-3-3-fork与跳过初始化" class="headerlink" title="15.3.3 fork与跳过初始化"></a>15.3.3 fork与跳过初始化</h3><p><strong>问题</strong><br>假设你的NEMU需要启动很多份elf头文件，而如果NEMU进行初始化要花很多的时间（比如花费大量时间来初始化一片128MB的内存），此时如果为每个elf来进行启动就会产生大量消耗，此时可以按照以下行为分析：<br>![[Lecture 15：Fork的应用 2023-03-16 17.29.53.excalidraw]]<br><strong>处理方法</strong><br>此时可以只执行一次nemu_init()的内容，之后只需要每进来一个需要启动的内容，就fork一份，然后找到没有处理的文件，将其进行处理，就可以完成操作。并且因为只进行一次init，因此可以加速程序执行第一个文件的速度。</p>
-<p><strong>跳过初始化的实际应用</strong><br>应用：安卓应用的秒启动</p>
-<ul>
-<li>简介：每一个安卓的程序都会通过以上的跳过初始化的方式进行启动。</li>
-<li>原理：安卓应用是一个Java程序，而Java是运行在JVM虚拟机上面，对于安卓而言是一个Android Runtime（自己实现的虚拟机）。而安卓和Java都会有一个十分大的标准库，如果每一个程序是采取冷启动，即从0开始执行整个Java程序，不可能几秒内完成加载，此时就是使用了跳过初始化的思想，所有的Java程序只进行初始化一次。</li>
-<li>Zygote Process：会有一个所有Android程序的父进程，名称为Zygote Process。其会完成所有必要的安卓程序的必要的类的加载，此时如果开始了一个新的程序，只要在init之后的状态基础之上fork一份即可完成创建。</li>
-<li>一次加载，全员使用<br>应用：Chrome浏览器</li>
-<li>简介：Chrome可以成功的原因之一，就是其速度非常的快。</li>
-<li>原理：Chrome当中，每一个网页就是一个进程，使用跳过初始化的思想来进行网页的快速加载</li>
+</li>
 </ul>
-<p><strong>核心：只要是从一个状态出发，需要很多个副本的，都可以使用fork。</strong></p>
-<h3 id="15-3-4-fork与备份"><a href="#15-3-4-fork与备份" class="headerlink" title="15.3.4 fork与备份"></a>15.3.4 fork与备份</h3><p><strong>简介：</strong><br>要是我们可以对有Bug的程序总是能在任何状态“试一试”，然后试错了还能回到过去，就好了。<br><strong>概念：</strong><br>当过去某个节点发生了一个Bug，我们能否回到过去，在产生一次这个Bug?特别是出现并发Bug，此类Bug或许十分难以重现，拥有此存档机制就可以去复现过去状态下的Bug。<br>![[Lecture 15：Fork的应用 2023-03-17 17.46.14.excalidraw]]<br>在任何状态下，可以使用fork()开启另一条平行宇宙，然后在此基础上进行存档。然后如果顺着正常的路径进行执行，但是之后在这主分支之上发生了Crash，此时就可以拿回之前的存档，从之前的存档开始。<br>![[Lecture 15：Fork的应用 2023-03-17 21.24.34.excalidraw]]<br>然后拿回了之前的存档后，从此存档开始执行，并且需要更改一些环境。很多Bug都是由于环境导致的（比如许多的并发Bug）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.27.15.excalidraw]]<br>这就是可以进行容错的机制。如果有轻量级的快照，就可以使用平行宇宙来复查一些Bug。甚至如果是想要还原并发这种Bug，甚至不需要复杂的Fork的快照，只需要有一个Setjmp寄存器的快照。</p>
-<h2 id="15-4-对于Fork的讨论"><a href="#15-4-对于Fork的讨论" class="headerlink" title="15.4 对于Fork的讨论"></a>15.4 对于Fork的讨论</h2><h3 id="15-4-1-A-Fork-in-the-road"><a href="#15-4-1-A-Fork-in-the-road" class="headerlink" title="15.4.1 A Fork() in the road"></a>15.4.1 A Fork() in the road</h3><p><strong>简介：</strong><br>对于Unix Fork的批评。<br><strong>概述：</strong><br>fork使用的最舒服的时候，就是在一个简单的管道模型当中。但是随着OS发展，进程不止是有地址空间和文件描述符，但是之后进程会有信号（fork之后，发信号是两个都发，还是只发一个？），线程，进程间通信对象，ptrace等等。<br>fork的开发者对于这些问题进行了修复，但是结果就是导致现在的fork十分的复杂。比如出现线程之后。</p>
-<p><strong>这些都是由进程拥有了一些更加复杂的对象所引发出的问题。</strong></p>
-<h3 id="15-4-2-线程对于Fork的影响"><a href="#15-4-2-线程对于Fork的影响" class="headerlink" title="15.4.2 线程对于Fork的影响"></a>15.4.2 线程对于Fork的影响</h3><p><strong>线程概述</strong><br>在一个进程当中，会有一片地址空间，两个不同的线程共享这些地址空间，所有的页面都是共享的（因为页面是由OS持有的）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.43.41.excalidraw]]<br><strong>问题</strong><br>此时如果fork了一份这个进程，这当中的这些线程会怎么样？</p>
-<p><strong>分析</strong><br>首先，肯定是进程当中的某一个线程执行了fork，在执行了fork之后，是对应进程复制，另一个进程消失，还是两者都被复制？<br>正确答案是 只复制执行了fork的进程。<br>![[Lecture 15：Fork的应用 2023-03-17 21.47.35.excalidraw]]</p>
-<h3 id="15-4-3-更安全的创建一个进程"><a href="#15-4-3-更安全的创建一个进程" class="headerlink" title="15.4.3 更安全的创建一个进程"></a>15.4.3 更安全的创建一个进程</h3><p><strong>创建进程：POSIX Spawn</strong><br>代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">posix_spawn</span></span><br><span class="line"><span class="params">(</span></span><br><span class="line"><span class="params"><span class="type">pid_t</span> *pid,</span></span><br><span class="line"><span class="params"><span class="type">char</span> *path,</span></span><br><span class="line"><span class="params"><span class="type">posix_spawnattr_t</span> *attrp,</span></span><br><span class="line"><span class="params"><span class="type">char</span>* argv[],</span></span><br><span class="line"><span class="params"><span class="type">char</span>* envp[]</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
-<p>其是一个在fork发明出来之后的API，比fork更加的简单。</p>
-<p>Fork的七宗罪：<br>![[Pasted image 20230317215942.png]]</p>
-]]></content>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> Event</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">EventDispatcher</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> EventType <span class="title">GetEventType</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">const</span> <span class="type">char</span>* <span class="title">GetName</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">GetCategoryFlags</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> <span class="built_in">GetName</span>(); &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">IsInCategory</span><span class="params">(EventCategory category)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">GetCategoryFlags</span>() &amp; category;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="type">bool</span> m_Handled = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-抽象函数的实现宏"><a href="#2-1-抽象函数的实现宏" class="headerlink" title="2.1 抽象函数的实现宏"></a>2.1 抽象函数的实现宏</h3><p>因为在Event当中有抽象函数需要实现，每一个子类都需要手动进行实现的话会导致浪费。可以将其写成一个宏函数，在子类当中只需传入类型，既可以自动实现其子类的抽象函数的实现；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> EVENT_CLASS_TYPE(type) static EventType GetStaticType() &#123; return EventType::##type; &#125;\</span></span><br><span class="line"><span class="meta">								virtual EventType GetEventType() const override &#123; return GetStaticType(); &#125;\</span></span><br><span class="line"><span class="meta">								virtual const char* GetName() const override &#123; return #type; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-KeyEvent类设计"><a href="#3-KeyEvent类设计" class="headerlink" title="3.KeyEvent类设计"></a>3.KeyEvent类设计</h2><p><strong>KeyEvent概念</strong><br>需要处理案件的事件。并且按键的事件至少具有以下三种状态：</p>
+<ol>
+<li>第一次按下</li>
+<li>按下中</li>
+<li>第一次抬起<br>KeyEvent需要能够处理并表达这三种状态。</li>
+</ol>
+<p><strong>继承</strong><br>KeyEvent是其他更多按键事件的父类，是Event类的子类；</p>
+<p><strong>KeyEvent代码</strong><br>此代码的内容类似于是抽象类，只是用于提供继承；不能实例化一个Key Event；</p>
+<ul>
+<li>内容：<ul>
+<li>构造函数：构造函数被设置为protected，表示此类作用为提供继承；</li>
+<li>Get Key Code：返回KeyCode数值；<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetKeyCode</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_KeyCode; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryKeyboard | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">KeyEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">m_KeyCode</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_KeyCode;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<p><strong>EVENT_CLASS_CATEGORY内容</strong><br>因为KeyBoard键盘输入同时也是一般Input的一种，因此其进行分类时同属于这两种类型；</p>
+<h3 id="3-1-KeyPressedEvent类设计"><a href="#3-1-KeyPressedEvent类设计" class="headerlink" title="3.1 KeyPressedEvent类设计"></a>3.1 KeyPressedEvent类设计</h3><p>此类是一个可以被实际实例化的类；</p>
+<p><strong>构造函数</strong><br>此类的构造函数传入repeatCount，表示此按键的重复次数。当此数值不为0时，此内容表示当前Event在被重复按下；</p>
+<p><strong>ToString重写</strong><br>输出”KeyPressedEvent: “ 加上 KeyCode 的数值；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyPressedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyPressedEvent</span>(<span class="type">int</span> keycode, <span class="type">int</span> repeatCount)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode), <span class="built_in">m_RepeatCount</span>(repeatCount) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetRepeatCount</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_RepeatCount; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyPressedEvent: &quot;</span> &lt;&lt; m_KeyCode &lt;&lt; <span class="string">&quot; (&quot;</span> &lt;&lt; m_RepeatCount &lt;&lt; <span class="string">&quot; repeats)&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyPressed)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">int</span> m_RepeatCount;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-KeyReleasedEvent类设计"><a href="#3-2-KeyReleasedEvent类设计" class="headerlink" title="3.2 KeyReleasedEvent类设计"></a>3.2 KeyReleasedEvent类设计</h3><p>和Pressed类基本一致，只不过没有repeatCount的计数内容；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyReleasedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyReleasedEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyReleasedEvent: &quot;</span> &lt;&lt; m_KeyCode;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="4-EventDispatcher"><a href="#4-EventDispatcher" class="headerlink" title="4.EventDispatcher"></a>4.EventDispatcher</h2><p><strong>作用</strong><br>让我们可以实际的去发布一个事件，基于需要发布事件的类型；<br>创建一个Dispatcher的实例，并且拥有一个Event的引用。在这个Dispatcher中拥有一个Dispatch()方法，可以接受一个EventFn函数。然后如果类型一致，可以实际的在Dispatch中运行这个EventFn的函数。</p>
+<p><strong>构造函数</strong><br>Event基类作为参数，接受各种事件类型，赋值在私有的Event变量上；</p>
+<p><strong>Dispatch()方法</strong><br>在此方法内需要使用上Event，进行判断泛型传入的类型T的事件类型，和当前Dispatch中存储的Event的类型是否一致（通过GetEventType()方法，调用GetStaticType()方法）；<br>一致时，会调用EventFn中存储的函数，并返回bool；</p>
+<p><strong>EventFn函数</strong><br>使用std的function，并且返回bool类型，接受T&amp;引用（可以为任何类型的Event）作为参数；</p>
+<ul>
+<li>补充：<strong>std::function()</strong><ul>
+<li>可以把std::function看做一个函数对象，用于表示并存储函数这个抽象概念。</li>
+<li>std::function的实例可以存储、复制和调用任何可调用对象（函数指针，类成员函数指针，bind表达式等等），存储的可调用对象称为std::function的目标，若std::function不含目标，则称它为空</li>
+</ul>
+</li>
+</ul>
+<p>代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">EventDispatcher</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">	<span class="keyword">using</span> EventFn = std::function&lt;<span class="built_in">bool</span>(T&amp;)&gt;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">EventDispatcher</span>(Event&amp; event)</span><br><span class="line">		: <span class="built_in">m_Event</span>(event)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">	<span class="type">bool</span> <span class="title">Dispatch</span><span class="params">(EventFn&lt;T&gt; func)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (m_Event.<span class="built_in">GetEventType</span>() == T::<span class="built_in">GetStaticType</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			m_Event.m_Handled = <span class="built_in">func</span>(*(T*)&amp;m_Event);</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Event&amp; m_Event;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="5-MouseEvent设计"><a href="#5-MouseEvent设计" class="headerlink" title="5.MouseEvent设计"></a>5.MouseEvent设计</h2><p><strong>MouseMovedEvent</strong><br>传入x、y表示两个坐标位置，用于存储鼠标移动事件所需要的信息；<br>同理MouseScrolledEvent。<br>下面内容基本类似，主要关注构造函数中传入的参数的差别，代表了此种类型事件所实际需要使用到的数据。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseMovedEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseMovedEvent</span>(<span class="type">float</span> x, <span class="type">float</span> y)</span><br><span class="line">		: <span class="built_in">m_MouseX</span>(x), <span class="built_in">m_MouseY</span>(y) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetX</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseX; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetY</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseY; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseMovedEvent: &quot;</span> &lt;&lt; m_MouseX &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_MouseY;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseMoved)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> m_MouseX, m_MouseY;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseScrolledEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseScrolledEvent</span>(<span class="type">float</span> xOffset, <span class="type">float</span> yOffset)</span><br><span class="line">		: <span class="built_in">m_XOffset</span>(xOffset), <span class="built_in">m_YOffset</span>(yOffset) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetXOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_XOffset; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetYOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_YOffset; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseScrolledEvent: &quot;</span> &lt;&lt; <span class="built_in">GetXOffset</span>() &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; <span class="built_in">GetYOffset</span>();</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseScrolled)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> m_XOffset, m_YOffset;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetMouseButton</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Button; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">MouseButtonEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">m_Button</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_Button;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonPressedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseButtonPressedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseButtonPressedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonPressed)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonReleasedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseButtonReleasedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseButtonReleasedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-ApplicationEvent设计"><a href="#6-ApplicationEvent设计" class="headerlink" title="6.ApplicationEvent设计"></a>6.ApplicationEvent设计</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowResizeEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowResizeEvent</span>(<span class="type">unsigned</span> <span class="type">int</span> width, <span class="type">unsigned</span> <span class="type">int</span> height)</span><br><span class="line">		: <span class="built_in">m_Width</span>(width), <span class="built_in">m_Height</span>(height) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetWidth</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Width; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetHeight</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Height; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;WindowResizeEvent: &quot;</span> &lt;&lt; m_Width &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_Height;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowResize)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> m_Width, m_Height;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowCloseEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowCloseEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowClose)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppTickEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppTickEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppTick)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppUpdateEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppUpdateEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppUpdate)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppRenderEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppRenderEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppRender)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>操作系统</category>
+        <category>游戏引擎</category>
       </categories>
       <tags>
-        <tag>操作系统</tag>
-        <tag>Fork</tag>
+        <tag>游戏引擎</tag>
+        <tag>事件</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
-    <title>Lecture 13：系统调用与Shell</title>
-    <url>/2023/08/3dbfbd52ee49.html</url>
-    <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
-<h3 id="13-1-2-早期的Shell"><a href="#13-1-2-早期的Shell" class="headerlink" title="13.1.2 早期的Shell"></a>13.1.2 早期的Shell</h3><p><strong>概念：</strong><br>早期的OS没有复杂结构，系统调用就像是库函数，那个时代的Shell就是命令行终端机。<br>核心：<strong>Shell就是一门把用户指令翻译为系统调用的编程语言</strong></p>
-<p>手册：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man sh</span><br></pre></td></tr></table></figure>
-<p>这是一个非常简单的手册，包含很多shell的内容，建立对UNIX Shell的基础认识。</p>
-<h2 id="13-2-复刻简易UNIX"><a href="#13-2-复刻简易UNIX" class="headerlink" title="13.2 复刻简易UNIX"></a>13.2 复刻简易UNIX</h2><h3 id="13-2-1-简易UNIX代码初设置"><a href="#13-2-1-简易UNIX代码初设置" class="headerlink" title="13.2.1 简易UNIX代码初设置"></a>13.2.1 简易UNIX代码初设置</h3><p>早期的计算机设计由于性能低下，设计不能太消耗性能以及复杂<br>代码：<a href="http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c</a><br>零库函数依赖、可以作为最小可用的Linux的init程序<br>由于其链接任何库函数，因此可以ffreestanding</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -c -ffreestanding sh-xv6.c -g -O2</span><br><span class="line">ld sh-xv6.o -o sh</span><br></pre></td></tr></table></figure>
-<p>第一行是将其编译，然后第二行将其静态链接<br>当使用反汇编模式进行调试时，直接从_Start()，用C写的这个函数处开始执行。此程序可以直接以命令行的形式进行运行。<br>![[Pasted image 20230827140800.png]]</p>
-<h3 id="12-2-2-第一步：读取命令"><a href="#12-2-2-第一步：读取命令" class="headerlink" title="12.2.2 第一步：读取命令"></a>12.2.2 第一步：读取命令</h3><p>代码：<br>解析：不停的getcmd()来获得用户的输入，这其中直接使用read的系统调用</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nread = <span class="built_in">syscall</span>(SYS_read,<span class="number">0</span>,buf,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-<p>一直读到换行符才停止：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(*(buf++)==<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
-<p>将命令读取到buf缓冲区里</p>
-<h3 id="12-2-3-第二步：可能性-解释执行命令"><a href="#12-2-3-第二步：可能性-解释执行命令" class="headerlink" title="12.2.3 第二步：可能性|解释执行命令"></a>12.2.3 第二步：可能性|解释执行命令</h3><p>代码：<br>![[Pasted image 20230301181806.png]]<br>解析：<br>首先判断是不是一条’cd’命令，并且其当中不能有空格<br>使用系统调用，读取buf+3之后的数据</p>
-<h3 id="12-2-4-第二步：可能性-新进程创建"><a href="#12-2-4-第二步：可能性-新进程创建" class="headerlink" title="12.2.4 第二步：可能性|新进程创建"></a>12.2.4 第二步：可能性|新进程创建</h3><p>解析：可能性|如果不是cd命令，此时创建一个新的进程，在新的进程里面把进程解析</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">syscall</span>(SYS_fork) == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">runcmd</span>(<span class="built_in">parsecmd</span>(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230301183132.png]]<br>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
+    <title>【游戏引擎原理】P1：GPU驱动的几何管线</title>
+    <url>/2023/08/fd049e549b6a.html</url>
+    <content><![CDATA[<p>传统渲染问题：<br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。</p>
+<span id="more"></span>
+<h2 id="1-传统渲染管线"><a href="#1-传统渲染管线" class="headerlink" title="1 传统渲染管线"></a>1 传统渲染管线</h2><h3 id="1-1-传统渲染问题"><a href="#1-1-传统渲染问题" class="headerlink" title="1.1 传统渲染问题"></a>1.1 传统渲染问题</h3><p><strong>核心：所有的需求是在CPU那端发起</strong><br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。<br><strong>Draw Graphics API</strong><br>传统渲染管线跑现代游戏无法满足，现代CPU得先把数据准备好，然后再把数据给到GPU；</p>
+<h3 id="1-2-Compute-Shader与GPU驱动管线"><a href="#1-2-Compute-Shader与GPU驱动管线" class="headerlink" title="1.2 Compute Shader与GPU驱动管线"></a>1.2 Compute Shader与GPU驱动管线</h3><p><strong>Compute Shader核心概念</strong><br>计算机不需要再CPU和GPU中来回导数据，所有的计算都在GPU的内部；<br>方法：</p>
+<ol>
+<li>在GPU中内置一些计算模块，很多计算直接在GPU中完成；把很多只有在CPU中才可以做的通用计算放到GPU上面；</li>
+<li>单个Draw Call可以绘制多个Mesh；</li>
+</ol>
+<p><strong>更加进阶的状态：GPU驱动Render管线</strong><br>GPU控制什么对象该被实际的渲染，包括Lod Selection，Visibility Culling On GPU<br>CPU不触碰GPU的数据，尽量让CPU不那么忙；</p>
+<p><strong>GPU驱动Render管线在材质中应用</strong><br>在《刺客信条大革命》中大场景的渲染，大场景当中有大量不可见的物体以及材质；</p>
 <ul>
-<li>命令与管道<ul>
-<li>管道和命令关系<ul>
-<li>管道的左边和右边都可以任意复杂：   </li>
-<li>可以是一个很长的式子：<code>(echo a;each b;echo c;echo d)|wc -l</code></li>
-<li>把管道左边的输出作为右边的输入，这就是管道的形式语义。</li>
-</ul>
-</li>
-<li>管道解析<ul>
-<li>pipe()创建一个管道，管道返回两个描述符：</li>
-<li>pipe[0]是读口，pipe[1]是写口</li>
-<li>之后会使用fork创建两个新的进程，这两个新的进程完全复制的父进程的状态，因此此时这三个进程完全共享管道，并且共进共出。</li>
-<li>之后将p[0]的文件描述符关闭，后背又将p[1]的文件描述符关掉</li>
-<li>之后再进行Fork，子进程编号为1的进程指向管道的左边，Fork出来的子进程再进行上述出现的行为</li>
+<li>解决方法<ul>
+<li>对每个游戏世界中的物体，按照其Mesh把其分成无数个小的Clusters，计算这个小Clusters是否被遮挡</li>
+<li>因为这种小粒度的Cluster在GPU中可以被批量处理，因此实际上性能更高，对于三角形有尽可能高的利用率；</li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<p>管道行为图解：<br>![[Pasted image 20230303165535.png]]</p>
-<h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
-<p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
-<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程<br>常用指令：<br>![[Pasted image 20230303170448.png]]<br><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
-<h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
-<p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
-<p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
-<h3 id="13-3-2-现代Shell展望"><a href="#13-3-2-现代Shell展望" class="headerlink" title="13.3.2 现代Shell展望"></a>13.3.2 现代Shell展望</h3><p>现代的Shell功能不变，都是人和机器之间的API，但是其形式可以发生变化</p>
+<p><strong>GPU驱动Pipeline概述</strong><br>流程图：<br><img src="/../../image/Pasted%20image%2020230827161631.png"></p>
+<p>CPU阶段进行粗略的Culling，在GPU阶段进行更加精细的Culling，每一个物体被分成不同的Cluster，然后打包进一个非常大的Index Buffer当中。最后一个Draw Call一次性完成计算。<br>核心：通过前面GPU一大堆的计算，一次性将不可见的几何完成绘制；</p>
+<p><strong>Work in CPU Side</strong><br>在CPU端只需要</p>
+<h2 id="2-Occlusion-Culling与相机以及阴影"><a href="#2-Occlusion-Culling与相机以及阴影" class="headerlink" title="2 Occlusion Culling与相机以及阴影"></a>2 Occlusion Culling与相机以及阴影</h2><p>如何将观测或者光照不到的地方的渲染变得尽可能廉价；</p>
+<p><strong>核心概念</strong><br>对于所有基于Cluster渲染的管线而言，Occlusion的计算都是十分关键的部分；<br>而Occlusion的基本思想，就是尽可能快速且低成本的基于当前相机的位置构建index buffer，类似于形成了一层幕布；当想渲染任何一个物体的时候，使用cluster渲染时使用这个index buffer在GPU中快速进行测试，快速将不需要渲染的部分剔除掉；</p>
+<h3 id="2-1-Occlusion-Depth-Generation"><a href="#2-1-Occlusion-Depth-Generation" class="headerlink" title="2.1 Occlusion Depth Generation"></a>2.1 Occlusion Depth Generation</h3><p>遮挡深度生成：这个根据场景生成的Depth Buffer可以被重用；</p>
+<p><strong>深度Pre-Pass与最好的Occluders在完整的像素当中</strong></p>
+<ol>
+<li>选择最好的occluders通过艺术资源或者heuristic</li>
+<li>重新计算occluder</li>
+<li>合并以及重投影与十六分之一的像素版本；</li>
+<li>生成Z-Buffer用于GPU Culling计算；</li>
+</ol>
+<p><strong>两个阶段的Occlusion Culling</strong><br>第一阶段：把上一帧里面的所有物体，依据Z buffer数据测试一遍，对所有通过上一帧Z-Buffer的物体先绘制一遍；把可能可见的物体先跑一遍得出画面；<br>问题：此时得出的z很有可能是错误的，此时应该把所有认为可能不可见的物体也测试一遍Z-Buffer<br>第二阶段：在第一阶段过滤完之后，重新再测试一遍被忽略掉的物体，从而减少大量的渲染量，准确并且高效完成；<br><img src="/../../image/Pasted%20image%2020230827161702.png"></p>
+<h3 id="2-2-可视化内容处理渲染管线"><a href="#2-2-可视化内容处理渲染管线" class="headerlink" title="2.2 可视化内容处理渲染管线"></a>2.2 可视化内容处理渲染管线</h3><p><strong>Visiblity Buffer</strong><br>Visiblity Buffer是一种新的越来越瘦关注的Buffer；<br>如果使用传统的Shading，每一次渲染都需要全部进行处理，处理的数据量非常大，因此可以把这些Texture可以全部打包放到一个Shading当中</p>
+<p><strong>Deferred Shading 与 G-Buffer 存在的意义与问题</strong><br>Deffered Shading：在Deferred Shader中处理很多三角形的场景时，其不会保证优先绘制靠近相机的物体，因此对于同一个像素可能会渲染十几次，因为在这个像素上可能会有多个物体在其射线上；<br>大量的对G-Buffer的读写会产生大量的性能浪费；</p>
+<p><strong>Visiblity Buffer</strong><br>解决方法：在第一帧渲染的时候，就只把几何数据渲染进去，而不是把Texture等其他数据全部在第一帧弄进去；在获得了这些几何体的位置信息后，再将其手动的把每个顶点该有的信息输入进去；<br>Shading阶段时，把几何体的每个像素位置拿到，反算出来其像素点应该有的反射率等信息，接下来对其进行Shading；<br>其非常适合在场景当中有大量的小物体，而且这些物体经常会被其他物体遮挡住；</p>
+<p><strong>Visiblity Buffer与Deferred Shading结合</strong><br>将Visiblity和G-Buffer结合，G-Buffer的数据可以来自于传统渲染管线，也可以来自于Visiblity Buffer渲染管线；</p>
+<h2 id="3-Nanite"><a href="#3-Nanite" class="headerlink" title="3 Nanite"></a>3 Nanite</h2><h3 id="3-1-前言"><a href="#3-1-前言" class="headerlink" title="3.1 前言"></a>3.1 前言</h3><p><strong>要解决的问题</strong><br>每个做Render的目标：在虚拟世界中还原现实世界，但现实世界中具有无限的几何细节。实时渲染的人希望在游戏当中实现无限的几何细节；</p>
+<p><strong>Nanite基本的源头：Virtual Texture</strong><br>在真实的游戏场景当中拥有大量的texture，在游戏引擎中提出Virtual Texture的思想，即在游戏当中、离Camera的Texture精度高，离Camera远的Texture精度低；即先形成一大张的Virtual Texture；</p>
+<p><strong>进一步推到：把几何Geometry也变成Virtual Map</strong><br>需要有一个方法把几何也变成Virtual Map；但这个过程十分困难，因为几何信息的处理比Texture困难很多；</p>
 <ul>
-<li>界面自带StackOverflow？</li>
-<li>结合神经网络？</li>
-<li>智能补全？</li>
-<li>POPL20</li>
+<li>Voxels方法？<ul>
+<li>难以表达高精度内容</li>
+<li>数据量惊人</li>
+<li>而且目前主流的艺术资产都不是基于Voxel表达的</li>
 </ul>
-<h2 id="13-4-终端与任务控制"><a href="#13-4-终端与任务控制" class="headerlink" title="13.4 终端与任务控制"></a>13.4 终端与任务控制</h2><h3 id="13-4-1-终端机制"><a href="#13-4-1-终端机制" class="headerlink" title="13.4.1 终端机制"></a>13.4.1 终端机制</h3><p>问题：为什么有时候使用Ctrl + C可以退出程序，有时候不可以？为什么有些进程可以退出，当管道创建了很多个进程时，使用Ctrl + C 将退出哪个进程？如果时Fork了一个Shell，那使用Ctrl + C 是不是要退出Shell？tmux是怎么实现的？</p>
-<p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
-<p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
-<h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
-<p><strong>信号处理程序：</strong><br>![[Pasted image 20230303173129.png]]<br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
-<h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
-<p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
+</li>
+<li>Subdivision Surfaces？<ul>
+<li>增加几何的精细度</li>
+<li>在实时给几何体细分表面</li>
+</ul>
+</li>
+<li>Map-Based Method?<ul>
+<li>难以表达表面特性</li>
+<li>基于硬件的加密几何</li>
+</ul>
+</li>
+</ul>
+<p><strong>最后结果：基于三角形的几何构建</strong></p>
+<h3 id="3-2-Virtual-Geometry"><a href="#3-2-Virtual-Geometry" class="headerlink" title="3.2 Virtual Geometry"></a>3.2 Virtual Geometry</h3><p><strong>Nanite中的几何表达</strong><br>无论增加多少的几何复杂度，屏幕上能够展示的几何数量终归是有限的，有像素上有一个或两个三角形就够了；<br>可以通过屏幕像素的精度来决定几何物体的精度；</p>
+<ul>
+<li>基于Cluster的几何表达<ul>
+<li>将几何体分成不同的Cluster</li>
+<li>让其根据View来决定Cluster的精度，不同的LOD在Cluster中具有不同的精度</li>
+<li>对于屏幕空间最大化的利用<br><img src="/../../image/Pasted%20image%2020230827161729.png"></li>
+</ul>
+</li>
+</ul>
+<p><strong>Nanite的Cluster细分方法</strong><br>根据View的距离情况，根据LOD进行Cluster的简化，将其合成一份Cluster；<br>因此可以在游戏进行时，可以根据View距离加载不同的LOD；<br><strong>Cluster合并的问题</strong><br>不同LOD等级的物体之间衔接的时候会有问题，即本来是根据同一LOD构建出的几何体现在有部分表面其Cluster变成其他LOD是，分界处衔接有问题；<br>解决方法：把边给锁住；在边缘一直锁着LOD0的边；但是锁边的时候这些边的三角形数量也很高；并且因为人眼对于高频的信号感受力很强，因此对于这种边缘处突然出现的高频信号会有反应；</p>
+<p><strong>对Cluster合并问题的解决：Cluster Group</strong><br>只缩Cluster Group的边，里面的Cluster再随意的去简化；<br>保证了在LOD切换的时候，不会在衔接处明显变化；<br>其希望被锁住的LOD的边在切换的时候不会注意到被缩边的Cluster Group;<br>如图是Cluster Group在不同LOD时变化：<br>乱中有序：底层的Cluster上层可能有多个，并且不会和上层的所有Cluster都产生关系；<br><img src="/../../image/Pasted%20image%2020230827161745.png"></p>
+<h3 id="3-3-QEM"><a href="#3-3-QEM" class="headerlink" title="3.3 QEM"></a>3.3 QEM</h3><p>形成Cluster Group的流水线；<br><strong>LOD Selection For Cluster Group In Paralllel</strong><br>能不能让LOD的Selection可不可以被并行化，从左到右或者从右到左的遍历都有可能是不稳定的；<br>把Cluster节点组成的树状的LOD，变成数组的线性的LOD（通过把Cluster其对应父节点的信息存储进来）</p>
+<ul>
+<li>希望是独立的决策</li>
+</ul>
 ]]></content>
       <categories>
-        <category>操作系统</category>
+        <category>游戏引擎</category>
       </categories>
       <tags>
-        <tag>操作系统</tag>
-        <tag>Shell</tag>
+        <tag>游戏引擎</tag>
+        <tag>技术美术</tag>
       </tags>
   </entry>
 </search>
