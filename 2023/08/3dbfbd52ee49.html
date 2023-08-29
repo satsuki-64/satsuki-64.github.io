@@ -27,12 +27,14 @@
 <meta property="og:site_name" content="Satsuki的博客">
 <meta property="og:description" content="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829192041.png">
 <meta property="article:published_time" content="2023-08-27T06:05:35.000Z">
-<meta property="article:modified_time" content="2023-08-27T06:16:17.003Z">
+<meta property="article:modified_time" content="2023-08-29T11:20:46.815Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="操作系统">
 <meta property="article:tag" content="Shell">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829192041.png">
 
 
 <link rel="canonical" href="https://satsuki-64.github.io/2023/08/3dbfbd52ee49.html">
@@ -157,18 +159,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -234,9 +236,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-08-27 14:05:35 / 修改时间：14:16:17" itemprop="dateCreated datePublished" datetime="2023-08-27T14:05:35+08:00">2023-08-27</time>
+      <time title="创建时间：2023-08-27 14:05:35" itemprop="dateCreated datePublished" datetime="2023-08-27T14:05:35+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-29 19:20:46" itemprop="dateModified" datetime="2023-08-29T19:20:46+08:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -276,7 +284,8 @@
 
 <h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230301183132.png]]<br>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
+
+<p>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
 <ul>
 <li>命令与管道<ul>
 <li>管道和命令关系<ul>
@@ -296,11 +305,11 @@
 </ul>
 </li>
 </ul>
-<p>管道行为图解：<br>![[Pasted image 20230303165535.png]]</p>
 <h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
 <p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
-<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程<br>常用指令：<br>![[Pasted image 20230303170448.png]]<br><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
+<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程</p>
+<p><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
 <h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
 <p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
 <p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
@@ -315,7 +324,7 @@
 <p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
 <p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
 <h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
-<p><strong>信号处理程序：</strong><br>![[Pasted image 20230303173129.png]]<br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
+<p><strong>信号处理程序：</strong><br><img src="/../../image/Pasted%20image%2020230829192041.png"><br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
 <h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
 <p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
@@ -376,7 +385,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共24.7k字</span>
+  <span class="post-count">博客全站共32.2k字</span>
 </div>
     </div>
   </footer>

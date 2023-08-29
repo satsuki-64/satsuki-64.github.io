@@ -1,6 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>【CSharp系列】1. CLR执行模型</title>
+    <url>/2023/08/5aed3da140f6.html</url>
+    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<span id="more"></span></li>
+</ol>
+<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
+</ol>
+<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
+<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
+<ol>
+<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
+<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
+<li>元数据：源代码的定义数据，源代码的引用数据</li>
+<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
+<li></li>
+</ol>
+<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
+<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
+<ol>
+<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
+<li>程序集是重用、安全性以及版本控制的最小单元；</li>
+<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
+</ol>
+<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
+<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
+<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
+<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
+<p><strong>加载CLR</strong></p>
+<ol>
+<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
+<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
+<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
+</ol>
+<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
+<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
+<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
+<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
+]]></content>
+      <categories>
+        <category>CSharp</category>
+      </categories>
+      <tags>
+        <tag>CSharp</tag>
+        <tag>CLR</tag>
+        <tag>编译原理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>AI时代个人生存指南</title>
+    <url>/2023/08/62011fb26306.html</url>
+    <content><![CDATA[<ul>
+<li><ol>
+<li>ChatGPT使用基础</li>
+</ol>
+<ul>
+<li>1.1 ChatGPT的使用之道</li>
+<li>1.2 ChatGPT的使用之术</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="1-Chat-GPT使用基础"><a href="#1-Chat-GPT使用基础" class="headerlink" title="1.Chat GPT使用基础"></a>1.Chat GPT使用基础</h1><p><strong>核心思想：拥抱AI，理解AI，成为AI</strong></p>
+<ul>
+<li>拥抱AI<ul>
+<li>率先掌握AI技能，掌握竞争优势；</li>
+</ul>
+</li>
+<li>理解AI<ul>
+<li>知道AI的能力，知道AI能做什么；</li>
+<li>同时反推自己的发展方向：AI不能做什么，就是人未来能做的事情；</li>
+</ul>
+</li>
+<li>成为AI<ul>
+<li>率先向AI学习，让自己的思维和AI同步；</li>
+<li>谁和AI最像，谁就获得了第一批AI带来的绝对优势；</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-1-ChatGPT的使用之道"><a href="#1-1-ChatGPT的使用之道" class="headerlink" title="1.1 ChatGPT的使用之道"></a>1.1 ChatGPT的使用之道</h2><p><strong>前言：关于prompt</strong><br>虽然目前依然需要使用prompt来辅助AI，但未来的AI发展是其越来越理解人类想要什么，而不需要使用prompt来提示；</p>
+<blockquote>
+<p><em>prompt教程推荐：吴恩达的prompt视频（适合程序员）：<br><a href="https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&vd_source=3f70c2a1700b0323e22826080d18a119">https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f70c2a1700b0323e22826080d18a119</a></em></p>
+</blockquote>
+<p><strong>概念：ChatGPT能做什么</strong><br>首先思考AI能做什么，在了解AI能做的事情的情况下，再思考应该让它如何做这件事情；<br>AI的画像：<strong>一个学习过网上所有知识，保守而道德的名校大学生。理性思考5秒钟，回答10句话。</strong></p>
+<ul>
+<li>知识：只存留在2021年；</li>
+<li>保守：没有独特思想；</li>
+<li>道德：有人类设定的道德包袱；</li>
+<li>名校本科生水平：不接受过于复杂的问题，可以回答大部分知识问题；</li>
+<li>理性思考5秒钟：不能接受过度复杂问题；</li>
+</ul>
+<p><strong>道一：Chat GPT的道德</strong><br>AI的回答是很道德的回答。当和价值立场或者观点相关的问题时，只会给出不同的立场，而不表达观点；</p>
+<ul>
+<li>甚至会出现<strong>道德在事实之上</strong>；</li>
+<li>为了保证道德的限制，甚至让道德在事实之上；<br><em>或许道德极大的限制了LLM的能力。</em></li>
+</ul>
+<p><strong>道二：Chat GPT的知识</strong><br>一般本科大学生的知识它都会；并且理解能力强。</p>
+<p><strong>道三：Chat GPT的提问</strong><br>对于提问，遵循两个原则：<strong>拆分、直接</strong>；</p>
+<ul>
+<li>直接：<ul>
+<li>提问不能太复杂，但是可以很困难；</li>
+</ul>
+</li>
+<li>拆分：<ul>
+<li>回答内容不能太长，所以一开始就设计多个问题，对各个部分拆分提问；</li>
+<li>对很长内容的提问：先提问大纲内容，再对每个大纲的细分内容进行提问；</li>
+</ul>
+</li>
+</ul>
+<p><strong>道四：面对AI的幻觉</strong><br>AI是语言生成模型，即按照上一句话生成下一句话；</p>
+<ul>
+<li>AI会出现强行回答，AI自己也无法分辨真假；</li>
+<li>如何面对AI回答的幻觉：<ul>
+<li>逻辑推演；</li>
+<li>拥有常识；</li>
+<li>自行验证；</li>
+</ul>
+</li>
+</ul>
+<p><strong>道五：把寻找和使用AI工具，纳入接受新工作的思考流程</strong><br>在接受一份新工作的时候，首先就可以想一想：当中有哪些工作是AI可以做的；并且把它纳入到生成流程当中。</p>
+<p><strong>补充：AI大模型的数据截止到2021年</strong><br>在2021年之前的数据，在LLM当中都有；但2021年之后的数据，AI自己也需要去查（通过OpenAI的服务器去访问这些网站）；</p>
+<p><strong>应用场合</strong></p>
+<ul>
+<li>文字工作<ul>
+<li>套路文章创作，润色，翻译，取标题，举例子</li>
+</ul>
+</li>
+<li>生活助手<ul>
+<li>普通问题咨询</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-ChatGPT的使用之术"><a href="#1-2-ChatGPT的使用之术" class="headerlink" title="1.2 ChatGPT的使用之术"></a>1.2 ChatGPT的使用之术</h2><p><strong>术一：描述好背景信息</strong><br>在向AI咨询一个问题前，一定要先描述好问题的背景信息；<br>如果不清楚描述什么背景，可以<strong>向AI提问，这个问题需要了解什么背景信息</strong>；</p>
+<p><strong>术二：提问计算方法，再得到结果</strong><br>如果直接问AI一个问题的答案，AI可能难以回答。但是如果提问AI一个问题的计算方法，AI的回答正确率更高；</p>
+<ul>
+<li>AI知道计算的方法，但不擅长计算</li>
+<li>对AI进行复杂计算的提问：可以<strong>先问过程，再顺着过程问答案</strong>；</li>
+</ul>
+<p><strong>术三：让他扮演一个角色</strong><br>让他扮演一个角色，作为一个角色来回答你的问题；<br><em>你现是一个作家、你现在是一个软件公司的文案总监、你现在是一个法律顾问</em></p>
+<h1 id="2-Midjourney使用基础"><a href="#2-Midjourney使用基础" class="headerlink" title="2.Midjourney使用基础"></a>2.Midjourney使用基础</h1><h2 id="2-1-Midjourney使用之道"><a href="#2-1-Midjourney使用之道" class="headerlink" title="2.1 Midjourney使用之道"></a>2.1 Midjourney使用之道</h2><p><strong>道一：创作具有艺术感的图像</strong><br>AI绘画可以模仿多种艺术风格，创造性的运用绘画技巧，并进行独特的构图和色彩搭配；</p>
+<p><strong>道二：难以处理复杂边缘、空间关系的物体</strong><br>这与扩散模型的原理有关。现阶段，扩散模型可学习的样本图片的清晰度普遍较低，导致模型在处理某些细节时需要进行“猜测”。因此，我们常常发现AI绘制的手指存在错误，其他具有复杂边缘的物体也存在同样的问题。另外，扩散模型并非从空间角度理解图像，因此在处理物体间复杂的空间关系时，AI可能会遇到困难</p>
+<p><strong>道三：难以同时绘制多个对象，并且每个对象有不同的属性</strong><br>AI可能无法准确理解多个对象和这些对象之间的属性关系，或者可能会忽略掉一些关键属性。 </p>
+<h2 id="2-2-Midjourney使用之术"><a href="#2-2-Midjourney使用之术" class="headerlink" title="2.2 Midjourney使用之术"></a>2.2 Midjourney使用之术</h2><p><strong>术一：Prompt能力</strong><br>使用明确且具体的语言，来描述任务；</p>
+<p><strong>术二：用尽可能清晰的语言</strong><br>Midjourney的语言文字理解能力不如Chat GPT；</p>
+<p><strong>术三：工具本身的熟练程度</strong></p>
+<ul>
+<li>设置宽高比；</li>
+<li>混乱程度；</li>
+<li>使用种子；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</title>
     <url>/2023/08/4b26dd1d757b.html</url>
     <content><![CDATA[<ul>
@@ -165,7 +335,37 @@
   <entry>
     <title>【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</title>
     <url>/2023/08/2d466e9f916b.html</url>
-    <content><![CDATA[<span id="more"></span>
+    <content><![CDATA[<ul>
+<li><ol>
+<li>垃圾回收的基本假设</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>垃圾回收算法</li>
+</ol>
+<ul>
+<li>2.1 初始化堆与第0代对象</li>
+<li>2.2 从第0代对象到第1代对象</li>
+<li>2.3 从第1代对象到第2代对象</li>
+</ul>
+</li>
+<li><ol start="3">
+<li>垃圾回收触发条件</li>
+</ol>
+<ul>
+<li>3.1 监视垃圾回收内存使用</li>
+</ul>
+</li>
+<li><ol start="4">
+<li>大对象</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>垃圾回收模式</li>
+</ol>
+</li>
+</ul>
+<span id="more"></span>
 <h1 id="1-垃圾回收的基本假设"><a href="#1-垃圾回收的基本假设" class="headerlink" title="1.垃圾回收的基本假设"></a>1.垃圾回收的基本假设</h1><p>由于CLR的GC是基于代的垃圾回收器算法，因此其对代码做出了以下几点假设：</p>
 <ul>
 <li><ol>
@@ -339,65 +539,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【CSharp系列】1. CLR执行模型</title>
-    <url>/2023/08/5aed3da140f6.html</url>
-    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步<span id="more"></span></li>
-</ol>
-<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
-</ol>
-<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
-<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
-<ol>
-<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
-<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
-<li>元数据：源代码的定义数据，源代码的引用数据</li>
-<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
-<li></li>
-</ol>
-<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
-<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
-<ol>
-<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
-<li>程序集是重用、安全性以及版本控制的最小单元；</li>
-<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
-</ol>
-<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
-<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
-<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
-<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
-<p><strong>加载CLR</strong></p>
-<ol>
-<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
-<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
-<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
-</ol>
-<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
-<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
-<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
-<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
-]]></content>
-      <categories>
-        <category>CSharp</category>
-      </categories>
-      <tags>
-        <tag>CSharp</tag>
-        <tag>CLR</tag>
-        <tag>编译原理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【商业系列】商业计划书大纲与内容</title>
     <url>/2023/08/efa8d1f054ea.html</url>
     <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
@@ -498,538 +639,6 @@
       <tags>
         <tag>商业</tag>
         <tag>创业</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 10：状态机模型的应用</title>
-    <url>/2023/08/f8b821c31d0a.html</url>
-    <content><![CDATA[<ul>
-<li>状态机的确定性<ul>
-<li>概念<ul>
-<li>每一个状态都有一个确定的下一个状态</li>
-<li>不确定的状态机，状态之后会有不同的分支状态</li>
-</ul>
-</li>
-<li>宏观物理世界<ul>
-<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
-<li>例子：Game Of Life</li>
-</ul>
-</li>
-<li>微观物理世界<span id="more"></span></li>
-</ul>
-</li>
-</ul>
-<h2 id="10-1-状态机模型的物理世界应用"><a href="#10-1-状态机模型的物理世界应用" class="headerlink" title="10.1 状态机模型的物理世界应用"></a>10.1 状态机模型的物理世界应用</h2><h3 id="10-1-1-世界状态的确定性分析"><a href="#10-1-1-世界状态的确定性分析" class="headerlink" title="10.1.1 世界状态的确定性分析"></a>10.1.1 世界状态的确定性分析</h3><ul>
-<li>状态机的确定性<ul>
-<li>概念<ul>
-<li>每一个状态都有一个确定的下一个状态</li>
-<li>不确定的状态机，状态之后会有不同的分支状态</li>
-</ul>
-</li>
-<li>宏观物理世界<ul>
-<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
-<li>例子：Game Of Life</li>
-</ul>
-</li>
-<li>微观物理世界</li>
-</ul>
-</li>
-</ul>
-<h3 id="10-1-2-状态机模型的应用"><a href="#10-1-2-状态机模型的应用" class="headerlink" title="10.1.2 状态机模型的应用"></a>10.1.2 状态机模型的应用</h3><p>这里不知道为什么会出现问题。。。</p>
-<h2 id="在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原"><a href="#在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原" class="headerlink" title="在决定性的数学公理体系下，状态机模型的使用1. 数学严谨的体系下，解释平行宇宙2. 细胞的状态分析与还原"></a>在决定性的数学公理体系下，状态机模型的使用<br>1. 数学严谨的体系下，解释平行宇宙<br>2. 细胞的状态分析与还原</h2><h2 id="10-2-状态机模型下的编译器和现代CPU"><a href="#10-2-状态机模型下的编译器和现代CPU" class="headerlink" title="10.2 状态机模型下的编译器和现代CPU"></a>10.2 状态机模型下的编译器和现代CPU</h2><h3 id="10-2-1-编译器模型"><a href="#10-2-1-编译器模型" class="headerlink" title="10.2.1 编译器模型"></a>10.2.1 编译器模型</h3><h2 id="编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay"><a href="#编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay" class="headerlink" title="编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）### 10.2.2 编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多### 10.2.3 查看状态机执行程序执行 &#x3D; 状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。+ 查看所有的状态机行为    + 方法：使用GDB进行调试        + 单步调试        + 反汇编调试    + 通过调试器展示的状态的一部分        + 寄存器        + 内存        + 变量状态机视角下，Debug可进行的行为：1. 复制当前状态机的状态2. 回溯状态机的上一个状态3. 进入状态机的下一个状态4. 记录一个状态机的完整执行+ 状态机的状态回溯    + 概念：        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走        + 每次状态切换时更改的内容有效    + 例子：        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现+ 记录状态机的完整执行    + 决定性程序：        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来    + 拥有系统调用、Random的程序：        + 待记录内容：        + 1. 指令数        + 2. 结果        + 3. n份以上内容    + 可使用此功能        + 指令：            + rr record        + 想记录下函数的全部行为：            + 需要知道从上一条指令到下一条指令有多少决定性的指 令            + 程序的io            + 程序的中断        + 程序可以完整的记录程序的执行            + 例子：老游戏的replay"></a>编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）<br>在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）<br>### 10.2.2 编译器优化的正确性<br><strong>核心：源代码状态机和二进制状态机的可观测行为的一致性</strong><br>例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多<br>### 10.2.3 查看状态机执行<br>程序执行 &#x3D; 状态机执行<br>例子：通过strace观测系统调用的行为以及所花费的时间。<br>+ 查看所有的状态机行为<br>    + 方法：使用GDB进行调试<br>        + 单步调试<br>        + 反汇编调试<br>    + 通过调试器展示的状态的一部分<br>        + 寄存器<br>        + 内存<br>        + 变量<br>状态机视角下，Debug可进行的行为：<br>1. 复制当前状态机的状态<br>2. 回溯状态机的上一个状态<br>3. 进入状态机的下一个状态<br>4. 记录一个状态机的完整执行<br>+ 状态机的状态回溯<br>    + 概念：<br>        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走<br>        + 每次状态切换时更改的内容有效<br>    + 例子：<br>        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现<br>+ 记录状态机的完整执行<br>    + 决定性程序：<br>        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来<br>    + 拥有系统调用、Random的程序：<br>        + 待记录内容：<br>        + 1. 指令数<br>        + 2. 结果<br>        + 3. n份以上内容<br>    + 可使用此功能<br>        + 指令：<br>            + rr record<br>        + 想记录下函数的全部行为：<br>            + 需要知道从上一条指令到下一条指令有多少决定性的指 令<br>            + 程序的io<br>            + 程序的中断<br>        + 程序可以完整的记录程序的执行<br>            + 例子：老游戏的replay</h2><h2 id="10-3-状态机与性能分析"><a href="#10-3-状态机与性能分析" class="headerlink" title="10.3 状态机与性能分析"></a>10.3 状态机与性能分析</h2><h3 id="10-3-1-采样状态机的执行"><a href="#10-3-1-采样状态机的执行" class="headerlink" title="10.3.1 采样状态机的执行"></a>10.3.1 采样状态机的执行</h3><h2 id="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：-Pasted-image-20230222163118-png-将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-Pasted-image-20230222163358-png-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解"><a href="#每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：-Pasted-image-20230222163118-png-将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-Pasted-image-20230222163358-png-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解" class="headerlink" title="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature optimization is the root of all exil.问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要+ 性能优化的时机    + 分析程序在时间和空间上的调用    + 时间    + 空间### 10.3.2 Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断+ 中断    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出#### 10.3.2.1 基于gcc进行性能摘要输出当前程序性能摘要：结果：![[Pasted image 20230222163118.png]]将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：![[Pasted image 20230222163358.png]]### 10.3.3 实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上+ 工业界面到的性能优化    + 实际情况：木桶效应    + 每个部分都已经优化到了局部最优解"></a>每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。<br><em>性能分析的核心原则：Premature optimization is the root of all exil.</em><br>问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要<br>+ 性能优化的时机<br>    + 分析程序在时间和空间上的调用<br>    + 时间<br>    + 空间<br>### 10.3.2 Profiler和性能摘要<br><strong>单点调试的问题：</strong><br>当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。<br>实现此步骤的方法是：中断<br>+ 中断<br>    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出<br>#### 10.3.2.1 基于gcc进行性能摘要<br>输出当前程序性能摘要：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf stat ./a.out </span><br></pre></td></tr></table></figure><br>结果：<br>![[Pasted image 20230222163118.png]]<br>将整个程序的Profiler记录，并打开报告：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf record ./a.out</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure><br>获得的每一条指令的时间：<br>![[Pasted image 20230222163358.png]]<br>### 10.3.3 实际中的性能优化<br>百分之八十的时间都消耗在了百分之二十的代码上<br>+ 工业界面到的性能优化<br>    + 实际情况：木桶效应<br>    + 每个部分都已经优化到了局部最优解</h2><h2 id="10-4-状态机与程序验证"><a href="#10-4-状态机与程序验证" class="headerlink" title="10.4 状态机与程序验证"></a>10.4 状态机与程序验证</h2><h3 id="10-4-1-现在的Model-Check工具"><a href="#10-4-1-现在的Model-Check工具" class="headerlink" title="10.4.1 现在的Model Check工具"></a>10.4.1 现在的Model Check工具</h3><p>概念：状态机模型可以用于证明程序的正确性。使用bfs便利所有的状态，再使用execute给定一个并发程序的调度。<br>例子：for程序的并发Bug<br>**学术界的Model Check工具</p>
-<ol>
-<li>NASA的Java PathFinder：把Model Check扩充到了所有的Java代码</li>
-<li>Spin：只可以使用其自己定义的语言</li>
-<li>TLA Plus：用于亚马逊的并发式程序的正确性验证</li>
-</ol>
-<ul>
-<li>现在的Model Check在分布式系统上的应用<ul>
-<li>并发系统：<ul>
-<li>分布式系统也是一种并发系统，但是其问题更大</li>
-<li>并发系统假设其所有的节点都能够正常工作</li>
-</ul>
-</li>
-<li>分布式系统<ul>
-<li>在分布式系统中，必须假设所有的节点都可能出错（丢失）</li>
-<li>在节点丢失的情况下还能进行tutorial</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="10-4-2-Model-Check可以做什么"><a href="#10-4-2-Model-Check可以做什么" class="headerlink" title="10.4.2 Model Check可以做什么"></a>10.4.2 Model Check可以做什么</h3><p>当探索不确定性程序的执行时，Model Check可以检查任何程序的执行；<br>Model Check可以检测当前不确定程序的任何一种可能性，并检查出Bug。</p>
-<ul>
-<li>不确定<ul>
-<li>输入不确定</li>
-<li>随机函数不确定<br>面对不确定性程序，可以检测程序的所有可能性空间<br><strong>问题：程序的状态空间太大</strong></li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>如何将这个状态的可能性减少？</li>
-<li>如何将状态合并？</li>
-<li>如何将状态往后延迟？</li>
-</ol>
-<ul>
-<li>状态坍缩<ul>
-<li>将大量可能性的状态转换为分支，延迟状态的展开，将状态合并，直到发现Bug再将其反向展开</li>
-<li>分支成立：<ul>
-<li>再检测有没有分支<ul>
-<li>分支成立：<ul>
-<li>在检测有没有分支：<ul>
-<li>分支成立：<ul>
-<li>当前红色的状态是否可达？</li>
-<li>用约束求解器来计算</li>
-<li>计算出当前程序的状态，此状态为Bug</li>
-</ul>
-</li>
-<li>分支不成立：</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>分支不成立：</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>分支不成立：</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>状态机</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 11：操作系统上的进程</title>
-    <url>/2023/08/5b1cbd3ab6e9.html</url>
-    <content><![CDATA[<blockquote>
-<pre><code>1. 操作系统启动后做了什么？
-2. 操作系统如何管理进程？
-</code></pre>
-</blockquote>
-<span id="more"></span>
-<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
-<p><strong>Linux进入之后加载第一个程序的代码：</strong><br>![[Pasted image 20230223142644.png]]</p>
-<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230223142425.png]]</p>
-<h3 id="11-1-2-最小Linux实现"><a href="#11-1-2-最小Linux实现" class="headerlink" title="11.1.2 最小Linux实现"></a>11.1.2 最小Linux实现</h3><p>最小Linux的树状结构：<br>![[Pasted image 20230223142955.png]]<br>initramfs打包选项：<br>![[Pasted image 20230223143107.png]]<br>Linux 运行：</p>
-<ol>
-<li>无图形界面</li>
-<li>128m内存</li>
-<li>linux内核</li>
-<li>将initramfs<br>![[Pasted image 20230223143146.png]]<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
-</ol>
-<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
-<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
-<ol>
-<li>当中有更多挂载的磁盘</li>
-<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
-</ol>
-<p><strong>系统调用的三大类型</strong></p>
-<ol>
-<li>进程管理</li>
-<li>文件管理</li>
-<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
-</ol>
-<hr>
-<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
-<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
-<ul>
-<li>完全一致的进程<ul>
-<li>两个进程在内存上一模一样，寄存器一样</li>
-<li>只有返回的值不一样：<ul>
-<li>每一个进程都有一个唯一的编号</li>
-<li>除了编号之外一切相同</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
-<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
-<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
-<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
-<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
-<ul>
-<li>line buffer<ul>
-<li>直接把每一行buffer输出出来</li>
-</ul>
-</li>
-<li>full buffer<ul>
-<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
-</ul>
-</li>
-</ul>
-<p>fork的问题：多个线程下，fork的行为问题</p>
-<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
-<p>使用代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
-<ul>
-<li>环境变量<ul>
-<li>PATH<ul>
-<li>程序执行路径的环境变量</li>
-</ul>
-</li>
-<li>PWD<ul>
-<li>当前路径</li>
-</ul>
-</li>
-<li>HOME<ul>
-<li>HOME目录</li>
-</ul>
-</li>
-<li>DISPLAY<ul>
-<li>图形输出</li>
-</ul>
-</li>
-<li>PS1<ul>
-<li>shell提示符</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
-<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
-<hr>
-<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
-<ul>
-<li>问题<ul>
-<li>多线程的程序，exit的行为如何？</li>
-<li>是所有线程结束还是只结束调用的线程？</li>
-</ul>
-</li>
-<li>多种exit<ul>
-<li>stdlib当中的exit</li>
-<li>glibc当中的_exit(0)</li>
-<li>syscall(SES_exit,0)</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>进程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 12：进程的地址空间</title>
-    <url>/2023/08/d03400aa93d7.html</url>
-    <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
-<span id="more"></span>
-<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
-<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
-
-<p>查看某一个进程地址空间代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
-<p>当中的37491为进程的id。</p>
-<p><strong>查看结果：</strong><br>![[Pasted image 20230224190930.png]]</p>
-<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong><br>当中一条系统调用：<br>![[Pasted image 20230224191620.png]]<br>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</p>
-<p><strong>37491进程更详细的信息：</strong><br>![[Pasted image 20230224191818.png]]<br>相关手册：<code>mam 5 proc</code></p>
-<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br>![[Pasted image 20230224192252.png]]<br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
-<p>将以上读取的信息和其ELF信息比较着来看：<br>![[Pasted image 20230224192640.png]]</p>
-<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
-<hr>
-<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
-<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
-<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
-<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
-<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
-<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
-<p><strong>定义：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
-<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
-<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br>![[Pasted image 20230227174912.png]]</p>
-<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
-<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
-<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
-<ul>
-<li>第一步：获得游戏进程的PID（进程号）</li>
-<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
-<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
-<li>第四步：遍历此段内存，找到关键词数据</li>
-<li>第五步：修改被关键字标记的内存</li>
-</ul>
-<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
-<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
-<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
-<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
-<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>进程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 13：系统调用与Shell</title>
-    <url>/2023/08/3dbfbd52ee49.html</url>
-    <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
-<h3 id="13-1-2-早期的Shell"><a href="#13-1-2-早期的Shell" class="headerlink" title="13.1.2 早期的Shell"></a>13.1.2 早期的Shell</h3><p><strong>概念：</strong><br>早期的OS没有复杂结构，系统调用就像是库函数，那个时代的Shell就是命令行终端机。<br>核心：<strong>Shell就是一门把用户指令翻译为系统调用的编程语言</strong></p>
-<p>手册：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man sh</span><br></pre></td></tr></table></figure>
-<p>这是一个非常简单的手册，包含很多shell的内容，建立对UNIX Shell的基础认识。</p>
-<h2 id="13-2-复刻简易UNIX"><a href="#13-2-复刻简易UNIX" class="headerlink" title="13.2 复刻简易UNIX"></a>13.2 复刻简易UNIX</h2><h3 id="13-2-1-简易UNIX代码初设置"><a href="#13-2-1-简易UNIX代码初设置" class="headerlink" title="13.2.1 简易UNIX代码初设置"></a>13.2.1 简易UNIX代码初设置</h3><p>早期的计算机设计由于性能低下，设计不能太消耗性能以及复杂<br>代码：<a href="http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c</a><br>零库函数依赖、可以作为最小可用的Linux的init程序<br>由于其链接任何库函数，因此可以ffreestanding</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -c -ffreestanding sh-xv6.c -g -O2</span><br><span class="line">ld sh-xv6.o -o sh</span><br></pre></td></tr></table></figure>
-<p>第一行是将其编译，然后第二行将其静态链接<br>当使用反汇编模式进行调试时，直接从_Start()，用C写的这个函数处开始执行。此程序可以直接以命令行的形式进行运行。<br>![[Pasted image 20230827140800.png]]</p>
-<h3 id="12-2-2-第一步：读取命令"><a href="#12-2-2-第一步：读取命令" class="headerlink" title="12.2.2 第一步：读取命令"></a>12.2.2 第一步：读取命令</h3><p>代码：<br>解析：不停的getcmd()来获得用户的输入，这其中直接使用read的系统调用</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nread = <span class="built_in">syscall</span>(SYS_read,<span class="number">0</span>,buf,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-<p>一直读到换行符才停止：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(*(buf++)==<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
-<p>将命令读取到buf缓冲区里</p>
-<h3 id="12-2-3-第二步：可能性-解释执行命令"><a href="#12-2-3-第二步：可能性-解释执行命令" class="headerlink" title="12.2.3 第二步：可能性|解释执行命令"></a>12.2.3 第二步：可能性|解释执行命令</h3><p>代码：<br>![[Pasted image 20230301181806.png]]<br>解析：<br>首先判断是不是一条’cd’命令，并且其当中不能有空格<br>使用系统调用，读取buf+3之后的数据</p>
-<h3 id="12-2-4-第二步：可能性-新进程创建"><a href="#12-2-4-第二步：可能性-新进程创建" class="headerlink" title="12.2.4 第二步：可能性|新进程创建"></a>12.2.4 第二步：可能性|新进程创建</h3><p>解析：可能性|如果不是cd命令，此时创建一个新的进程，在新的进程里面把进程解析</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">syscall</span>(SYS_fork) == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">runcmd</span>(<span class="built_in">parsecmd</span>(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230301183132.png]]<br>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
-<ul>
-<li>命令与管道<ul>
-<li>管道和命令关系<ul>
-<li>管道的左边和右边都可以任意复杂：   </li>
-<li>可以是一个很长的式子：<code>(echo a;each b;echo c;echo d)|wc -l</code></li>
-<li>把管道左边的输出作为右边的输入，这就是管道的形式语义。</li>
-</ul>
-</li>
-<li>管道解析<ul>
-<li>pipe()创建一个管道，管道返回两个描述符：</li>
-<li>pipe[0]是读口，pipe[1]是写口</li>
-<li>之后会使用fork创建两个新的进程，这两个新的进程完全复制的父进程的状态，因此此时这三个进程完全共享管道，并且共进共出。</li>
-<li>之后将p[0]的文件描述符关闭，后背又将p[1]的文件描述符关掉</li>
-<li>之后再进行Fork，子进程编号为1的进程指向管道的左边，Fork出来的子进程再进行上述出现的行为</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>管道行为图解：<br>![[Pasted image 20230303165535.png]]</p>
-<h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
-<p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
-<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程<br>常用指令：<br>![[Pasted image 20230303170448.png]]<br><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
-<h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
-<p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
-<p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
-<h3 id="13-3-2-现代Shell展望"><a href="#13-3-2-现代Shell展望" class="headerlink" title="13.3.2 现代Shell展望"></a>13.3.2 现代Shell展望</h3><p>现代的Shell功能不变，都是人和机器之间的API，但是其形式可以发生变化</p>
-<ul>
-<li>界面自带StackOverflow？</li>
-<li>结合神经网络？</li>
-<li>智能补全？</li>
-<li>POPL20</li>
-</ul>
-<h2 id="13-4-终端与任务控制"><a href="#13-4-终端与任务控制" class="headerlink" title="13.4 终端与任务控制"></a>13.4 终端与任务控制</h2><h3 id="13-4-1-终端机制"><a href="#13-4-1-终端机制" class="headerlink" title="13.4.1 终端机制"></a>13.4.1 终端机制</h3><p>问题：为什么有时候使用Ctrl + C可以退出程序，有时候不可以？为什么有些进程可以退出，当管道创建了很多个进程时，使用Ctrl + C 将退出哪个进程？如果时Fork了一个Shell，那使用Ctrl + C 是不是要退出Shell？tmux是怎么实现的？</p>
-<p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
-<p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
-<h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
-<p><strong>信号处理程序：</strong><br>![[Pasted image 20230303173129.png]]<br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
-<h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
-<p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>Shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 14：C标准库的实现</title>
-    <url>/2023/08/68a724658d83.html</url>
-    <content><![CDATA[<p>操作系统内核对外面提供的API就是Syscall，而当中和用户交互的就是Shell。而在Shell的外面，OS提供了一个框架性程序，帮助开发者实现应用程序（因为没有人愿意在没有库函数的情况下，直接使用汇编、系统调用来制作应用程序）</p>
-<blockquote>
-<p>· 在系统调用之上构建可以普遍使用的标准库：libc</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="14-1-系统调用的封装"><a href="#14-1-系统调用的封装" class="headerlink" title="14.1 系统调用的封装"></a>14.1 系统调用的封装</h2><h3 id="14-1-1-熟悉又陌生的libc"><a href="#14-1-1-熟悉又陌生的libc" class="headerlink" title="14.1.1 熟悉又陌生的libc"></a>14.1.1 熟悉又陌生的libc</h3><p><strong>为什么需要libc</strong><br>虽然不借助任何的库函数也可以写程序，但是在自己写的时候还是要进行封装（一些固定的功能）。<br>裸奔式的编程是不可行的，即使是实现最简单的程序也有很多可以重用的部分。</p>
-<h3 id="14-1-2-libc提供的类型系统"><a href="#14-1-2-libc提供的类型系统" class="headerlink" title="14.1.2 libc提供的类型系统"></a>14.1.2 libc提供的类型系统</h3><p><strong>第一种：类型系统</strong><br>问题：size of int 是多少大小？C语言编译器可以将其实现为八字节，也可以是四字节<br>解释：这种不同字节大小的类型，在进行跨平台交叉编译时，其移植性具有很大的障碍，因为其在不同平台上大小可能不同。<br>方法：libc标准库专门提供对应的标准基本类型</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br></pre></td></tr></table></figure>
-<p>在使用的时候，直接使用标注上字节大小的int或bool:</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int32_t</span> a;</span><br><span class="line">	<span class="type">uint64_t</span> x;</span><br><span class="line">	<span class="type">intptr_t</span> ptr;<span class="comment">//可以保证，把这个指针cast成一个int之后不会丢失任何的数据</span></span><br><span class="line">	<span class="comment">//intptr_t ptr = (intptr_t)main;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果是使用int替代intptr_t时，可能会丢失信息。</p>
-<p>常见、在freestanding下也可以使用的定义：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">stddef.h -&gt; <span class="type">size_t</span></span><br><span class="line">stdint.h -&gt; <span class="type">int32_t</span>,<span class="type">uint64_t</span></span><br><span class="line">stdbool.h -&gt; <span class="type">bool</span>,<span class="literal">true</span>,<span class="literal">false</span></span><br><span class="line"><span class="type">float</span>.h</span><br><span class="line">limits.h</span><br><span class="line">stdarg.h</span><br></pre></td></tr></table></figure>
-<p>系统syscall使用到的stdarg.h；当系统调用的函数在传递参数时，其当中参数的设计：<br>![[Pasted image 20230307124449.png]]<br>仿照系统的函数写的代码：<br>![[Pasted image 20230307124836.png]]</p>
-<p>另一个问题：long type<br>long type32位机上是四字节，在其他机器上可能是八字节；</p>
-<h3 id="14-1-3-libc对系统调用的封装"><a href="#14-1-3-libc对系统调用的封装" class="headerlink" title="14.1.3 libc对系统调用的封装"></a>14.1.3 libc对系统调用的封装</h3><p><strong>对execve()系统调用的封装</strong><br>execve()并不好用，平时使用的时候使用麻烦。<br>比如execve()的第一个路径必须为是一个合法的路径，可以是相对路径，但必须是合法的路径：<code>../../../../../../.././bin/echo</code><br>execve如果不给合法的路径，其会直接拒绝用户，但用户想要实现的是找到path当中的echo，而不是找完全准确的那个path。<br>平时写代码可能会用：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">execlp(<span class="string">&quot;echo&quot;</span>,<span class="string">&quot;echo&quot;</span>,<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;OS course&quot;</span>,<span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//打印结果：hello OS course</span></span><br></pre></td></tr></table></figure>
-<p>用静态的方式编译，然后查看其系统调用：<br>![[Pasted image 20230307131337.png]]<br>execve会尝试每一个path当中的路径，然后直到成功找到那个程序，然后使用execve进程reset。这当中也介绍了更高情商的API：execlp<br><em>补充：在看手册的时候，手册当中经常会有很大的引用，比如在execve的手册当中，其当中可以看到SEE ALSO，顺着这些引用往下看就可以算是实现了一次文献调研</em><br>libc就是对在系统调用的基础上，面向人类易用性进行的封装。</p>
-<h3 id="14-1-4-libc对string、数组的封装"><a href="#14-1-4-libc对string、数组的封装" class="headerlink" title="14.1.4 libc对string、数组的封装"></a>14.1.4 libc对string、数组的封装</h3><p><strong>main函数中的参数</strong><br>main函数会有三个参数。当中有一个数组：<code>char *argv[]*</code></p>
-<p>memset实现：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memset</span><span class="params">(<span class="type">void</span>* s <span class="type">int</span> c,<span class="type">size_t</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		((<span class="type">char</span>*)s)[i] = c;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>memset对于数据竞争的态度：直接不管你，谁最后把数据写进去，内存单元就是哪个进程的，并且标准库只对“标准库内部数据”的线程安全性负责。<br>使用clang对其进行编译后的结果：</p>
-<p><strong>补充：libc实现的复杂性</strong><br>对于libc的实现者而言，因为Libc会被很多人调用，因此其正确性必须得得到验证。并且作为Libc，其必须得跑得快，而且还得兼顾各种的机器，在不同机器上面跑的快不快……<br>在多个线程使用其时，会不会产生数据竞争，是不是还得考虑安全……新的机制来了，当前代码还得支持。</p>
-<p><em>补：现在的C语言 &#x3D; 大号的汇编语言 + 大家还能接受的API的标准</em></p>
-<h3 id="14-1-5-其他的例子"><a href="#14-1-5-其他的例子" class="headerlink" title="14.1.5 其他的例子"></a>14.1.5 其他的例子</h3><p>数学库的实现：过于复杂，比如浮点数的性质，比如在接近0的时候如何保证精度。而OS要对纯粹的计算进行封装。</p>
-<hr>
-<h2 id="14-2-文件描述符与进程封装"><a href="#14-2-文件描述符与进程封装" class="headerlink" title="14.2 文件描述符与进程封装"></a>14.2 文件描述符与进程封装</h2><p>操作系统中存在大量的对象，比如终端、对于Shell来说连接的终端。libc的职责之一，就是对于这些常见对象的封装</p>
-<h3 id="14-2-1-什么是文件描述符"><a href="#14-2-1-什么是文件描述符" class="headerlink" title="14.2.1 什么是文件描述符"></a>14.2.1 什么是文件描述符</h3><p>文件描述符就是一个打开的文件，而Linux当中一切都是文件，因此可以使用文件描述符来打开一切对象。因此Libc必须要对文件描述符进行一定的封装。 </p>
-<p>例：往文件系统里面写文件的一段代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">FILE* fp = fopen(<span class="string">&quot;a.txt&quot;</span>,<span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="built_in">fprintf</span>(fp,<span class="string">&quot;Hello,OS world\n&quot;</span>);</span><br></pre></td></tr></table></figure>
-<p>使用gcc编译：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -g a.c &amp;&amp; ./a.out</span><br></pre></td></tr></table></figure>
-<p>其系统调用的过程：<br>![[Pasted image 20230307171635.png]]<br>这是OS视角下，当前程序的行为。但也可以从用户的视角来看一下，这个代码发生的行为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">p *fp</span><br></pre></td></tr></table></figure>
-<p>对文件描述符的指针解引用，得出的结果（部分）：<br>![[Pasted image 20230307171858.png]]<br>由此可以看到：FILE* 背后就是封装了一个文件描述符。同时一个FILE只能返回一个文件描述符，要么是读口要么是写口。<br>装填了值之后，fp解引用会变成这样：<br>![[Pasted image 20230307172411.png]]<br>可以清晰的看到libc为其设置的不同区域的大小以及对应的内容。</p>
-<p>popen和pclose的设计具有缺陷（或者说相比于现代的语言，不易用）</p>
-<h3 id="14-2-2-其他进程-操作系统功能"><a href="#14-2-2-其他进程-操作系统功能" class="headerlink" title="14.2.2 其他进程&#x2F;操作系统功能"></a>14.2.2 其他进程&#x2F;操作系统功能</h3><p><strong>错误信息处理</strong><br>所有的API都有可能失败，此时Shell可能会发出一个error message，比如“No Such file or directory”。并且不止是这一个错误发出了这个信息，还有很多的其他err message都是这个，是不是背后有一个共通的错误反应的内容？<br>因为这背后都使用了一样的libc当中的错误处理代码，一代一代的传承出来（除非有一个打破者，比如rust出现）</p>
-<p><strong>环境变量</strong><br>可以自己实现env.c这样的命令，借助Linux提供的env.c机制，可以实现非常简单的env环境变量实现。<br>在C语言当中可以使用环境变量：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">char</span>** environ;</span><br></pre></td></tr></table></figure>
-<p>而这些环境变量在执行之前就已经有值，这些值是谁设置的？如何查看这些内容？<br>可以使用gdb调试，从starti开始执行。<br>先编译一下env.c代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc env.c -g -static</span><br></pre></td></tr></table></figure>
-<p>受用gdb使用时，最开始starti时没有值，再往下执行后，可以看到时__libc_start_main()给其赋值<br>gdb断点查看：<br>![[Pasted image 20230308165300.png]]</p>
-<h2 id="14-3-地址空间的封装"><a href="#14-3-地址空间的封装" class="headerlink" title="14.3 地址空间的封装"></a>14.3 地址空间的封装</h2><h3 id="14-3-1-内存分配行为"><a href="#14-3-1-内存分配行为" class="headerlink" title="14.3.1 内存分配行为"></a>14.3.1 内存分配行为</h3><p><strong>简介</strong><br>libc的一个非常重要的功能之一就是内存管理，而这块主要就是malloc和free，任何的应用程序都需要大量的分配内存。</p>
-<p><strong>行为分析</strong><br>在一个大区间中维护互不相交的区间的集合，大区间由mmap来实现，mmap基于当前进程的地址空间，从当中挖去一大块内存。<br>在一个左闭右开的区间，维护一个数据结构，这些被分配的内存互相不相交，在这片内存当中进行malloc和free，可以往一片空区分配内存，或者将已经分配的内存释放掉。因此malloc和free就是区间管理。</p>
-<p><strong>内存分配的效率问题</strong><br>当想要在设计内存管理的时候，使用类似红黑树、B+树类似的算法思路想要去实现算法复杂度的log(n)时，就已经陷入误区。<br>在OS上，在多处理器的方案下，光是想要实现安全性就够困难了。</p>
-<p><strong>任何脱离workflow的性能优化都是耍流氓</strong>，在考虑性能之前，需要先考虑需要什么样的性能。</p>
-<h3 id="14-3-2-内存管理workflow分析"><a href="#14-3-2-内存管理workflow分析" class="headerlink" title="14.3.2 内存管理workflow分析"></a>14.3.2 内存管理workflow分析</h3><p><strong>指导思想</strong><br>内存被分配出来就是为了被使用的，O(n)大小的对象分配至少需要有相对应数量级的读写操作，不然就是性能Bug。<br>必须是在需要对应的对象，需要那么多的内存时才分配那部分内存。</p>
-<p><strong>问题</strong></p>
-<ul>
-<li>越小的对象创建&#x2F;分配越频繁<ul>
-<li>字符串、临时对象等</li>
-<li>生存周期可长可短</li>
-</ul>
-</li>
-<li>较为频繁的分配中等大小的对象<ul>
-<li>较大的数组、复杂的对象</li>
-<li>更长的生命周期</li>
-</ul>
-</li>
-<li>低频率的大对象<ul>
-<li>巨大的容器、分配器</li>
-<li>很长的生存周期</li>
-</ul>
-</li>
-<li>挑战：并行化的分配问题<ul>
-<li>所有的分配都会在处理器上发生，而处理器是并发、相互高度用总线连接的</li>
-</ul>
-</li>
-</ul>
-<h3 id="14-3-3-内存问题的两种方案"><a href="#14-3-3-内存问题的两种方案" class="headerlink" title="14.3.3 内存问题的两种方案"></a>14.3.3 内存问题的两种方案</h3><p>设置两套系统：</p>
-<ul>
-<li>fast path<ul>
-<li>性能好，并行度好，覆盖大部分情况</li>
-<li>可以很快的解决问题，但是有小概率失败</li>
-</ul>
-</li>
-<li>slow path<ul>
-<li>性能没那么好，但是要求把事情做好</li>
-</ul>
-</li>
-<li>人的fast系统和slow系统<ul>
-<li>直觉式的反应系统和推力式的反应系统</li>
-</ul>
-</li>
-</ul>
-<p><strong>Malloc：Fast Path设计</strong><br>简介：使得所有的CPU都可以并行的申请内存<br>实现：想实现更快的分配，因此不能进行上锁，如果此时有两个线程，此时可以以page的方式，在page的基础上维护一个空闲链表，当一个page分配完了，再从全局的page当中分配一个page，往其上一把锁，然后把这个page返回给需要的地方。<br>当快速的在page上分配内存时是fast path，但是当内存不够，分配更多的page时，此时是slow path。通过这种设计实现slow path的访问变少，性能变好。<br>如果不想在page上使用链表维护时，还可以设置最小的分配单元位32b、64b、…4kb，此时有一个64kb的page，在此page上有个Header，除了这个Header之外，在这个Page上就是一堆16b的对象（或者其他格式），可以为每个分配的大小单独分配结构。</p>
-<p><strong>小内存的分段设计</strong><br>基于一个个Segregation上进行分配，每个slab里面的对象大小都一致，每个线程都在本地拥有立即分配完成的权限。</p>
-<p><strong>大内存的大锁设计</strong><br>需要分配大内存时，此时就是使用线段树，将一串区域切分成树，然后变成了一个算法问题。使用一把大锁保证其安全。</p>
-<h2 id="14-4-总结"><a href="#14-4-总结" class="headerlink" title="14.4 总结"></a>14.4 总结</h2><h3 id="14-4-1-相关手册"><a href="#14-4-1-相关手册" class="headerlink" title="14.4.1 相关手册"></a>14.4.1 相关手册</h3><p><strong>Libc手册</strong><br>The GNU C Library</p>
-<p>Libc的实现：Newlib</p>
-<h3 id="14-4-2-从C走向世界"><a href="#14-4-2-从C走向世界" class="headerlink" title="14.4.2 从C走向世界"></a>14.4.2 从C走向世界</h3><p>基于C，可以实现C++的编译器<br>基于C++，可以实现C++标准库<br>基于C++，可以是西安OpenJDK<br>基于C++，可以实现JS，进而实现整个浏览器当中的世界</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>C语言</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 15：Fork的应用</title>
-    <url>/2023/08/3d8a9bfbeeea.html</url>
-    <content><![CDATA[<p>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象</p>
-<span id="more"></span>
-<blockquote>
-<p>前言：从这节课开始，会逐渐进入到如何实现OS相关的内容，即往OS的内核来走</p>
-</blockquote>
-<h2 id="15-1-fork-行为的补充解释"><a href="#15-1-fork-行为的补充解释" class="headerlink" title="15.1 fork()行为的补充解释"></a>15.1 fork()行为的补充解释</h2><h3 id="15-1-1-操作系统的状态机"><a href="#15-1-1-操作系统的状态机" class="headerlink" title="15.1.1  操作系统的状态机"></a>15.1.1  操作系统的状态机</h3><p><strong>概念复习</strong><br>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象（行为类似于指针共享）<br>Execve：进程执行了Execve，状态机就会被重置，但是在重置之后，OS当中的对象还在，因此即使状态被重置，这个指向依然存在，比如其打开的文件描述符依然存在。</p>
-<h3 id="15-1-2-文件描述符"><a href="#15-1-2-文件描述符" class="headerlink" title="15.1.2 文件描述符"></a>15.1.2 文件描述符</h3><p><strong>概念</strong><br><strong>文件描述符就是一个指向操作系统内对象的指针</strong>，只能通过OS运行的方式去访问这些对象。但是对于一个文本对象，write一个对象的时候，应该是具有一个文件内的偏移量，进而可以使得两个write写入的内容不是被覆盖，而是都可以被写入。</p>
-<p>文件描述符可以通过Open来得到，比如：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">open(<span class="string">&quot;a.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
-<p>此时会获得一个文件描述符，并且指向这个 a.txt 对象<br>在使用Open打开文件描述符时，可以使用一个O_APPEND的方式写入。不管文件的数量多少，都会以file offset的方式在文件的末尾进行追加。</p>
-<p><strong>文件描述符的复制</strong><br>代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;a.txt&quot;</span>,O_WROLY | O_CREAT);<span class="comment">//用creat打开，如果不存在就被创造</span></span><br><span class="line">assert(fd &gt; <span class="number">0</span>);</span><br><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line">assert(pid&gt;<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(pid == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;World&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>完整代码：<br>![[Pasted image 20230315124639.png]]</p>
-<ul>
-<li><p>问题一：文件偏移量的管理<br>以上代码的结果，是Hello被World覆盖掉，还是两者都被输出？即当两个相同状态的进程进行write时，其两者用于相同的文件描述符的前提下，两者是共享偏移量还是其他行为？ </p>
-</li>
-<li><p>问题二：dup复制文件描述符<br><strong>什么是dup</strong><br>假设原本存在一个fd为3的文件描述符，指向了OS中的一个对象。当使用了dup之后，此时会再出现一个文件描述符，其fd为4，同样也指向了此OS中的一个对象。<br>但是如果带有文件偏移量，那此时究竟应该是共享offset，还是独立offset？</p>
-</li>
-</ul>
-<h2 id="15-2-fork的实现"><a href="#15-2-fork的实现" class="headerlink" title="15.2 fork的实现"></a>15.2 fork的实现</h2><h3 id="15-2-1-fork设计的问题"><a href="#15-2-1-fork设计的问题" class="headerlink" title="15.2.1 fork设计的问题"></a>15.2.1 fork设计的问题</h3><p>创建副本这件事情的代价很大，进程可能有很大的地址空间，如果此时对一个非常大的地址空间fork一份，并且在这之后立马就execve，此时就会产生十分大的性能浪费，此时OS会怎么应对这种状况？</p>
-<p><strong>OS中的进程地址空间设计</strong><br>每一个进程会有一个地址空间，并且在地址空间当中会进行分页（MMU），而进程其本身拥有的只是一个映射表。映射表提供了相关的信息，表示不同的内容会映射到分页之后的哪个页面，所以概念上进程拥有这些页面，其实实际上依然是由OS控制着所有这些内容。</p>
-<h3 id="15-2-2-共享只读设计"><a href="#15-2-2-共享只读设计" class="headerlink" title="15.2.2 共享只读设计"></a>15.2.2 共享只读设计</h3><p>当一个进程拥有两个页面时，内容如下：<br>![[Lecture 15：Fork的应用 2023-03-15 17.06.04.excalidraw]]<br>当指向了一个fork之后，其状态如下;<br>![[Lecture 15：Fork的应用 2023-03-15 17.07.24.excalidraw]]<br>此时这两个进程都同时指向了一个可写的页面，因此Old进程可以写，New进程也可以写。但是此时OS会偷偷的抹掉这个可写的权限，进而可能发生缺页中断（段错误）。但如果OS发现，这个缺页中断只是被偷偷抹掉的，此时OS会将此页引用计数减1，然后将其拷贝一份到另外的可写权限的空间，从而把读写的权限重新还给NEW进程。<br>![[Lecture 15：Fork的应用 2023-03-15 17.12.48.excalidraw]]<br><strong>优点：</strong><br>这种设计Copy on Write的设计，当遇到非常大的地址空间中需要映射的内容时，有时可以不需要为其创建新的内容，只有在使用时才产生这种Copy On Write。<br><strong>例子：libc</strong><br>整个OS里面，只有一份libc的副本，OS当中有很多的进程，此时这些不同的进程都是指向同一个libc。</p>
-<p><strong>代码证明Copy On Write</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NPROC 1000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MB 128</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SIZE (MB * (1 &lt;&lt; 20))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> xstr(s) str(s)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> str(s) #s</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">char</span> *data = <span class="built_in">malloc</span>(SIZE); <span class="comment">// 128MB shared memory</span></span><br><span class="line">  <span class="built_in">memset</span>(data, <span class="string">&#x27;_&#x27;</span>, SIZE);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; NPROC - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// NPROC processes go here</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">asm</span> <span class="title function_">volatile</span><span class="params">(<span class="string">&quot;.fill 1048576 * &quot;</span> xstr(MB) <span class="string">&quot;, 1, 0x90&quot;</span>)</span>; <span class="comment">// 128MB shared code</span></span><br><span class="line"></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> idx = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span> fd = open(<span class="string">&quot;/dev/urandom&quot;</span>, O_RDONLY); assert(fd &gt; <span class="number">0</span>);</span><br><span class="line">  read(fd, &amp;idx, <span class="keyword">sizeof</span>(idx));</span><br><span class="line">  close(fd);</span><br><span class="line">  idx %= <span class="number">1048576</span> * MB;</span><br><span class="line"></span><br><span class="line">  data[idx] = <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;pid = %d, write data[%u]\n&quot;</span>, getpid(), idx);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    sleep(<span class="number">1</span>); <span class="comment">// not terminate</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行了这个代码之后，在OS当中有1000个进程在进行，并且上述代码在SO中，每个都要求分配了128MB的内存。但是OS并没有Crash掉，实际只是用了1GB左右的内存。这就是Copy On Write的实现。</p>
-<p><strong>关于进程内存占有量</strong><br>由此推导出一个结论：证明一个进程用的多少的内存就是一个伪命题。如果简单的将一个进程映射的内存之和相加作为其内存大小，mmap可以映射一大片的内存（比如20T内存），但是这些内存是按需使用的，其只是做了一个映射，然后使用时只会用多少分配多少，并且还有很多内存是共享的（Libc）。</p>
-<h2 id="15-3-状态机的复制"><a href="#15-3-状态机的复制" class="headerlink" title="15.3 状态机的复制"></a>15.3 状态机的复制</h2><h3 id="15-3-1-状态机视角"><a href="#15-3-1-状态机视角" class="headerlink" title="15.3.1 状态机视角"></a>15.3.1 状态机视角</h3><p><strong>概念：平行宇宙与fork</strong><br>物理世界上不同的粒子状态，可以定义出不同时间下的状态。如果此时要进行时间穿越，此时行为就是将未来的部分状态带到过去，并且从此状态开始进行分叉，而这个分叉就是fork()。<br>OS运行开发者使用fork()实现平行宇宙。</p>
-<h3 id="15-3-2-fork与并行化"><a href="#15-3-2-fork与并行化" class="headerlink" title="15.3.2 fork与并行化"></a>15.3.2 fork与并行化</h3><p><strong>例子1：码交换搜索问题</strong><br>和不同的部分进行交换，就会进入不同的状态。可以使用状态机的视角，将所有的状态进行探索。<br>![[Lecture 15：Fork的应用 2023-03-16 16.57.00.excalidraw]]</p>
-<p><strong>例子2：基于fork的dfs</strong><br>原本的dfs会使用深度遍历进行探索，然后使用回溯法回到原本的状态，回溯的过程十分耗时。而如果基于fork，使用状态机的视角来进行迁移，则可以只会跳回到初始状态（通过使用exit()来实现）。<br>其启示是：可以使用fork实现dfs；使用fork来进入不同的状态，并且联合OS来帮助进行管理，此时进入新的状态后原本的平行宇宙也可以被消除掉，每探索完一个平行宇宙都将其删除掉。<br>并且，还可以创造多个平行宇宙，并行的得到所有状态，然后程序结束。</p>
-<h3 id="15-3-3-fork与跳过初始化"><a href="#15-3-3-fork与跳过初始化" class="headerlink" title="15.3.3 fork与跳过初始化"></a>15.3.3 fork与跳过初始化</h3><p><strong>问题</strong><br>假设你的NEMU需要启动很多份elf头文件，而如果NEMU进行初始化要花很多的时间（比如花费大量时间来初始化一片128MB的内存），此时如果为每个elf来进行启动就会产生大量消耗，此时可以按照以下行为分析：<br>![[Lecture 15：Fork的应用 2023-03-16 17.29.53.excalidraw]]<br><strong>处理方法</strong><br>此时可以只执行一次nemu_init()的内容，之后只需要每进来一个需要启动的内容，就fork一份，然后找到没有处理的文件，将其进行处理，就可以完成操作。并且因为只进行一次init，因此可以加速程序执行第一个文件的速度。</p>
-<p><strong>跳过初始化的实际应用</strong><br>应用：安卓应用的秒启动</p>
-<ul>
-<li>简介：每一个安卓的程序都会通过以上的跳过初始化的方式进行启动。</li>
-<li>原理：安卓应用是一个Java程序，而Java是运行在JVM虚拟机上面，对于安卓而言是一个Android Runtime（自己实现的虚拟机）。而安卓和Java都会有一个十分大的标准库，如果每一个程序是采取冷启动，即从0开始执行整个Java程序，不可能几秒内完成加载，此时就是使用了跳过初始化的思想，所有的Java程序只进行初始化一次。</li>
-<li>Zygote Process：会有一个所有Android程序的父进程，名称为Zygote Process。其会完成所有必要的安卓程序的必要的类的加载，此时如果开始了一个新的程序，只要在init之后的状态基础之上fork一份即可完成创建。</li>
-<li>一次加载，全员使用<br>应用：Chrome浏览器</li>
-<li>简介：Chrome可以成功的原因之一，就是其速度非常的快。</li>
-<li>原理：Chrome当中，每一个网页就是一个进程，使用跳过初始化的思想来进行网页的快速加载</li>
-</ul>
-<p><strong>核心：只要是从一个状态出发，需要很多个副本的，都可以使用fork。</strong></p>
-<h3 id="15-3-4-fork与备份"><a href="#15-3-4-fork与备份" class="headerlink" title="15.3.4 fork与备份"></a>15.3.4 fork与备份</h3><p><strong>简介：</strong><br>要是我们可以对有Bug的程序总是能在任何状态“试一试”，然后试错了还能回到过去，就好了。<br><strong>概念：</strong><br>当过去某个节点发生了一个Bug，我们能否回到过去，在产生一次这个Bug?特别是出现并发Bug，此类Bug或许十分难以重现，拥有此存档机制就可以去复现过去状态下的Bug。<br>![[Lecture 15：Fork的应用 2023-03-17 17.46.14.excalidraw]]<br>在任何状态下，可以使用fork()开启另一条平行宇宙，然后在此基础上进行存档。然后如果顺着正常的路径进行执行，但是之后在这主分支之上发生了Crash，此时就可以拿回之前的存档，从之前的存档开始。<br>![[Lecture 15：Fork的应用 2023-03-17 21.24.34.excalidraw]]<br>然后拿回了之前的存档后，从此存档开始执行，并且需要更改一些环境。很多Bug都是由于环境导致的（比如许多的并发Bug）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.27.15.excalidraw]]<br>这就是可以进行容错的机制。如果有轻量级的快照，就可以使用平行宇宙来复查一些Bug。甚至如果是想要还原并发这种Bug，甚至不需要复杂的Fork的快照，只需要有一个Setjmp寄存器的快照。</p>
-<h2 id="15-4-对于Fork的讨论"><a href="#15-4-对于Fork的讨论" class="headerlink" title="15.4 对于Fork的讨论"></a>15.4 对于Fork的讨论</h2><h3 id="15-4-1-A-Fork-in-the-road"><a href="#15-4-1-A-Fork-in-the-road" class="headerlink" title="15.4.1 A Fork() in the road"></a>15.4.1 A Fork() in the road</h3><p><strong>简介：</strong><br>对于Unix Fork的批评。<br><strong>概述：</strong><br>fork使用的最舒服的时候，就是在一个简单的管道模型当中。但是随着OS发展，进程不止是有地址空间和文件描述符，但是之后进程会有信号（fork之后，发信号是两个都发，还是只发一个？），线程，进程间通信对象，ptrace等等。<br>fork的开发者对于这些问题进行了修复，但是结果就是导致现在的fork十分的复杂。比如出现线程之后。</p>
-<p><strong>这些都是由进程拥有了一些更加复杂的对象所引发出的问题。</strong></p>
-<h3 id="15-4-2-线程对于Fork的影响"><a href="#15-4-2-线程对于Fork的影响" class="headerlink" title="15.4.2 线程对于Fork的影响"></a>15.4.2 线程对于Fork的影响</h3><p><strong>线程概述</strong><br>在一个进程当中，会有一片地址空间，两个不同的线程共享这些地址空间，所有的页面都是共享的（因为页面是由OS持有的）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.43.41.excalidraw]]<br><strong>问题</strong><br>此时如果fork了一份这个进程，这当中的这些线程会怎么样？</p>
-<p><strong>分析</strong><br>首先，肯定是进程当中的某一个线程执行了fork，在执行了fork之后，是对应进程复制，另一个进程消失，还是两者都被复制？<br>正确答案是 只复制执行了fork的进程。<br>![[Lecture 15：Fork的应用 2023-03-17 21.47.35.excalidraw]]</p>
-<h3 id="15-4-3-更安全的创建一个进程"><a href="#15-4-3-更安全的创建一个进程" class="headerlink" title="15.4.3 更安全的创建一个进程"></a>15.4.3 更安全的创建一个进程</h3><p><strong>创建进程：POSIX Spawn</strong><br>代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">posix_spawn</span></span><br><span class="line"><span class="params">(</span></span><br><span class="line"><span class="params"><span class="type">pid_t</span> *pid,</span></span><br><span class="line"><span class="params"><span class="type">char</span> *path,</span></span><br><span class="line"><span class="params"><span class="type">posix_spawnattr_t</span> *attrp,</span></span><br><span class="line"><span class="params"><span class="type">char</span>* argv[],</span></span><br><span class="line"><span class="params"><span class="type">char</span>* envp[]</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
-<p>其是一个在fork发明出来之后的API，比fork更加的简单。</p>
-<p>Fork的七宗罪：<br>![[Pasted image 20230317215942.png]]</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>Fork</tag>
       </tags>
   </entry>
   <entry>
@@ -1197,6 +806,850 @@
       <tags>
         <tag>游戏引擎</tag>
         <tag>技术美术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 10：状态机模型的应用</title>
+    <url>/2023/08/f8b821c31d0a.html</url>
+    <content><![CDATA[<ul>
+<li>状态机的确定性<ul>
+<li>概念<ul>
+<li>每一个状态都有一个确定的下一个状态</li>
+<li>不确定的状态机，状态之后会有不同的分支状态</li>
+</ul>
+</li>
+<li>宏观物理世界<ul>
+<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
+<li>例子：Game Of Life</li>
+</ul>
+</li>
+<li>微观物理世界<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="10-1-状态机模型的物理世界应用"><a href="#10-1-状态机模型的物理世界应用" class="headerlink" title="10.1 状态机模型的物理世界应用"></a>10.1 状态机模型的物理世界应用</h2><h3 id="10-1-1-世界状态的确定性分析"><a href="#10-1-1-世界状态的确定性分析" class="headerlink" title="10.1.1 世界状态的确定性分析"></a>10.1.1 世界状态的确定性分析</h3><ul>
+<li>状态机的确定性<ul>
+<li>概念<ul>
+<li>每一个状态都有一个确定的下一个状态</li>
+<li>不确定的状态机，状态之后会有不同的分支状态</li>
+</ul>
+</li>
+<li>宏观物理世界<ul>
+<li>近似于决定性的状态机，状态之间用于牛顿机械式的逻辑关系</li>
+<li>例子：Game Of Life</li>
+</ul>
+</li>
+<li>微观物理世界</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-1-2-状态机模型的应用"><a href="#10-1-2-状态机模型的应用" class="headerlink" title="10.1.2 状态机模型的应用"></a>10.1.2 状态机模型的应用</h3><p>这里不知道为什么会出现问题。。。</p>
+<h2 id="在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原"><a href="#在决定性的数学公理体系下，状态机模型的使用1-数学严谨的体系下，解释平行宇宙2-细胞的状态分析与还原" class="headerlink" title="在决定性的数学公理体系下，状态机模型的使用1. 数学严谨的体系下，解释平行宇宙2. 细胞的状态分析与还原"></a>在决定性的数学公理体系下，状态机模型的使用<br>1. 数学严谨的体系下，解释平行宇宙<br>2. 细胞的状态分析与还原</h2><h2 id="10-2-状态机模型下的编译器和现代CPU"><a href="#10-2-状态机模型下的编译器和现代CPU" class="headerlink" title="10.2 状态机模型下的编译器和现代CPU"></a>10.2 状态机模型下的编译器和现代CPU</h2><h3 id="10-2-1-编译器模型"><a href="#10-2-1-编译器模型" class="headerlink" title="10.2.1 编译器模型"></a>10.2.1 编译器模型</h3><h2 id="编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay"><a href="#编译器：从源代码S（状态机）-二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）-10-2-2-编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多-10-2-3-查看状态机执行程序执行-状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。-查看所有的状态机行为-方法：使用GDB进行调试-单步调试-反汇编调试-通过调试器展示的状态的一部分-寄存器-内存-变量状态机视角下，Debug可进行的行为：1-复制当前状态机的状态2-回溯状态机的上一个状态3-进入状态机的下一个状态4-记录一个状态机的完整执行-状态机的状态回溯-概念：-虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走-每次状态切换时更改的内容有效-例子：-在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来-，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现-记录状态机的完整执行-决定性程序：-如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来-拥有系统调用、Random的程序：-待记录内容：-1-指令数-2-结果-3-n份以上内容-可使用此功能-指令：-rr-record-想记录下函数的全部行为：-需要知道从上一条指令到下一条指令有多少决定性的指-令-程序的io-程序的中断-程序可以完整的记录程序的执行-例子：老游戏的replay" class="headerlink" title="编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）### 10.2.2 编译器优化的正确性核心：源代码状态机和二进制状态机的可观测行为的一致性例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多### 10.2.3 查看状态机执行程序执行 &#x3D; 状态机执行例子：通过strace观测系统调用的行为以及所花费的时间。+ 查看所有的状态机行为    + 方法：使用GDB进行调试        + 单步调试        + 反汇编调试    + 通过调试器展示的状态的一部分        + 寄存器        + 内存        + 变量状态机视角下，Debug可进行的行为：1. 复制当前状态机的状态2. 回溯状态机的上一个状态3. 进入状态机的下一个状态4. 记录一个状态机的完整执行+ 状态机的状态回溯    + 概念：        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走        + 每次状态切换时更改的内容有效    + 例子：        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现+ 记录状态机的完整执行    + 决定性程序：        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来    + 拥有系统调用、Random的程序：        + 待记录内容：        + 1. 指令数        + 2. 结果        + 3. n份以上内容    + 可使用此功能        + 指令：            + rr record        + 想记录下函数的全部行为：            + 需要知道从上一条指令到下一条指令有多少决定性的指 令            + 程序的io            + 程序的中断        + 程序可以完整的记录程序的执行            + 例子：老游戏的replay"></a>编译器：从源代码S（状态机）-&gt; 二进制代码C（状态机）<br>在不同的SystemCall之中，保证语义一致性（保证结果的最终一致）<br>### 10.2.2 编译器优化的正确性<br><strong>核心：源代码状态机和二进制状态机的可观测行为的一致性</strong><br>例子：现代的CPU在一个时钟周期当中可以执行两条指令甚至更多<br>### 10.2.3 查看状态机执行<br>程序执行 &#x3D; 状态机执行<br>例子：通过strace观测系统调用的行为以及所花费的时间。<br>+ 查看所有的状态机行为<br>    + 方法：使用GDB进行调试<br>        + 单步调试<br>        + 反汇编调试<br>    + 通过调试器展示的状态的一部分<br>        + 寄存器<br>        + 内存<br>        + 变量<br>状态机视角下，Debug可进行的行为：<br>1. 复制当前状态机的状态<br>2. 回溯状态机的上一个状态<br>3. 进入状态机的下一个状态<br>4. 记录一个状态机的完整执行<br>+ 状态机的状态回溯<br>    + 概念：<br>        + 虽然当前程序的状态机的状态可能十分复杂，但是在不同指令之间进行执行时，如果只是将指令的行为记录下来，即可回走<br>        + 每次状态切换时更改的内容有效<br>    + 例子：<br>        + 在一个用于随机情况的方法条件下，可以通过gcc的record将状态记录下来 ，当想要还原这个随机性的Bug时只需要恢复当时的状态即可实现<br>+ 记录状态机的完整执行<br>    + 决定性程序：<br>        + 如果程序是完全决定性的，只要程序的初始状态知道，之后的状态都可以据此由此复现出来<br>    + 拥有系统调用、Random的程序：<br>        + 待记录内容：<br>        + 1. 指令数<br>        + 2. 结果<br>        + 3. n份以上内容<br>    + 可使用此功能<br>        + 指令：<br>            + rr record<br>        + 想记录下函数的全部行为：<br>            + 需要知道从上一条指令到下一条指令有多少决定性的指 令<br>            + 程序的io<br>            + 程序的中断<br>        + 程序可以完整的记录程序的执行<br>            + 例子：老游戏的replay</h2><h2 id="10-3-状态机与性能分析"><a href="#10-3-状态机与性能分析" class="headerlink" title="10.3 状态机与性能分析"></a>10.3 状态机与性能分析</h2><h3 id="10-3-1-采样状态机的执行"><a href="#10-3-1-采样状态机的执行" class="headerlink" title="10.3.1 采样状态机的执行"></a>10.3.1 采样状态机的执行</h3><h2 id="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解"><a href="#每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature-optimization-is-the-root-of-all-exil-问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要-性能优化的时机-分析程序在时间和空间上的调用-时间-空间-10-3-2-Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断-中断-概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出-10-3-2-1-基于gcc进行性能摘要输出当前程序性能摘要：结果：将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：-10-3-3-实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上-工业界面到的性能优化-实际情况：木桶效应-每个部分都已经优化到了局部最优解" class="headerlink" title="每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。性能分析的核心原则：Premature optimization is the root of all exil.问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要+ 性能优化的时机    + 分析程序在时间和空间上的调用    + 时间    + 空间### 10.3.2 Profiler和性能摘要单点调试的问题：当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。实现此步骤的方法是：中断+ 中断    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出#### 10.3.2.1 基于gcc进行性能摘要输出当前程序性能摘要：结果：将整个程序的Profiler记录，并打开报告：获得的每一条指令的时间：### 10.3.3 实际中的性能优化百分之八十的时间都消耗在了百分之二十的代码上+ 工业界面到的性能优化    + 实际情况：木桶效应    + 每个部分都已经优化到了局部最优解"></a>每当想进行性能优化的时候，总是要停下来想想，当下是否适合作性能优化。<br><em>性能分析的核心原则：Premature optimization is the root of all exil.</em><br>问题：如何在代价很低的方法下，获得程序的summary（）？即获得性能摘要<br>+ 性能优化的时机<br>    + 分析程序在时间和空间上的调用<br>    + 时间<br>    + 空间<br>### 10.3.2 Profiler和性能摘要<br><strong>单点调试的问题：</strong><br>当使用gdb单点调试时，程序需要在每个指令下停止下来，无法测算每个指令执行的速度。此时只需要关注状态机的整体行为，观察程序在某一段时间中的关键信息（CPU、GPU、内存）数据。<br>实现此步骤的方法是：中断<br>+ 中断<br>    + 概念：基于中断的机制，程序此时会进入到OS的代码。此时OS的代码可以访问到程序中断前的状态，并将此状态进行采样与输出<br>#### 10.3.2.1 基于gcc进行性能摘要<br>输出当前程序性能摘要：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf stat ./a.out </span><br></pre></td></tr></table></figure><br>结果：<br><img src="/../../image/Pasted%20image%2020230829191438.png"><br>将整个程序的Profiler记录，并打开报告：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perf record ./a.out</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure><br>获得的每一条指令的时间：<br><img src="/../../image/Pasted%20image%2020230829191456.png"><br>### 10.3.3 实际中的性能优化<br>百分之八十的时间都消耗在了百分之二十的代码上<br>+ 工业界面到的性能优化<br>    + 实际情况：木桶效应<br>    + 每个部分都已经优化到了局部最优解</h2><h2 id="10-4-状态机与程序验证"><a href="#10-4-状态机与程序验证" class="headerlink" title="10.4 状态机与程序验证"></a>10.4 状态机与程序验证</h2><h3 id="10-4-1-现在的Model-Check工具"><a href="#10-4-1-现在的Model-Check工具" class="headerlink" title="10.4.1 现在的Model Check工具"></a>10.4.1 现在的Model Check工具</h3><p>概念：状态机模型可以用于证明程序的正确性。使用bfs便利所有的状态，再使用execute给定一个并发程序的调度。<br>例子：for程序的并发Bug<br>**学术界的Model Check工具</p>
+<ol>
+<li>NASA的Java PathFinder：把Model Check扩充到了所有的Java代码</li>
+<li>Spin：只可以使用其自己定义的语言</li>
+<li>TLA Plus：用于亚马逊的并发式程序的正确性验证</li>
+</ol>
+<ul>
+<li>现在的Model Check在分布式系统上的应用<ul>
+<li>并发系统：<ul>
+<li>分布式系统也是一种并发系统，但是其问题更大</li>
+<li>并发系统假设其所有的节点都能够正常工作</li>
+</ul>
+</li>
+<li>分布式系统<ul>
+<li>在分布式系统中，必须假设所有的节点都可能出错（丢失）</li>
+<li>在节点丢失的情况下还能进行tutorial</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-4-2-Model-Check可以做什么"><a href="#10-4-2-Model-Check可以做什么" class="headerlink" title="10.4.2 Model Check可以做什么"></a>10.4.2 Model Check可以做什么</h3><p>当探索不确定性程序的执行时，Model Check可以检查任何程序的执行；<br>Model Check可以检测当前不确定程序的任何一种可能性，并检查出Bug。</p>
+<ul>
+<li>不确定<ul>
+<li>输入不确定</li>
+<li>随机函数不确定<br>面对不确定性程序，可以检测程序的所有可能性空间<br><strong>问题：程序的状态空间太大</strong></li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>如何将这个状态的可能性减少？</li>
+<li>如何将状态合并？</li>
+<li>如何将状态往后延迟？</li>
+</ol>
+<ul>
+<li>状态坍缩<ul>
+<li>将大量可能性的状态转换为分支，延迟状态的展开，将状态合并，直到发现Bug再将其反向展开</li>
+<li>分支成立：<ul>
+<li>再检测有没有分支<ul>
+<li>分支成立：<ul>
+<li>在检测有没有分支：<ul>
+<li>分支成立：<ul>
+<li>当前红色的状态是否可达？</li>
+<li>用约束求解器来计算</li>
+<li>计算出当前程序的状态，此状态为Bug</li>
+</ul>
+</li>
+<li>分支不成立：</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分支不成立：</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分支不成立：</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>状态机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 11：操作系统上的进程</title>
+    <url>/2023/08/5b1cbd3ab6e9.html</url>
+    <content><![CDATA[<blockquote>
+<pre><code>1. 操作系统启动后做了什么？
+2. 操作系统如何管理进程？
+</code></pre>
+</blockquote>
+<span id="more"></span>
+<h2 id="11-1-进程与Linux"><a href="#11-1-进程与Linux" class="headerlink" title="11.1 进程与Linux"></a>11.1 进程与Linux</h2><h3 id="11-1-1-操作系统的第一个进程"><a href="#11-1-1-操作系统的第一个进程" class="headerlink" title="11.1.1 操作系统的第一个进程"></a>11.1.1 操作系统的第一个进程</h3><p>操作系统的第一条程序执行之后，接下来的行为就是创建其他的程序，然后就把操作系统的全部控制权交给程序，即操作系统树根上的程序。<br>操作系统只是创建第一个树根进程，然后其他进程由此树根进程创建。</p>
+<p><strong>Linux进入之后加载第一个程序的代码：</strong><br><img src="/../../image/Pasted%20image%2020230829191238.png"></p>
+<h4 id="11-1-1-1-gcc观看进程结构"><a href="#11-1-1-1-gcc观看进程结构" class="headerlink" title="11.1.1.1 gcc观看进程结构"></a>11.1.1.1 gcc观看进程结构</h4><p>以下shell指令执行后，将会输出当前OS的所有进程，而这些所有进程都是由根进程所创建：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">systemd ---..其他进程</span><br></pre></td></tr></table></figure>
+<p><img src="/../../image/Pasted%20image%2020230829191308.png"></p>
+<h3 id="11-1-2-最小Linux实现Linux-运行："><a href="#11-1-2-最小Linux实现Linux-运行：" class="headerlink" title="11.1.2 最小Linux实现Linux 运行："></a>11.1.2 最小Linux实现Linux 运行：</h3><ol>
+<li>无图形界面</li>
+<li>128m内存</li>
+<li>linux内核</li>
+<li>将initramfs<br>使用<code>make run</code>启动程序后，当前OS内核当中只有一个init在执行，此进程不可返回，不然OS就会发生Crash</li>
+</ol>
+<h4 id="11-1-2-1-OS内核链接至BusyBox"><a href="#11-1-2-1-OS内核链接至BusyBox" class="headerlink" title="11.1.2.1 OS内核链接至BusyBox"></a>11.1.2.1 OS内核链接至BusyBox</h4><p>将busybox链接至OS的<code>/bin/</code>目录下，生成的链接文件的名称为ps、arch、pst等这些Linux常见命令的名称，此时在OS中就可以直接使用这些程序。<br>只要当前程序是静态链接的，就可以被链接到OS当中</p>
+<h3 id="11-1-3-略复杂一些的OS实现"><a href="#11-1-3-略复杂一些的OS实现" class="headerlink" title="11.1.3 略复杂一些的OS实现"></a>11.1.3 略复杂一些的OS实现</h3><p>内容：</p>
+<ol>
+<li>当中有更多挂载的磁盘</li>
+<li>执行switch root系统调用，将initramfs销毁<br>把初始的文件系统销毁，然后创建一个新的文件系统</li>
+</ol>
+<p><strong>系统调用的三大类型</strong></p>
+<ol>
+<li>进程管理</li>
+<li>文件管理</li>
+<li>内存管理<br>有这三类系统调用，就可以实现整个OS世界</li>
+</ol>
+<hr>
+<h2 id="11-2-进程与fork"><a href="#11-2-进程与fork" class="headerlink" title="11.2 进程与fork()"></a>11.2 进程与fork()</h2><p>OS必须要有一个创建进程的API，在Init加载了第一个进程后，使用fork()创建其他的进程</p>
+<h3 id="11-2-1-什么是fork"><a href="#11-2-1-什么是fork" class="headerlink" title="11.2.1 什么是fork()"></a>11.2.1 什么是fork()</h3><p>当前进程有一个执行流，当执行到了fork()之后当前程序的执行流变成两条，完成分叉<br><strong>如何理解？</strong><br>操作系统在加载之后就创建了init这个状态机。当init执行了fork()后，执行流就会陷入到内核当中执行OS代码，fork会把当前进程状态机的状态完整复制一份，然后创建一个新的执行流</p>
+<ul>
+<li>完全一致的进程<ul>
+<li>两个进程在内存上一模一样，寄存器一样</li>
+<li>只有返回的值不一样：<ul>
+<li>每一个进程都有一个唯一的编号</li>
+<li>除了编号之外一切相同</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>当操作系统新创建了进程之后，就变成了一个并发程序。OS每一次可以选择一个进程执行一次（如果每一个时刻CPU只能执行一个）</p>
+<h3 id="11-2-2-Fork-Bomb"><a href="#11-2-2-Fork-Bomb" class="headerlink" title="11.2.2 Fork Bomb"></a>11.2.2 Fork Bomb</h3><p>可以创建一个无限创建进程的程序，一开始的fork变成两个fork，每个创建的fork又可以创建fork，无休止创建下去。</p>
+<h3 id="11-2-3-Fork行为分析"><a href="#11-2-3-Fork行为分析" class="headerlink" title="11.2.3 Fork行为分析"></a>11.2.3 Fork行为分析</h3><p>对于Fork创建进程的行为进行分析<br><strong>代码：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc , <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">2</span> ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		fork();</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		wait(<span class="literal">NULL</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>执行行为：</strong><br>第一次i &#x3D; 0时，进入for然后执行一次fork()，此时进程会进行分叉变成两个进程，两个进程拥有完全一致的状态，因此都会进入printf然后输出。<br>第二次i&#x3D;1时，当前已经有了两个fork，而这两个fork都会各自进行复制，因此会有四个进程取执行printf()然后输出Hello</p>
+<p><strong>Printf行为分析：</strong><br>第一点：fork就只是一个无情的拷贝状态的机器<br>第二点：因为fork只是一个无情的状态拷贝机器，因此其会把库函数内部的状态也给其复制一份。<br>将Printf直接打印到屏幕上面：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">fflush(<span class="built_in">stdout</span>);</span><br></pre></td></tr></table></figure>
+<p>如果不适用fflush，库函数会先将其放在buffer当中。</p>
+<ul>
+<li>line buffer<ul>
+<li>直接把每一行buffer输出出来</li>
+</ul>
+</li>
+<li>full buffer<ul>
+<li>只有满足buffer大小要求后才输出出来，不然就先给到buffer</li>
+</ul>
+</li>
+</ul>
+<p>fork的问题：多个线程下，fork的行为问题</p>
+<h2 id="11-3-进程与execve"><a href="#11-3-进程与execve" class="headerlink" title="11.3 进程与execve()"></a>11.3 进程与execve()</h2><h3 id="11-3-1-execve行为"><a href="#11-3-1-execve行为" class="headerlink" title="11.3.1 execve行为"></a>11.3.1 execve行为</h3><p>fork创建了新的进程之后，可以检查其pid是否等于0，如果不为0则执行，进入背景现成，如果为0则为父进程，此时执行execve()，接着就会重置状态机，将当前运行的状态机重置为另一个程序的初始状态。<br>定义：execute the program referred to by pathname.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">exceve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname,<span class="type">char</span> *<span class="type">const</span> argv[],<span class="type">char</span>* cons envp[])</span>;</span><br></pre></td></tr></table></figure>
+<p>使用代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> argv[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;env&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span>* <span class="type">const</span> envp[] = </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="string">&quot;HELLO=WORLD&quot;</span>,<span class="literal">NULL</span>,</span><br><span class="line">	&#125;;</span><br><span class="line">	execve(argv[<span class="number">0</span>],argv,envp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="11-3-2-环境变量"><a href="#11-3-2-环境变量" class="headerlink" title="11.3.2 环境变量"></a>11.3.2 环境变量</h3><p>环境变量就是应用程序执行的环境，当状态机重置时，其他状态不变，当前状态机的状态被更改。<br>所有程序执行的第一行总是execvve，新的状态的启动总是要被重置，即使用execve</p>
+<ul>
+<li>环境变量<ul>
+<li>PATH<ul>
+<li>程序执行路径的环境变量</li>
+</ul>
+</li>
+<li>PWD<ul>
+<li>当前路径</li>
+</ul>
+</li>
+<li>HOME<ul>
+<li>HOME目录</li>
+</ul>
+</li>
+<li>DISPLAY<ul>
+<li>图形输出</li>
+</ul>
+</li>
+<li>PS1<ul>
+<li>shell提示符</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>LINUX也只不过是在这些环境变量当中找到 内容，然后执行</p>
+<p><strong>PATH环境变量</strong><br>PATH就是可执行文件的搜索路径。当执行gcc之后，此时gcc的系统调用就是寻找其当前程序有可能的可执行文件的目录，搜索顺序就是PATH中指定的顺序。</p>
+<hr>
+<h2 id="11-4-进程与exit"><a href="#11-4-进程与exit" class="headerlink" title="11.4 进程与exit()"></a>11.4 进程与exit()</h2><p>进程需要进行销毁，当前状态机世界当中所有的状态都不变，除了当前执行exit()的进程直接从OS当中消失</p>
+<ul>
+<li>问题<ul>
+<li>多线程的程序，exit的行为如何？</li>
+<li>是所有线程结束还是只结束调用的线程？</li>
+</ul>
+</li>
+<li>多种exit<ul>
+<li>stdlib当中的exit</li>
+<li>glibc当中的_exit(0)</li>
+<li>syscall(SES_exit,0)</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>进程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 12：进程的地址空间</title>
+    <url>/2023/08/d03400aa93d7.html</url>
+    <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
+<span id="more"></span>
+<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
+<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
+
+<p>查看某一个进程地址空间代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
+<p>当中的37491为进程的id。</p>
+<p><strong>查看结果：</strong><br><img src="/../../image/Pasted%20image%2020230829191538.png"></p>
+<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong></p>
+<ul>
+<li>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。</li>
+<li>proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</li>
+</ul>
+<p>**相关手册：<code>mam 5 proc</code></p>
+<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br><img src="/../../image/Pasted%20image%2020230829191738.png"><br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
+<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
+<hr>
+<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
+<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
+<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
+<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
+<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
+<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
+<p><strong>定义：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
+<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
+<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br><img src="/../../image/Pasted%20image%2020230829191917.png"></p>
+<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
+<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
+<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
+<ul>
+<li>第一步：获得游戏进程的PID（进程号）</li>
+<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
+<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
+<li>第四步：遍历此段内存，找到关键词数据</li>
+<li>第五步：修改被关键字标记的内存</li>
+</ul>
+<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
+<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
+<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
+<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
+<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>进程</tag>
+        <tag>Fork</tag>
+        <tag>Mmap</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 13：系统调用与Shell</title>
+    <url>/2023/08/3dbfbd52ee49.html</url>
+    <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
+<h3 id="13-1-2-早期的Shell"><a href="#13-1-2-早期的Shell" class="headerlink" title="13.1.2 早期的Shell"></a>13.1.2 早期的Shell</h3><p><strong>概念：</strong><br>早期的OS没有复杂结构，系统调用就像是库函数，那个时代的Shell就是命令行终端机。<br>核心：<strong>Shell就是一门把用户指令翻译为系统调用的编程语言</strong></p>
+<p>手册：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man sh</span><br></pre></td></tr></table></figure>
+<p>这是一个非常简单的手册，包含很多shell的内容，建立对UNIX Shell的基础认识。</p>
+<h2 id="13-2-复刻简易UNIX"><a href="#13-2-复刻简易UNIX" class="headerlink" title="13.2 复刻简易UNIX"></a>13.2 复刻简易UNIX</h2><h3 id="13-2-1-简易UNIX代码初设置"><a href="#13-2-1-简易UNIX代码初设置" class="headerlink" title="13.2.1 简易UNIX代码初设置"></a>13.2.1 简易UNIX代码初设置</h3><p>早期的计算机设计由于性能低下，设计不能太消耗性能以及复杂<br>代码：<a href="http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c</a><br>零库函数依赖、可以作为最小可用的Linux的init程序<br>由于其链接任何库函数，因此可以ffreestanding</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -c -ffreestanding sh-xv6.c -g -O2</span><br><span class="line">ld sh-xv6.o -o sh</span><br></pre></td></tr></table></figure>
+<p>第一行是将其编译，然后第二行将其静态链接<br>当使用反汇编模式进行调试时，直接从_Start()，用C写的这个函数处开始执行。此程序可以直接以命令行的形式进行运行。<br>![[Pasted image 20230827140800.png]]</p>
+<h3 id="12-2-2-第一步：读取命令"><a href="#12-2-2-第一步：读取命令" class="headerlink" title="12.2.2 第一步：读取命令"></a>12.2.2 第一步：读取命令</h3><p>代码：<br>解析：不停的getcmd()来获得用户的输入，这其中直接使用read的系统调用</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nread = <span class="built_in">syscall</span>(SYS_read,<span class="number">0</span>,buf,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>一直读到换行符才停止：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(*(buf++)==<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+<p>将命令读取到buf缓冲区里</p>
+<h3 id="12-2-3-第二步：可能性-解释执行命令"><a href="#12-2-3-第二步：可能性-解释执行命令" class="headerlink" title="12.2.3 第二步：可能性|解释执行命令"></a>12.2.3 第二步：可能性|解释执行命令</h3><p>代码：<br>![[Pasted image 20230301181806.png]]<br>解析：<br>首先判断是不是一条’cd’命令，并且其当中不能有空格<br>使用系统调用，读取buf+3之后的数据</p>
+<h3 id="12-2-4-第二步：可能性-新进程创建"><a href="#12-2-4-第二步：可能性-新进程创建" class="headerlink" title="12.2.4 第二步：可能性|新进程创建"></a>12.2.4 第二步：可能性|新进程创建</h3><p>解析：可能性|如果不是cd命令，此时创建一个新的进程，在新的进程里面把进程解析</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">syscall</span>(SYS_fork) == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">runcmd</span>(<span class="built_in">parsecmd</span>(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
+
+<p>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
+<ul>
+<li>命令与管道<ul>
+<li>管道和命令关系<ul>
+<li>管道的左边和右边都可以任意复杂：   </li>
+<li>可以是一个很长的式子：<code>(echo a;each b;echo c;echo d)|wc -l</code></li>
+<li>把管道左边的输出作为右边的输入，这就是管道的形式语义。</li>
+</ul>
+</li>
+<li>管道解析<ul>
+<li>pipe()创建一个管道，管道返回两个描述符：</li>
+<li>pipe[0]是读口，pipe[1]是写口</li>
+<li>之后会使用fork创建两个新的进程，这两个新的进程完全复制的父进程的状态，因此此时这三个进程完全共享管道，并且共进共出。</li>
+<li>之后将p[0]的文件描述符关闭，后背又将p[1]的文件描述符关掉</li>
+<li>之后再进行Fork，子进程编号为1的进程指向管道的左边，Fork出来的子进程再进行上述出现的行为</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
+<p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
+<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程</p>
+<p><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
+<h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
+<p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
+<p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
+<h3 id="13-3-2-现代Shell展望"><a href="#13-3-2-现代Shell展望" class="headerlink" title="13.3.2 现代Shell展望"></a>13.3.2 现代Shell展望</h3><p>现代的Shell功能不变，都是人和机器之间的API，但是其形式可以发生变化</p>
+<ul>
+<li>界面自带StackOverflow？</li>
+<li>结合神经网络？</li>
+<li>智能补全？</li>
+<li>POPL20</li>
+</ul>
+<h2 id="13-4-终端与任务控制"><a href="#13-4-终端与任务控制" class="headerlink" title="13.4 终端与任务控制"></a>13.4 终端与任务控制</h2><h3 id="13-4-1-终端机制"><a href="#13-4-1-终端机制" class="headerlink" title="13.4.1 终端机制"></a>13.4.1 终端机制</h3><p>问题：为什么有时候使用Ctrl + C可以退出程序，有时候不可以？为什么有些进程可以退出，当管道创建了很多个进程时，使用Ctrl + C 将退出哪个进程？如果时Fork了一个Shell，那使用Ctrl + C 是不是要退出Shell？tmux是怎么实现的？</p>
+<p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
+<p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
+<h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
+<p><strong>信号处理程序：</strong><br><img src="/../../image/Pasted%20image%2020230829192041.png"><br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
+<h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
+<p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 14：C标准库的实现</title>
+    <url>/2023/08/68a724658d83.html</url>
+    <content><![CDATA[<p>操作系统内核对外面提供的API就是Syscall，而当中和用户交互的就是Shell。而在Shell的外面，OS提供了一个框架性程序，帮助开发者实现应用程序（因为没有人愿意在没有库函数的情况下，直接使用汇编、系统调用来制作应用程序）</p>
+<blockquote>
+<p>· 在系统调用之上构建可以普遍使用的标准库：libc</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="14-1-系统调用的封装"><a href="#14-1-系统调用的封装" class="headerlink" title="14.1 系统调用的封装"></a>14.1 系统调用的封装</h2><h3 id="14-1-1-熟悉又陌生的libc"><a href="#14-1-1-熟悉又陌生的libc" class="headerlink" title="14.1.1 熟悉又陌生的libc"></a>14.1.1 熟悉又陌生的libc</h3><p><strong>为什么需要libc</strong><br>虽然不借助任何的库函数也可以写程序，但是在自己写的时候还是要进行封装（一些固定的功能）。<br>裸奔式的编程是不可行的，即使是实现最简单的程序也有很多可以重用的部分。</p>
+<h3 id="14-1-2-libc提供的类型系统"><a href="#14-1-2-libc提供的类型系统" class="headerlink" title="14.1.2 libc提供的类型系统"></a>14.1.2 libc提供的类型系统</h3><p><strong>第一种：类型系统</strong><br>问题：size of int 是多少大小？C语言编译器可以将其实现为八字节，也可以是四字节<br>解释：这种不同字节大小的类型，在进行跨平台交叉编译时，其移植性具有很大的障碍，因为其在不同平台上大小可能不同。<br>方法：libc标准库专门提供对应的标准基本类型</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>在使用的时候，直接使用标注上字节大小的int或bool:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int32_t</span> a;</span><br><span class="line">	<span class="type">uint64_t</span> x;</span><br><span class="line">	<span class="type">intptr_t</span> ptr;<span class="comment">//可以保证，把这个指针cast成一个int之后不会丢失任何的数据</span></span><br><span class="line">	<span class="comment">//intptr_t ptr = (intptr_t)main;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是使用int替代intptr_t时，可能会丢失信息。</p>
+<p>常见、在freestanding下也可以使用的定义：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">stddef.h -&gt; <span class="type">size_t</span></span><br><span class="line">stdint.h -&gt; <span class="type">int32_t</span>,<span class="type">uint64_t</span></span><br><span class="line">stdbool.h -&gt; <span class="type">bool</span>,<span class="literal">true</span>,<span class="literal">false</span></span><br><span class="line"><span class="type">float</span>.h</span><br><span class="line">limits.h</span><br><span class="line">stdarg.h</span><br></pre></td></tr></table></figure>
+<p>系统syscall使用到的stdarg.h；<br>另一个问题：long type<br>long type32位机上是四字节，在其他机器上可能是八字节；</p>
+<h3 id="14-1-3-libc对系统调用的封装"><a href="#14-1-3-libc对系统调用的封装" class="headerlink" title="14.1.3 libc对系统调用的封装"></a>14.1.3 libc对系统调用的封装</h3><p><strong>对execve()系统调用的封装</strong><br>execve()并不好用，平时使用的时候使用麻烦。<br>比如execve()的第一个路径必须为是一个合法的路径，可以是相对路径，但必须是合法的路径：<code>../../../../../../.././bin/echo</code><br>execve如果不给合法的路径，其会直接拒绝用户，但用户想要实现的是找到path当中的echo，而不是找完全准确的那个path。<br>平时写代码可能会用：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">execlp(<span class="string">&quot;echo&quot;</span>,<span class="string">&quot;echo&quot;</span>,<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;OS course&quot;</span>,<span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//打印结果：hello OS course</span></span><br></pre></td></tr></table></figure>
+<p>用静态的方式编译，然后查看其系统调用：<br><img src="/../../image/Pasted%20image%2020230829192141.png"><br>execve会尝试每一个path当中的路径，然后直到成功找到那个程序，然后使用execve进程reset。这当中也介绍了更高情商的API：execlp<br><em>补充：在看手册的时候，手册当中经常会有很大的引用，比如在execve的手册当中，其当中可以看到SEE ALSO，顺着这些引用往下看就可以算是实现了一次文献调研</em><br>libc就是对在系统调用的基础上，面向人类易用性进行的封装。</p>
+<h3 id="14-1-4-libc对string、数组的封装"><a href="#14-1-4-libc对string、数组的封装" class="headerlink" title="14.1.4 libc对string、数组的封装"></a>14.1.4 libc对string、数组的封装</h3><p><strong>main函数中的参数</strong><br>main函数会有三个参数。当中有一个数组：<code>char *argv[]*</code></p>
+<p>memset实现：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memset</span><span class="params">(<span class="type">void</span>* s <span class="type">int</span> c,<span class="type">size_t</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>; i&lt;n ; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		((<span class="type">char</span>*)s)[i] = c;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>memset对于数据竞争的态度：直接不管你，谁最后把数据写进去，内存单元就是哪个进程的，并且标准库只对“标准库内部数据”的线程安全性负责。<br>使用clang对其进行编译后的结果：</p>
+<p><strong>补充：libc实现的复杂性</strong><br>对于libc的实现者而言，因为Libc会被很多人调用，因此其正确性必须得得到验证。并且作为Libc，其必须得跑得快，而且还得兼顾各种的机器，在不同机器上面跑的快不快……<br>在多个线程使用其时，会不会产生数据竞争，是不是还得考虑安全……新的机制来了，当前代码还得支持。</p>
+<p><em>补：现在的C语言 &#x3D; 大号的汇编语言 + 大家还能接受的API的标准</em></p>
+<h3 id="14-1-5-其他的例子"><a href="#14-1-5-其他的例子" class="headerlink" title="14.1.5 其他的例子"></a>14.1.5 其他的例子</h3><p>数学库的实现：过于复杂，比如浮点数的性质，比如在接近0的时候如何保证精度。而OS要对纯粹的计算进行封装。</p>
+<hr>
+<h2 id="14-2-文件描述符与进程封装"><a href="#14-2-文件描述符与进程封装" class="headerlink" title="14.2 文件描述符与进程封装"></a>14.2 文件描述符与进程封装</h2><p>操作系统中存在大量的对象，比如终端、对于Shell来说连接的终端。libc的职责之一，就是对于这些常见对象的封装</p>
+<h3 id="14-2-1-什么是文件描述符"><a href="#14-2-1-什么是文件描述符" class="headerlink" title="14.2.1 什么是文件描述符"></a>14.2.1 什么是文件描述符</h3><p>文件描述符就是一个打开的文件，而Linux当中一切都是文件，因此可以使用文件描述符来打开一切对象。因此Libc必须要对文件描述符进行一定的封装。 </p>
+<p>例：往文件系统里面写文件的一段代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">FILE* fp = fopen(<span class="string">&quot;a.txt&quot;</span>,<span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="built_in">fprintf</span>(fp,<span class="string">&quot;Hello,OS world\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>使用gcc编译：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -g a.c &amp;&amp; ./a.out</span><br></pre></td></tr></table></figure>
+
+<p>这是OS视角下，当前程序的行为。但也可以从用户的视角来看一下，这个代码发生的行为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">p *fp</span><br></pre></td></tr></table></figure>
+<p>对文件描述符的指针解引用，得出的结果（部分）：<br>![[Pasted image 20230307171858.png]]<br>由此可以看到：FILE* 背后就是封装了一个文件描述符。同时一个FILE只能返回一个文件描述符，要么是读口要么是写口。<br>装填了值之后，fp解引用会变成这样：<br>![[Pasted image 20230307172411.png]]<br>可以清晰的看到libc为其设置的不同区域的大小以及对应的内容。</p>
+<p>popen和pclose的设计具有缺陷（或者说相比于现代的语言，不易用）</p>
+<h3 id="14-2-2-其他进程-操作系统功能"><a href="#14-2-2-其他进程-操作系统功能" class="headerlink" title="14.2.2 其他进程&#x2F;操作系统功能"></a>14.2.2 其他进程&#x2F;操作系统功能</h3><p><strong>错误信息处理</strong><br>所有的API都有可能失败，此时Shell可能会发出一个error message，比如“No Such file or directory”。并且不止是这一个错误发出了这个信息，还有很多的其他err message都是这个，是不是背后有一个共通的错误反应的内容？<br>因为这背后都使用了一样的libc当中的错误处理代码，一代一代的传承出来（除非有一个打破者，比如rust出现）</p>
+<p><strong>环境变量</strong><br>可以自己实现env.c这样的命令，借助Linux提供的env.c机制，可以实现非常简单的env环境变量实现。<br>在C语言当中可以使用环境变量：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">char</span>** environ;</span><br></pre></td></tr></table></figure>
+<p>而这些环境变量在执行之前就已经有值，这些值是谁设置的？如何查看这些内容？<br>可以使用gdb调试，从starti开始执行。<br>先编译一下env.c代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc env.c -g -static</span><br></pre></td></tr></table></figure>
+<p>受用gdb使用时，最开始starti时没有值，再往下执行后，可以看到时__libc_start_main()给其赋值<br>gdb断点查看：<br>![[Pasted image 20230308165300.png]]</p>
+<h2 id="14-3-地址空间的封装"><a href="#14-3-地址空间的封装" class="headerlink" title="14.3 地址空间的封装"></a>14.3 地址空间的封装</h2><h3 id="14-3-1-内存分配行为"><a href="#14-3-1-内存分配行为" class="headerlink" title="14.3.1 内存分配行为"></a>14.3.1 内存分配行为</h3><p><strong>简介</strong><br>libc的一个非常重要的功能之一就是内存管理，而这块主要就是malloc和free，任何的应用程序都需要大量的分配内存。</p>
+<p><strong>行为分析</strong><br>在一个大区间中维护互不相交的区间的集合，大区间由mmap来实现，mmap基于当前进程的地址空间，从当中挖去一大块内存。<br>在一个左闭右开的区间，维护一个数据结构，这些被分配的内存互相不相交，在这片内存当中进行malloc和free，可以往一片空区分配内存，或者将已经分配的内存释放掉。因此malloc和free就是区间管理。</p>
+<p><strong>内存分配的效率问题</strong><br>当想要在设计内存管理的时候，使用类似红黑树、B+树类似的算法思路想要去实现算法复杂度的log(n)时，就已经陷入误区。<br>在OS上，在多处理器的方案下，光是想要实现安全性就够困难了。</p>
+<p><strong>任何脱离workflow的性能优化都是耍流氓</strong>，在考虑性能之前，需要先考虑需要什么样的性能。</p>
+<h3 id="14-3-2-内存管理workflow分析"><a href="#14-3-2-内存管理workflow分析" class="headerlink" title="14.3.2 内存管理workflow分析"></a>14.3.2 内存管理workflow分析</h3><p><strong>指导思想</strong><br>内存被分配出来就是为了被使用的，O(n)大小的对象分配至少需要有相对应数量级的读写操作，不然就是性能Bug。<br>必须是在需要对应的对象，需要那么多的内存时才分配那部分内存。</p>
+<p><strong>问题</strong></p>
+<ul>
+<li>越小的对象创建&#x2F;分配越频繁<ul>
+<li>字符串、临时对象等</li>
+<li>生存周期可长可短</li>
+</ul>
+</li>
+<li>较为频繁的分配中等大小的对象<ul>
+<li>较大的数组、复杂的对象</li>
+<li>更长的生命周期</li>
+</ul>
+</li>
+<li>低频率的大对象<ul>
+<li>巨大的容器、分配器</li>
+<li>很长的生存周期</li>
+</ul>
+</li>
+<li>挑战：并行化的分配问题<ul>
+<li>所有的分配都会在处理器上发生，而处理器是并发、相互高度用总线连接的</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-3-3-内存问题的两种方案"><a href="#14-3-3-内存问题的两种方案" class="headerlink" title="14.3.3 内存问题的两种方案"></a>14.3.3 内存问题的两种方案</h3><p>设置两套系统：</p>
+<ul>
+<li>fast path<ul>
+<li>性能好，并行度好，覆盖大部分情况</li>
+<li>可以很快的解决问题，但是有小概率失败</li>
+</ul>
+</li>
+<li>slow path<ul>
+<li>性能没那么好，但是要求把事情做好</li>
+</ul>
+</li>
+<li>人的fast系统和slow系统<ul>
+<li>直觉式的反应系统和推力式的反应系统</li>
+</ul>
+</li>
+</ul>
+<p><strong>Malloc：Fast Path设计</strong><br>简介：使得所有的CPU都可以并行的申请内存<br>实现：想实现更快的分配，因此不能进行上锁，如果此时有两个线程，此时可以以page的方式，在page的基础上维护一个空闲链表，当一个page分配完了，再从全局的page当中分配一个page，往其上一把锁，然后把这个page返回给需要的地方。<br>当快速的在page上分配内存时是fast path，但是当内存不够，分配更多的page时，此时是slow path。通过这种设计实现slow path的访问变少，性能变好。<br>如果不想在page上使用链表维护时，还可以设置最小的分配单元位32b、64b、…4kb，此时有一个64kb的page，在此page上有个Header，除了这个Header之外，在这个Page上就是一堆16b的对象（或者其他格式），可以为每个分配的大小单独分配结构。</p>
+<p><strong>小内存的分段设计</strong><br>基于一个个Segregation上进行分配，每个slab里面的对象大小都一致，每个线程都在本地拥有立即分配完成的权限。</p>
+<p><strong>大内存的大锁设计</strong><br>需要分配大内存时，此时就是使用线段树，将一串区域切分成树，然后变成了一个算法问题。使用一把大锁保证其安全。</p>
+<h2 id="14-4-总结"><a href="#14-4-总结" class="headerlink" title="14.4 总结"></a>14.4 总结</h2><h3 id="14-4-1-相关手册"><a href="#14-4-1-相关手册" class="headerlink" title="14.4.1 相关手册"></a>14.4.1 相关手册</h3><p><strong>Libc手册</strong><br>The GNU C Library</p>
+<p>Libc的实现：Newlib</p>
+<h3 id="14-4-2-从C走向世界"><a href="#14-4-2-从C走向世界" class="headerlink" title="14.4.2 从C走向世界"></a>14.4.2 从C走向世界</h3><p>基于C，可以实现C++的编译器<br>基于C++，可以实现C++标准库<br>基于C++，可以是西安OpenJDK<br>基于C++，可以实现JS，进而实现整个浏览器当中的世界</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>C语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 16：什么是可执行文件</title>
+    <url>/2023/08/92c8110645cf.html</url>
+    <content><![CDATA[<p>目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。</p>
+<ul>
+<li>重新回到可执行文件：可执行文件是什么，其如何在OS上运行；<span id="more"></span></li>
+</ul>
+<h2 id="16-1-可执行文件"><a href="#16-1-可执行文件" class="headerlink" title="16.1 可执行文件"></a>16.1 可执行文件</h2><h3 id="16-1-1-手册的逻辑"><a href="#16-1-1-手册的逻辑" class="headerlink" title="16.1.1 手册的逻辑"></a>16.1.1 手册的逻辑</h3><p><strong>链接</strong><br>关于可执行文件的手册地址：<a href="http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf">http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf</a></p>
+<p><strong>读手册的逻辑</strong><br>如果想要了解某部分知识，需要去观看包含其的对应的手册。但是很多手册（Friendly Manual）都有大量的依赖知识，只有拥有了这些依赖知识才能读懂这个手册。因此不能直接读手册，而是先学习简单的模型，回到7、80年代的概念，然后在学习手册当中最核心的部分，随着积累越来越多在逐渐往外扩展。</p>
+<h3 id="16-1-2-可执行文件：状态机的描述"><a href="#16-1-2-可执行文件：状态机的描述" class="headerlink" title="16.1.2 可执行文件：状态机的描述"></a>16.1.2 可执行文件：状态机的描述</h3><p><strong>简介</strong><br>可执行文件在OS当中是被execve调用的，而execve是把当前进程的状态机进行重置。所以由此可以进行一个推论：<br><strong>可执行文件，是一个状态机的初始状态的描述</strong>（或者说时描述一个状态机被重置之后的状态），并且还描述了状态机之后的数据迁移。<br>[[Lecture 11：操作系统上的进程#11.3 进程与execve()]]</p>
+<p><strong>问题：如果自己要实现一个可执行文件，应该涵盖什么</strong><br>因为可执行文件就是用于描述状态机重置之后的初始状态，那状态机的状态无非就是：</p>
+<ol>
+<li><p>寄存器<br>查看方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info registers</span><br></pre></td></tr></table></figure>
+<p><img src="/../../image/Pasted%20image%2020230829192659.png"><br>这当中有些值是由在状态机的初始状态下直接将其赋为0，比如r8~r15寄存器，其不需要在二进制数据中进行指定；有些是需要指定的，比如rip寄存器的值；还有些是由OS来为其分配的，比如rsp寄存器；</p>
+</li>
+<li><p>内存（地址空间）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors //获得进程号</span><br><span class="line">pmap 390489    //打印地址空间</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>所有这些地址空间中的数据，比如592k的可读可执行，首先会有两个问题：1、其地址在哪里；2、其初始值为多少；这些就是其初始值信息。<br>[[Lecture 12：进程的地址空间]]</p>
+<p><strong>可执行文件的本质</strong><br>可执行文件就是一个数据结构，描述了状态机的 初始状态 + 迁移，然后再思考将什么信息放入到二进制文件里。</p>
+<h3 id="16-1-3-操纵系统上的可执行文件"><a href="#16-1-3-操纵系统上的可执行文件" class="headerlink" title="16.1.3 操纵系统上的可执行文件"></a>16.1.3 操纵系统上的可执行文件</h3><p><strong>文件的可执行权限</strong><br>更改文件权限指令：<br>以下是添加一个可执行权限</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x a.out</span><br></pre></td></tr></table></figure>
+<p>如果将一个可执行文件的可执行权限抹除掉，此时再对其进行执行将产生报错；而如果将一个源代码文件的可执行权限打开，强行将一个源代码文件改为可执行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x a.c</span><br></pre></td></tr></table></figure>
+<p>此时将产生一个Permission denied的报错。</p>
+<p><strong>是谁决定了一个文件能不能执行？</strong><br>执行一个程序时会使用execve系统调用，在使用execve读取可执行文件时，OS才会去检查其可执行权限；<br>![[Pasted image 20230322163623.png]]<br>但是如果将a.out文件的可执行权限抹除掉，此时再使用strace观察进程的系统调用会变成如下情况：<br>![[Pasted image 20230322163934.png]]<br>此时操作系统返回了EACCES，给了一个错误信息；<br>但如果将一个a.c文件，将其权限改为可执行文件，此时再去观测去strace其报错会变成：Exec format error信息，表示OS无法识别此可执行文件。 </p>
+<h3 id="16-1-4-常见的可执行文件"><a href="#16-1-4-常见的可执行文件" class="headerlink" title="16.1.4 常见的可执行文件"></a>16.1.4 常见的可执行文件</h3><p>核心：<strong>可执行文件就是一个操作系统内的普通对象；</strong></p>
+<p><strong>She-bang</strong><br>可以在一个c语言的文件中写入以下内容：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">#感叹号/usr/bin/python3</span><br><span class="line"></span><br><span class="line"><span class="title function_">print</span><span class="params">(<span class="string">&quot;Hello&quot;</span>)</span></span><br></pre></td></tr></table></figure>
+<p>此时这个a.c文件就变得可执行了，并且输出了Hello。</p>
+<p>She-bang机制：可以在代码当中跟一个可执行文件，然后程序会去执行它。<br>当操作系统发现了一个“#！”后，execve会把#！后背的内容填写到execve的第一个参数，把file文件填写到第二个参数；<br>所以She-bang就是一个偷梁换柱的execve。</p>
+<h2 id="16-2-解析可执行文件"><a href="#16-2-解析可执行文件" class="headerlink" title="16.2 解析可执行文件"></a>16.2 解析可执行文件</h2><h3 id="16-2-1-GNU-binutils-工具"><a href="#16-2-1-GNU-binutils-工具" class="headerlink" title="16.2.1 GNU binutils 工具"></a>16.2.1 GNU binutils 工具</h3><p>部分工具：<br>![[Pasted image 20230322190921.png]]<br>这些工具可以用在可执行文件上：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">readelf -h a.out</span><br></pre></td></tr></table></figure>
+
+<p>可执行文件就是描述状态机初始状态的数据结构，而binutils就是解析这个数据结构的工具；比如objdump就是把代码的汇编语言解析出来，其就是对于数据结构的查看、生成、修改的工具。</p>
+<h3 id="16-2-2-可执行文件的运行时状态"><a href="#16-2-2-可执行文件的运行时状态" class="headerlink" title="16.2.2 可执行文件的运行时状态"></a>16.2.2 可执行文件的运行时状态</h3><p>还可以使用调试器来获得可执行文件的运行时状态，info可以帮助debugger获得运行时状态。<br>GDB获得调用栈信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(gdb)bt</span><br></pre></td></tr></table></figure>
+<p>为什么GDB可以打印程序的back trace?GDB如何通过内存里面的信息打印出以上的信息？<br>因为二进制文件当中有一些额外信息，这些额外信息可以帮助你实现<code>addr2line</code>命令；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">addr2line 0x401cfb a.out</span><br></pre></td></tr></table></figure>
+<p>然后会打印目标位置对应的行号：</p>
+<h3 id="16-2-3-调试信息"><a href="#16-2-3-调试信息" class="headerlink" title="16.2.3 调试信息"></a>16.2.3 调试信息</h3><p>在进行GCC编译的时候，如果加上了-S 选项，会加上一些额外的调试信息；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -static source.c -g -S</span><br></pre></td></tr></table></figure>
+<p>使用-g表示生成汇编代码，在这其中生成了很多更多的调试信息；</p>
+<p><strong>DWARF通用调试信息</strong><br>编译器在编译时会生成很多额外的信息（DWARF调试信息），这些调试信息十分通用；其允许你对于任何一段内存定义一个函数f()，然后如果你的程序指针pc指向这里，每一段内存都有一个f()函数，调用这个f()就可以把这些内存当中存储的信息获得出来。</p>
+<p><strong>优化后的调试信息问题</strong><br>但是因为编译器的优化，导致在进行分析调试信息的时候，经常会产生一些错误，即把二进制的状态转换成汇编层面的语义十分具有挑战性。</p>
+<p><strong>程序BackTrace与GCC优化Bug</strong><br>在获得程序的backtrace时，需要获得每个被调用函数的地址。此时如果将函数在栈上通过寄存器的数值保存的rbp的数值来生成一个链表，可以通过访问此链表的方式来获得当前函数的每个地址信息。但是如果使用了gcc的-O2优化，则很多个函数会在优化后被合成一个函数，此时就无法获得其在C语言语言层面上的调用栈信息，进而无法获得其函数调用的backtrace。</p>
+<p><strong>逆向工程</strong><br>如果想获得一个商业软件的可执行文件里面，恢复其尽可能多的信息，就需要进行你想工程。<br>工具：ida<br>书籍：《IDApro权威指南》</p>
+<h2 id="16-3-链接与重定位"><a href="#16-3-链接与重定位" class="headerlink" title="16.3 链接与重定位"></a>16.3 链接与重定位</h2><h3 id="16-3-1-从C代码到二进制文件"><a href="#16-3-1-从C代码到二进制文件" class="headerlink" title="16.3.1 从C代码到二进制文件"></a>16.3.1 从C代码到二进制文件</h3><p>在使用gcc编译链接之后，一个代码当中对于未定义函数的使用，是如何通过链接，访问到其他代码当中的函数的？</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	f();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是main函数，f()未定义</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//这里是f()的实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在使用gcc将main()函数对应的代码变成汇编代码之后，程序的大部分内容都已经被确定，但是还剩下部分callq指令（函数调用）未被确定：<br>![[Pasted image 20230328192912.png]]<br>此时其还不知道此函数的地址，其会生成00来填充；</p>
+<p><strong>汇编且还未链接的程序的设计语义</strong>：main.o就是一个数据结构，在这个数据结构当中包含了所有重要的代码，并且还包含了其<strong>未来需要满足的内容的约束</strong>。而在函数调用时，其就是相对偏移量的约束，S(目标函数位置) + A(-4) - P(P &#x3D; main + 0xb)。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">assert(</span><br><span class="line">	(<span class="type">char</span> *)hello == </span><br><span class="line">	(<span class="type">char</span> *)main + </span><br><span class="line">	<span class="number">0xf</span> +</span><br><span class="line">	*(<span class="type">int32_t</span> *)((<span class="type">uintptr_t</span>)main + <span class="number">0xb</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="16-3-2-重新理解编译、链接过程"><a href="#16-3-2-重新理解编译、链接过程" class="headerlink" title="16.3.2 重新理解编译、链接过程"></a>16.3.2 重新理解编译、链接过程</h3><p><strong>编译器（gcc）</strong></p>
+<ul>
+<li>High-level semantics (C 状态机) → low-level semantics (汇编)</li>
+</ul>
+<p><strong>汇编器 (as)</strong></p>
+<ul>
+<li>Low-level semantics → Binary semantics (状态机容器)<ul>
+<li>“一一对应” 地翻译成二进制代码<ul>
+<li>sections, symbols, debug info</li>
+</ul>
+</li>
+<li>不能决定的要留下 “之后怎么办” 的信息<ul>
+<li>relocations</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>链接器 (ld)</strong></p>
+<ul>
+<li>合并所有容器，得到 “一个完整的状态机”<ul>
+<li>ldscript (<code>-Wl,--verbose</code>); 和 C Runtime Objects (CRT) 链接</li>
+<li>missing&#x2F;duplicate symbol 会出错</li>
+</ul>
+</li>
+</ul>
+<p><strong>图示：</strong><br><img src="/../../image/Pasted%20image%2020230829192839.png"></p>
+<p>而在这些过程当中，ELF只不过是一个描述以上过程的一个“容器数据结构”，包含了完成以上过程所需的必要信息：<br><img src="/../../image/Pasted%20image%2020230829192904.png"><br>正确的理解ELF的方式是：当你自己想要实现一个ELF时，有哪些部分是必不可少的？</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">executable</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> entry; <span class="comment">//代码的进入点地址：代码、数据</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">segment</span> *<span class="title">segments</span>;</span> <span class="comment">//不同的段</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> *<span class="title">relocs</span>;</span><span class="comment">//重定位</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> *<span class="title">symbols</span>;</span> </span><br><span class="line">&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">segment</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> flags, size; <span class="comment">//每个段是可执行可读？还是可执行？可写？</span></span><br><span class="line">	<span class="type">char</span> data[<span class="number">0</span>]; </span><br><span class="line">&#125; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> S, A, P;<span class="comment">//用于计算重定位后的地址</span></span><br><span class="line">	<span class="type">char</span> name[<span class="number">32</span>]; <span class="comment">//重定位地址的名字</span></span><br><span class="line">	&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> &#123;</span> <span class="type">uint32_t</span> off; <span class="type">char</span> name[<span class="number">32</span>]; &#125;;</span><br></pre></td></tr></table></figure>
+<p>然后在这么一个最简单的数据结构当中，会有很多缺陷，围绕这这些缺陷进行更多的设计，最终就形成了现在所看到的繁杂的ELF文件。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>可执行文件</tag>
+        <tag>链接</tag>
+        <tag>汇编</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 15：Fork的应用</title>
+    <url>/2023/08/3d8a9bfbeeea.html</url>
+    <content><![CDATA[<p>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象</p>
+<span id="more"></span>
+<blockquote>
+<p>前言：从这节课开始，会逐渐进入到如何实现OS相关的内容，即往OS的内核来走</p>
+</blockquote>
+<h2 id="15-1-fork-行为的补充解释"><a href="#15-1-fork-行为的补充解释" class="headerlink" title="15.1 fork()行为的补充解释"></a>15.1 fork()行为的补充解释</h2><h3 id="15-1-1-操作系统的状态机"><a href="#15-1-1-操作系统的状态机" class="headerlink" title="15.1.1  操作系统的状态机"></a>15.1.1  操作系统的状态机</h3><p><strong>概念复习</strong><br>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象（行为类似于指针共享）<br>Execve：进程执行了Execve，状态机就会被重置，但是在重置之后，OS当中的对象还在，因此即使状态被重置，这个指向依然存在，比如其打开的文件描述符依然存在。</p>
+<h3 id="15-1-2-文件描述符"><a href="#15-1-2-文件描述符" class="headerlink" title="15.1.2 文件描述符"></a>15.1.2 文件描述符</h3><p><strong>概念</strong><br><strong>文件描述符就是一个指向操作系统内对象的指针</strong>，只能通过OS运行的方式去访问这些对象。但是对于一个文本对象，write一个对象的时候，应该是具有一个文件内的偏移量，进而可以使得两个write写入的内容不是被覆盖，而是都可以被写入。</p>
+<p>文件描述符可以通过Open来得到，比如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">open(<span class="string">&quot;a.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>此时会获得一个文件描述符，并且指向这个 a.txt 对象<br>在使用Open打开文件描述符时，可以使用一个O_APPEND的方式写入。不管文件的数量多少，都会以file offset的方式在文件的末尾进行追加。</p>
+<p><strong>文件描述符的复制</strong><br>代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;a.txt&quot;</span>,O_WROLY | O_CREAT);<span class="comment">//用creat打开，如果不存在就被创造</span></span><br><span class="line">assert(fd &gt; <span class="number">0</span>);</span><br><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line">assert(pid&gt;<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(pid == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;World&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>问题一：文件偏移量的管理<br>以上代码的结果，是Hello被World覆盖掉，还是两者都被输出？即当两个相同状态的进程进行write时，其两者用于相同的文件描述符的前提下，两者是共享偏移量还是其他行为？ </p>
+</li>
+<li><p>问题二：dup复制文件描述符<br><strong>什么是dup</strong><br>假设原本存在一个fd为3的文件描述符，指向了OS中的一个对象。当使用了dup之后，此时会再出现一个文件描述符，其fd为4，同样也指向了此OS中的一个对象。<br>但是如果带有文件偏移量，那此时究竟应该是共享offset，还是独立offset？</p>
+</li>
+</ul>
+<h2 id="15-2-fork的实现"><a href="#15-2-fork的实现" class="headerlink" title="15.2 fork的实现"></a>15.2 fork的实现</h2><h3 id="15-2-1-fork设计的问题"><a href="#15-2-1-fork设计的问题" class="headerlink" title="15.2.1 fork设计的问题"></a>15.2.1 fork设计的问题</h3><p>创建副本这件事情的代价很大，进程可能有很大的地址空间，如果此时对一个非常大的地址空间fork一份，并且在这之后立马就execve，此时就会产生十分大的性能浪费，此时OS会怎么应对这种状况？</p>
+<p><strong>OS中的进程地址空间设计</strong><br>每一个进程会有一个地址空间，并且在地址空间当中会进行分页（MMU），而进程其本身拥有的只是一个映射表。映射表提供了相关的信息，表示不同的内容会映射到分页之后的哪个页面，所以概念上进程拥有这些页面，其实实际上依然是由OS控制着所有这些内容。</p>
+<h3 id="15-2-2-共享只读设计"><a href="#15-2-2-共享只读设计" class="headerlink" title="15.2.2 共享只读设计"></a>15.2.2 共享只读设计</h3><p>当一个进程拥有两个页面时，内容如下：<br><img src="/../../image/Pasted%20image%2020230829192242.png"><br>当指向了一个fork之后，其状态如下;<br><img src="/../../image/Pasted%20image%2020230829192306.png"><br>此时这两个进程都同时指向了一个可写的页面，因此Old进程可以写，New进程也可以写。但是此时OS会偷偷的抹掉这个可写的权限，进而可能发生缺页中断（段错误）。但如果OS发现，这个缺页中断只是被偷偷抹掉的，此时OS会将此页引用计数减1，然后将其拷贝一份到另外的可写权限的空间，从而把读写的权限重新还给NEW进程。<br><img src="/../../image/Pasted%20image%2020230829192322.png"><br><strong>优点：</strong><br>这种设计Copy on Write的设计，当遇到非常大的地址空间中需要映射的内容时，有时可以不需要为其创建新的内容，只有在使用时才产生这种Copy On Write。<br><strong>例子：libc</strong><br>整个OS里面，只有一份libc的副本，OS当中有很多的进程，此时这些不同的进程都是指向同一个libc。</p>
+<p><strong>代码证明Copy On Write</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NPROC 1000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MB 128</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SIZE (MB * (1 &lt;&lt; 20))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> xstr(s) str(s)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> str(s) #s</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">char</span> *data = <span class="built_in">malloc</span>(SIZE); <span class="comment">// 128MB shared memory</span></span><br><span class="line">  <span class="built_in">memset</span>(data, <span class="string">&#x27;_&#x27;</span>, SIZE);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; NPROC - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// NPROC processes go here</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">asm</span> <span class="title function_">volatile</span><span class="params">(<span class="string">&quot;.fill 1048576 * &quot;</span> xstr(MB) <span class="string">&quot;, 1, 0x90&quot;</span>)</span>; <span class="comment">// 128MB shared code</span></span><br><span class="line"></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> idx = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span> fd = open(<span class="string">&quot;/dev/urandom&quot;</span>, O_RDONLY); assert(fd &gt; <span class="number">0</span>);</span><br><span class="line">  read(fd, &amp;idx, <span class="keyword">sizeof</span>(idx));</span><br><span class="line">  close(fd);</span><br><span class="line">  idx %= <span class="number">1048576</span> * MB;</span><br><span class="line"></span><br><span class="line">  data[idx] = <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;pid = %d, write data[%u]\n&quot;</span>, getpid(), idx);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    sleep(<span class="number">1</span>); <span class="comment">// not terminate</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行了这个代码之后，在OS当中有1000个进程在进行，并且上述代码在SO中，每个都要求分配了128MB的内存。但是OS并没有Crash掉，实际只是用了1GB左右的内存。这就是Copy On Write的实现。</p>
+<p><strong>关于进程内存占有量</strong><br>由此推导出一个结论：证明一个进程用的多少的内存就是一个伪命题。如果简单的将一个进程映射的内存之和相加作为其内存大小，mmap可以映射一大片的内存（比如20T内存），但是这些内存是按需使用的，其只是做了一个映射，然后使用时只会用多少分配多少，并且还有很多内存是共享的（Libc）。</p>
+<h2 id="15-3-状态机的复制"><a href="#15-3-状态机的复制" class="headerlink" title="15.3 状态机的复制"></a>15.3 状态机的复制</h2><h3 id="15-3-1-状态机视角"><a href="#15-3-1-状态机视角" class="headerlink" title="15.3.1 状态机视角"></a>15.3.1 状态机视角</h3><p><strong>概念：平行宇宙与fork</strong><br>物理世界上不同的粒子状态，可以定义出不同时间下的状态。如果此时要进行时间穿越，此时行为就是将未来的部分状态带到过去，并且从此状态开始进行分叉，而这个分叉就是fork()。<br>OS运行开发者使用fork()实现平行宇宙。</p>
+<h3 id="15-3-2-fork与并行化"><a href="#15-3-2-fork与并行化" class="headerlink" title="15.3.2 fork与并行化"></a>15.3.2 fork与并行化</h3><p><strong>例子1：码交换搜索问题</strong><br>和不同的部分进行交换，就会进入不同的状态。可以使用状态机的视角，将所有的状态进行探索。<br>![[Lecture 15：Fork的应用 2023-03-16 16.57.00.excalidraw]]</p>
+<p><strong>例子2：基于fork的dfs</strong><br>原本的dfs会使用深度遍历进行探索，然后使用回溯法回到原本的状态，回溯的过程十分耗时。而如果基于fork，使用状态机的视角来进行迁移，则可以只会跳回到初始状态（通过使用exit()来实现）。<br>其启示是：可以使用fork实现dfs；使用fork来进入不同的状态，并且联合OS来帮助进行管理，此时进入新的状态后原本的平行宇宙也可以被消除掉，每探索完一个平行宇宙都将其删除掉。<br>并且，还可以创造多个平行宇宙，并行的得到所有状态，然后程序结束。</p>
+<h3 id="15-3-3-fork与跳过初始化"><a href="#15-3-3-fork与跳过初始化" class="headerlink" title="15.3.3 fork与跳过初始化"></a>15.3.3 fork与跳过初始化</h3><p><strong>问题</strong><br>假设你的NEMU需要启动很多份elf头文件，而如果NEMU进行初始化要花很多的时间（比如花费大量时间来初始化一片128MB的内存），此时如果为每个elf来进行启动就会产生大量消耗，此时可以按照以下行为分析：<br>![[Lecture 15：Fork的应用 2023-03-16 17.29.53.excalidraw]]<br><strong>处理方法</strong><br>此时可以只执行一次nemu_init()的内容，之后只需要每进来一个需要启动的内容，就fork一份，然后找到没有处理的文件，将其进行处理，就可以完成操作。并且因为只进行一次init，因此可以加速程序执行第一个文件的速度。</p>
+<p><strong>跳过初始化的实际应用</strong><br>应用：安卓应用的秒启动</p>
+<ul>
+<li>简介：每一个安卓的程序都会通过以上的跳过初始化的方式进行启动。</li>
+<li>原理：安卓应用是一个Java程序，而Java是运行在JVM虚拟机上面，对于安卓而言是一个Android Runtime（自己实现的虚拟机）。而安卓和Java都会有一个十分大的标准库，如果每一个程序是采取冷启动，即从0开始执行整个Java程序，不可能几秒内完成加载，此时就是使用了跳过初始化的思想，所有的Java程序只进行初始化一次。</li>
+<li>Zygote Process：会有一个所有Android程序的父进程，名称为Zygote Process。其会完成所有必要的安卓程序的必要的类的加载，此时如果开始了一个新的程序，只要在init之后的状态基础之上fork一份即可完成创建。</li>
+<li>一次加载，全员使用<br>应用：Chrome浏览器</li>
+<li>简介：Chrome可以成功的原因之一，就是其速度非常的快。</li>
+<li>原理：Chrome当中，每一个网页就是一个进程，使用跳过初始化的思想来进行网页的快速加载</li>
+</ul>
+<p><strong>核心：只要是从一个状态出发，需要很多个副本的，都可以使用fork。</strong></p>
+<h3 id="15-3-4-fork与备份"><a href="#15-3-4-fork与备份" class="headerlink" title="15.3.4 fork与备份"></a>15.3.4 fork与备份</h3><p><strong>简介：</strong><br>要是我们可以对有Bug的程序总是能在任何状态“试一试”，然后试错了还能回到过去，就好了。<br><strong>概念：</strong><br>当过去某个节点发生了一个Bug，我们能否回到过去，在产生一次这个Bug?特别是出现并发Bug，此类Bug或许十分难以重现，拥有此存档机制就可以去复现过去状态下的Bug。<br>在任何状态下，可以使用fork()开启另一条平行宇宙，然后在此基础上进行存档。然后如果顺着正常的路径进行执行，但是之后在这主分支之上发生了Crash，此时就可以拿回之前的存档，从之前的存档开始。<br><img src="/../../image/Pasted%20image%2020230829192347.png"><br>然后拿回了之前的存档后，从此存档开始执行，并且需要更改一些环境。很多Bug都是由于环境导致的（比如许多的并发Bug）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.27.15.excalidraw]]<br>这就是可以进行容错的机制。如果有轻量级的快照，就可以使用平行宇宙来复查一些Bug。甚至如果是想要还原并发这种Bug，甚至不需要复杂的Fork的快照，只需要有一个Setjmp寄存器的快照。</p>
+<h2 id="15-4-对于Fork的讨论"><a href="#15-4-对于Fork的讨论" class="headerlink" title="15.4 对于Fork的讨论"></a>15.4 对于Fork的讨论</h2><h3 id="15-4-1-A-Fork-in-the-road"><a href="#15-4-1-A-Fork-in-the-road" class="headerlink" title="15.4.1 A Fork() in the road"></a>15.4.1 A Fork() in the road</h3><p><strong>简介：</strong><br>对于Unix Fork的批评。<br><strong>概述：</strong><br>fork使用的最舒服的时候，就是在一个简单的管道模型当中。但是随着OS发展，进程不止是有地址空间和文件描述符，但是之后进程会有信号（fork之后，发信号是两个都发，还是只发一个？），线程，进程间通信对象，ptrace等等。<br>fork的开发者对于这些问题进行了修复，但是结果就是导致现在的fork十分的复杂。比如出现线程之后。</p>
+<p><strong>这些都是由进程拥有了一些更加复杂的对象所引发出的问题。</strong></p>
+<h3 id="15-4-2-线程对于Fork的影响"><a href="#15-4-2-线程对于Fork的影响" class="headerlink" title="15.4.2 线程对于Fork的影响"></a>15.4.2 线程对于Fork的影响</h3><p><strong>线程概述</strong><br>在一个进程当中，会有一片地址空间，两个不同的线程共享这些地址空间，所有的页面都是共享的（因为页面是由OS持有的）。<br><img src="/../../image/Pasted%20image%2020230829192415.png"><br><strong>问题</strong><br>此时如果fork了一份这个进程，这当中的这些线程会怎么样？</p>
+<p><strong>分析</strong><br>首先，肯定是进程当中的某一个线程执行了fork，在执行了fork之后，是对应进程复制，另一个进程消失，还是两者都被复制？<br>正确答案是 只复制执行了fork的进程。<br><img src="/../../image/Pasted%20image%2020230829192444.png"></p>
+<h3 id="15-4-3-更安全的创建一个进程"><a href="#15-4-3-更安全的创建一个进程" class="headerlink" title="15.4.3 更安全的创建一个进程"></a>15.4.3 更安全的创建一个进程</h3><p><strong>创建进程：POSIX Spawn</strong><br>代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">posix_spawn</span></span><br><span class="line"><span class="params">(</span></span><br><span class="line"><span class="params"><span class="type">pid_t</span> *pid,</span></span><br><span class="line"><span class="params"><span class="type">char</span> *path,</span></span><br><span class="line"><span class="params"><span class="type">posix_spawnattr_t</span> *attrp,</span></span><br><span class="line"><span class="params"><span class="type">char</span>* argv[],</span></span><br><span class="line"><span class="params"><span class="type">char</span>* envp[]</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+<p>其是一个在fork发明出来之后的API，比fork更加的简单。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>Fork</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 17：动态链接与加载</title>
+    <url>/2023/08/7c3f50531736.html</url>
+    <content><![CDATA[<blockquote>
+<p>前言：可执行文件就是一个描述状态机初始状态的数据结构；<br>问题：<br>    1、可执行文件如何被OS加载？<br>    2、什么是动态链接&#x2F;动态加载？</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="17-1-静态ELF文件加载器"><a href="#17-1-静态ELF文件加载器" class="headerlink" title="17.1 静态ELF文件加载器"></a>17.1 静态ELF文件加载器</h2><h3 id="17-1-1-ELF文件"><a href="#17-1-1-ELF文件" class="headerlink" title="17.1.1 ELF文件"></a>17.1.1 ELF文件</h3><p><strong>ELF文件定义</strong><br>在OS下面的“&#x2F;usr&#x2F;include&#x2F;elf.h”文件中，可以看到ELF文件定义描述；<br><img src="/../../image/Pasted%20image%2020230829193028.png"><br><strong>获得程序的ELF</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">readelf a.out</span><br></pre></td></tr></table></figure>
+<p>使用此指令来获得可执行文件的elf文件信息，并将其翻译出来；<br>ELF文件描述了一个数据结构，这个数据结构描述了进程在execve之后被Loader使用时如何加载；</p>
+<h3 id="17-1-2-ELF加载器"><a href="#17-1-2-ELF加载器" class="headerlink" title="17.1.2 ELF加载器"></a>17.1.2 ELF加载器</h3><p>Loader所作行为：解析数据结构 + 复制信息到内存 + 跳转<br><strong>Loader需加载内容</strong></p>
+<ul>
+<li>1、ELF文件里面的信息</li>
+<li>2、设置一些运行时状态<ul>
+<li>argv</li>
+<li>envp<br>以上两部分内容共同构成进程的初始状态；</li>
+</ul>
+</li>
+</ul>
+<p><strong>Loader实现了解</strong><br>Loader只是个程序，其通过动态链接的方式编译；<br>在编译之后，可以往Loader传入一个参数：比如某个程序，此时Loader会开始将ELF文件搬到指定的位置上，并且可以是使用此Loader加载其他程序。<br>在Loader当中，使用mmap + ELF信息映射到内存当中； Loader解析ELF数据结构，然后把对应内容放到内存；<br>当所有的内容都使用mmap搬进内存之后，可以使用pmap观看其地址空间：<br>可以看到其地址空间当中有两份程序，一份是loader的内存，一份是minimal的内容；即当前ELF所有具体的内容都被加载；</p>
+<h3 id="17-1-3-进程初始状态设置"><a href="#17-1-3-进程初始状态设置" class="headerlink" title="17.1.3 进程初始状态设置"></a>17.1.3 进程初始状态设置</h3><p>完成对于进程的栈以及其他空间的初始化设置；<br>实例化进程Stack：<br><img src="/../../image/Pasted%20image%2020230829193055.png"><br>比如：当中指明了rsp寄存器指向Argument Count，并且8 + rsp执行后续的参数；<br>有了这个手册之后，之后的行为就是把这些内容实现成代码。</p>
+<p><strong>初始化代码实现</strong></p>
+<ol>
+<li>先静态分配一片空间，将此空间设置为栈空间；<ol>
+<li>![[Pasted image 20230329190038.png]]</li>
+</ol>
+</li>
+<li>定义对应的push指令，可以将内容push到栈中；</li>
+<li>对照着实例化进程文档，将内容push到栈上；<ol>
+<li>![[Pasted image 20230329190137.png]]</li>
+<li>argc、argv以及环境变量等，依次压入栈中；</li>
+</ol>
+</li>
+<li>最后执行跳转<ol>
+<li>![[Pasted image 20230329190308.png]]</li>
+<li>将程序的入口地址给到指针，将rdx和rsp清零；</li>
+</ol>
+</li>
+</ol>
+<p><strong>OS、Loader与execve之间关系</strong><br>以上实现的第一个Loader是在OS上实现的，基于操作系统中的open、mmap、close，使用这些系统调用实现了一个execve，因此execve在某种程度上不是必须的，Linux可以基于ld静态链接，加上mmap、open等系统调用，就完成程序的加载。<br>由此可知：相当一部分系统调用可以实现成用户态的；</p>
+<h3 id="17-1-4-Boot-Block-Loader"><a href="#17-1-4-Boot-Block-Loader" class="headerlink" title="17.1.4 Boot Block Loader"></a>17.1.4 Boot Block Loader</h3><p><strong>什么是Boot Block Loader</strong><br>由固件实现的Boot Block Loader，将OS通过固件，一点一点加载到磁盘上、内存里。并且除了这512字节的最开始的block，在这之后还有1024字节的main args，在这之后是OS的Kernel内核文件。</p>
+<p><strong>加载OS内核</strong><br>哪怕ELF文件只有512字节的二进制文件，也可以为其写一个Loader；</p>
+<ul>
+<li>![[Pasted image 20230329191754.png]]<br>把Main函数的参数加载进来，并在之后把elf32复制，创建状态机的状态；<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">load_kernel</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  Elf32_Ehdr *elf32 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  Elf64_Ehdr *elf64 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  <span class="type">int</span> is_ap = boot_record()-&gt;is_ap;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!is_ap) &#123;</span><br><span class="line">    <span class="comment">// load argument (string) to memory</span></span><br><span class="line">    copy_from_disk((<span class="type">void</span> *)MAINARG_ADDR, <span class="number">1024</span>, <span class="number">-1024</span>);</span><br><span class="line">    <span class="comment">// load elf header to memory</span></span><br><span class="line">    copy_from_disk(elf32, <span class="number">4096</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) &#123;</span><br><span class="line">      load_elf64(elf64);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      load_elf32(elf32);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// everything should be loaded</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf64-&gt;e_entry)();<span class="comment">//设置程序进入点</span></span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf32-&gt;e_entry)();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="17-2-Linux内核加载器"><a href="#17-2-Linux内核加载器" class="headerlink" title="17.2 Linux内核加载器"></a>17.2 Linux内核加载器</h2><p>使用make进行编译，然后即可以对其进行调试；之后可以使用GDB，和调试其他的可执行程序一样来调试这个Linux代码，只要将BreakPoint放在代码的EntryPoint上即可。<br>之后如果想进行进一步的调试，就得开始使用一些更加现代的工具以及IDE，比如VSCode来把Linux内核放入到VSCode当中；<br>可以将Linux生成的哪些链接信息给到VSCode，这样就可以在编辑界面当中来动态的获得一个内容的链接内容；</p>
+<h2 id="17-3-动态链接与加载"><a href="#17-3-动态链接与加载" class="headerlink" title="17.3 动态链接与加载"></a>17.3 动态链接与加载</h2><h3 id="17-3-1-为什么需要动态链接"><a href="#17-3-1-为什么需要动态链接" class="headerlink" title="17.3.1 为什么需要动态链接"></a>17.3.1 为什么需要动态链接</h3><p><strong>静态链接问题</strong></p>
+<ul>
+<li>随着项目越来越大，库函数越来越大，文件系统会越来越膨胀，需要占有大量的磁盘空间；即不希望每个库函数都在可执行文件里面进行库函数的拷贝；</li>
+<li>同时，大型项目有把应用程序拆开的需求；</li>
+</ul>
+<p><strong>动态链接</strong><br>只要库函数遵循一定的标准，那么就可以把这个库在运行动态的链接；编译一部分，不用重新链接；</p>
+<p><strong>工业界实际的ELF问题</strong><br>ELF是一个数据结构，这个数据结构当中有专门的符号表，将一些概念上紧密相关的东西在数据结构中通过符号表（为了提升性能）强行拆散；</p>
+<h3 id="17-3-2-自顶向下设计的动态链接实现"><a href="#17-3-2-自顶向下设计的动态链接实现" class="headerlink" title="17.3.2 自顶向下设计的动态链接实现"></a>17.3.2 自顶向下设计的动态链接实现</h3><p><strong>基本假设</strong><br>假设所有的加载器、编译器、链接器都完全收你控制，此时生成一个最小的用于动态链接的数据结构，然后再在此基础上针对ELF进行优化；</p>
+<p><strong>最小的ELF</strong><br>当想要实现自己的库函数，当中有一个putchar的符号需要被动态加载，如何进行设计？<br>简化之后，动态链接最基本的行为：</p>
+<ul>
+<li>LOAD（“libc.dl”）&#x2F;&#x2F;加载动态库</li>
+<li>IMPORT（putchar）&#x2F;&#x2F;加载外部符号</li>
+<li>EXPORT（hello）&#x2F;&#x2F;为动态库导出符号</li>
+<li>在代码中引用一个外部库的符号</li>
+</ul>
+<h4 id="17-3-2-1-最小加载器实现"><a href="#17-3-2-1-最小加载器实现" class="headerlink" title="17.3.2.1 最小加载器实现"></a>17.3.2.1 最小加载器实现</h4><p>JYY实现的最小动态链接加载器；<br>![[Pasted image 20230330174916.png]]<br>自己实现的最简单的二进制文件格式：<br>![[Pasted image 20230330175114.png]]</p>
+<h4 id="17-3-3-2-动态链接Header定义"><a href="#17-3-3-2-动态链接Header定义" class="headerlink" title="17.3.3.2 动态链接Header定义"></a>17.3.3.2 动态链接Header定义</h4><p>使用此Header定义此二进制可执行文件的格式；<br>最简单的二进制动态链接文件：就是由一个头文件和一个符号表构成的；</p>
+<p><strong>dl_Header代码：</strong><br>![[Pasted image 20230414182843.png]]<br><strong>dl_Header图示：</strong><br>![[Lecture 17：动态链接与加载 2023-04-14 18.22.19.excalidraw]]</p>
+<p><strong>定义的四个宏</strong><br>![[Pasted image 20230414182950.png]]<br>第一个：IMPORT</p>
+<ol>
+<li>在Imoort当中使用DSYM函数</li>
+<li>在DSYM函数中当中传入sym（比如说是putchar，目标链接函数名称）</li>
+<li>当前sym当中传入间接寻址的地址rip，然后putchar指向symbol当中的offset。<br>第二个：EXPORT<br>向当中传入一个外部符号的调用，为了导出这个符号，在offset当中保存这个符号的相对于符号头部的偏移量；</li>
+</ol>
+<p><strong>程序预编译之后</strong><br>![[Pasted image 20230414184042.png]]<br>每一个symbol都被对齐到32字节，offset开始时为0，此时加载器发现了这个符号的offset的值为零，此时就会开始间接调转，查询符号表，将地址填入到这当中。</p>
+<p>符号链接：当你想要跳转到一个你所不知道的地址上时，就现找一块数据（offset）填上零，然后做一个间接跳转，在加载器进行加载的时候，查符号表，将地址填进去；</p>
+<p><strong>二进制视角文件</strong><br>![[Pasted image 20230414185023.png]]<br>第20行，前面八位的全零部分标志，以及libc.dl表示的需要链接的程序；<br>包括90，a0部分的全零内容，对应的多个struct symbol之后的全零字段；<br>然后c0,d0之后就是代码的部分；</p>
+<h3 id="17-3-3-对动态链接定义的加载"><a href="#17-3-3-对动态链接定义的加载" class="headerlink" title="17.3.3 对动态链接定义的加载"></a>17.3.3 对动态链接定义的加载</h3><p><strong>对dl的加载代码：</strong><br>![[Pasted image 20230414185311.png]]<br>就是扫描符号表，将dl二进制文件中对应的符号找到其需要的地址；碰到LOAD就打印其名称，碰到EXTERN就打印其对应内容；</p>
+<p><strong>objump实现</strong><br>![[Pasted image 20230414185450.png]]<br>两个For循环内的内容：</p>
+<ul>
+<li>第一层for循环：遍历符号表</li>
+<li>第二层：遍历代码的每一个字节<ul>
+<li>当代码的某一个字节刚好对应某一个符号的时候，执行一个反汇编，使用ndisasm反汇编器将代码输出出来；</li>
+</ul>
+</li>
+</ul>
+<p><strong>加载器主要部分：dlopen</strong><br>![[Pasted image 20230414190056.png]]<br>首先获得dl的hdr头文件，然后把path文件打开，解析文件头；<br>通过解析文件头知道了文件有多大后，使用mmap将其需要的内容直接映射到内存当中；<br>如果内存映射成功，在for循环内遍历符号表，如果符号表当中是+号则进行递归加载，如果是问号，则直接赋值offset内容；</p>
+<h3 id="17-3-4-自己设计DL文件中的缺陷"><a href="#17-3-4-自己设计DL文件中的缺陷" class="headerlink" title="17.3.4 自己设计DL文件中的缺陷"></a>17.3.4 自己设计DL文件中的缺陷</h3><p><strong>代码分段</strong><br>自己编写的代码只能可读可写可执行，想要不同部分不同类型，就需要进行分段；<br><strong>指定加载器</strong><br>需要指定一个加载器</p>
+<p>写一个编译器的时候，在编译器的视角里面，C代码当中出现的函数，不知道其是静态链接的还是动态链接；不知道是用call还是call DASM，而且不知道外部符号在哪里；并且call是不需要间接跳转的；<br>当链接时发现是一个动态链接符号的话，就需要靠plt去找内容，因此就发明了GOT和PLT；</p>
+<p>全局偏移表：<br>![[Pasted image 20230414191207.png]]<br>在ELF文件之下：<br>![[Pasted image 20230414191222.png]]<br>所有的间接跳转，全部都在PLT里面；</p>
+<p><strong>GOT</strong><br>我们的符号表就是GOT（Global Offset Table）</p>
+<p><strong>对于静态、动态链接的统一</strong><br>无论静态动态，都统一使静态链接先；<br>然后增加一层间接层：Procedure Linkage Table（PLT），将所有未被解析的符号都统一翻译成call。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">putchar</span> PLT:</span><br><span class="line">	call DSYM（<span class="built_in">putchar</span>）</span><br><span class="line">main:</span><br><span class="line">	call <span class="built_in">putchar</span> PLT</span><br></pre></td></tr></table></figure>
+
+<p>作业：读实例代码；</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>链接</tag>
+        <tag>ELF</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 28：持久数据的可靠性</title>
+    <url>/2023/08/2a905fcc408b.html</url>
+    <content><![CDATA[<ul>
+<li>前言：文件系统和OS的耦合度<ul>
+<li>相比于进程以及虚拟化部分，文件系统和OS的耦合程度相对较低；</li>
+<li>从 1-bit 数据 -&gt; 设备 -&gt; 驱动 -&gt; Block IO（Bread&#x2F;Bwrite） -&gt; Block Array 在块的数组上构建文件系统 -&gt; 目录结构</li>
+<li>这当中已经经过了很多层的抽象，对于底层的实现细节抽象程度高；</li>
+</ul>
+</li>
+<li>文件系统算法与持久化<ul>
+<li>文件系统算法的基本假设是：内存可靠，以及接受断电数据丢失（这部分内容是文件系统的数据结构实现的假设）</li>
+<li>但：磁盘上的数据是不接受丢失的。如何保证持久数据的可靠性；<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="28-1-RAID"><a href="#28-1-RAID" class="headerlink" title="28.1 RAID"></a>28.1 RAID</h2><p>RAID：Redundant Array of lnexpensiveDisks；</p>
+<h3 id="28-1-1-存储需求"><a href="#28-1-1-存储需求" class="headerlink" title="28.1.1 存储需求"></a>28.1.1 存储需求</h3><p><strong>持久存储的需求：性能</strong><br>因为有超大容量的计算中心，才能实现现在互联网上大量的数据。只要CPU处理的过来，就尽可能多的放硬盘；<br>因此在计算中心当中，有专门用于存储数据的服务器，这当中有上百块磁盘：<br><img src="/../../image/Pasted%20image%2020230829204003.png"></p>
+<p><strong>持久存储的需求：可靠性</strong></p>
+<ul>
+<li>基本前提<ul>
+<li>任何物理存储的介质都有失效的可能性；</li>
+<li>小概率事件：硬盘损坏（但 大量重复 &#x3D; 必然发生）</li>
+</ul>
+</li>
+</ul>
+<p><strong>两方面的需求：性能与可靠性</strong><br>当性能高时，大量的设备就会增加出错的可能性，进而减少可靠性；但依然需要可靠性，才能保证系统正常使用；</p>
+<ul>
+<li>解决方法：RAID<ul>
+<li>存储设备的虚拟化</li>
+<li>图灵奖论文：<a href="https://dl.acm.org/doi/10.1145/971701.50214">https://dl.acm.org/doi/10.1145/971701.50214</a></li>
+<li>内容：证明了可靠性和性能可以兼得；</li>
+</ul>
+</li>
+</ul>
+<h3 id="28-1-2-RAID：存储设备的虚拟化"><a href="#28-1-2-RAID：存储设备的虚拟化" class="headerlink" title="28.1.2 RAID：存储设备的虚拟化"></a>28.1.2 RAID：存储设备的虚拟化</h3><p><strong>RAID内容</strong><br>对于磁盘内容反向的虚拟化；</p>
+<ul>
+<li>内容简介：<ul>
+<li>不同的虚拟化<ul>
+<li>进程：把一个CPU分时虚拟成多个虚拟CPU</li>
+<li>虚存：把一份内存通过MMU虚拟成多个地址空间；</li>
+<li>文件：把一个存储设备虚拟成多个虚拟磁盘；</li>
+</ul>
+</li>
+<li>可以有很多个磁盘，每一个都不太可靠。可以把这些磁盘的整体当成是一个虚拟的磁盘。当有一个磁盘消失时，虚拟磁盘不会收到任何的影响；</li>
+</ul>
+</li>
+</ul>
+<p><strong>RAID基本假设</strong></p>
+<ul>
+<li>假设一：磁盘可能在某个时候就突然彻底无法访问；<ul>
+<li>机械故障；</li>
+<li>芯片故障；</li>
+</ul>
+</li>
+<li>假设二：有很多个磁盘；</li>
+</ul>
+<h3 id="28-1-3-RAID实现：最简单的版本"><a href="#28-1-3-RAID实现：最简单的版本" class="headerlink" title="28.1.3 RAID实现：最简单的版本"></a>28.1.3 RAID实现：最简单的版本</h3><p>假设现在有v1和v2两个虚拟磁盘，然后还有A和B两个物理磁盘；<br>当需要保证可靠性时，只需要让v1的数据和v2的数据各自在AB上存储一份：<br><img src="/../../image/Pasted%20image%2020230829212321.png"><br>因此，任何一块盘丢了之后都不会对系统产生致命影响，大幅提高了可靠性；<br>并且，当需要对磁盘进行读写时，速度可以更快，因为可以A和B一起读，各自读一半的数据，因此速度提高了一倍：<br><em>不过写入的速度还是50%</em><br><img src="/../../image/Pasted%20image%2020230829212645.png"></p>
+<h3 id="28-1-4-RAID实现：设计空间"><a href="#28-1-4-RAID实现：设计空间" class="headerlink" title="28.1.4 RAID实现：设计空间"></a>28.1.4 RAID实现：设计空间</h3><ul>
+<li><p>例子：把两个1t的物理磁盘（AB）虚拟化成一个2t的虚拟磁盘；</p>
+<ul>
+<li>此时如果相对盘进行读写时，比如读V1和V2，此时速度并没有翻倍。</li>
+<li>因为B1、B2在看戏；<br><img src="/../../image/Pasted%20image%2020230829213035.png"></li>
+</ul>
+</li>
+<li><p>设计目的：同时利用带宽</p>
+<ul>
+<li>将内容随机映射，使得AB都有空间；</li>
+<li>此时如果读V3V4，此时在虚拟磁盘上还是连续的，并且可以同时读写；<br><img src="/../../image/Pasted%20image%2020230829213258.png"></li>
+</ul>
+</li>
+</ul>
+<p><strong>设计空间</strong><br>此时对于文件而言，就是以下过程</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">f(i)： 如何把Vi映射到f(i)块上，即设计空间</span><br></pre></td></tr></table></figure>
+<p><img src="/../../image/Pasted%20image%2020230829213624.png"></p>
+<p><strong>RAID-10</strong><br>假设有4块盘，此时可以先用两块组成RAID1，在用两外两块组成RAID2；最终一起组成RAID0；<br>一起对应成4块物理磁盘ABCD；<br><img src="/../../image/Pasted%20image%2020230829214052.png"><br>此时V1234分别放在了ABCD上，并且用于很高的带宽及其稳定度。其可以容忍任何一块磁盘出现事故；并且可以并行的方式进行读写；<br>并且：假设A和C都坏了，V1234都还正常存储；</p>
+<ul>
+<li>RAID-10：有时能容忍两块盘坏，有时候却不能。如果我们有很多块盘，能否减少浪费?</li>
+</ul>
+<h3 id="28-1-5-RAID实现：奇偶校验和"><a href="#28-1-5-RAID实现：奇偶校验和" class="headerlink" title="28.1.5 RAID实现：奇偶校验和"></a>28.1.5 RAID实现：奇偶校验和</h3><p>当前如果有4块盘，可以有3块专门用于存放数据，还有一块专门用于存放奇偶校验；<br>把ABC当作是RAID0，并且V234依然是连续的；<br>磁盘D专门用于存储校验和。<br><img src="/../../image/Pasted%20image%2020230829214910.png"></p>
+<p>当有100块盘时，可以用99块来存储数据，1块来存储奇偶校验和。</p>
+<ul>
+<li>问题<ul>
+<li>这种方法读取速度很快，连续写入很快；</li>
+<li>但是随机写入的速度十分的满；</li>
+<li>随机写的性能成为了性能的瓶颈；</li>
+</ul>
+</li>
+</ul>
+<h3 id="28-1-6-RAID实现：每块盘都是奇偶盘"><a href="#28-1-6-RAID实现：每块盘都是奇偶盘" class="headerlink" title="28.1.6 RAID实现：每块盘都是奇偶盘"></a>28.1.6 RAID实现：每块盘都是奇偶盘</h3><p>可以在每一盘上面都放上奇偶盘；每一块盘都可以作为奇偶盘。<br><img src="/../../image/Pasted%20image%2020230829215520.png"></p>
+<p><strong>性能分析：盘越多，速度越快</strong><br>RAID把很多不可靠的磁盘，变成了又快有可靠的磁盘；<br><img src="/../../image/Pasted%20image%2020230829215605.png"></p>
+<p><strong>But：谷歌把所有不可靠的计算机，变得分布式的可靠</strong><br>因此云计算革掉了大型机计算的命。计算机进入大数据时代。</p>
+<h2 id="28-2-崩溃一致性与崩溃恢复"><a href="#28-2-崩溃一致性与崩溃恢复" class="headerlink" title="28.2 崩溃一致性与崩溃恢复"></a>28.2 崩溃一致性与崩溃恢复</h2><p>在有了RAID之后，可以保证数据的存储的可靠性；但是对于一致性的实现还需要这部分内容；</p>
+<ul>
+<li><strong>即使磁盘现在是可靠的，但软件依然可能不可靠</strong><ul>
+<li>比如OS突然蓝屏了，电脑Crash；</li>
+<li>系统随时可能会发生断电；</li>
+<li>但：文件系统是OS上的一个数据结构</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>文件系统</tag>
       </tags>
   </entry>
 </search>

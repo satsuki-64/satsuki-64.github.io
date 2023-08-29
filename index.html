@@ -152,18 +152,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -191,6 +191,372 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/2a905fcc408b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/2a905fcc408b.html" class="post-title-link" itemprop="url">Lecture 28：持久数据的可靠性</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-29 20:30:08 / 修改时间：22:02:31" itemprop="dateCreated datePublished" datetime="2023-08-29T20:30:08+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li>前言：文件系统和OS的耦合度<ul>
+<li>相比于进程以及虚拟化部分，文件系统和OS的耦合程度相对较低；</li>
+<li>从 1-bit 数据 -&gt; 设备 -&gt; 驱动 -&gt; Block IO（Bread&#x2F;Bwrite） -&gt; Block Array 在块的数组上构建文件系统 -&gt; 目录结构</li>
+<li>这当中已经经过了很多层的抽象，对于底层的实现细节抽象程度高；</li>
+</ul>
+</li>
+<li>文件系统算法与持久化<ul>
+<li>文件系统算法的基本假设是：内存可靠，以及接受断电数据丢失（这部分内容是文件系统的数据结构实现的假设）</li>
+<li>但：磁盘上的数据是不接受丢失的。如何保证持久数据的可靠性；
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/2a905fcc408b.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/7c3f50531736.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/7c3f50531736.html" class="post-title-link" itemprop="url">Lecture 17：动态链接与加载</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-29 19:29:28 / 修改时间：19:30:57" itemprop="dateCreated datePublished" datetime="2023-08-29T19:29:28+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>前言：可执行文件就是一个描述状态机初始状态的数据结构；<br>问题：<br>    1、可执行文件如何被OS加载？<br>    2、什么是动态链接&#x2F;动态加载？</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/7c3f50531736.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/92c8110645cf.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/92c8110645cf.html" class="post-title-link" itemprop="url">Lecture 16：什么是可执行文件</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-29 19:25:17 / 修改时间：19:29:10" itemprop="dateCreated datePublished" datetime="2023-08-29T19:25:17+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。</p>
+<ul>
+<li>重新回到可执行文件：可执行文件是什么，其如何在OS上运行；
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/92c8110645cf.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/62011fb26306.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/62011fb26306.html" class="post-title-link" itemprop="url">AI时代个人生存指南</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-29 12:49:30 / 修改时间：16:31:22" itemprop="dateCreated datePublished" datetime="2023-08-29T12:49:30+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li><ol>
+<li>ChatGPT使用基础</li>
+</ol>
+<ul>
+<li>1.1 ChatGPT的使用之道</li>
+<li>1.2 ChatGPT的使用之术</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/62011fb26306.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -230,7 +596,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-08-29 10:01:37 / 修改时间：10:56:37" itemprop="dateCreated datePublished" datetime="2023-08-29T10:01:37+08:00">2023-08-29</time>
+      <time title="创建时间：2023-08-29 10:01:37 / 修改时间：12:42:41" itemprop="dateCreated datePublished" datetime="2023-08-29T10:01:37+08:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -252,170 +618,44 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <span id="more"></span>
-<h1 id="1-垃圾回收的基本假设"><a href="#1-垃圾回收的基本假设" class="headerlink" title="1.垃圾回收的基本假设"></a>1.垃圾回收的基本假设</h1><p>由于CLR的GC是基于代的垃圾回收器算法，因此其对代码做出了以下几点假设：</p>
-<ul>
+          <ul>
 <li><ol>
-<li>对象越新，生存期越短；</li>
+<li>垃圾回收的基本假设</li>
 </ol>
 </li>
 <li><ol start="2">
-<li>对象越老，生存期越长；</li>
+<li>垃圾回收算法</li>
 </ol>
+<ul>
+<li>2.1 初始化堆与第0代对象</li>
+<li>2.2 从第0代对象到第1代对象</li>
+<li>2.3 从第1代对象到第2代对象</li>
+</ul>
 </li>
 <li><ol start="3">
-<li>回收堆的一部分，速度快于回收整个堆；<br>以上假设对于大部分的现代应用程序都成立，其影响了下面GC算法的实现。</li>
+<li>垃圾回收触发条件</li>
+</ol>
+<ul>
+<li>3.1 监视垃圾回收内存使用</li>
+</ul>
+</li>
+<li><ol start="4">
+<li>大对象</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>垃圾回收模式</li>
 </ol>
 </li>
 </ul>
-<h1 id="2-垃圾回收算法"><a href="#2-垃圾回收算法" class="headerlink" title="2.垃圾回收算法"></a>2.垃圾回收算法</h1><h2 id="2-1-初始化堆与第0代对象"><a href="#2-1-初始化堆与第0代对象" class="headerlink" title="2.1 初始化堆与第0代对象"></a>2.1 初始化堆与第0代对象</h2><p><strong>实现过程</strong></p>
-<ul>
-<li>预算容量<ul>
-<li>CLR初始化时，为第0代对象选择一个预算容量。</li>
-</ul>
-</li>
-<li>启动垃圾回收<ul>
-<li>如果分配一个新对象造成第0代超过预算，就必须立马就启动一次垃圾回收。</li>
-<li>假设此时初始化时分配的对象刚好用完第0代的空间，那么分配下一个对象就必须启动垃圾回收。</li>
-</ul>
-</li>
-<li>压缩对象<ul>
-<li>垃圾回收器判断对象C和E是垃圾，所以会压缩对象D，使之与对象B相邻。</li>
-</ul>
-</li>
-<li>进入第1代<ul>
-<li>在垃圾回收中存活的对象A，B和D现在成为第1代对象。第1代对象已经经历了垃圾回收器的一次检查；</li>
-<li>此时第0代不包含任何对象，当下一次再分配内存时，新对象会被继续分配到第0代之中；</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>初始化堆：<br><img src="/../../image/Pasted%20image%2020230829101037.png"></p>
-<p>启动垃圾回收+压缩对象+进入第1代：<br><img src="/../../image/Pasted%20image%2020230829101102.png"></p>
-<h2 id="2-2-从第0代对象到第1代对象"><a href="#2-2-从第0代对象到第1代对象" class="headerlink" title="2.2 从第0代对象到第1代对象"></a>2.2 从第0代对象到第1代对象</h2><p><strong>实现过程</strong></p>
-<ul>
-<li>继续分配<ul>
-<li>新分配的对象继续进入第0代；</li>
-<li>部分对象（包含第1代与第0代）在程序运行时，逐渐变得不可达；</li>
-</ul>
-</li>
-<li>启动垃圾回收<ul>
-<li>新对象造成第0代超出预算；</li>
-</ul>
-</li>
-<li>决定GC检查代<ul>
-<li>垃圾回收器必须决定检查哪些代。开始一次垃圾回收时，垃圾回收器除了检查第0代时，还会检查第1代占用了多少内存。</li>
-<li>在下图中，由于第1代占用的内存远少于预算，所以垃圾回收器只检查第0代中的对象；</li>
-</ul>
-</li>
-</ul>
-<p><strong>基本假设与基于代的GC</strong></p>
-<ul>
-<li>假设一：对象越新，生存期越短<ul>
-<li>因为新的对象在第0代中，并且第0代包含更多垃圾的可能性很大，在GC时能回收更多的内存；</li>
-<li>即<strong>对象越新，生存期越短</strong></li>
-<li>并且由于忽略了第1代中的对象，所以加快了垃圾回收速度</li>
-</ul>
-</li>
-<li>假设三：回收堆的一部分，速度快于回收整个堆<ul>
-<li>忽略第1代中的对象能提升垃圾回收器的性能。对性能有更大提振作用的是：现在不必遍历托管堆中的每个对象；</li>
-<li>如果根或对象引用了老一代的某个对象，垃圾回收器就可以忽略老对象内部的所有引用，能在更短的时间内构造好可达对象图；</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>产生新对象，垃圾产生：<br><img src="/../../image/Pasted%20image%2020230829101709.png"></p>
-<p>垃圾回收，对象压缩：<br><img src="/../../image/Pasted%20image%2020230829101728.png"></p>
-<h2 id="2-3-从第1代对象到第2代对象"><a href="#2-3-从第1代对象到第2代对象" class="headerlink" title="2.3 从第1代对象到第2代对象"></a>2.3 从第1代对象到第2代对象</h2><p><strong>实现过程</strong></p>
-<ul>
-<li>全部预算已满<ul>
-<li>假定第1代的增长导致它的所有对象占用了全部预算。此时应用程序继续运行并分配对象，使第0代对象达到它的预算容量；</li>
-<li>此时由于第0代已满，必须进行垃圾回收；</li>
-<li>此次垃圾回收时发现第1代占用太多空间，导致全部预算用完（并且第1代当中已经有很多对象变得不可达）；</li>
-<li>此次垃圾回收需要堆第0代以及第1代对象进行回收；</li>
-</ul>
-</li>
-<li>产生第2代<ul>
-<li>经过垃圾回收，产生第2代对象；第0代继续空余出来；</li>
-<li><strong>只有在第1代超出预算时才会检查第1代中的对象</strong></li>
-</ul>
-</li>
-</ul>
-<p><strong>托管堆与代</strong></p>
-<ul>
-<li>3代托管堆<ul>
-<li>托管堆只支持三代：第0代、第1代和第2代，没有第3代。</li>
-</ul>
-</li>
-<li>代与预算<ul>
-<li>CLR初始化时，会为每一代选择预算；</li>
-</ul>
-</li>
-<li>CLR 的垃圾回收器是自调节的<ul>
-<li>垃圾回收器会在执行垃圾回收的过程中了解应用程序的行为；<ul>
-<li>假定应用程序构造了许多对象，但每个对象用的时间都很短。在这种情况下，对第0代的垃圾回收会回收大量内存；</li>
-<li>事实上，第0代的所有对象都可能被回收；</li>
-</ul>
-</li>
-<li><strong>当GC发现回收0代后存活下来的对象很少，就可能减少第0代的预算，反之增加预算</strong>。这种启发式的算法对第1代以及第2代通用适用；</li>
-<li>每当垃圾回收进行后，会检查存活下来的对象多少，进而增大或减小这些代的预算；</li>
-</ul>
-</li>
-</ul>
-<h1 id="3-垃圾回收触发条件"><a href="#3-垃圾回收触发条件" class="headerlink" title="3.垃圾回收触发条件"></a>3.垃圾回收触发条件</h1><p><strong>垃圾回收可以有以下几种触发条件</strong></p>
-<ol>
-<li>CLR检测垃圾回收超出代的预算；</li>
-<li>代码显示调用System.GC的静态方法Collect；</li>
-<li>Windows报告低内存情况；</li>
-<li>CLR卸载AppDomain；</li>
-<li>CLR关闭；</li>
-</ol>
-<p><strong>强制垃圾回收</strong><br>System.GC类型允许应用程序对垃圾回收器进行一些直接控制。可以用Collect进行强制垃圾回收，但大部分情况下不推荐。</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Collect</span>(<span class="params">Int32 generation,GCCollectionMode mode,Boolean blocking</span>)</span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>generation<ul>
-<li>表示回收第几代的垃圾</li>
-</ul>
-</li>
-<li>GCCollectionMode<ul>
-<li>Default：不传递任何符号名称；</li>
-<li>Forced：强制回收指定的代(以及低于它的所有代)；</li>
-<li>Optimized：只有在能释放大量内存或者能减少碎片化的前提下，才执行回收（强制执行Collect时，尽可能使用这种模式）；</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-1-监视垃圾回收内存使用"><a href="#3-1-监视垃圾回收内存使用" class="headerlink" title="3.1 监视垃圾回收内存使用"></a>3.1 监视垃圾回收内存使用</h2><p><strong>监视用方法</strong></p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Int32 <span class="title">CollectionCount</span>(<span class="params">Int32 generation</span>)</span>;</span><br><span class="line"><span class="function">Int64 <span class="title">GetTotalMemory</span>(<span class="params">Boolean forceFullCollection</span>)</span>;</span><br></pre></td></tr></table></figure>
-<h1 id="4-大对象"><a href="#4-大对象" class="headerlink" title="4.大对象"></a>4.大对象</h1><p><strong>什么是大对象</strong><br>在CLR当中，将对象分为大对象和小对象，大于85000字节的对象是大对象；</p>
-<p><strong>大对象特点</strong></p>
-<ul>
-<li>大对象在进程地址空间其他地方分配；</li>
-<li>目前的GC不压缩大对象；</li>
-<li>大对象总是第2代的，不可能为第0、1代；</li>
-</ul>
-<h1 id="5-垃圾回收模式"><a href="#5-垃圾回收模式" class="headerlink" title="5.垃圾回收模式"></a>5.垃圾回收模式</h1><p><strong>两种基本的GC模式</strong></p>
-<ul>
-<li>工作站模式<ul>
-<li>该模式针对客户端应用程序优化GC；</li>
-<li><strong>CLR默认以工作站模式运行</strong></li>
-<li>GC造成的延时很低，应用程序的线程挂起时间短，并且GC假定机器上运行的其他应用程序都不会消耗太多的CPU资源；</li>
-</ul>
-</li>
-<li>服务器模式<ul>
-<li>该模式针对服务器端应用程序优化GC；</li>
-<li>被优化的主要是吞吐量和资源利用。GC假定机器上没有运行其他应用程序，并假定机器的所有CPU都可用来辅助完成GC；</li>
-<li>该模式造成托管堆被拆分成几个区域，每个CPU一个；</li>
-<li>开始垃圾回收时，垃圾回收器在每个CPU上都运行一个特殊线程，每个线程都和其他线程并发回收它自己的区域；</li>
-<li>这个功能要求应用程序在多CPU计算机上运行使线程能真正地同时工作，从而获得性能的提升。</li>
-</ul>
-</li>
-</ul>
-<p><strong>切换工作模式</strong><br>GCLatencyMode定义四种模式：</p>
-<ol>
-<li>Batch：服务器GC模式的默认值，关闭并发GC；</li>
-<li>Interactive：工作站GC模式的默认值，打开并发GC；</li>
-<li>LowLatency：此模式时，GC将全力避免第2代垃圾的回收。更容易抛出内存溢出异常；</li>
-<li>SustainedLowLatency；</li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/2d466e9f916b.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -856,9 +1096,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-08-27 14:09:52 / 修改时间：14:16:17" itemprop="dateCreated datePublished" datetime="2023-08-27T14:09:52+08:00">2023-08-27</time>
+      <time title="创建时间：2023-08-27 14:09:52" itemprop="dateCreated datePublished" datetime="2023-08-27T14:09:52+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-29 19:25:02" itemprop="dateModified" datetime="2023-08-29T19:25:02+08:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -906,365 +1152,6 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/68a724658d83.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/08/68a724658d83.html" class="post-title-link" itemprop="url">Lecture 14：C标准库的实现</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-08-27 14:08:50 / 修改时间：14:16:17" itemprop="dateCreated datePublished" datetime="2023-08-27T14:08:50+08:00">2023-08-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>操作系统内核对外面提供的API就是Syscall，而当中和用户交互的就是Shell。而在Shell的外面，OS提供了一个框架性程序，帮助开发者实现应用程序（因为没有人愿意在没有库函数的情况下，直接使用汇编、系统调用来制作应用程序）</p>
-<blockquote>
-<p>· 在系统调用之上构建可以普遍使用的标准库：libc</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/08/68a724658d83.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/3dbfbd52ee49.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/08/3dbfbd52ee49.html" class="post-title-link" itemprop="url">Lecture 13：系统调用与Shell</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-08-27 14:05:35 / 修改时间：14:16:17" itemprop="dateCreated datePublished" datetime="2023-08-27T14:05:35+08:00">2023-08-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/08/3dbfbd52ee49.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/d03400aa93d7.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/08/d03400aa93d7.html" class="post-title-link" itemprop="url">Lecture 12：进程的地址空间</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-08-27 14:04:16 / 修改时间：14:16:17" itemprop="dateCreated datePublished" datetime="2023-08-27T14:04:16+08:00">2023-08-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/08/d03400aa93d7.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/5aed3da140f6.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/08/5aed3da140f6.html" class="post-title-link" itemprop="url">【CSharp系列】1. CLR执行模型</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-08-27 04:00:25" itemprop="dateCreated datePublished" datetime="2023-08-27T04:00:25+08:00">2023-08-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-29 10:02:00" itemprop="dateModified" datetime="2023-08-29T10:02:00+08:00">2023-08-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSharp/" itemprop="url" rel="index"><span itemprop="name">CSharp</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/08/5aed3da140f6.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -1290,7 +1177,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共24.7k字</span>
+  <span class="post-count">博客全站共32.2k字</span>
 </div>
     </div>
   </footer>

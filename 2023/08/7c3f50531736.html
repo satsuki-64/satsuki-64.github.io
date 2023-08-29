@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2F4F4F" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言：可执行文件就是一个描述状态机初始状态的数据结构；问题：    1、可执行文件如何被OS加载？    2、什么是动态链接&#x2F;动态加载？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lecture 17：动态链接与加载">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/08/7c3f50531736.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="前言：可执行文件就是一个描述状态机初始状态的数据结构；问题：    1、可执行文件如何被OS加载？    2、什么是动态链接&#x2F;动态加载？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829193028.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829193055.png">
+<meta property="article:published_time" content="2023-08-29T11:29:28.000Z">
+<meta property="article:modified_time" content="2023-08-29T11:30:57.790Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="链接">
+<meta property="article:tag" content="ELF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829193028.png">
+
+
+<link rel="canonical" href="https://satsuki-64.github.io/2023/08/7c3f50531736.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/08/7c3f50531736.html","path":"2023/08/7c3f50531736.html","title":"Lecture 17：动态链接与加载"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Lecture 17：动态链接与加载 | Satsuki的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  <a target="_blank" rel="noopener" href="https://github.com/satsuki-64" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Satsuki的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#17-1-%E9%9D%99%E6%80%81ELF%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-text">17.1 静态ELF文件加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#17-1-1-ELF%E6%96%87%E4%BB%B6"><span class="nav-text">17.1.1 ELF文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17-1-2-ELF%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-text">17.1.2 ELF加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17-1-3-%E8%BF%9B%E7%A8%8B%E5%88%9D%E5%A7%8B%E7%8A%B6%E6%80%81%E8%AE%BE%E7%BD%AE"><span class="nav-text">17.1.3 进程初始状态设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17-1-4-Boot-Block-Loader"><span class="nav-text">17.1.4 Boot Block Loader</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-2-Linux%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-text">17.2 Linux内核加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-3-%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%B8%8E%E5%8A%A0%E8%BD%BD"><span class="nav-text">17.3 动态链接与加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#17-3-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5"><span class="nav-text">17.3.1 为什么需要动态链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17-3-2-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%AE%9E%E7%8E%B0"><span class="nav-text">17.3.2 自顶向下设计的动态链接实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#17-3-2-1-%E6%9C%80%E5%B0%8F%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E7%8E%B0"><span class="nav-text">17.3.2.1 最小加载器实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#17-3-3-2-%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5Header%E5%AE%9A%E4%B9%89"><span class="nav-text">17.3.3.2 动态链接Header定义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17-3-3-%E5%AF%B9%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%AE%9A%E4%B9%89%E7%9A%84%E5%8A%A0%E8%BD%BD"><span class="nav-text">17.3.3 对动态链接定义的加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17-3-4-%E8%87%AA%E5%B7%B1%E8%AE%BE%E8%AE%A1DL%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="nav-text">17.3.4 自己设计DL文件中的缺陷</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Satsuki"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Satsuki</p>
+  <div class="site-description" itemprop="description">向着黄昏与自由迁徙</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/satsuki-64" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;satsuki-64" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15079296601@163.com" title="E-Mail → 15079296601@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/1472895664" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;1472895664" rel="noopener me" target="_blank">Bilibili</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/7c3f50531736.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Lecture 17：动态链接与加载 | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lecture 17：动态链接与加载
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-29 19:29:28 / 修改时间：19:30:57" itemprop="dateCreated datePublished" datetime="2023-08-29T19:29:28+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>前言：可执行文件就是一个描述状态机初始状态的数据结构；<br>问题：<br>    1、可执行文件如何被OS加载？<br>    2、什么是动态链接&#x2F;动态加载？</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="17-1-静态ELF文件加载器"><a href="#17-1-静态ELF文件加载器" class="headerlink" title="17.1 静态ELF文件加载器"></a>17.1 静态ELF文件加载器</h2><h3 id="17-1-1-ELF文件"><a href="#17-1-1-ELF文件" class="headerlink" title="17.1.1 ELF文件"></a>17.1.1 ELF文件</h3><p><strong>ELF文件定义</strong><br>在OS下面的“&#x2F;usr&#x2F;include&#x2F;elf.h”文件中，可以看到ELF文件定义描述；<br><img src="/../../image/Pasted%20image%2020230829193028.png"><br><strong>获得程序的ELF</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readelf a.out</span><br></pre></td></tr></table></figure>
+<p>使用此指令来获得可执行文件的elf文件信息，并将其翻译出来；<br>ELF文件描述了一个数据结构，这个数据结构描述了进程在execve之后被Loader使用时如何加载；</p>
+<h3 id="17-1-2-ELF加载器"><a href="#17-1-2-ELF加载器" class="headerlink" title="17.1.2 ELF加载器"></a>17.1.2 ELF加载器</h3><p>Loader所作行为：解析数据结构 + 复制信息到内存 + 跳转<br><strong>Loader需加载内容</strong></p>
+<ul>
+<li>1、ELF文件里面的信息</li>
+<li>2、设置一些运行时状态<ul>
+<li>argv</li>
+<li>envp<br>以上两部分内容共同构成进程的初始状态；</li>
+</ul>
+</li>
+</ul>
+<p><strong>Loader实现了解</strong><br>Loader只是个程序，其通过动态链接的方式编译；<br>在编译之后，可以往Loader传入一个参数：比如某个程序，此时Loader会开始将ELF文件搬到指定的位置上，并且可以是使用此Loader加载其他程序。<br>在Loader当中，使用mmap + ELF信息映射到内存当中； Loader解析ELF数据结构，然后把对应内容放到内存；<br>当所有的内容都使用mmap搬进内存之后，可以使用pmap观看其地址空间：<br>可以看到其地址空间当中有两份程序，一份是loader的内存，一份是minimal的内容；即当前ELF所有具体的内容都被加载；</p>
+<h3 id="17-1-3-进程初始状态设置"><a href="#17-1-3-进程初始状态设置" class="headerlink" title="17.1.3 进程初始状态设置"></a>17.1.3 进程初始状态设置</h3><p>完成对于进程的栈以及其他空间的初始化设置；<br>实例化进程Stack：<br><img src="/../../image/Pasted%20image%2020230829193055.png"><br>比如：当中指明了rsp寄存器指向Argument Count，并且8 + rsp执行后续的参数；<br>有了这个手册之后，之后的行为就是把这些内容实现成代码。</p>
+<p><strong>初始化代码实现</strong></p>
+<ol>
+<li>先静态分配一片空间，将此空间设置为栈空间；<ol>
+<li>![[Pasted image 20230329190038.png]]</li>
+</ol>
+</li>
+<li>定义对应的push指令，可以将内容push到栈中；</li>
+<li>对照着实例化进程文档，将内容push到栈上；<ol>
+<li>![[Pasted image 20230329190137.png]]</li>
+<li>argc、argv以及环境变量等，依次压入栈中；</li>
+</ol>
+</li>
+<li>最后执行跳转<ol>
+<li>![[Pasted image 20230329190308.png]]</li>
+<li>将程序的入口地址给到指针，将rdx和rsp清零；</li>
+</ol>
+</li>
+</ol>
+<p><strong>OS、Loader与execve之间关系</strong><br>以上实现的第一个Loader是在OS上实现的，基于操作系统中的open、mmap、close，使用这些系统调用实现了一个execve，因此execve在某种程度上不是必须的，Linux可以基于ld静态链接，加上mmap、open等系统调用，就完成程序的加载。<br>由此可知：相当一部分系统调用可以实现成用户态的；</p>
+<h3 id="17-1-4-Boot-Block-Loader"><a href="#17-1-4-Boot-Block-Loader" class="headerlink" title="17.1.4 Boot Block Loader"></a>17.1.4 Boot Block Loader</h3><p><strong>什么是Boot Block Loader</strong><br>由固件实现的Boot Block Loader，将OS通过固件，一点一点加载到磁盘上、内存里。并且除了这512字节的最开始的block，在这之后还有1024字节的main args，在这之后是OS的Kernel内核文件。</p>
+<p><strong>加载OS内核</strong><br>哪怕ELF文件只有512字节的二进制文件，也可以为其写一个Loader；</p>
+<ul>
+<li>![[Pasted image 20230329191754.png]]<br>把Main函数的参数加载进来，并在之后把elf32复制，创建状态机的状态；<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">load_kernel</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  Elf32_Ehdr *elf32 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  Elf64_Ehdr *elf64 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  <span class="type">int</span> is_ap = boot_record()-&gt;is_ap;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!is_ap) &#123;</span><br><span class="line">    <span class="comment">// load argument (string) to memory</span></span><br><span class="line">    copy_from_disk((<span class="type">void</span> *)MAINARG_ADDR, <span class="number">1024</span>, <span class="number">-1024</span>);</span><br><span class="line">    <span class="comment">// load elf header to memory</span></span><br><span class="line">    copy_from_disk(elf32, <span class="number">4096</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) &#123;</span><br><span class="line">      load_elf64(elf64);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      load_elf32(elf32);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// everything should be loaded</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf64-&gt;e_entry)();<span class="comment">//设置程序进入点</span></span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf32-&gt;e_entry)();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="17-2-Linux内核加载器"><a href="#17-2-Linux内核加载器" class="headerlink" title="17.2 Linux内核加载器"></a>17.2 Linux内核加载器</h2><p>使用make进行编译，然后即可以对其进行调试；之后可以使用GDB，和调试其他的可执行程序一样来调试这个Linux代码，只要将BreakPoint放在代码的EntryPoint上即可。<br>之后如果想进行进一步的调试，就得开始使用一些更加现代的工具以及IDE，比如VSCode来把Linux内核放入到VSCode当中；<br>可以将Linux生成的哪些链接信息给到VSCode，这样就可以在编辑界面当中来动态的获得一个内容的链接内容；</p>
+<h2 id="17-3-动态链接与加载"><a href="#17-3-动态链接与加载" class="headerlink" title="17.3 动态链接与加载"></a>17.3 动态链接与加载</h2><h3 id="17-3-1-为什么需要动态链接"><a href="#17-3-1-为什么需要动态链接" class="headerlink" title="17.3.1 为什么需要动态链接"></a>17.3.1 为什么需要动态链接</h3><p><strong>静态链接问题</strong></p>
+<ul>
+<li>随着项目越来越大，库函数越来越大，文件系统会越来越膨胀，需要占有大量的磁盘空间；即不希望每个库函数都在可执行文件里面进行库函数的拷贝；</li>
+<li>同时，大型项目有把应用程序拆开的需求；</li>
+</ul>
+<p><strong>动态链接</strong><br>只要库函数遵循一定的标准，那么就可以把这个库在运行动态的链接；编译一部分，不用重新链接；</p>
+<p><strong>工业界实际的ELF问题</strong><br>ELF是一个数据结构，这个数据结构当中有专门的符号表，将一些概念上紧密相关的东西在数据结构中通过符号表（为了提升性能）强行拆散；</p>
+<h3 id="17-3-2-自顶向下设计的动态链接实现"><a href="#17-3-2-自顶向下设计的动态链接实现" class="headerlink" title="17.3.2 自顶向下设计的动态链接实现"></a>17.3.2 自顶向下设计的动态链接实现</h3><p><strong>基本假设</strong><br>假设所有的加载器、编译器、链接器都完全收你控制，此时生成一个最小的用于动态链接的数据结构，然后再在此基础上针对ELF进行优化；</p>
+<p><strong>最小的ELF</strong><br>当想要实现自己的库函数，当中有一个putchar的符号需要被动态加载，如何进行设计？<br>简化之后，动态链接最基本的行为：</p>
+<ul>
+<li>LOAD（“libc.dl”）&#x2F;&#x2F;加载动态库</li>
+<li>IMPORT（putchar）&#x2F;&#x2F;加载外部符号</li>
+<li>EXPORT（hello）&#x2F;&#x2F;为动态库导出符号</li>
+<li>在代码中引用一个外部库的符号</li>
+</ul>
+<h4 id="17-3-2-1-最小加载器实现"><a href="#17-3-2-1-最小加载器实现" class="headerlink" title="17.3.2.1 最小加载器实现"></a>17.3.2.1 最小加载器实现</h4><p>JYY实现的最小动态链接加载器；<br>![[Pasted image 20230330174916.png]]<br>自己实现的最简单的二进制文件格式：<br>![[Pasted image 20230330175114.png]]</p>
+<h4 id="17-3-3-2-动态链接Header定义"><a href="#17-3-3-2-动态链接Header定义" class="headerlink" title="17.3.3.2 动态链接Header定义"></a>17.3.3.2 动态链接Header定义</h4><p>使用此Header定义此二进制可执行文件的格式；<br>最简单的二进制动态链接文件：就是由一个头文件和一个符号表构成的；</p>
+<p><strong>dl_Header代码：</strong><br>![[Pasted image 20230414182843.png]]<br><strong>dl_Header图示：</strong><br>![[Lecture 17：动态链接与加载 2023-04-14 18.22.19.excalidraw]]</p>
+<p><strong>定义的四个宏</strong><br>![[Pasted image 20230414182950.png]]<br>第一个：IMPORT</p>
+<ol>
+<li>在Imoort当中使用DSYM函数</li>
+<li>在DSYM函数中当中传入sym（比如说是putchar，目标链接函数名称）</li>
+<li>当前sym当中传入间接寻址的地址rip，然后putchar指向symbol当中的offset。<br>第二个：EXPORT<br>向当中传入一个外部符号的调用，为了导出这个符号，在offset当中保存这个符号的相对于符号头部的偏移量；</li>
+</ol>
+<p><strong>程序预编译之后</strong><br>![[Pasted image 20230414184042.png]]<br>每一个symbol都被对齐到32字节，offset开始时为0，此时加载器发现了这个符号的offset的值为零，此时就会开始间接调转，查询符号表，将地址填入到这当中。</p>
+<p>符号链接：当你想要跳转到一个你所不知道的地址上时，就现找一块数据（offset）填上零，然后做一个间接跳转，在加载器进行加载的时候，查符号表，将地址填进去；</p>
+<p><strong>二进制视角文件</strong><br>![[Pasted image 20230414185023.png]]<br>第20行，前面八位的全零部分标志，以及libc.dl表示的需要链接的程序；<br>包括90，a0部分的全零内容，对应的多个struct symbol之后的全零字段；<br>然后c0,d0之后就是代码的部分；</p>
+<h3 id="17-3-3-对动态链接定义的加载"><a href="#17-3-3-对动态链接定义的加载" class="headerlink" title="17.3.3 对动态链接定义的加载"></a>17.3.3 对动态链接定义的加载</h3><p><strong>对dl的加载代码：</strong><br>![[Pasted image 20230414185311.png]]<br>就是扫描符号表，将dl二进制文件中对应的符号找到其需要的地址；碰到LOAD就打印其名称，碰到EXTERN就打印其对应内容；</p>
+<p><strong>objump实现</strong><br>![[Pasted image 20230414185450.png]]<br>两个For循环内的内容：</p>
+<ul>
+<li>第一层for循环：遍历符号表</li>
+<li>第二层：遍历代码的每一个字节<ul>
+<li>当代码的某一个字节刚好对应某一个符号的时候，执行一个反汇编，使用ndisasm反汇编器将代码输出出来；</li>
+</ul>
+</li>
+</ul>
+<p><strong>加载器主要部分：dlopen</strong><br>![[Pasted image 20230414190056.png]]<br>首先获得dl的hdr头文件，然后把path文件打开，解析文件头；<br>通过解析文件头知道了文件有多大后，使用mmap将其需要的内容直接映射到内存当中；<br>如果内存映射成功，在for循环内遍历符号表，如果符号表当中是+号则进行递归加载，如果是问号，则直接赋值offset内容；</p>
+<h3 id="17-3-4-自己设计DL文件中的缺陷"><a href="#17-3-4-自己设计DL文件中的缺陷" class="headerlink" title="17.3.4 自己设计DL文件中的缺陷"></a>17.3.4 自己设计DL文件中的缺陷</h3><p><strong>代码分段</strong><br>自己编写的代码只能可读可写可执行，想要不同部分不同类型，就需要进行分段；<br><strong>指定加载器</strong><br>需要指定一个加载器</p>
+<p>写一个编译器的时候，在编译器的视角里面，C代码当中出现的函数，不知道其是静态链接的还是动态链接；不知道是用call还是call DASM，而且不知道外部符号在哪里；并且call是不需要间接跳转的；<br>当链接时发现是一个动态链接符号的话，就需要靠plt去找内容，因此就发明了GOT和PLT；</p>
+<p>全局偏移表：<br>![[Pasted image 20230414191207.png]]<br>在ELF文件之下：<br>![[Pasted image 20230414191222.png]]<br>所有的间接跳转，全部都在PLT里面；</p>
+<p><strong>GOT</strong><br>我们的符号表就是GOT（Global Offset Table）</p>
+<p><strong>对于静态、动态链接的统一</strong><br>无论静态动态，都统一使静态链接先；<br>然后增加一层间接层：Procedure Linkage Table（PLT），将所有未被解析的符号都统一翻译成call。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">putchar</span> PLT:</span><br><span class="line">	call DSYM（<span class="built_in">putchar</span>）</span><br><span class="line">main:</span><br><span class="line">	call <span class="built_in">putchar</span> PLT</span><br></pre></td></tr></table></figure>
+
+<p>作业：读实例代码；</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
+              <a href="/tags/%E9%93%BE%E6%8E%A5/" rel="tag"><i class="fa fa-tag"></i> 链接</a>
+              <a href="/tags/ELF/" rel="tag"><i class="fa fa-tag"></i> ELF</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/92c8110645cf.html" rel="prev" title="Lecture 16：什么是可执行文件">
+                  <i class="fa fa-angle-left"></i> Lecture 16：什么是可执行文件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/08/2a905fcc408b.html" rel="next" title="Lecture 28：持久数据的可靠性">
+                  Lecture 28：持久数据的可靠性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Satsuki</span>
+  </div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共32.2k字</span>
+</div>
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

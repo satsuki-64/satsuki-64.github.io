@@ -27,12 +27,18 @@
 <meta property="og:site_name" content="Satsuki的博客">
 <meta property="og:description" content="程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829191538.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829191738.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829191917.png">
 <meta property="article:published_time" content="2023-08-27T06:04:16.000Z">
-<meta property="article:modified_time" content="2023-08-27T06:16:17.003Z">
+<meta property="article:modified_time" content="2023-08-29T11:19:19.453Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="操作系统">
 <meta property="article:tag" content="进程">
+<meta property="article:tag" content="Fork">
+<meta property="article:tag" content="Mmap">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829191538.png">
 
 
 <link rel="canonical" href="https://satsuki-64.github.io/2023/08/d03400aa93d7.html">
@@ -157,18 +163,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -234,9 +240,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-08-27 14:04:16 / 修改时间：14:16:17" itemprop="dateCreated datePublished" datetime="2023-08-27T14:04:16+08:00">2023-08-27</time>
+      <time title="创建时间：2023-08-27 14:04:16" itemprop="dateCreated datePublished" datetime="2023-08-27T14:04:16+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-29 19:19:19" itemprop="dateModified" datetime="2023-08-29T19:19:19+08:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -266,14 +278,17 @@
 <p>查看某一个进程地址空间代码：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
 <p>当中的37491为进程的id。</p>
-<p><strong>查看结果：</strong><br>![[Pasted image 20230224190930.png]]</p>
-<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong><br>当中一条系统调用：<br>![[Pasted image 20230224191620.png]]<br>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</p>
-<p><strong>37491进程更详细的信息：</strong><br>![[Pasted image 20230224191818.png]]<br>相关手册：<code>mam 5 proc</code></p>
+<p><strong>查看结果：</strong><br><img src="/../../image/Pasted%20image%2020230829191538.png"></p>
+<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong></p>
+<ul>
+<li>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。</li>
+<li>proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</li>
+</ul>
+<p>**相关手册：<code>mam 5 proc</code></p>
 <h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
 
-<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br>![[Pasted image 20230224192252.png]]<br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
-<p>将以上读取的信息和其ELF信息比较着来看：<br>![[Pasted image 20230224192640.png]]</p>
+<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br><img src="/../../image/Pasted%20image%2020230829191738.png"><br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
 <h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
 <hr>
 <h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
@@ -287,7 +302,7 @@
 
 <p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
 <h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
-<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br>![[Pasted image 20230227174912.png]]</p>
+<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br><img src="/../../image/Pasted%20image%2020230829191917.png"></p>
 <p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
 <h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
 <h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
@@ -319,6 +334,8 @@
           <div class="post-tags">
               <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
               <a href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 进程</a>
+              <a href="/tags/Fork/" rel="tag"><i class="fa fa-tag"></i> Fork</a>
+              <a href="/tags/Mmap/" rel="tag"><i class="fa fa-tag"></i> Mmap</a>
           </div>
 
         
@@ -365,7 +382,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共24.7k字</span>
+  <span class="post-count">博客全站共32.2k字</span>
 </div>
     </div>
   </footer>
