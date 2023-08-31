@@ -152,7 +152,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -163,7 +163,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -191,6 +191,380 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/5f4541f148f0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/5f4541f148f0.html" class="post-title-link" itemprop="url">【CSharp系列】托管堆与垃圾回收（3）-- 特殊资源对象</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-31 12:28:17 / 修改时间：13:06:32" itemprop="dateCreated datePublished" datetime="2023-08-31T12:28:17+08:00">2023-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSharp/" itemprop="url" rel="index"><span itemprop="name">CSharp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <span id="more"></span>
+<h1 id="1-特殊资源对象"><a href="#1-特殊资源对象" class="headerlink" title="1.特殊资源对象"></a>1.特殊资源对象</h1><p><strong>什么是特殊资源对象</strong><br>对于C#中的大部分对象而言，只要有内存的分配既可以正常工作。但是还有一部分对象其使用了其他特殊的资源，比如IO设备、线程、锁、Socket等等。<br><em>例如，System.IO.FileStream类型需要打开一个文件(本机资源)并保存文件的指针。然后类型的Read和Write方法用此指针操作文件。类似地，System.Threading.Mutex类型要打开一个Windows互斥体内核对象(本机资源)并保存其对象的指针，并在调用Mutex的方法时使用该对象。</em></p>
+<p><strong>如何处理特殊资源对象：Finalize终结</strong><br>对于这些特殊资源对象，不可以直接对象内存进行回收，而是应该在回收之前先对其进行一些处理，保证其在回收之前执行一些代码。</p>
+<ul>
+<li>Finalize终结机制：<ul>
+<li>CLR提供了称为终结的机制，允许对象在被判定为垃圾之后，但在对象内存被回收之前执行一些代码。</li>
+<li>任何包装了本机资源(文件、网络连接、套接字、互斥体)的类型都支持终结。CLR 判定一个对象不可达时，对象将终结它自己，释放它包装的本机资源。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Finalize方法</strong><br>在System.Object中定义了受保护的虚方法：Finalize<br>垃圾回收器判定对象是垃圾后，会调用对象的Finalize方法。C#要求在类名前面加上“～”符号来定义Finalize方法：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SomeType</span></span><br><span class="line">&#123;</span><br><span class="line">	~SomeType()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//这里的代码会进入Finalize方法	</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-Finalize特点"><a href="#2-Finalize特点" class="headerlink" title="2.Finalize特点"></a>2.Finalize特点</h1><p><strong>特点一：执行终结导致对象存活变长</strong></p>
+<ul>
+<li>被视为垃圾的对象在垃圾回收完毕之后才会调用 Finalize 方法，所以这些对象的内存不是马上被回收的；</li>
+<li>可终结对象在回收时必须存活，造成它会提升一代，使对象活得比正常时间长，增大了内存耗用；更糟的是，可终结对象被提升时，其字段引用的所有对象也会被提升，因为它们也必须继续存活。</li>
+<li>建议<ul>
+<li>要尽量避免为引用类型的字段定义可终结对象；</li>
+<li>尽量不要直接使用 Finalize 方法；</li>
+</ul>
+</li>
+</ul>
+<p><strong>特点二：无法控制Finalize执行的时间</strong></p>
+<ul>
+<li>CLR不保证多个Finalize方法的调用顺序。所以在Finalize方法中，<strong>不要访问定义了Finalize方法的其他类型的对象</strong>：那些对象可能已经终结了；</li>
+<li>但可以安全地访问值类型的实例，或者访问没有定义 Finalize 方法的引用类型的对象；</li>
+</ul>
+<p><strong>特点三：CLR使用一个特殊、高优先级的线程调用Finalize方法</strong></p>
+<ul>
+<li>为了避免死锁，CLR使用专用线程来负责此方法的执行；</li>
+<li>但也同时，如果一个Finalize方法阻塞，该线程也就无法再调用任何更多的Finalize方法；</li>
+</ul>
+<p><strong>结论：Finalize只是用于释放本机资源而设计的</strong></p>
+<ul>
+<li>建议：不要重写Obiect的Finalize方法；</li>
+<li>正确做法是：使用Microsoft在FCL中提供的辅助类；<ul>
+<li>这些辅助类重写了Finalize方法；</li>
+<li>添加了一些特殊的CLR代码，可以从这些辅助类派生出自己的类；</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-SafeHandle类"><a href="#3-SafeHandle类" class="headerlink" title="3.SafeHandle类"></a>3.SafeHandle类</h1><h2 id="3-1-SafeHandle类基本概念"><a href="#3-1-SafeHandle类基本概念" class="headerlink" title="3.1 SafeHandle类基本概念"></a>3.1 SafeHandle类基本概念</h2><p><strong>SafeHandle类的定义</strong><br>SafeHandle类是一个抽象基类，位于System.Runtime.InteropServices命名空间中；<br>它用于提供一个安全的封装器，用于管理本机资源的句柄（例如文件句柄、内核对象句柄等）；<br>SafeHandle类通过派生具体的子类，提供了一种可靠的方式来管理和释放这些句柄。</p>
+<p><strong>SafeHandle类解决的问题</strong><br>SafeHandle类解决了在C#中使用本机资源句柄时的一些常见问题，例如：</p>
+<ul>
+<li>1.内存泄漏：在编写使用本机资源的代码时，如果不正确地释放句柄，可能会导致内存泄漏；</li>
+<li>2.不确定的错误：使用不正确的句柄或重复释放句柄可能会导致不确定的行为和错误；</li>
+<li>3.线程安全：在多线程环境下，对句柄的访问必须进行适当的同步，以确保不会导致竞态条件或其他线程相关的问题；<br>SafeHandle类通过提供一个可继承的模板，规范了如何正确使用和自动释放本机资源句柄，从而解决了上述问题。</li>
+</ul>
+<p><strong>SafeHandle和Finalize方法的关系</strong></p>
+<ul>
+<li>核心：SafeHandle类通过覆盖Finalize方法来增强对句柄的管理和释放；</li>
+<li>内容：<ul>
+<li>Finalize方法是C#中的垃圾回收器提供的一个特殊方法，用于在对象被垃圾回收之前执行清理操作。</li>
+<li>SafeHandle类中的子类通常会重写Dispose方法和Finalize方法。Dispose方法用于显式地释放句柄和其他资源，而Finalize方法则是在垃圾回收器执行回收操作之前被自动调用。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-2-SafeHandle特点"><a href="#3-2-SafeHandle特点" class="headerlink" title="3.2 SafeHandle特点"></a>3.2 SafeHandle特点</h2><h3 id="3-2-1-派生自CriticalFinalizerObject类"><a href="#3-2-1-派生自CriticalFinalizerObject类" class="headerlink" title="3.2.1 派生自CriticalFinalizerObject类"></a>3.2.1 派生自CriticalFinalizerObject类</h3><p><strong>功能一：首次构造时执行JIT编译</strong></p>
+<ul>
+<li>内容<ul>
+<li>首次构造任何CriticalFinalizerObject的派生类型对象时，CLR立即对继承层次结构中的所有 Finalize 方法进行JIT编译；</li>
+</ul>
+</li>
+<li>目的<ul>
+<li>构造对象时就编译这些方法，可确保当对象被确定为垃圾之后，本机资源肯定会得以释放；</li>
+<li>不对 Finalize 方法进行提前编译，那么也许能分配并使用本机资源，但无法保证释放；</li>
+<li>因为<strong>内存紧张时，CLR可能找不到足够的内存来编译Finalize方法</strong>，这会阻止Finalize方法的执行，造成本机资源泄漏；</li>
+<li>因为提前进行JIT编译，可以解决这个问题；</li>
+</ul>
+</li>
+</ul>
+<p><strong>功能二：</strong></p>
+<ul>
+<li>调用Finalize顺序<ul>
+<li>CLR是在调用了非 CriticalFinalizerObject 派生类型的 Finalize 方法之后，才调用CriticalFinalizerObject派生类型的Finalize方法；</li>
+<li>托管资源类因此可以在它们的Finalize方法中成功地访问CriticalFinalizerObject派生类型的对象；</li>
+<li><em>例如FileStream类的Finalize方法可以放心地将数据从内存缓冲区 fush到磁盘，它知道此时磁盘文件还没有关闭；</em></li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-2-SafeHandle是抽象类"><a href="#3-2-2-SafeHandle是抽象类" class="headerlink" title="3.2.2 SafeHandle是抽象类"></a>3.2.2 SafeHandle是抽象类</h3><p>为了能够使用此类，必须有另一个类从该类派生并重写：</p>
+<ol>
+<li>受保护的构造函数</li>
+<li>抽象方法ReleaseHandle</li>
+<li>抽象属性IsInvalid的get访问器</li>
+</ol>
+<p><strong>辅助类：SafeHandleZero0rMinusOnelsInvalid类</strong><br>此类继承自SafeHandle，也是一个抽象类，用于辅助进行类的派生；</p>
+<ul>
+<li>抽象类：<ul>
+<li>必须有另一个类从该类派生，并重写它的受保护构造器和抽象方法ReleaseHandle；</li>
+<li>NETFramework 提供了几个从SafeHandleZero0rMinusOneIsInvalid 派生的公共类，包括：<ul>
+<li>SafeFileHandle</li>
+<li>SafeRegistryHandle</li>
+<li>SafeWaitHandle</li>
+<li>SafeMemoryMappedViewHandle</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他继承自SafeHandleZero0rMinusOnelsInvalid的类<ul>
+<li>SafeProcessHandle</li>
+<li>SafeThreadHandle</li>
+<li>SafeTokenHandleSafeLibraryHandle</li>
+<li>SafeLocalAllocHandle</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-3-SafeHandle作用"><a href="#3-2-3-SafeHandle作用" class="headerlink" title="3.2.3 SafeHandle作用"></a>3.2.3 SafeHandle作用</h3><ol>
+<li>修正了潜在的资源泄露问题：SafeHandle收到CLR的特殊对待；</li>
+<li>防止有人利用潜在的安全漏洞</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/081ae7892f5f.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/081ae7892f5f.html" class="post-title-link" itemprop="url">Prompt编写指南</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-31 01:53:45 / 修改时间：02:30:53" itemprop="dateCreated datePublished" datetime="2023-08-31T01:53:45+08:00">2023-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <span id="more"></span>
+<h1 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1.基础知识"></a>1.基础知识</h1><h2 id="1-1-两种LLM"><a href="#1-1-两种LLM" class="headerlink" title="1.1 两种LLM"></a>1.1 两种LLM</h2><p><strong>Base LLM</strong><br>基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。</p>
+<p><strong>Instruction Tuned LLM</strong><br>这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。<br>对于大部分情况下，都为使用ITLLM进行学习以及开发。</p>
+<ul>
+<li>因为ITLLM是基于指令（关键词）进行的矫正、输出，因此当结果不合适时，应对重写选择合适的指令；</li>
+</ul>
+<h2 id="1-2-提问原则"><a href="#1-2-提问原则" class="headerlink" title="1.2 提问原则"></a>1.2 提问原则</h2><h3 id="1-2-1-原则一：编写明确、具体的指令"><a href="#1-2-1-原则一：编写明确、具体的指令" class="headerlink" title="1.2.1 原则一：编写明确、具体的指令"></a>1.2.1 原则一：编写明确、具体的指令</h3><p>明确 不等于 简短，为了明确的指令，可以提供更多的描述，来保证上下文信息的重组；</p>
+<p><strong>具体方法1：使用分隔符清楚的指示输入的不同部分</strong></p>
+<ul>
+<li>分隔符可以是任何清晰的符号：引号、分割号、三引号、XML标记等</li>
+<li>让模型知道：这是一个单独的部分</li>
+</ul>
+<p><strong>具体方法2：要求结构化的输出</strong><br>可以要求HTML、JSON、XML、MD等具体格式的输出；</p>
+<p><strong>具体方法3：要求模型检查条件是否被满足</strong><br>当问题是基于某些假设时，可以先让模型检查这些假设；如果不满足条件，则指示停止尝试完全完成这些任务。</p>
+<p><strong>具体方法4：少量训练提示</strong><br>在前面有成功回答的问题时，可以要求模型，它的任务是以一致的风格回答问题；</p>
+<h3 id="1-2-2-原则二：给模型时间去思考"><a href="#1-2-2-原则二：给模型时间去思考" class="headerlink" title="1.2.2 原则二：给模型时间去思考"></a>1.2.2 原则二：给模型时间去思考</h3><p>模型无法处理过于复杂的问题。因此需要给模型“时间”去思考；</p>
+<p><strong>具体方法1：指定完成任务所需的步骤</strong><br>具体指明回答时的步骤，比如：<br><em>第一步：总结要点<br>第二步：将要点翻译成英文<br>第三步：列出每一个要点的名称以及总结<br>第四步：输出JSON格式的内容</em></p>
+<p><strong>具体方法2：指示模型在做出结论之前，先思考解决方案</strong><br>在模型给出具体的答案之前，先给时间去进行问题的实际思考；<br>比如让模型先用自己的计算方法进行计算，然后再和给出的答案进行比较；<br>*1、先给出你自己的解决方案<br>2、再该处你自己的解决方案之前，不要决定解决方案是否正确<br>*</p>
+<p><strong>具体方法3：面对幻觉时，要求模型先给出引用，再基于引用给出答案</strong><br>由于模型并不知道自己知识的边界，因此可能会编造出看起来十分正确的回答；<br>为了解决这种问题，可以要求：</p>
+<ol>
+<li>模型先给出针对问题的答案的引用；</li>
+<li>要求模型基于这些引用，回答相关问题；</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/d5920372157c.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/d5920372157c.html" class="post-title-link" itemprop="url">【Game Engine】P2：Precompiled Header</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-30 23:37:57 / 修改时间：23:54:33" itemprop="dateCreated datePublished" datetime="2023-08-30T23:37:57+08:00">2023-08-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/" itemprop="url" rel="index"><span itemprop="name">游戏引擎</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <span id="more"></span>
+<h1 id="1-编写预编译头"><a href="#1-编写预编译头" class="headerlink" title="1.编写预编译头"></a>1.编写预编译头</h1><p><strong>C++中的PCH</strong><br>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。以下是负责的.h代码；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_set&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HZ_PLATFORM_WINDOWS</span></span><br><span class="line">	<span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-将预编译头内容加入到premake"><a href="#2-将预编译头内容加入到premake" class="headerlink" title="2.将预编译头内容加入到premake"></a>2.将预编译头内容加入到premake</h1><p>加入到Premake中<br>需要把内容加入到premake当中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">project <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    location <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    kind <span class="string">&quot;SharedLib&quot;</span></span><br><span class="line"></span><br><span class="line">    language <span class="string">&quot;C++&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">targetdir</span> (<span class="string">&quot;bin/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">objdir</span> (<span class="string">&quot;bin-int/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    pchheader <span class="string">&quot;skpch.h&quot;</span></span><br><span class="line"></span><br><span class="line">    pchsource <span class="string">&quot;Satsuki/src/skpch&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    files</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.h&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.cpp&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    includedirs</span><br><span class="line">x</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -230,7 +604,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-08-29 20:30:08 / 修改时间：22:02:31" itemprop="dateCreated datePublished" datetime="2023-08-29T20:30:08+08:00">2023-08-29</time>
+      <time title="创建时间：2023-08-29 20:30:08 / 修改时间：22:20:34" itemprop="dateCreated datePublished" datetime="2023-08-29T20:30:08+08:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -325,7 +699,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-08-29 19:29:28 / 修改时间：19:30:57" itemprop="dateCreated datePublished" datetime="2023-08-29T19:29:28+08:00">2023-08-29</time>
+      <time title="创建时间：2023-08-29 19:29:28 / 修改时间：22:20:34" itemprop="dateCreated datePublished" datetime="2023-08-29T19:29:28+08:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -413,7 +787,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-08-29 19:25:17 / 修改时间：19:29:10" itemprop="dateCreated datePublished" datetime="2023-08-29T19:25:17+08:00">2023-08-29</time>
+      <time title="创建时间：2023-08-29 19:25:17 / 修改时间：22:20:34" itemprop="dateCreated datePublished" datetime="2023-08-29T19:25:17+08:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -501,7 +875,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-08-29 12:49:30 / 修改时间：16:31:22" itemprop="dateCreated datePublished" datetime="2023-08-29T12:49:30+08:00">2023-08-29</time>
+      <time title="创建时间：2023-08-29 12:49:30 / 修改时间：22:20:34" itemprop="dateCreated datePublished" datetime="2023-08-29T12:49:30+08:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -875,283 +1249,6 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/efa8d1f054ea.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/08/efa8d1f054ea.html" class="post-title-link" itemprop="url">【商业系列】商业计划书大纲与内容</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-08-28 01:16:31 / 修改时间：01:53:30" itemprop="dateCreated datePublished" datetime="2023-08-28T01:16:31+08:00">2023-08-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%95%86%E4%B8%9A/" itemprop="url" rel="index"><span itemprop="name">商业</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>商业计划书大纲</strong></p>
-<ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析</li>
-<li>5、 商业模式</li>
-<li>6、 战略规划
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/08/efa8d1f054ea.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/fd049e549b6a.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/08/fd049e549b6a.html" class="post-title-link" itemprop="url">【游戏引擎原理】P1：GPU驱动的几何管线</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-08-27 14:13:38" itemprop="dateCreated datePublished" datetime="2023-08-27T14:13:38+08:00">2023-08-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-29 10:55:43" itemprop="dateModified" datetime="2023-08-29T10:55:43+08:00">2023-08-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/" itemprop="url" rel="index"><span itemprop="name">游戏引擎</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>传统渲染问题：<br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/08/fd049e549b6a.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/3d8a9bfbeeea.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/08/3d8a9bfbeeea.html" class="post-title-link" itemprop="url">Lecture 15：Fork的应用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-08-27 14:09:52" itemprop="dateCreated datePublished" datetime="2023-08-27T14:09:52+08:00">2023-08-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-29 19:25:02" itemprop="dateModified" datetime="2023-08-29T19:25:02+08:00">2023-08-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/08/3d8a9bfbeeea.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -1177,7 +1274,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共32.2k字</span>
+  <span class="post-count">博客全站共35k字</span>
 </div>
     </div>
   </footer>

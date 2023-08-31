@@ -20,25 +20,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="向着黄昏与自由迁徙">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Satsuki的博客">
-<meta property="og:url" content="https://satsuki-64.github.io/tags/%E7%AE%97%E6%B3%95/index.html">
+    <meta name="description" content="1.基础知识1.1 两种LLMBase LLM基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。 Instruction Tuned LLM这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。对于大部分情况下，都为使用ITLLM进行学习以及开发。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prompt编写指南">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/08/081ae7892f5f.html">
 <meta property="og:site_name" content="Satsuki的博客">
-<meta property="og:description" content="向着黄昏与自由迁徙">
+<meta property="og:description" content="1.基础知识1.1 两种LLMBase LLM基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。 Instruction Tuned LLM这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。对于大部分情况下，都为使用ITLLM进行学习以及开发。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-30T17:53:45.000Z">
+<meta property="article:modified_time" content="2023-08-30T18:30:53.549Z">
 <meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="ChatGPT">
+<meta property="article:tag" content="深度学习">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://satsuki-64.github.io/tags/%E7%AE%97%E6%B3%95/">
+<link rel="canonical" href="https://satsuki-64.github.io/2023/08/081ae7892f5f.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/算法/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/08/081ae7892f5f.html","path":"2023/08/081ae7892f5f.html","title":"Prompt编写指南"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: 算法 | Satsuki的博客</title>
+<title>Prompt编写指南 | Satsuki的博客</title>
   
 
 
@@ -125,7 +130,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -138,6 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-text">1.基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E4%B8%A4%E7%A7%8DLLM"><span class="nav-text">1.1 两种LLM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E6%8F%90%E9%97%AE%E5%8E%9F%E5%88%99"><span class="nav-text">1.2 提问原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E5%8E%9F%E5%88%99%E4%B8%80%EF%BC%9A%E7%BC%96%E5%86%99%E6%98%8E%E7%A1%AE%E3%80%81%E5%85%B7%E4%BD%93%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="nav-text">1.2.1 原则一：编写明确、具体的指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-%E5%8E%9F%E5%88%99%E4%BA%8C%EF%BC%9A%E7%BB%99%E6%A8%A1%E5%9E%8B%E6%97%B6%E9%97%B4%E5%8E%BB%E6%80%9D%E8%80%83"><span class="nav-text">1.2.2 原则二：给模型时间去思考</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -190,70 +196,127 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">算法
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/081ae7892f5f.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Prompt编写指南 | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Prompt编写指南
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+
+      <time title="创建时间：2023-08-31 01:53:45 / 修改时间：02:30:53" itemprop="dateCreated datePublished" datetime="2023-08-31T01:53:45+08:00">2023-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><span id="more"></span>
+<h1 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1.基础知识"></a>1.基础知识</h1><h2 id="1-1-两种LLM"><a href="#1-1-两种LLM" class="headerlink" title="1.1 两种LLM"></a>1.1 两种LLM</h2><p><strong>Base LLM</strong><br>基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。</p>
+<p><strong>Instruction Tuned LLM</strong><br>这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。<br>对于大部分情况下，都为使用ITLLM进行学习以及开发。</p>
+<ul>
+<li>因为ITLLM是基于指令（关键词）进行的矫正、输出，因此当结果不合适时，应对重写选择合适的指令；</li>
+</ul>
+<h2 id="1-2-提问原则"><a href="#1-2-提问原则" class="headerlink" title="1.2 提问原则"></a>1.2 提问原则</h2><h3 id="1-2-1-原则一：编写明确、具体的指令"><a href="#1-2-1-原则一：编写明确、具体的指令" class="headerlink" title="1.2.1 原则一：编写明确、具体的指令"></a>1.2.1 原则一：编写明确、具体的指令</h3><p>明确 不等于 简短，为了明确的指令，可以提供更多的描述，来保证上下文信息的重组；</p>
+<p><strong>具体方法1：使用分隔符清楚的指示输入的不同部分</strong></p>
+<ul>
+<li>分隔符可以是任何清晰的符号：引号、分割号、三引号、XML标记等</li>
+<li>让模型知道：这是一个单独的部分</li>
+</ul>
+<p><strong>具体方法2：要求结构化的输出</strong><br>可以要求HTML、JSON、XML、MD等具体格式的输出；</p>
+<p><strong>具体方法3：要求模型检查条件是否被满足</strong><br>当问题是基于某些假设时，可以先让模型检查这些假设；如果不满足条件，则指示停止尝试完全完成这些任务。</p>
+<p><strong>具体方法4：少量训练提示</strong><br>在前面有成功回答的问题时，可以要求模型，它的任务是以一致的风格回答问题；</p>
+<h3 id="1-2-2-原则二：给模型时间去思考"><a href="#1-2-2-原则二：给模型时间去思考" class="headerlink" title="1.2.2 原则二：给模型时间去思考"></a>1.2.2 原则二：给模型时间去思考</h3><p>模型无法处理过于复杂的问题。因此需要给模型“时间”去思考；</p>
+<p><strong>具体方法1：指定完成任务所需的步骤</strong><br>具体指明回答时的步骤，比如：<br><em>第一步：总结要点<br>第二步：将要点翻译成英文<br>第三步：列出每一个要点的名称以及总结<br>第四步：输出JSON格式的内容</em></p>
+<p><strong>具体方法2：指示模型在做出结论之前，先思考解决方案</strong><br>在模型给出具体的答案之前，先给时间去进行问题的实际思考；<br>比如让模型先用自己的计算方法进行计算，然后再和给出的答案进行比较；<br>*1、先给出你自己的解决方案<br>2、再该处你自己的解决方案之前，不要决定解决方案是否正确<br>*</p>
+<p><strong>具体方法3：面对幻觉时，要求模型先给出引用，再基于引用给出答案</strong><br>由于模型并不知道自己知识的边界，因此可能会编造出看起来十分正确的回答；<br>为了解决这种问题，可以要求：</p>
+<ol>
+<li>模型先给出针对问题的答案的引用；</li>
+<li>要求模型基于这些引用，回答相关问题；</li>
+</ol>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-08-29T10:01:37+08:00"
-              content="2023-08-29">
-          08-29
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-        <a class="post-title-link" href="/2023/08/2d466e9f916b.html" itemprop="url">
-          <span itemprop="name">【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</span>
-        </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"><i class="fa fa-tag"></i> AI</a>
+              <a href="/tags/ChatGPT/" rel="tag"><i class="fa fa-tag"></i> ChatGPT</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/d5920372157c.html" rel="prev" title="【Game Engine】P2：Precompiled Header">
+                  <i class="fa fa-angle-left"></i> 【Game Engine】P2：Precompiled Header
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/08/5f4541f148f0.html" rel="next" title="【CSharp系列】托管堆与垃圾回收（3）-- 特殊资源对象">
+                  【CSharp系列】托管堆与垃圾回收（3）-- 特殊资源对象 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-08-28T10:02:21+08:00"
-              content="2023-08-28">
-          08-28
-        </time>
-      </div>
 
-      <div class="post-title">
-        <a class="post-title-link" href="/2023/08/4b26dd1d757b.html" itemprop="url">
-          <span itemprop="name">【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</span>
-        </a>
-      </div>
 
-      
-    </header>
-  </article>
 
-    </div>
-  </div>
-  
-  
-  
+
 
 </div>
   </main>
