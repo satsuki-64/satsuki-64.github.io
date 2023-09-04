@@ -1,65 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>【CSharp系列】1. CLR执行模型</title>
-    <url>/2023/08/5aed3da140f6.html</url>
-    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步<span id="more"></span></li>
-</ol>
-<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
-<ol>
-<li>内存管理</li>
-<li>程序集加载</li>
-<li>安全性</li>
-<li>异常处理</li>
-<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
-</ol>
-<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
-<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
-<ol>
-<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
-<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
-<li>元数据：源代码的定义数据，源代码的引用数据</li>
-<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
-<li></li>
-</ol>
-<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
-<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
-<ol>
-<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
-<li>程序集是重用、安全性以及版本控制的最小单元；</li>
-<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
-</ol>
-<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
-<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
-<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
-<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
-<p><strong>加载CLR</strong></p>
-<ol>
-<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
-<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
-<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
-</ol>
-<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
-<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
-<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
-<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
-]]></content>
-      <categories>
-        <category>CSharp</category>
-      </categories>
-      <tags>
-        <tag>CSharp</tag>
-        <tag>CLR</tag>
-        <tag>编译原理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【CSharp系列】CLR寄宿与AppDomain（1）-- 基本概念</title>
     <url>/2023/09/a5b39cbba297.html</url>
     <content><![CDATA[<p>内容大纲：</p>
@@ -176,165 +117,62 @@
       </tags>
   </entry>
   <entry>
-    <title>【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</title>
-    <url>/2023/08/4b26dd1d757b.html</url>
-    <content><![CDATA[<ul>
-<li><ol>
-<li>为什么要有托管堆</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>什么是托管堆</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>垃圾回收算法</li>
-</ol>
-<ul>
-<li><ol>
-<li>引用计数算法</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>引用跟踪算法<span id="more"></span></li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="1-为什么要有托管堆"><a href="#1-为什么要有托管堆" class="headerlink" title="1.为什么要有托管堆"></a>1.为什么要有托管堆</h1><h2 id="1-1-面向对象与资源分配"><a href="#1-1-面向对象与资源分配" class="headerlink" title="1.1 面向对象与资源分配"></a>1.1 面向对象与资源分配</h2><p><strong>面向对象中的资源</strong><br>概念：在面向对象的环境中，任何一种类型都代表了计算机中可供程序使用的一种资源。如果要使用这种资源，就需要为这种资源分配一定的内存；</p>
-<p><strong>资源分配步骤</strong></p>
-<ul>
-<li>第一步<ul>
-<li>调用IL代码<code>newobj</code>，为代表资源的类型分配内存；</li>
-<li>此步骤通常由new操作符来触发并完成；</li>
-</ul>
-</li>
-<li>第二步<ul>
-<li>根据类型的状态设置，初始化内存，设置资源的初始状态并使得此资源可用；</li>
-<li>由类型的实例构造函数来设置初始状态；</li>
-</ul>
-</li>
-<li>第三步<ul>
-<li>访问类型的成员来使用此资源</li>
-</ul>
-</li>
-<li>第四步<ul>
-<li>摧毁资源的状态，以进行垃圾的清理</li>
-</ul>
-</li>
-<li>第五步<ul>
-<li>由GC回收期释放内存</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-为什么需要托管堆来进行垃圾回收"><a href="#1-2-为什么需要托管堆来进行垃圾回收" class="headerlink" title="1.2 为什么需要托管堆来进行垃圾回收"></a>1.2 为什么需要托管堆来进行垃圾回收</h2><p><strong>C++中的例子</strong><br>在需要程序员手动管理内存的语言中（比如当C++不使用shareptr或其他基于对象的指针时），程序员经常会产生两种错误：</p>
+    <title>【CSharp系列】1. CLR执行模型</title>
+    <url>/2023/08/5aed3da140f6.html</url>
+    <content><![CDATA[<p>将源代码编译成托管模块<br><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
 <ol>
-<li>忘记释放不再需要的内存，进而造成内存泄漏；</li>
-<li>尝试使用已经释放的内存，造成安全漏洞；<br>由于这两种错误经常是在程序运行时才能发现，因此程序发生异常时调试困难。</li>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<span id="more"></span></li>
 </ol>
-<p><strong>解决方法：可验证的、类型安全的代码</strong><br>在资源分配阶段中的【第四步】，此步骤若不是由程序员来完成，而是交给程序的托管堆和垃圾回收器来自动进行时，此时程序就能进一步的保证安全；</p>
-<ul>
-<li>托管堆会自动完成垃圾的回收，并且当需要手动进行回收时，托管堆还提供了一个简化的模型；</li>
-</ul>
-<p><strong>补充：需要特殊清理的类型</strong><br>部分包装了本机资源的类型，比如对文件、Socket、数据库连接资源的类型，可能无法使用自动进行的垃圾回收，而是需要程序员使用GC的手动触发；</p>
-<h1 id="2-什么是托管堆"><a href="#2-什么是托管堆" class="headerlink" title="2.什么是托管堆"></a>2.什么是托管堆</h1><h2 id="2-1-托管堆基本概念"><a href="#2-1-托管堆基本概念" class="headerlink" title="2.1 托管堆基本概念"></a>2.1 托管堆基本概念</h2><p><strong>托管堆</strong><br>在C#中，托管堆是一种用于存储和管理托管对象（即运行在CLR中的对象）的内存区域。它是CLR的一部分，为托管对象提供动态内存分配和释放的功能。托管堆是一种自动化内存管理机制，它通过垃圾回收器自动回收不再使用的对象，从而释放内存并确保内存的正确使用。</p>
-<p><strong>NextObjPtr</strong><br>CLR会在程序的托管堆中管理一个指针NextObjPtr，此指针会一直指向下一个对象在队中分配的位置。在最开始时，此指针指向地址空间的基地址；</p>
-<p><strong>内存自动扩张</strong><br>在一个区域的内存备非垃圾对象填满之后，CLR会自动分配更多的区域。此过程会一直进行，直到进程的地址空间被填满；</p>
-<h2 id="2-2-CLR中的new行为"><a href="#2-2-CLR中的new行为" class="headerlink" title="2.2 CLR中的new行为"></a>2.2 CLR中的new行为</h2><p><strong>执行行为</strong><br>C#的new操作符将导致CLR执行以下步骤：</p>
-<ul>
-<li>第一步<ul>
-<li>计算类型的字段(包括从基类型继承的字段)所需的字节数。</li>
-</ul>
-</li>
-<li>第二步<ul>
-<li>加上对象额外所需的两部分开销所需的字节数；</li>
-<li>每个对象都有两个开销字段：<ul>
-<li>类型对象指针</li>
-<li>同步块索引</li>
-</ul>
-</li>
-<li>对于32位应用程序，这两个字段各自需要 32位，所以每个对象要增加8字节。对于64位应用程序，这两个字段各自需要64位，所以每个对象要增加16字节；</li>
-</ul>
-</li>
-<li>第三步<ul>
-<li>检查阶段：<ul>
-<li>CLR检查区域中是否有分配对象所需的字节数。如果托管堆有足够的可用空间，就在NextObiPtr 指针指向的地址处放入对象，为对象分配的字节会被清零；</li>
-</ul>
-</li>
-<li>调用阶段<ul>
-<li>调用类型的构造器，为类型构造器中的this参数传递当前NextObiPtr指向的对象，new操作符返回对象引用；</li>
-<li>在返回这个引用之前，NextObjiPtr指针的值会加上对象占用的字节数来得到一个新值，即下个对象放入托管堆时的地址。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>分配之后的内存，在空间中形式如下简图：<br><img src="/../../image/Pasted%20image%2020230828103459.png" alt="新初始化的托管堆，其中构造了3个对象"></p>
-<h2 id="2-3-托管堆与空间局部化"><a href="#2-3-托管堆与空间局部化" class="headerlink" title="2.3 托管堆与空间局部化"></a>2.3 托管堆与空间局部化</h2><p><strong>空间局部化</strong><br>由于托管堆的分配是在指针之上加一个值，因此其分配的速度非常的快；差不多同时分配的对象彼此间有较强的联系，而且经常差不多在同一时间访问；</p>
-<ul>
-<li><strong>由于托管堆在内存中连续分配这些对象，所以会因为引用的“局部化”(locality)而获得性能上的提升</strong></li>
-</ul>
-<p><strong>具体的优点</strong></p>
-<ul>
-<li>优点一<ul>
-<li>进程的工作集会非常小，应用程序只需使用很少的内存，从而提高了速度；</li>
-</ul>
-</li>
-<li>优点二<ul>
-<li>代码使用的对象可以全部驻留在 CPU 的缓存中。应用程序能以非常快的速度访问这些对象，因为CPU在执行大多数操作不会因Cache Miss而被迫访问较慢的 RAM；</li>
-</ul>
-</li>
-</ul>
-<h1 id="3-垃圾回收算法"><a href="#3-垃圾回收算法" class="headerlink" title="3.垃圾回收算法"></a>3.垃圾回收算法</h1><p>在应用程序调用new操作符创建对象时，可能会没有足够地址空间来分配该对象，此时CLR就需要执行垃圾回收。</p>
-<h2 id="3-1-引用计数算法"><a href="#3-1-引用计数算法" class="headerlink" title="3.1 引用计数算法"></a>3.1 引用计数算法</h2><p><strong>什么是引用计数算法</strong><br>对于对象生存期的管理，有些系统使用的是引用计数算法；<em>比如微软的COM</em></p>
-<p><strong>算法内容</strong><br>堆上的每个对象都维护着一个内存字段，用于统计程序中多少部分正在使用对象。随着每一部分到达代码中某个不再需要对象的地方，就递减对象的计数字段。当计数字段变成0，对象就可以从内存中删除；</p>
-<p><strong>算法问题：循环引用</strong><br>在一些GUI应用程序中，窗口对象将容纳对子UI对象的引用，而子UI对象将容纳对父窗口对象的引用；<br>这种引用会阻止两个对象的计数器达到 0，所以两个对象永远不会删除，即使应用程序本身不再需要窗口。</p>
-<ul>
-<li>CLR不使用引用计数算法，而是使用<strong>引用跟踪算法</strong>；</li>
-</ul>
-<h2 id="3-2-引用跟踪算法"><a href="#3-2-引用跟踪算法" class="headerlink" title="3.2 引用跟踪算法"></a>3.2 引用跟踪算法</h2><p><strong>算法特点</strong><br>引用跟踪算法只关心引用类型的变量，不关心值类型变量。因为只有引用类型的变量才能引用堆上的对象，而值类型变量直接包含值类型实例本身。</p>
-<p><strong>基础概念：根</strong><br>在CLR中，将所有引用类型的变量称为<strong>根</strong>；<br>引用类型变量可以在许多场合使用：</p>
-<ul>
-<li>类的静态字段</li>
-<li>类的实例字段</li>
-<li>方法参数</li>
-<li>局部变量<br>这些内容都可以成为根。</li>
-</ul>
-<h3 id="3-2-1-算法实现"><a href="#3-2-1-算法实现" class="headerlink" title="3.2.1 算法实现"></a>3.2.1 算法实现</h3><p><strong>第一阶段：暂停阶段</strong><br>暂停进程中的所有线程。这防止线程在CLR检查期间访问对象并更改其状态；</p>
-<p><strong>第二阶段：标记阶段</strong></p>
-<ul>
-<li>CLR 遍历堆中的所有对象，将同步块索引字段中的一位设为 0；<em>当此位设为 0 时，表示此对象应该被删除；为 1 时表示不用删除；</em></li>
-<li>设置为 0 之后，表明所有对象都应删除。然后，CLR 检查所有活动根，查看它们引用了哪些对象。如果一个根包含null，CLR忽略这个根并继续检查下个根；</li>
-<li>任何根如果引用了堆上的对象，CLR 都会标记那个对象，也就是将该对象的同步块索引中的位设为 1。一个对象被标记后，CLR 会检查那个对象中的根，标记它们引用的对象。如果发现对象已经标记，就不重新检查对象的字段。这就避免了因为循环引用而产生死循环。</li>
-<li>全部检查完毕后，堆中的对象要么已标记，要么未标记。<ul>
-<li>已标记的对象不能被垃圾回收，因为至少有一个根在引用它。这种对象是<strong>可达reachable</strong>的对象。因为应用程序代码可通过仍在引用它的变量抵达它；</li>
-<li>未标记的对象是<strong>不可达unreachable</strong>的，因为应用程序中不存在使对象能被再次访问的根；</li>
-</ul>
-</li>
-</ul>
-<p>图示为回收之前的托管堆：<br><img src="/../../image/Pasted%20image%2020230828105510.png" alt="回收之前的托管堆"></p>
-<p><strong>第三阶段：压缩阶段</strong><br>CLR对堆中已标记的对象进行“内存位置的转移，压缩所有幸存下来的对象，使它们占用连续的内存空间，如图所示：<br><img src="/../../image/Pasted%20image%2020230828105609.png" alt="垃圾回收之后的托管堆"></p>
-<ul>
-<li>压缩的好处：<ul>
-<li>所有幸存对象在内存中紧挨在一起，恢复了引用的“局部化”，减小了应用程序的工作集，从而提升了将来访问这些对象时的性能；</li>
-<li>解决了原生堆的空间碎片化问题；</li>
-</ul>
-</li>
-<li>内存偏移<ul>
-<li>在内存中移动了对象之后有一个问题待解决：引用幸存对象的根现在引用的还是对象最初在内存中的位置，而非移动之后的位置；</li>
-<li>CLR要从每个根减去所引用的对象在内存中偏移的字节数，保证每个根还是引用和之前一样的对象–只是对象在内存中变换了位置；</li>
-</ul>
-</li>
-</ul>
+<h2 id="1-1-将源代码编译成托管模块"><a href="#1-1-将源代码编译成托管模块" class="headerlink" title="1.1 将源代码编译成托管模块"></a>1.1 将源代码编译成托管模块</h2><p><strong>定义：公共语言运行时（Common Language Runtime，CLR）</strong><br>描绘：是一个可以由多种编程语言使用的”运行时”，其核心功能包括：</p>
+<ol>
+<li>内存管理</li>
+<li>程序集加载</li>
+<li>安全性</li>
+<li>异常处理</li>
+<li>线程同步<br>这些功能可以由所有面向CLR的语言使用。基于CLR的托管语言和非托管C++语言，在系统层面后者可以进行更低级别的控制，可以完全按照自己的想法管理内存。而CLR不管开发者使用哪一种编程语言写源代码，只要其是面向CLR的。因此，CLR提供了其他技术所无法媲美的集成度，使得混合语言编程成为了开发者可以考虑的一个选项。<br>为了执行包含托管代码以及托管数据的模块，用户必须在自己的计算机上安装好CLR（目前作为.NET Framework的一部分被提供）</li>
+</ol>
+<p>补充：可将编译器是为语法检查其和“正确代码分析器”。</p>
+<p><strong>定义：托管模块（managed module）</strong><br>描述：托管模块是标准的32位（PE32）或者64位（PE32+）的Microsoft Windows可移植体文件，基于CLR来运行。<br>托管模块四大部分：</p>
+<ol>
+<li>PE32 或 PE32+头：如果是依赖于本机CPU的代码，此项会包含和本机CPU相关的信息。</li>
+<li>CLR头：包含使这个模块成为托管模块的信息，比如CLR版本，Main方法位置，MethodDef数据，模块元数据等</li>
+<li>元数据：源代码的定义数据，源代码的引用数据</li>
+<li>IL代码：编译器编译源代码时生成的代码，运行时CLR将IL编译成编辑CPU代码</li>
+<li></li>
+</ol>
+<p><strong>定义：托管代码（managed code）</strong><br>描述：每个面向CLR的编译器生成的代码，都是IL代码（中间代码），IL代码又被称作托管代码。<br>IL代码比大部分CPU机器语言都更加高级，其可以访问和操作对象的类型，并且提供了指令来创建和初始化对象那个、调用对象上的虚方法以及直接操作数组元素。在此意义上，可以将IL理解成是一种<strong>面向对象的机器语言</strong>。<br>补充：使用高级语言只能使用CLR全部功能当中的一个子集，但IL汇编语言运行开发人员访问CLR全部功能。<br>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.16.22.excalidraw]]</p>
+<h2 id="1-2-将托管模块合并成程序集"><a href="#1-2-将托管模块合并成程序集" class="headerlink" title="1.2 将托管模块合并成程序集"></a>1.2 将托管模块合并成程序集</h2><p><strong>定义：程序集（assembly）</strong><br>描述：CLR实际上并不和托管模块工作，而是和程序集工作。生成的程序集既可以时可执行文件，也可以是DLL，最终由CLR管理这些程序集中的代码的执行。<br>内容：</p>
+<ol>
+<li>程序集是一个或者多个模块&#x2F;资源文件的逻辑性分组；</li>
+<li>程序集是重用、安全性以及版本控制的最小单元；</li>
+<li>利用程序集，可以将一组文件作为一个单独的实体来对待；<br>优势：程序集把文件的逻辑表示和物理表示区分开，利用程序集可以在不同的地方部署文件，在使用到其时再进行下载，不使用其时可以无需下载，但是在对待程序集时确依然将其视为一个整体</li>
+</ol>
+<p>逻辑关系：<br>![[Chapter 1：CLR执行模型 2023-03-07 19.30.58.excalidraw]]</p>
+<h2 id="1-3-加载公共语言运行时"><a href="#1-3-加载公共语言运行时" class="headerlink" title="1.3 加载公共语言运行时"></a>1.3 加载公共语言运行时</h2><p><strong>简介</strong><br>在CLR运行之前，需要设置其平台选项指定最后生成的程序集能够在指定的平台上运行。</p>
+<p><strong>CLR运行前设置：设置不同CPU版本</strong><br>在CLR加载之前，C#编译器提供了一个&#x2F;platform的命令行选项，允许指定最后生成的程序集能够在指定的平台上运行。<br>取决于&#x2F;platform开关选项，C#编译器生成的程序集要么包含PE32，要么是PE32+，在可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。<br>之后，Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</p>
+<p><strong>MSCorEE.dll</strong><br>进程在Windows当中检查文件头后，需要决定创建32位或者64位进程，之后会在进程的地址空间内加载MSCorEE.dll的对应CPU版本，其不同版本都在<code>%SystemRoot%\System32</code>或者<code>%SystemRoot%\SysWow64</code>目录中。之后进程的主线程调用MSCorEE当中的定义的一个方法，此方法初始化CLR，并加载EXE程序集，调用入口方法Main。</p>
+<p><strong>加载CLR</strong></p>
+<ol>
+<li>可执行文件运行前，Windows会检查文件头，判断需要的是32位还是64位的地址空间。</li>
+<li>Windows检查EXE文件头，决定创建32位或者64位进程，并在进程地址空间加载MSCorEE.dll的x86、x64或者ARM版本。</li>
+<li>进程的主线程调用MSCorEE.dll中定义的一个方法，此方法初始化CLR，加载EXE程序集，调用其入口方法Main，然后托管应用程序启动并运行。</li>
+</ol>
+<p>![[Chapter 1：CLR执行模型 2023-03-07 20.10.16.excalidraw]]</p>
+<h2 id="1-4-执行程序集的代码"><a href="#1-4-执行程序集的代码" class="headerlink" title="1.4 执行程序集的代码"></a>1.4 执行程序集的代码</h2><p>定义：即时编译器（Just in time，JIT）<br>描述：在执行程序集中IL代码的方法后，需要将IL代码转换成本机（native）指令，此时就由CLR当中的JIT编译器来实现。JIT编译器动态的将本机CPU代码存储到动态内存中，因此一旦应用程序停止，编译好的代码也会被丢弃，之后再次启动或者存在两个实例时需要在此编译。</p>
+<p>定义：记录项<br>描述：CLR会分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项，这个记录项都含有一个地址，此地址指向该方法的具体实现。当JIT访问记录项，想编译对应函数时，即可顺着此记录项找到对应IL代码。</p>
+<p><strong>执行过程</strong><br>在Main方法执行之前，CLR检测出Main代码引用的所有类型，导致CLR分配一个内部的数据结构来管理对引用类型的访问。CLR将引用的类型当中的每个方法都设置一个记录项， CLR将每个记录项设置为包含在CLR内部的一个未编档函数，此函数为JITCompiler。在调用对应方法时，JITCompiler被调用，查询元数据找到IL代码，并且将此IL代码编译成本机CPU指令。<br>本机CPU代码动态分配到内存块当中，然后JITCompiler回到CLR为类型创建的内部数据结构，找到被调用方法对应的那条记录，将其修改（原本为对JITCompiler的引用）为指向CPU代码的内存块。第二次验证时，会跳过JITCompiler函数，直接执行内存块当中的代码。因为第二次调用不需要编译，因此只有在首次调用时有一些性能损失。</p>
 ]]></content>
       <categories>
         <category>CSharp</category>
       </categories>
       <tags>
         <tag>CSharp</tag>
-        <tag>垃圾回收</tag>
-        <tag>算法</tag>
+        <tag>CLR</tag>
+        <tag>编译原理</tag>
       </tags>
   </entry>
   <entry>
@@ -765,125 +603,6 @@
       </tags>
   </entry>
   <entry>
-    <title>AI时代个人生存指南</title>
-    <url>/2023/08/62011fb26306.html</url>
-    <content><![CDATA[<p>内容大纲：</p>
-<ul>
-<li><ol>
-<li>ChatGPT使用基础</li>
-</ol>
-<ul>
-<li>1.1 ChatGPT的使用之道</li>
-<li>1.2 ChatGPT的使用之术</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>Midjourney使用基础</li>
-</ol>
-<ul>
-<li>2.1 Midjourney的使用之道</li>
-<li>2.2 Midjourney的使用之术<span id="more"></span></li>
-</ul>
-</li>
-</ul>
-<h1 id="1-Chat-GPT使用基础"><a href="#1-Chat-GPT使用基础" class="headerlink" title="1.Chat GPT使用基础"></a>1.Chat GPT使用基础</h1><p><strong>核心思想：拥抱AI，理解AI，成为AI</strong></p>
-<ul>
-<li>拥抱AI<ul>
-<li>率先掌握AI技能，掌握竞争优势；</li>
-</ul>
-</li>
-<li>理解AI<ul>
-<li>知道AI的能力，知道AI能做什么；</li>
-<li>同时反推自己的发展方向：AI不能做什么，就是人未来能做的事情；</li>
-</ul>
-</li>
-<li>成为AI<ul>
-<li>率先向AI学习，让自己的思维和AI同步；</li>
-<li>谁和AI最像，谁就获得了第一批AI带来的绝对优势；</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-1-ChatGPT的使用之道"><a href="#1-1-ChatGPT的使用之道" class="headerlink" title="1.1 ChatGPT的使用之道"></a>1.1 ChatGPT的使用之道</h2><p><strong>前言：关于prompt</strong><br>虽然目前依然需要使用prompt来辅助AI，但未来的AI发展是其越来越理解人类想要什么，而不需要使用prompt来提示；</p>
-<blockquote>
-<p><em>prompt教程推荐：吴恩达的prompt视频（适合程序员）：<br><a href="https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&vd_source=3f70c2a1700b0323e22826080d18a119">https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f70c2a1700b0323e22826080d18a119</a></em></p>
-</blockquote>
-<p><strong>概念：ChatGPT能做什么</strong><br>首先思考AI能做什么，在了解AI能做的事情的情况下，再思考应该让它如何做这件事情；<br>AI的画像：<strong>一个学习过网上所有知识，保守而道德的名校大学生。理性思考5秒钟，回答10句话。</strong></p>
-<ul>
-<li>知识：只存留在2021年；</li>
-<li>保守：没有独特思想；</li>
-<li>道德：有人类设定的道德包袱；</li>
-<li>名校本科生水平：不接受过于复杂的问题，可以回答大部分知识问题；</li>
-<li>理性思考5秒钟：不能接受过度复杂问题；</li>
-</ul>
-<p><strong>道一：Chat GPT的道德</strong><br>AI的回答是很道德的回答。当和价值立场或者观点相关的问题时，只会给出不同的立场，而不表达观点；</p>
-<ul>
-<li>甚至会出现<strong>道德在事实之上</strong>；</li>
-<li>为了保证道德的限制，甚至让道德在事实之上；<br><em>或许道德极大的限制了LLM的能力。</em></li>
-</ul>
-<p><strong>道二：Chat GPT的知识</strong><br>一般本科大学生的知识它都会；并且理解能力强。</p>
-<p><strong>道三：Chat GPT的提问</strong><br>对于提问，遵循两个原则：<strong>拆分、直接</strong>；</p>
-<ul>
-<li>直接：<ul>
-<li>提问不能太复杂，但是可以很困难；</li>
-</ul>
-</li>
-<li>拆分：<ul>
-<li>回答内容不能太长，所以一开始就设计多个问题，对各个部分拆分提问；</li>
-<li>对很长内容的提问：先提问大纲内容，再对每个大纲的细分内容进行提问；</li>
-</ul>
-</li>
-</ul>
-<p><strong>道四：面对AI的幻觉</strong><br>AI是语言生成模型，即按照上一句话生成下一句话；</p>
-<ul>
-<li>AI会出现强行回答，AI自己也无法分辨真假；</li>
-<li>如何面对AI回答的幻觉：<ul>
-<li>逻辑推演；</li>
-<li>拥有常识；</li>
-<li>自行验证；</li>
-</ul>
-</li>
-</ul>
-<p><strong>道五：把寻找和使用AI工具，纳入接受新工作的思考流程</strong><br>在接受一份新工作的时候，首先就可以想一想：当中有哪些工作是AI可以做的；并且把它纳入到生成流程当中。</p>
-<p><strong>补充：AI大模型的数据截止到2021年</strong><br>在2021年之前的数据，在LLM当中都有；但2021年之后的数据，AI自己也需要去查（通过OpenAI的服务器去访问这些网站）；</p>
-<p><strong>应用场合</strong></p>
-<ul>
-<li>文字工作<ul>
-<li>套路文章创作，润色，翻译，取标题，举例子</li>
-</ul>
-</li>
-<li>生活助手<ul>
-<li>普通问题咨询</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-ChatGPT的使用之术"><a href="#1-2-ChatGPT的使用之术" class="headerlink" title="1.2 ChatGPT的使用之术"></a>1.2 ChatGPT的使用之术</h2><p><strong>术一：描述好背景信息</strong><br>在向AI咨询一个问题前，一定要先描述好问题的背景信息；<br>如果不清楚描述什么背景，可以<strong>向AI提问，这个问题需要了解什么背景信息</strong>；</p>
-<p><strong>术二：提问计算方法，再得到结果</strong><br>如果直接问AI一个问题的答案，AI可能难以回答。但是如果提问AI一个问题的计算方法，AI的回答正确率更高；</p>
-<ul>
-<li>AI知道计算的方法，但不擅长计算</li>
-<li>对AI进行复杂计算的提问：可以<strong>先问过程，再顺着过程问答案</strong>；</li>
-</ul>
-<p><strong>术三：让他扮演一个角色</strong><br>让他扮演一个角色，作为一个角色来回答你的问题；<br><em>你现是一个作家、你现在是一个软件公司的文案总监、你现在是一个法律顾问</em></p>
-<h1 id="2-Midjourney使用基础"><a href="#2-Midjourney使用基础" class="headerlink" title="2.Midjourney使用基础"></a>2.Midjourney使用基础</h1><h2 id="2-1-Midjourney使用之道"><a href="#2-1-Midjourney使用之道" class="headerlink" title="2.1 Midjourney使用之道"></a>2.1 Midjourney使用之道</h2><p><strong>道一：创作具有艺术感的图像</strong><br>AI绘画可以模仿多种艺术风格，创造性的运用绘画技巧，并进行独特的构图和色彩搭配；</p>
-<p><strong>道二：难以处理复杂边缘、空间关系的物体</strong><br>这与扩散模型的原理有关。现阶段，扩散模型可学习的样本图片的清晰度普遍较低，导致模型在处理某些细节时需要进行“猜测”。因此，我们常常发现AI绘制的手指存在错误，其他具有复杂边缘的物体也存在同样的问题。另外，扩散模型并非从空间角度理解图像，因此在处理物体间复杂的空间关系时，AI可能会遇到困难</p>
-<p><strong>道三：难以同时绘制多个对象，并且每个对象有不同的属性</strong><br>AI可能无法准确理解多个对象和这些对象之间的属性关系，或者可能会忽略掉一些关键属性。 </p>
-<h2 id="2-2-Midjourney使用之术"><a href="#2-2-Midjourney使用之术" class="headerlink" title="2.2 Midjourney使用之术"></a>2.2 Midjourney使用之术</h2><p><strong>术一：Prompt能力</strong><br>使用明确且具体的语言，来描述任务；</p>
-<p><strong>术二：用尽可能清晰的语言</strong><br>Midjourney的语言文字理解能力不如Chat GPT；</p>
-<p><strong>术三：工具本身的熟练程度</strong></p>
-<ul>
-<li>设置宽高比；</li>
-<li>混乱程度；</li>
-<li>使用种子；</li>
-</ul>
-]]></content>
-      <categories>
-        <category>人工智能</category>
-      </categories>
-      <tags>
-        <tag>AI</tag>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Prompt编写指南</title>
     <url>/2023/08/081ae7892f5f.html</url>
     <content><![CDATA[<p>内容大纲：</p>
@@ -928,109 +647,6 @@
         <tag>AI</tag>
         <tag>ChatGPT</tag>
         <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【商业系列】商业计划书大纲与内容</title>
-    <url>/2023/08/efa8d1f054ea.html</url>
-    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
-<ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析</li>
-<li>5、 商业模式</li>
-<li>6、 战略规划<span id="more"></span></li>
-</ul>
-<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容<ul>
-<li>1、项目介绍</li>
-<li>2、核心优势</li>
-</ul>
-</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析<ul>
-<li>1、 市场分析</li>
-<li>2、 竞品分析</li>
-</ul>
-</li>
-<li>5、 商业模式<ul>
-<li>1、 商业模式介绍</li>
-<li>2、 相关数据</li>
-</ul>
-</li>
-<li>6、 战略规划<ul>
-<li>1、 战略目标</li>
-<li>2、 实现路径</li>
-</ul>
-</li>
-</ul>
-<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
-<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
-<ol>
-<li>核心业务内容</li>
-<li>核心优势</li>
-</ol>
-<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
-<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
-<ul>
-<li>分析方法<ul>
-<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
-<li><ol>
-<li>增长型项目（还没开始或刚开始）</li>
-</ol>
-<ul>
-<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>运营型项目（已经开始）</li>
-</ol>
-<ul>
-<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
-<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
-<ul>
-<li>流量矩阵：<ul>
-<li>自媒体流量（自带宣传流量）</li>
-<li>开发团队（丰富开发经验）</li>
-<li>项目案例（Unity3D）</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
-<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
-<ul>
-<li>真实的数据，但是是部分的真实</li>
-</ul>
-<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
-<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
-<ol>
-<li>项目如何盈利？</li>
-<li>项目的流量模式？</li>
-<li>获客转化的路径？</li>
-<li>是否具有可持续性？</li>
-<li>增长的空间以及可能？</li>
-</ol>
-<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
-<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
-<ol>
-<li>确定战略目标，展现当前项目的发展前景</li>
-<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
-</ol>
-]]></content>
-      <categories>
-        <category>商业</category>
-      </categories>
-      <tags>
-        <tag>商业</tag>
-        <tag>创业</tag>
       </tags>
   </entry>
   <entry>
@@ -1263,146 +879,268 @@
       </tags>
   </entry>
   <entry>
-    <title>Lecture 12：进程的地址空间</title>
-    <url>/2023/08/d03400aa93d7.html</url>
-    <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
-<span id="more"></span>
-<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
-<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
-
-<p>查看某一个进程地址空间代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
-<p>当中的37491为进程的id。</p>
-<p><strong>查看结果：</strong><br><img src="/../../image/Pasted%20image%2020230829191538.png"></p>
-<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong></p>
+    <title>【商业系列】商业计划书大纲与内容</title>
+    <url>/2023/08/efa8d1f054ea.html</url>
+    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
 <ul>
-<li>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。</li>
-<li>proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</li>
+<li>1、 团队简介</li>
+<li>2、 项目内容</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析</li>
+<li>5、 商业模式</li>
+<li>6、 战略规划<span id="more"></span></li>
 </ul>
-<p>**相关手册：<code>mam 5 proc</code></p>
-<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br><img src="/../../image/Pasted%20image%2020230829191738.png"><br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
-<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
-<hr>
-<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
-<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
-<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
-<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
-<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
-<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
-<p><strong>定义：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
-<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
-<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br><img src="/../../image/Pasted%20image%2020230829191917.png"></p>
-<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
-<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
-<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
+<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
+<li>1、 团队简介</li>
+<li>2、 项目内容<ul>
+<li>1、项目介绍</li>
+<li>2、核心优势</li>
+</ul>
+</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析<ul>
+<li>1、 市场分析</li>
+<li>2、 竞品分析</li>
+</ul>
+</li>
+<li>5、 商业模式<ul>
+<li>1、 商业模式介绍</li>
+<li>2、 相关数据</li>
+</ul>
+</li>
+<li>6、 战略规划<ul>
+<li>1、 战略目标</li>
+<li>2、 实现路径</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
+<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
+<ol>
+<li>核心业务内容</li>
+<li>核心优势</li>
+</ol>
+<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
+<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
 <ul>
-<li>第一步：获得游戏进程的PID（进程号）</li>
-<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
-<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
-<li>第四步：遍历此段内存，找到关键词数据</li>
-<li>第五步：修改被关键字标记的内存</li>
+<li>分析方法<ul>
+<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
+<li><ol>
+<li>增长型项目（还没开始或刚开始）</li>
+</ol>
+<ul>
+<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
 </ul>
-<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
-<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
-<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
-<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
-<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
+</li>
+<li><ol start="2">
+<li>运营型项目（已经开始）</li>
+</ol>
+<ul>
+<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
+<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
+<ul>
+<li>流量矩阵：<ul>
+<li>自媒体流量（自带宣传流量）</li>
+<li>开发团队（丰富开发经验）</li>
+<li>项目案例（Unity3D）</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
+<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
+<ul>
+<li>真实的数据，但是是部分的真实</li>
+</ul>
+<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
+<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
+<ol>
+<li>项目如何盈利？</li>
+<li>项目的流量模式？</li>
+<li>获客转化的路径？</li>
+<li>是否具有可持续性？</li>
+<li>增长的空间以及可能？</li>
+</ol>
+<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
+<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
+<ol>
+<li>确定战略目标，展现当前项目的发展前景</li>
+<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
+</ol>
 ]]></content>
       <categories>
-        <category>操作系统</category>
+        <category>商业</category>
       </categories>
       <tags>
-        <tag>进程</tag>
-        <tag>操作系统</tag>
-        <tag>Fork</tag>
-        <tag>Mmap</tag>
+        <tag>商业</tag>
+        <tag>创业</tag>
       </tags>
   </entry>
   <entry>
-    <title>Lecture 13：系统调用与Shell</title>
-    <url>/2023/08/3dbfbd52ee49.html</url>
-    <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
-<h3 id="13-1-2-早期的Shell"><a href="#13-1-2-早期的Shell" class="headerlink" title="13.1.2 早期的Shell"></a>13.1.2 早期的Shell</h3><p><strong>概念：</strong><br>早期的OS没有复杂结构，系统调用就像是库函数，那个时代的Shell就是命令行终端机。<br>核心：<strong>Shell就是一门把用户指令翻译为系统调用的编程语言</strong></p>
-<p>手册：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man sh</span><br></pre></td></tr></table></figure>
-<p>这是一个非常简单的手册，包含很多shell的内容，建立对UNIX Shell的基础认识。</p>
-<h2 id="13-2-复刻简易UNIX"><a href="#13-2-复刻简易UNIX" class="headerlink" title="13.2 复刻简易UNIX"></a>13.2 复刻简易UNIX</h2><h3 id="13-2-1-简易UNIX代码初设置"><a href="#13-2-1-简易UNIX代码初设置" class="headerlink" title="13.2.1 简易UNIX代码初设置"></a>13.2.1 简易UNIX代码初设置</h3><p>早期的计算机设计由于性能低下，设计不能太消耗性能以及复杂<br>代码：<a href="http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c</a><br>零库函数依赖、可以作为最小可用的Linux的init程序<br>由于其链接任何库函数，因此可以ffreestanding</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -c -ffreestanding sh-xv6.c -g -O2</span><br><span class="line">ld sh-xv6.o -o sh</span><br></pre></td></tr></table></figure>
-<p>第一行是将其编译，然后第二行将其静态链接<br>当使用反汇编模式进行调试时，直接从_Start()，用C写的这个函数处开始执行。此程序可以直接以命令行的形式进行运行。<br>![[Pasted image 20230827140800.png]]</p>
-<h3 id="12-2-2-第一步：读取命令"><a href="#12-2-2-第一步：读取命令" class="headerlink" title="12.2.2 第一步：读取命令"></a>12.2.2 第一步：读取命令</h3><p>代码：<br>解析：不停的getcmd()来获得用户的输入，这其中直接使用read的系统调用</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nread = <span class="built_in">syscall</span>(SYS_read,<span class="number">0</span>,buf,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-<p>一直读到换行符才停止：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(*(buf++)==<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
-<p>将命令读取到buf缓冲区里</p>
-<h3 id="12-2-3-第二步：可能性-解释执行命令"><a href="#12-2-3-第二步：可能性-解释执行命令" class="headerlink" title="12.2.3 第二步：可能性|解释执行命令"></a>12.2.3 第二步：可能性|解释执行命令</h3><p>代码：<br>![[Pasted image 20230301181806.png]]<br>解析：<br>首先判断是不是一条’cd’命令，并且其当中不能有空格<br>使用系统调用，读取buf+3之后的数据</p>
-<h3 id="12-2-4-第二步：可能性-新进程创建"><a href="#12-2-4-第二步：可能性-新进程创建" class="headerlink" title="12.2.4 第二步：可能性|新进程创建"></a>12.2.4 第二步：可能性|新进程创建</h3><p>解析：可能性|如果不是cd命令，此时创建一个新的进程，在新的进程里面把进程解析</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">syscall</span>(SYS_fork) == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">runcmd</span>(<span class="built_in">parsecmd</span>(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
-
-<p>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
+    <title>【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</title>
+    <url>/2023/08/4b26dd1d757b.html</url>
+    <content><![CDATA[<ul>
+<li><ol>
+<li>为什么要有托管堆</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>什么是托管堆</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>垃圾回收算法</li>
+</ol>
 <ul>
-<li>命令与管道<ul>
-<li>管道和命令关系<ul>
-<li>管道的左边和右边都可以任意复杂：   </li>
-<li>可以是一个很长的式子：<code>(echo a;each b;echo c;echo d)|wc -l</code></li>
-<li>把管道左边的输出作为右边的输入，这就是管道的形式语义。</li>
-</ul>
+<li><ol>
+<li>引用计数算法</li>
+</ol>
 </li>
-<li>管道解析<ul>
-<li>pipe()创建一个管道，管道返回两个描述符：</li>
-<li>pipe[0]是读口，pipe[1]是写口</li>
-<li>之后会使用fork创建两个新的进程，这两个新的进程完全复制的父进程的状态，因此此时这三个进程完全共享管道，并且共进共出。</li>
-<li>之后将p[0]的文件描述符关闭，后背又将p[1]的文件描述符关掉</li>
-<li>之后再进行Fork，子进程编号为1的进程指向管道的左边，Fork出来的子进程再进行上述出现的行为</li>
-</ul>
+<li><ol start="2">
+<li>引用跟踪算法<span id="more"></span></li>
+</ol>
 </li>
 </ul>
 </li>
 </ul>
-<h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
-<p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
-<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程</p>
-<p><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
-<h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
-<p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
-<p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
-<h3 id="13-3-2-现代Shell展望"><a href="#13-3-2-现代Shell展望" class="headerlink" title="13.3.2 现代Shell展望"></a>13.3.2 现代Shell展望</h3><p>现代的Shell功能不变，都是人和机器之间的API，但是其形式可以发生变化</p>
+<h1 id="1-为什么要有托管堆"><a href="#1-为什么要有托管堆" class="headerlink" title="1.为什么要有托管堆"></a>1.为什么要有托管堆</h1><h2 id="1-1-面向对象与资源分配"><a href="#1-1-面向对象与资源分配" class="headerlink" title="1.1 面向对象与资源分配"></a>1.1 面向对象与资源分配</h2><p><strong>面向对象中的资源</strong><br>概念：在面向对象的环境中，任何一种类型都代表了计算机中可供程序使用的一种资源。如果要使用这种资源，就需要为这种资源分配一定的内存；</p>
+<p><strong>资源分配步骤</strong></p>
 <ul>
-<li>界面自带StackOverflow？</li>
-<li>结合神经网络？</li>
-<li>智能补全？</li>
-<li>POPL20</li>
+<li>第一步<ul>
+<li>调用IL代码<code>newobj</code>，为代表资源的类型分配内存；</li>
+<li>此步骤通常由new操作符来触发并完成；</li>
 </ul>
-<h2 id="13-4-终端与任务控制"><a href="#13-4-终端与任务控制" class="headerlink" title="13.4 终端与任务控制"></a>13.4 终端与任务控制</h2><h3 id="13-4-1-终端机制"><a href="#13-4-1-终端机制" class="headerlink" title="13.4.1 终端机制"></a>13.4.1 终端机制</h3><p>问题：为什么有时候使用Ctrl + C可以退出程序，有时候不可以？为什么有些进程可以退出，当管道创建了很多个进程时，使用Ctrl + C 将退出哪个进程？如果时Fork了一个Shell，那使用Ctrl + C 是不是要退出Shell？tmux是怎么实现的？</p>
-<p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
-<p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
-<h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
-<p><strong>信号处理程序：</strong><br><img src="/../../image/Pasted%20image%2020230829192041.png"><br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
-<h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
-<p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
+</li>
+<li>第二步<ul>
+<li>根据类型的状态设置，初始化内存，设置资源的初始状态并使得此资源可用；</li>
+<li>由类型的实例构造函数来设置初始状态；</li>
+</ul>
+</li>
+<li>第三步<ul>
+<li>访问类型的成员来使用此资源</li>
+</ul>
+</li>
+<li>第四步<ul>
+<li>摧毁资源的状态，以进行垃圾的清理</li>
+</ul>
+</li>
+<li>第五步<ul>
+<li>由GC回收期释放内存</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-为什么需要托管堆来进行垃圾回收"><a href="#1-2-为什么需要托管堆来进行垃圾回收" class="headerlink" title="1.2 为什么需要托管堆来进行垃圾回收"></a>1.2 为什么需要托管堆来进行垃圾回收</h2><p><strong>C++中的例子</strong><br>在需要程序员手动管理内存的语言中（比如当C++不使用shareptr或其他基于对象的指针时），程序员经常会产生两种错误：</p>
+<ol>
+<li>忘记释放不再需要的内存，进而造成内存泄漏；</li>
+<li>尝试使用已经释放的内存，造成安全漏洞；<br>由于这两种错误经常是在程序运行时才能发现，因此程序发生异常时调试困难。</li>
+</ol>
+<p><strong>解决方法：可验证的、类型安全的代码</strong><br>在资源分配阶段中的【第四步】，此步骤若不是由程序员来完成，而是交给程序的托管堆和垃圾回收器来自动进行时，此时程序就能进一步的保证安全；</p>
+<ul>
+<li>托管堆会自动完成垃圾的回收，并且当需要手动进行回收时，托管堆还提供了一个简化的模型；</li>
+</ul>
+<p><strong>补充：需要特殊清理的类型</strong><br>部分包装了本机资源的类型，比如对文件、Socket、数据库连接资源的类型，可能无法使用自动进行的垃圾回收，而是需要程序员使用GC的手动触发；</p>
+<h1 id="2-什么是托管堆"><a href="#2-什么是托管堆" class="headerlink" title="2.什么是托管堆"></a>2.什么是托管堆</h1><h2 id="2-1-托管堆基本概念"><a href="#2-1-托管堆基本概念" class="headerlink" title="2.1 托管堆基本概念"></a>2.1 托管堆基本概念</h2><p><strong>托管堆</strong><br>在C#中，托管堆是一种用于存储和管理托管对象（即运行在CLR中的对象）的内存区域。它是CLR的一部分，为托管对象提供动态内存分配和释放的功能。托管堆是一种自动化内存管理机制，它通过垃圾回收器自动回收不再使用的对象，从而释放内存并确保内存的正确使用。</p>
+<p><strong>NextObjPtr</strong><br>CLR会在程序的托管堆中管理一个指针NextObjPtr，此指针会一直指向下一个对象在队中分配的位置。在最开始时，此指针指向地址空间的基地址；</p>
+<p><strong>内存自动扩张</strong><br>在一个区域的内存备非垃圾对象填满之后，CLR会自动分配更多的区域。此过程会一直进行，直到进程的地址空间被填满；</p>
+<h2 id="2-2-CLR中的new行为"><a href="#2-2-CLR中的new行为" class="headerlink" title="2.2 CLR中的new行为"></a>2.2 CLR中的new行为</h2><p><strong>执行行为</strong><br>C#的new操作符将导致CLR执行以下步骤：</p>
+<ul>
+<li>第一步<ul>
+<li>计算类型的字段(包括从基类型继承的字段)所需的字节数。</li>
+</ul>
+</li>
+<li>第二步<ul>
+<li>加上对象额外所需的两部分开销所需的字节数；</li>
+<li>每个对象都有两个开销字段：<ul>
+<li>类型对象指针</li>
+<li>同步块索引</li>
+</ul>
+</li>
+<li>对于32位应用程序，这两个字段各自需要 32位，所以每个对象要增加8字节。对于64位应用程序，这两个字段各自需要64位，所以每个对象要增加16字节；</li>
+</ul>
+</li>
+<li>第三步<ul>
+<li>检查阶段：<ul>
+<li>CLR检查区域中是否有分配对象所需的字节数。如果托管堆有足够的可用空间，就在NextObiPtr 指针指向的地址处放入对象，为对象分配的字节会被清零；</li>
+</ul>
+</li>
+<li>调用阶段<ul>
+<li>调用类型的构造器，为类型构造器中的this参数传递当前NextObiPtr指向的对象，new操作符返回对象引用；</li>
+<li>在返回这个引用之前，NextObjiPtr指针的值会加上对象占用的字节数来得到一个新值，即下个对象放入托管堆时的地址。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>分配之后的内存，在空间中形式如下简图：<br><img src="/../../image/Pasted%20image%2020230828103459.png" alt="新初始化的托管堆，其中构造了3个对象"></p>
+<h2 id="2-3-托管堆与空间局部化"><a href="#2-3-托管堆与空间局部化" class="headerlink" title="2.3 托管堆与空间局部化"></a>2.3 托管堆与空间局部化</h2><p><strong>空间局部化</strong><br>由于托管堆的分配是在指针之上加一个值，因此其分配的速度非常的快；差不多同时分配的对象彼此间有较强的联系，而且经常差不多在同一时间访问；</p>
+<ul>
+<li><strong>由于托管堆在内存中连续分配这些对象，所以会因为引用的“局部化”(locality)而获得性能上的提升</strong></li>
+</ul>
+<p><strong>具体的优点</strong></p>
+<ul>
+<li>优点一<ul>
+<li>进程的工作集会非常小，应用程序只需使用很少的内存，从而提高了速度；</li>
+</ul>
+</li>
+<li>优点二<ul>
+<li>代码使用的对象可以全部驻留在 CPU 的缓存中。应用程序能以非常快的速度访问这些对象，因为CPU在执行大多数操作不会因Cache Miss而被迫访问较慢的 RAM；</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-垃圾回收算法"><a href="#3-垃圾回收算法" class="headerlink" title="3.垃圾回收算法"></a>3.垃圾回收算法</h1><p>在应用程序调用new操作符创建对象时，可能会没有足够地址空间来分配该对象，此时CLR就需要执行垃圾回收。</p>
+<h2 id="3-1-引用计数算法"><a href="#3-1-引用计数算法" class="headerlink" title="3.1 引用计数算法"></a>3.1 引用计数算法</h2><p><strong>什么是引用计数算法</strong><br>对于对象生存期的管理，有些系统使用的是引用计数算法；<em>比如微软的COM</em></p>
+<p><strong>算法内容</strong><br>堆上的每个对象都维护着一个内存字段，用于统计程序中多少部分正在使用对象。随着每一部分到达代码中某个不再需要对象的地方，就递减对象的计数字段。当计数字段变成0，对象就可以从内存中删除；</p>
+<p><strong>算法问题：循环引用</strong><br>在一些GUI应用程序中，窗口对象将容纳对子UI对象的引用，而子UI对象将容纳对父窗口对象的引用；<br>这种引用会阻止两个对象的计数器达到 0，所以两个对象永远不会删除，即使应用程序本身不再需要窗口。</p>
+<ul>
+<li>CLR不使用引用计数算法，而是使用<strong>引用跟踪算法</strong>；</li>
+</ul>
+<h2 id="3-2-引用跟踪算法"><a href="#3-2-引用跟踪算法" class="headerlink" title="3.2 引用跟踪算法"></a>3.2 引用跟踪算法</h2><p><strong>算法特点</strong><br>引用跟踪算法只关心引用类型的变量，不关心值类型变量。因为只有引用类型的变量才能引用堆上的对象，而值类型变量直接包含值类型实例本身。</p>
+<p><strong>基础概念：根</strong><br>在CLR中，将所有引用类型的变量称为<strong>根</strong>；<br>引用类型变量可以在许多场合使用：</p>
+<ul>
+<li>类的静态字段</li>
+<li>类的实例字段</li>
+<li>方法参数</li>
+<li>局部变量<br>这些内容都可以成为根。</li>
+</ul>
+<h3 id="3-2-1-算法实现"><a href="#3-2-1-算法实现" class="headerlink" title="3.2.1 算法实现"></a>3.2.1 算法实现</h3><p><strong>第一阶段：暂停阶段</strong><br>暂停进程中的所有线程。这防止线程在CLR检查期间访问对象并更改其状态；</p>
+<p><strong>第二阶段：标记阶段</strong></p>
+<ul>
+<li>CLR 遍历堆中的所有对象，将同步块索引字段中的一位设为 0；<em>当此位设为 0 时，表示此对象应该被删除；为 1 时表示不用删除；</em></li>
+<li>设置为 0 之后，表明所有对象都应删除。然后，CLR 检查所有活动根，查看它们引用了哪些对象。如果一个根包含null，CLR忽略这个根并继续检查下个根；</li>
+<li>任何根如果引用了堆上的对象，CLR 都会标记那个对象，也就是将该对象的同步块索引中的位设为 1。一个对象被标记后，CLR 会检查那个对象中的根，标记它们引用的对象。如果发现对象已经标记，就不重新检查对象的字段。这就避免了因为循环引用而产生死循环。</li>
+<li>全部检查完毕后，堆中的对象要么已标记，要么未标记。<ul>
+<li>已标记的对象不能被垃圾回收，因为至少有一个根在引用它。这种对象是<strong>可达reachable</strong>的对象。因为应用程序代码可通过仍在引用它的变量抵达它；</li>
+<li>未标记的对象是<strong>不可达unreachable</strong>的，因为应用程序中不存在使对象能被再次访问的根；</li>
+</ul>
+</li>
+</ul>
+<p>图示为回收之前的托管堆：<br><img src="/../../image/Pasted%20image%2020230828105510.png" alt="回收之前的托管堆"></p>
+<p><strong>第三阶段：压缩阶段</strong><br>CLR对堆中已标记的对象进行“内存位置的转移，压缩所有幸存下来的对象，使它们占用连续的内存空间，如图所示：<br><img src="/../../image/Pasted%20image%2020230828105609.png" alt="垃圾回收之后的托管堆"></p>
+<ul>
+<li>压缩的好处：<ul>
+<li>所有幸存对象在内存中紧挨在一起，恢复了引用的“局部化”，减小了应用程序的工作集，从而提升了将来访问这些对象时的性能；</li>
+<li>解决了原生堆的空间碎片化问题；</li>
+</ul>
+</li>
+<li>内存偏移<ul>
+<li>在内存中移动了对象之后有一个问题待解决：引用幸存对象的根现在引用的还是对象最初在内存中的位置，而非移动之后的位置；</li>
+<li>CLR要从每个根减去所引用的对象在内存中偏移的字节数，保证每个根还是引用和之前一样的对象–只是对象在内存中变换了位置；</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>操作系统</category>
+        <category>CSharp</category>
       </categories>
       <tags>
-        <tag>操作系统</tag>
-        <tag>Shell</tag>
+        <tag>CSharp</tag>
+        <tag>垃圾回收</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1928,6 +1666,49 @@
       </tags>
   </entry>
   <entry>
+    <title>Lecture 29：Xv6文件系统实现</title>
+    <url>/2023/09/a4bbdf6f0414.html</url>
+    <content><![CDATA[<p><strong>什么是文件系统</strong><br>图书馆支持的所有操作，就是文件系统需要的所有操作；</p>
+<ul>
+<li>新建一个书架-&gt;新建文件夹</li>
+<li>在书架的基础上：加上一本书</li>
+<li>书签：文件描述符</li>
+</ul>
+<p><strong>FAT文件系统实现</strong><br>使用链表将一个个的文件Cluster连起来；在目录的最前面使用metadata来描述一些元信息：文件大小、目录结构等等；<br>这些链表如果是顺序存储情况下，在内存里面也将是连续的。但如果出现不是线性的存储，则其链表以及Cluster可能会分布在内存的各地；<br><img src="/../../image/Pasted%20image%2020230904200953.png"></p>
+<ul>
+<li>UNIX文件系统实现<ul>
+<li>UNIX的文件系统，把以上的FAT当中用于连接cluster的链表全部存储在了内存当中的一个固定的地方，此时可以通过读取此固定的地方来知道如何对文件进行操作；<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="1-mkfs：创建文件系统"><a href="#1-mkfs：创建文件系统" class="headerlink" title="1.mkfs：创建文件系统"></a>1.mkfs：创建文件系统</h2><p><strong>实现：只管分配，不管回收</strong><br>这个mkfs就是只管分配，不管回收的代码；</p>
+<ul>
+<li>rsect&#x2F;wsect (bread&#x2F;bwrite)</li>
+<li>balloc&#x2F;bzero</li>
+<li>ialloc</li>
+<li>iappend</li>
+<li>rinode&#x2F;winode<br>不管是FAT还是UNIX，最基础的内容都是rsect和wsect函数（由OS提供）；</li>
+</ul>
+<p><strong>如何阅读xv6的文件系统部分代码</strong><br>无论代码多么复杂，最后都会变成rsect和wsect这两个接口的调用；<br>因此只要可以把这两个接口的调用全部找出来，就可以更轻松的阅读这部分代码；</p>
+<ul>
+<li>用Python写的控制gdb的脚本<ul>
+<li>trace(gdb.Breakpoint)：打一个break点；<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TRACED = <span class="string">&#x27;bwrite balloc ialloc iappend rinode winode rsect wsect&#x27;</span>.split()</span><br><span class="line">IGNORE = <span class="string">&#x27;ip xp buf&#x27;</span>.split()</span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">trace</span>(gdb.Breakpoint):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">stop</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        f, bt = gdb.selected_frame(), []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> f <span class="keyword">and</span> f.is_valid():</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (name := f.name()) <span class="keyword">in</span> TRACED:</span><br><span class="line"></span><br><span class="line">                lvars = [<span class="string">f&#x27;<span class="subst">&#123;sym.name&#125;</span>=<span class="subst">&#123;sym.value(f)&#125;</span>&#x27;</span></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> sym <span class="keyword">in</span> f.block()</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> sym.is_argument <span class="keyword">and</span> sym.name <span class="keyword">not</span> <span class="keyword">in</span> IGNORE]</span><br><span class="line"></span><br><span class="line">                bt.append(<span class="string">f&#x27;\033[32m<span class="subst">&#123;name&#125;</span>\033[0m(<span class="subst">&#123;<span class="string">&quot;, &quot;</span>.join(lvars)&#125;</span>)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            f = f.older()</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;    &#x27;</span> * (<span class="built_in">len</span>(bt) - <span class="number">1</span>) + bt[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span> <span class="comment"># won&#x27;t stop at this breakpoint</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">gdb.execute(<span class="string">&#x27;set prompt off&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;set pagination off&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> fn <span class="keyword">in</span> TRACED:</span><br><span class="line">    trace(fn)</span><br><span class="line">gdb.execute(<span class="string">&#x27;run fs.img README user/_ls&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;quit&#x27;</span>)</span><br></pre></td></tr></table></figure>
+使用此指令来执行以上代码：<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gdb -ex &#x27;source mkfs/trace.py&#x27; mkfs/mkfs</span><br></pre></td></tr></table></figure>
+mkfs就是在磁盘上创建了一个数据结构，这个数据结构就是往一个文件的后背写入一些数据，不用管怎么删除。将代码最终变成bread和bwrite；</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>文件系统</tag>
+        <tag>操作系统</tag>
+        <tag>xv6</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Game Engine】P1：引擎事件系统</title>
     <url>/2023/08/73d34ee8e11a.html</url>
     <content><![CDATA[<p>引擎事件系统框架编写</p>
@@ -2030,6 +1811,46 @@
       </tags>
   </entry>
   <entry>
+    <title>【Game Engine】P3：Window抽象与GLFW</title>
+    <url>/2023/09/dad31b7b45e4.html</url>
+    <content><![CDATA[<ol>
+<li>GLFW与premake文件</li>
+<li>项目Premake代码修改</li>
+</ol>
+<span id="more"></span>
+<h2 id="1-GLFW与premake文件"><a href="#1-GLFW与premake文件" class="headerlink" title="1.GLFW与premake文件"></a>1.GLFW与premake文件</h2><p>文件包含代码：<br>引用了项目需要用到的和GLFW相关的代码文件（for windows）</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">files</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="string">&quot;include/GLFW/glfw3.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;include/GLFW/glfw3native.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/glfw_config.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/context.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/init.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/input.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/monitor.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/vulkan.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/window.c&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>以下是完整premake代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">project &quot;GLFW&quot;</span><br><span class="line">    kind &quot;StaticLib&quot;</span><br><span class="line">    language &quot;C&quot;</span><br><span class="line">    </span><br><span class="line">	targetdir (&quot;bin/&quot; .. outputdir .. &quot;/%&#123;prj.name&#125;&quot;)</span><br><span class="line">    objdir (&quot;bin-int/&quot; .. outputdir .. &quot;/%&#123;prj.name&#125;&quot;)</span><br><span class="line"></span><br><span class="line">	files</span><br><span class="line">	&#123;</span><br><span class="line">        &quot;include/GLFW/glfw3.h&quot;,</span><br><span class="line">        &quot;include/GLFW/glfw3native.h&quot;,</span><br><span class="line">        &quot;src/glfw_config.h&quot;,</span><br><span class="line">        &quot;src/context.c&quot;,</span><br><span class="line">        &quot;src/init.c&quot;,</span><br><span class="line">        &quot;src/input.c&quot;,</span><br><span class="line">        &quot;src/monitor.c&quot;,</span><br><span class="line">        &quot;src/vulkan.c&quot;,</span><br><span class="line">        &quot;src/window.c&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	filter &quot;system:windows&quot;</span><br><span class="line">        buildoptions &#123; &quot;-std=c11&quot;, &quot;-lgdi32&quot; &#125;</span><br><span class="line">        systemversion &quot;10.0.17134.0&quot;</span><br><span class="line">        staticruntime &quot;On&quot;</span><br><span class="line">        </span><br><span class="line">        files</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;src/win32_init.c&quot;,</span><br><span class="line">            &quot;src/win32_joystick.c&quot;,</span><br><span class="line">            &quot;src/win32_monitor.c&quot;,</span><br><span class="line">            &quot;src/win32_time.c&quot;,</span><br><span class="line">            &quot;src/win32_thread.c&quot;,</span><br><span class="line">            &quot;src/win32_window.c&quot;,</span><br><span class="line">            &quot;src/wgl_context.c&quot;,</span><br><span class="line">            &quot;src/egl_context.c&quot;,</span><br><span class="line">            &quot;src/osmesa_context.c&quot;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">		defines </span><br><span class="line">		&#123; </span><br><span class="line">            &quot;_GLFW_WIN32&quot;,</span><br><span class="line">            &quot;_CRT_SECURE_NO_WARNINGS&quot;</span><br><span class="line">		&#125;</span><br><span class="line">    filter &#123; &quot;system:windows&quot;, &quot;configurations:Release&quot; &#125;</span><br><span class="line">        buildoptions &quot;/MT&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>给项目添加GLFW代码</strong><br><img src="/../../image/Pasted%20image%2020230905010507.png"></p>
+<h1 id="2-项目premake代码修改"><a href="#2-项目premake代码修改" class="headerlink" title="2.项目premake代码修改"></a>2.项目premake代码修改</h1><p><strong>增加代码，引用GLFW到Satsuki项目</strong></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">-- Include directories relative to root folder (solution directory)</span><br><span class="line"></span><br><span class="line">IncludeDir = <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">IncludeDir<span class="punctuation">[</span><span class="string">&quot;GLFW&quot;</span><span class="punctuation">]</span> = <span class="string">&quot;Satsuki/vendor/GLFW/include&quot;</span></span><br><span class="line"></span><br><span class="line">include <span class="string">&quot;Satsuki/vendor/GLFW&quot;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>include “Satsuki&#x2F;vendor&#x2F;GLFW”<ul>
+<li>将GLFW中的premake代码直接粘贴到这个位置；</li>
+</ul>
+</li>
+<li>IncludeDir[“GLFW”] &#x3D; “Satsuki&#x2F;vendor&#x2F;GLFW&#x2F;include”<ul>
+<li>增加编译时引用的路径；</li>
+</ul>
+</li>
+</ul>
+<p><strong>link设置</strong><br>GLFW作为静态链接库，被项目引用；</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">includedirs</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;%&#123;IncludeDir.GLFW&#125;&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">links</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;GLFW&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;opengl32.lib&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>游戏引擎</category>
+      </categories>
+      <tags>
+        <tag>游戏引擎</tag>
+        <tag>C++</tag>
+        <tag>OpenGL</tag>
+        <tag>GLFW</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【游戏引擎原理】P1：GPU驱动的几何管线</title>
     <url>/2023/08/fd049e549b6a.html</url>
     <content><![CDATA[<p>传统渲染问题：<br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。</p>
@@ -2111,6 +1932,268 @@
       <tags>
         <tag>游戏引擎</tag>
         <tag>技术美术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>AI时代个人生存指南</title>
+    <url>/2023/08/62011fb26306.html</url>
+    <content><![CDATA[<p>内容大纲：</p>
+<ul>
+<li><ol>
+<li>ChatGPT使用基础</li>
+</ol>
+<ul>
+<li>1.1 ChatGPT的使用之道</li>
+<li>1.2 ChatGPT的使用之术</li>
+</ul>
+</li>
+<li><ol start="2">
+<li>Midjourney使用基础</li>
+</ol>
+<ul>
+<li>2.1 Midjourney的使用之道</li>
+<li>2.2 Midjourney的使用之术<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h1 id="1-Chat-GPT使用基础"><a href="#1-Chat-GPT使用基础" class="headerlink" title="1.Chat GPT使用基础"></a>1.Chat GPT使用基础</h1><p><strong>核心思想：拥抱AI，理解AI，成为AI</strong></p>
+<ul>
+<li>拥抱AI<ul>
+<li>率先掌握AI技能，掌握竞争优势；</li>
+</ul>
+</li>
+<li>理解AI<ul>
+<li>知道AI的能力，知道AI能做什么；</li>
+<li>同时反推自己的发展方向：AI不能做什么，就是人未来能做的事情；</li>
+</ul>
+</li>
+<li>成为AI<ul>
+<li>率先向AI学习，让自己的思维和AI同步；</li>
+<li>谁和AI最像，谁就获得了第一批AI带来的绝对优势；</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-1-ChatGPT的使用之道"><a href="#1-1-ChatGPT的使用之道" class="headerlink" title="1.1 ChatGPT的使用之道"></a>1.1 ChatGPT的使用之道</h2><p><strong>前言：关于prompt</strong><br>虽然目前依然需要使用prompt来辅助AI，但未来的AI发展是其越来越理解人类想要什么，而不需要使用prompt来提示；</p>
+<blockquote>
+<p><em>prompt教程推荐：吴恩达的prompt视频（适合程序员）：<br><a href="https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&vd_source=3f70c2a1700b0323e22826080d18a119">https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f70c2a1700b0323e22826080d18a119</a></em></p>
+</blockquote>
+<p><strong>概念：ChatGPT能做什么</strong><br>首先思考AI能做什么，在了解AI能做的事情的情况下，再思考应该让它如何做这件事情；<br>AI的画像：<strong>一个学习过网上所有知识，保守而道德的名校大学生。理性思考5秒钟，回答10句话。</strong></p>
+<ul>
+<li>知识：只存留在2021年；</li>
+<li>保守：没有独特思想；</li>
+<li>道德：有人类设定的道德包袱；</li>
+<li>名校本科生水平：不接受过于复杂的问题，可以回答大部分知识问题；</li>
+<li>理性思考5秒钟：不能接受过度复杂问题；</li>
+</ul>
+<p><strong>道一：Chat GPT的道德</strong><br>AI的回答是很道德的回答。当和价值立场或者观点相关的问题时，只会给出不同的立场，而不表达观点；</p>
+<ul>
+<li>甚至会出现<strong>道德在事实之上</strong>；</li>
+<li>为了保证道德的限制，甚至让道德在事实之上；<br><em>或许道德极大的限制了LLM的能力。</em></li>
+</ul>
+<p><strong>道二：Chat GPT的知识</strong><br>一般本科大学生的知识它都会；并且理解能力强。</p>
+<p><strong>道三：Chat GPT的提问</strong><br>对于提问，遵循两个原则：<strong>拆分、直接</strong>；</p>
+<ul>
+<li>直接：<ul>
+<li>提问不能太复杂，但是可以很困难；</li>
+</ul>
+</li>
+<li>拆分：<ul>
+<li>回答内容不能太长，所以一开始就设计多个问题，对各个部分拆分提问；</li>
+<li>对很长内容的提问：先提问大纲内容，再对每个大纲的细分内容进行提问；</li>
+</ul>
+</li>
+</ul>
+<p><strong>道四：面对AI的幻觉</strong><br>AI是语言生成模型，即按照上一句话生成下一句话；</p>
+<ul>
+<li>AI会出现强行回答，AI自己也无法分辨真假；</li>
+<li>如何面对AI回答的幻觉：<ul>
+<li>逻辑推演；</li>
+<li>拥有常识；</li>
+<li>自行验证；</li>
+</ul>
+</li>
+</ul>
+<p><strong>道五：把寻找和使用AI工具，纳入接受新工作的思考流程</strong><br>在接受一份新工作的时候，首先就可以想一想：当中有哪些工作是AI可以做的；并且把它纳入到生成流程当中。</p>
+<p><strong>补充：AI大模型的数据截止到2021年</strong><br>在2021年之前的数据，在LLM当中都有；但2021年之后的数据，AI自己也需要去查（通过OpenAI的服务器去访问这些网站）；</p>
+<p><strong>应用场合</strong></p>
+<ul>
+<li>文字工作<ul>
+<li>套路文章创作，润色，翻译，取标题，举例子</li>
+</ul>
+</li>
+<li>生活助手<ul>
+<li>普通问题咨询</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-ChatGPT的使用之术"><a href="#1-2-ChatGPT的使用之术" class="headerlink" title="1.2 ChatGPT的使用之术"></a>1.2 ChatGPT的使用之术</h2><p><strong>术一：描述好背景信息</strong><br>在向AI咨询一个问题前，一定要先描述好问题的背景信息；<br>如果不清楚描述什么背景，可以<strong>向AI提问，这个问题需要了解什么背景信息</strong>；</p>
+<p><strong>术二：提问计算方法，再得到结果</strong><br>如果直接问AI一个问题的答案，AI可能难以回答。但是如果提问AI一个问题的计算方法，AI的回答正确率更高；</p>
+<ul>
+<li>AI知道计算的方法，但不擅长计算</li>
+<li>对AI进行复杂计算的提问：可以<strong>先问过程，再顺着过程问答案</strong>；</li>
+</ul>
+<p><strong>术三：让他扮演一个角色</strong><br>让他扮演一个角色，作为一个角色来回答你的问题；<br><em>你现是一个作家、你现在是一个软件公司的文案总监、你现在是一个法律顾问</em></p>
+<h1 id="2-Midjourney使用基础"><a href="#2-Midjourney使用基础" class="headerlink" title="2.Midjourney使用基础"></a>2.Midjourney使用基础</h1><h2 id="2-1-Midjourney使用之道"><a href="#2-1-Midjourney使用之道" class="headerlink" title="2.1 Midjourney使用之道"></a>2.1 Midjourney使用之道</h2><p><strong>道一：创作具有艺术感的图像</strong><br>AI绘画可以模仿多种艺术风格，创造性的运用绘画技巧，并进行独特的构图和色彩搭配；</p>
+<p><strong>道二：难以处理复杂边缘、空间关系的物体</strong><br>这与扩散模型的原理有关。现阶段，扩散模型可学习的样本图片的清晰度普遍较低，导致模型在处理某些细节时需要进行“猜测”。因此，我们常常发现AI绘制的手指存在错误，其他具有复杂边缘的物体也存在同样的问题。另外，扩散模型并非从空间角度理解图像，因此在处理物体间复杂的空间关系时，AI可能会遇到困难</p>
+<p><strong>道三：难以同时绘制多个对象，并且每个对象有不同的属性</strong><br>AI可能无法准确理解多个对象和这些对象之间的属性关系，或者可能会忽略掉一些关键属性。 </p>
+<h2 id="2-2-Midjourney使用之术"><a href="#2-2-Midjourney使用之术" class="headerlink" title="2.2 Midjourney使用之术"></a>2.2 Midjourney使用之术</h2><p><strong>术一：Prompt能力</strong><br>使用明确且具体的语言，来描述任务；</p>
+<p><strong>术二：用尽可能清晰的语言</strong><br>Midjourney的语言文字理解能力不如Chat GPT；</p>
+<p><strong>术三：工具本身的熟练程度</strong></p>
+<ul>
+<li>设置宽高比；</li>
+<li>混乱程度；</li>
+<li>使用种子；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 12：进程的地址空间</title>
+    <url>/2023/08/d03400aa93d7.html</url>
+    <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
+<span id="more"></span>
+<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
+<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
+
+<p>查看某一个进程地址空间代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
+<p>当中的37491为进程的id。</p>
+<p><strong>查看结果：</strong><br><img src="/../../image/Pasted%20image%2020230829191538.png"></p>
+<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong></p>
+<ul>
+<li>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。</li>
+<li>proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</li>
+</ul>
+<p>**相关手册：<code>mam 5 proc</code></p>
+<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br><img src="/../../image/Pasted%20image%2020230829191738.png"><br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
+<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
+<hr>
+<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
+<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
+<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
+<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
+<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
+<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
+<p><strong>定义：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
+<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
+<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br><img src="/../../image/Pasted%20image%2020230829191917.png"></p>
+<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
+<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
+<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
+<ul>
+<li>第一步：获得游戏进程的PID（进程号）</li>
+<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
+<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
+<li>第四步：遍历此段内存，找到关键词数据</li>
+<li>第五步：修改被关键字标记的内存</li>
+</ul>
+<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
+<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
+<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
+<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
+<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>进程</tag>
+        <tag>操作系统</tag>
+        <tag>Fork</tag>
+        <tag>Mmap</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 13：系统调用与Shell</title>
+    <url>/2023/08/3dbfbd52ee49.html</url>
+    <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
+<h3 id="13-1-2-早期的Shell"><a href="#13-1-2-早期的Shell" class="headerlink" title="13.1.2 早期的Shell"></a>13.1.2 早期的Shell</h3><p><strong>概念：</strong><br>早期的OS没有复杂结构，系统调用就像是库函数，那个时代的Shell就是命令行终端机。<br>核心：<strong>Shell就是一门把用户指令翻译为系统调用的编程语言</strong></p>
+<p>手册：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man sh</span><br></pre></td></tr></table></figure>
+<p>这是一个非常简单的手册，包含很多shell的内容，建立对UNIX Shell的基础认识。</p>
+<h2 id="13-2-复刻简易UNIX"><a href="#13-2-复刻简易UNIX" class="headerlink" title="13.2 复刻简易UNIX"></a>13.2 复刻简易UNIX</h2><h3 id="13-2-1-简易UNIX代码初设置"><a href="#13-2-1-简易UNIX代码初设置" class="headerlink" title="13.2.1 简易UNIX代码初设置"></a>13.2.1 简易UNIX代码初设置</h3><p>早期的计算机设计由于性能低下，设计不能太消耗性能以及复杂<br>代码：<a href="http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c</a><br>零库函数依赖、可以作为最小可用的Linux的init程序<br>由于其链接任何库函数，因此可以ffreestanding</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -c -ffreestanding sh-xv6.c -g -O2</span><br><span class="line">ld sh-xv6.o -o sh</span><br></pre></td></tr></table></figure>
+<p>第一行是将其编译，然后第二行将其静态链接<br>当使用反汇编模式进行调试时，直接从_Start()，用C写的这个函数处开始执行。此程序可以直接以命令行的形式进行运行。<br>![[Pasted image 20230827140800.png]]</p>
+<h3 id="12-2-2-第一步：读取命令"><a href="#12-2-2-第一步：读取命令" class="headerlink" title="12.2.2 第一步：读取命令"></a>12.2.2 第一步：读取命令</h3><p>代码：<br>解析：不停的getcmd()来获得用户的输入，这其中直接使用read的系统调用</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nread = <span class="built_in">syscall</span>(SYS_read,<span class="number">0</span>,buf,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>一直读到换行符才停止：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(*(buf++)==<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+<p>将命令读取到buf缓冲区里</p>
+<h3 id="12-2-3-第二步：可能性-解释执行命令"><a href="#12-2-3-第二步：可能性-解释执行命令" class="headerlink" title="12.2.3 第二步：可能性|解释执行命令"></a>12.2.3 第二步：可能性|解释执行命令</h3><p>代码：<br>![[Pasted image 20230301181806.png]]<br>解析：<br>首先判断是不是一条’cd’命令，并且其当中不能有空格<br>使用系统调用，读取buf+3之后的数据</p>
+<h3 id="12-2-4-第二步：可能性-新进程创建"><a href="#12-2-4-第二步：可能性-新进程创建" class="headerlink" title="12.2.4 第二步：可能性|新进程创建"></a>12.2.4 第二步：可能性|新进程创建</h3><p>解析：可能性|如果不是cd命令，此时创建一个新的进程，在新的进程里面把进程解析</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">syscall</span>(SYS_fork) == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">runcmd</span>(<span class="built_in">parsecmd</span>(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
+
+<p>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
+<ul>
+<li>命令与管道<ul>
+<li>管道和命令关系<ul>
+<li>管道的左边和右边都可以任意复杂：   </li>
+<li>可以是一个很长的式子：<code>(echo a;each b;echo c;echo d)|wc -l</code></li>
+<li>把管道左边的输出作为右边的输入，这就是管道的形式语义。</li>
+</ul>
+</li>
+<li>管道解析<ul>
+<li>pipe()创建一个管道，管道返回两个描述符：</li>
+<li>pipe[0]是读口，pipe[1]是写口</li>
+<li>之后会使用fork创建两个新的进程，这两个新的进程完全复制的父进程的状态，因此此时这三个进程完全共享管道，并且共进共出。</li>
+<li>之后将p[0]的文件描述符关闭，后背又将p[1]的文件描述符关掉</li>
+<li>之后再进行Fork，子进程编号为1的进程指向管道的左边，Fork出来的子进程再进行上述出现的行为</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
+<p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
+<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程</p>
+<p><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
+<h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
+<p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
+<p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
+<h3 id="13-3-2-现代Shell展望"><a href="#13-3-2-现代Shell展望" class="headerlink" title="13.3.2 现代Shell展望"></a>13.3.2 现代Shell展望</h3><p>现代的Shell功能不变，都是人和机器之间的API，但是其形式可以发生变化</p>
+<ul>
+<li>界面自带StackOverflow？</li>
+<li>结合神经网络？</li>
+<li>智能补全？</li>
+<li>POPL20</li>
+</ul>
+<h2 id="13-4-终端与任务控制"><a href="#13-4-终端与任务控制" class="headerlink" title="13.4 终端与任务控制"></a>13.4 终端与任务控制</h2><h3 id="13-4-1-终端机制"><a href="#13-4-1-终端机制" class="headerlink" title="13.4.1 终端机制"></a>13.4.1 终端机制</h3><p>问题：为什么有时候使用Ctrl + C可以退出程序，有时候不可以？为什么有些进程可以退出，当管道创建了很多个进程时，使用Ctrl + C 将退出哪个进程？如果时Fork了一个Shell，那使用Ctrl + C 是不是要退出Shell？tmux是怎么实现的？</p>
+<p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
+<p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
+<h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
+<p><strong>信号处理程序：</strong><br><img src="/../../image/Pasted%20image%2020230829192041.png"><br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
+<h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
+<p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>Shell</tag>
       </tags>
   </entry>
 </search>
