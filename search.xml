@@ -382,6 +382,168 @@
       </tags>
   </entry>
   <entry>
+    <title>【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</title>
+    <url>/2023/08/4b26dd1d757b.html</url>
+    <content><![CDATA[<ul>
+<li><ol>
+<li>为什么要有托管堆</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>什么是托管堆</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>垃圾回收算法</li>
+</ol>
+<ul>
+<li><ol>
+<li>引用计数算法</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>引用跟踪算法<span id="more"></span></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-为什么要有托管堆"><a href="#1-为什么要有托管堆" class="headerlink" title="1.为什么要有托管堆"></a>1.为什么要有托管堆</h1><h2 id="1-1-面向对象与资源分配"><a href="#1-1-面向对象与资源分配" class="headerlink" title="1.1 面向对象与资源分配"></a>1.1 面向对象与资源分配</h2><p><strong>面向对象中的资源</strong><br>概念：在面向对象的环境中，任何一种类型都代表了计算机中可供程序使用的一种资源。如果要使用这种资源，就需要为这种资源分配一定的内存；</p>
+<p><strong>资源分配步骤</strong></p>
+<ul>
+<li>第一步<ul>
+<li>调用IL代码<code>newobj</code>，为代表资源的类型分配内存；</li>
+<li>此步骤通常由new操作符来触发并完成；</li>
+</ul>
+</li>
+<li>第二步<ul>
+<li>根据类型的状态设置，初始化内存，设置资源的初始状态并使得此资源可用；</li>
+<li>由类型的实例构造函数来设置初始状态；</li>
+</ul>
+</li>
+<li>第三步<ul>
+<li>访问类型的成员来使用此资源</li>
+</ul>
+</li>
+<li>第四步<ul>
+<li>摧毁资源的状态，以进行垃圾的清理</li>
+</ul>
+</li>
+<li>第五步<ul>
+<li>由GC回收期释放内存</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-为什么需要托管堆来进行垃圾回收"><a href="#1-2-为什么需要托管堆来进行垃圾回收" class="headerlink" title="1.2 为什么需要托管堆来进行垃圾回收"></a>1.2 为什么需要托管堆来进行垃圾回收</h2><p><strong>C++中的例子</strong><br>在需要程序员手动管理内存的语言中（比如当C++不使用shareptr或其他基于对象的指针时），程序员经常会产生两种错误：</p>
+<ol>
+<li>忘记释放不再需要的内存，进而造成内存泄漏；</li>
+<li>尝试使用已经释放的内存，造成安全漏洞；<br>由于这两种错误经常是在程序运行时才能发现，因此程序发生异常时调试困难。</li>
+</ol>
+<p><strong>解决方法：可验证的、类型安全的代码</strong><br>在资源分配阶段中的【第四步】，此步骤若不是由程序员来完成，而是交给程序的托管堆和垃圾回收器来自动进行时，此时程序就能进一步的保证安全；</p>
+<ul>
+<li>托管堆会自动完成垃圾的回收，并且当需要手动进行回收时，托管堆还提供了一个简化的模型；</li>
+</ul>
+<p><strong>补充：需要特殊清理的类型</strong><br>部分包装了本机资源的类型，比如对文件、Socket、数据库连接资源的类型，可能无法使用自动进行的垃圾回收，而是需要程序员使用GC的手动触发；</p>
+<h1 id="2-什么是托管堆"><a href="#2-什么是托管堆" class="headerlink" title="2.什么是托管堆"></a>2.什么是托管堆</h1><h2 id="2-1-托管堆基本概念"><a href="#2-1-托管堆基本概念" class="headerlink" title="2.1 托管堆基本概念"></a>2.1 托管堆基本概念</h2><p><strong>托管堆</strong><br>在C#中，托管堆是一种用于存储和管理托管对象（即运行在CLR中的对象）的内存区域。它是CLR的一部分，为托管对象提供动态内存分配和释放的功能。托管堆是一种自动化内存管理机制，它通过垃圾回收器自动回收不再使用的对象，从而释放内存并确保内存的正确使用。</p>
+<p><strong>NextObjPtr</strong><br>CLR会在程序的托管堆中管理一个指针NextObjPtr，此指针会一直指向下一个对象在队中分配的位置。在最开始时，此指针指向地址空间的基地址；</p>
+<p><strong>内存自动扩张</strong><br>在一个区域的内存备非垃圾对象填满之后，CLR会自动分配更多的区域。此过程会一直进行，直到进程的地址空间被填满；</p>
+<h2 id="2-2-CLR中的new行为"><a href="#2-2-CLR中的new行为" class="headerlink" title="2.2 CLR中的new行为"></a>2.2 CLR中的new行为</h2><p><strong>执行行为</strong><br>C#的new操作符将导致CLR执行以下步骤：</p>
+<ul>
+<li>第一步<ul>
+<li>计算类型的字段(包括从基类型继承的字段)所需的字节数。</li>
+</ul>
+</li>
+<li>第二步<ul>
+<li>加上对象额外所需的两部分开销所需的字节数；</li>
+<li>每个对象都有两个开销字段：<ul>
+<li>类型对象指针</li>
+<li>同步块索引</li>
+</ul>
+</li>
+<li>对于32位应用程序，这两个字段各自需要 32位，所以每个对象要增加8字节。对于64位应用程序，这两个字段各自需要64位，所以每个对象要增加16字节；</li>
+</ul>
+</li>
+<li>第三步<ul>
+<li>检查阶段：<ul>
+<li>CLR检查区域中是否有分配对象所需的字节数。如果托管堆有足够的可用空间，就在NextObiPtr 指针指向的地址处放入对象，为对象分配的字节会被清零；</li>
+</ul>
+</li>
+<li>调用阶段<ul>
+<li>调用类型的构造器，为类型构造器中的this参数传递当前NextObiPtr指向的对象，new操作符返回对象引用；</li>
+<li>在返回这个引用之前，NextObjiPtr指针的值会加上对象占用的字节数来得到一个新值，即下个对象放入托管堆时的地址。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>分配之后的内存，在空间中形式如下简图：<br><img src="/../../image/Pasted%20image%2020230828103459.png" alt="新初始化的托管堆，其中构造了3个对象"></p>
+<h2 id="2-3-托管堆与空间局部化"><a href="#2-3-托管堆与空间局部化" class="headerlink" title="2.3 托管堆与空间局部化"></a>2.3 托管堆与空间局部化</h2><p><strong>空间局部化</strong><br>由于托管堆的分配是在指针之上加一个值，因此其分配的速度非常的快；差不多同时分配的对象彼此间有较强的联系，而且经常差不多在同一时间访问；</p>
+<ul>
+<li><strong>由于托管堆在内存中连续分配这些对象，所以会因为引用的“局部化”(locality)而获得性能上的提升</strong></li>
+</ul>
+<p><strong>具体的优点</strong></p>
+<ul>
+<li>优点一<ul>
+<li>进程的工作集会非常小，应用程序只需使用很少的内存，从而提高了速度；</li>
+</ul>
+</li>
+<li>优点二<ul>
+<li>代码使用的对象可以全部驻留在 CPU 的缓存中。应用程序能以非常快的速度访问这些对象，因为CPU在执行大多数操作不会因Cache Miss而被迫访问较慢的 RAM；</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-垃圾回收算法"><a href="#3-垃圾回收算法" class="headerlink" title="3.垃圾回收算法"></a>3.垃圾回收算法</h1><p>在应用程序调用new操作符创建对象时，可能会没有足够地址空间来分配该对象，此时CLR就需要执行垃圾回收。</p>
+<h2 id="3-1-引用计数算法"><a href="#3-1-引用计数算法" class="headerlink" title="3.1 引用计数算法"></a>3.1 引用计数算法</h2><p><strong>什么是引用计数算法</strong><br>对于对象生存期的管理，有些系统使用的是引用计数算法；<em>比如微软的COM</em></p>
+<p><strong>算法内容</strong><br>堆上的每个对象都维护着一个内存字段，用于统计程序中多少部分正在使用对象。随着每一部分到达代码中某个不再需要对象的地方，就递减对象的计数字段。当计数字段变成0，对象就可以从内存中删除；</p>
+<p><strong>算法问题：循环引用</strong><br>在一些GUI应用程序中，窗口对象将容纳对子UI对象的引用，而子UI对象将容纳对父窗口对象的引用；<br>这种引用会阻止两个对象的计数器达到 0，所以两个对象永远不会删除，即使应用程序本身不再需要窗口。</p>
+<ul>
+<li>CLR不使用引用计数算法，而是使用<strong>引用跟踪算法</strong>；</li>
+</ul>
+<h2 id="3-2-引用跟踪算法"><a href="#3-2-引用跟踪算法" class="headerlink" title="3.2 引用跟踪算法"></a>3.2 引用跟踪算法</h2><p><strong>算法特点</strong><br>引用跟踪算法只关心引用类型的变量，不关心值类型变量。因为只有引用类型的变量才能引用堆上的对象，而值类型变量直接包含值类型实例本身。</p>
+<p><strong>基础概念：根</strong><br>在CLR中，将所有引用类型的变量称为<strong>根</strong>；<br>引用类型变量可以在许多场合使用：</p>
+<ul>
+<li>类的静态字段</li>
+<li>类的实例字段</li>
+<li>方法参数</li>
+<li>局部变量<br>这些内容都可以成为根。</li>
+</ul>
+<h3 id="3-2-1-算法实现"><a href="#3-2-1-算法实现" class="headerlink" title="3.2.1 算法实现"></a>3.2.1 算法实现</h3><p><strong>第一阶段：暂停阶段</strong><br>暂停进程中的所有线程。这防止线程在CLR检查期间访问对象并更改其状态；</p>
+<p><strong>第二阶段：标记阶段</strong></p>
+<ul>
+<li>CLR 遍历堆中的所有对象，将同步块索引字段中的一位设为 0；<em>当此位设为 0 时，表示此对象应该被删除；为 1 时表示不用删除；</em></li>
+<li>设置为 0 之后，表明所有对象都应删除。然后，CLR 检查所有活动根，查看它们引用了哪些对象。如果一个根包含null，CLR忽略这个根并继续检查下个根；</li>
+<li>任何根如果引用了堆上的对象，CLR 都会标记那个对象，也就是将该对象的同步块索引中的位设为 1。一个对象被标记后，CLR 会检查那个对象中的根，标记它们引用的对象。如果发现对象已经标记，就不重新检查对象的字段。这就避免了因为循环引用而产生死循环。</li>
+<li>全部检查完毕后，堆中的对象要么已标记，要么未标记。<ul>
+<li>已标记的对象不能被垃圾回收，因为至少有一个根在引用它。这种对象是<strong>可达reachable</strong>的对象。因为应用程序代码可通过仍在引用它的变量抵达它；</li>
+<li>未标记的对象是<strong>不可达unreachable</strong>的，因为应用程序中不存在使对象能被再次访问的根；</li>
+</ul>
+</li>
+</ul>
+<p>图示为回收之前的托管堆：<br><img src="/../../image/Pasted%20image%2020230828105510.png" alt="回收之前的托管堆"></p>
+<p><strong>第三阶段：压缩阶段</strong><br>CLR对堆中已标记的对象进行“内存位置的转移，压缩所有幸存下来的对象，使它们占用连续的内存空间，如图所示：<br><img src="/../../image/Pasted%20image%2020230828105609.png" alt="垃圾回收之后的托管堆"></p>
+<ul>
+<li>压缩的好处：<ul>
+<li>所有幸存对象在内存中紧挨在一起，恢复了引用的“局部化”，减小了应用程序的工作集，从而提升了将来访问这些对象时的性能；</li>
+<li>解决了原生堆的空间碎片化问题；</li>
+</ul>
+</li>
+<li>内存偏移<ul>
+<li>在内存中移动了对象之后有一个问题待解决：引用幸存对象的根现在引用的还是对象最初在内存中的位置，而非移动之后的位置；</li>
+<li>CLR要从每个根减去所引用的对象在内存中偏移的字节数，保证每个根还是引用和之前一样的对象–只是对象在内存中变换了位置；</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>CSharp</category>
+      </categories>
+      <tags>
+        <tag>CSharp</tag>
+        <tag>垃圾回收</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【CSharp系列】托管堆与垃圾回收（3）-- 特殊资源对象</title>
     <url>/2023/08/5f4541f148f0.html</url>
     <content><![CDATA[<p>内容大纲：</p>
@@ -603,50 +765,332 @@
       </tags>
   </entry>
   <entry>
-    <title>Prompt编写指南</title>
-    <url>/2023/08/081ae7892f5f.html</url>
-    <content><![CDATA[<p>内容大纲：</p>
+    <title>【商业系列】商业计划书大纲与内容</title>
+    <url>/2023/08/efa8d1f054ea.html</url>
+    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
 <ul>
-<li><ol>
-<li>基础知识</li>
-</ol>
-<ul>
-<li>1.1 两种LLM</li>
-<li>1.2 提问原则</li>
+<li>1、 团队简介</li>
+<li>2、 项目内容</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析</li>
+<li>5、 商业模式</li>
+<li>6、 战略规划<span id="more"></span></li>
+</ul>
+<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
+<li>1、 团队简介</li>
+<li>2、 项目内容<ul>
+<li>1、项目介绍</li>
+<li>2、核心优势</li>
+</ul>
+</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析<ul>
+<li>1、 市场分析</li>
+<li>2、 竞品分析</li>
+</ul>
+</li>
+<li>5、 商业模式<ul>
+<li>1、 商业模式介绍</li>
+<li>2、 相关数据</li>
+</ul>
+</li>
+<li>6、 战略规划<ul>
+<li>1、 战略目标</li>
+<li>2、 实现路径</li>
 </ul>
 </li>
 </ul>
-<span id="more"></span>
-<h1 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1.基础知识"></a>1.基础知识</h1><h2 id="1-1-两种LLM"><a href="#1-1-两种LLM" class="headerlink" title="1.1 两种LLM"></a>1.1 两种LLM</h2><p><strong>Base LLM</strong><br>基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。</p>
-<p><strong>Instruction Tuned LLM</strong><br>这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。<br>对于大部分情况下，都为使用ITLLM进行学习以及开发。</p>
-<ul>
-<li>因为ITLLM是基于指令（关键词）进行的矫正、输出，因此当结果不合适时，应对重写选择合适的指令；</li>
-</ul>
-<h2 id="1-2-提问原则"><a href="#1-2-提问原则" class="headerlink" title="1.2 提问原则"></a>1.2 提问原则</h2><h3 id="1-2-1-原则一：编写明确、具体的指令"><a href="#1-2-1-原则一：编写明确、具体的指令" class="headerlink" title="1.2.1 原则一：编写明确、具体的指令"></a>1.2.1 原则一：编写明确、具体的指令</h3><p>明确 不等于 简短，为了明确的指令，可以提供更多的描述，来保证上下文信息的重组；</p>
-<p><strong>具体方法1：使用分隔符清楚的指示输入的不同部分</strong></p>
-<ul>
-<li>分隔符可以是任何清晰的符号：引号、分割号、三引号、XML标记等</li>
-<li>让模型知道：这是一个单独的部分</li>
-</ul>
-<p><strong>具体方法2：要求结构化的输出</strong><br>可以要求HTML、JSON、XML、MD等具体格式的输出；</p>
-<p><strong>具体方法3：要求模型检查条件是否被满足</strong><br>当问题是基于某些假设时，可以先让模型检查这些假设；如果不满足条件，则指示停止尝试完全完成这些任务。</p>
-<p><strong>具体方法4：少量训练提示</strong><br>在前面有成功回答的问题时，可以要求模型，它的任务是以一致的风格回答问题；</p>
-<h3 id="1-2-2-原则二：给模型时间去思考"><a href="#1-2-2-原则二：给模型时间去思考" class="headerlink" title="1.2.2 原则二：给模型时间去思考"></a>1.2.2 原则二：给模型时间去思考</h3><p>模型无法处理过于复杂的问题。因此需要给模型“时间”去思考；</p>
-<p><strong>具体方法1：指定完成任务所需的步骤</strong><br>具体指明回答时的步骤，比如：<br><em>第一步：总结要点<br>第二步：将要点翻译成英文<br>第三步：列出每一个要点的名称以及总结<br>第四步：输出JSON格式的内容</em></p>
-<p><strong>具体方法2：指示模型在做出结论之前，先思考解决方案</strong><br>在模型给出具体的答案之前，先给时间去进行问题的实际思考；<br>比如让模型先用自己的计算方法进行计算，然后再和给出的答案进行比较；<br>*1、先给出你自己的解决方案<br>2、再该处你自己的解决方案之前，不要决定解决方案是否正确<br>*</p>
-<p><strong>具体方法3：面对幻觉时，要求模型先给出引用，再基于引用给出答案</strong><br>由于模型并不知道自己知识的边界，因此可能会编造出看起来十分正确的回答；<br>为了解决这种问题，可以要求：</p>
+<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
+<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
 <ol>
-<li>模型先给出针对问题的答案的引用；</li>
-<li>要求模型基于这些引用，回答相关问题；</li>
+<li>核心业务内容</li>
+<li>核心优势</li>
+</ol>
+<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
+<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
+<ul>
+<li>分析方法<ul>
+<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
+<li><ol>
+<li>增长型项目（还没开始或刚开始）</li>
+</ol>
+<ul>
+<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
+</ul>
+</li>
+<li><ol start="2">
+<li>运营型项目（已经开始）</li>
+</ol>
+<ul>
+<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
+<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
+<ul>
+<li>流量矩阵：<ul>
+<li>自媒体流量（自带宣传流量）</li>
+<li>开发团队（丰富开发经验）</li>
+<li>项目案例（Unity3D）</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
+<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
+<ul>
+<li>真实的数据，但是是部分的真实</li>
+</ul>
+<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
+<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
+<ol>
+<li>项目如何盈利？</li>
+<li>项目的流量模式？</li>
+<li>获客转化的路径？</li>
+<li>是否具有可持续性？</li>
+<li>增长的空间以及可能？</li>
+</ol>
+<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
+<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
+<ol>
+<li>确定战略目标，展现当前项目的发展前景</li>
+<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
 </ol>
 ]]></content>
       <categories>
-        <category>人工智能</category>
+        <category>商业</category>
       </categories>
       <tags>
-        <tag>AI</tag>
-        <tag>ChatGPT</tag>
-        <tag>深度学习</tag>
+        <tag>商业</tag>
+        <tag>创业</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Game Engine】P2：Precompiled Header</title>
+    <url>/2023/08/d5920372157c.html</url>
+    <content><![CDATA[<p>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。</p>
+<span id="more"></span>
+<h1 id="1-编写预编译头"><a href="#1-编写预编译头" class="headerlink" title="1.编写预编译头"></a>1.编写预编译头</h1><p><strong>C++中的PCH</strong><br>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。以下是负责的.h代码；</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_set&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HZ_PLATFORM_WINDOWS</span></span><br><span class="line">	<span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-将预编译头内容加入到premake"><a href="#2-将预编译头内容加入到premake" class="headerlink" title="2.将预编译头内容加入到premake"></a>2.将预编译头内容加入到premake</h1><p>加入到Premake中<br>需要把内容加入到premake当中：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">project <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    location <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    kind <span class="string">&quot;SharedLib&quot;</span></span><br><span class="line"></span><br><span class="line">    language <span class="string">&quot;C++&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">targetdir</span> (<span class="string">&quot;bin/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">objdir</span> (<span class="string">&quot;bin-int/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    pchheader <span class="string">&quot;skpch.h&quot;</span></span><br><span class="line"></span><br><span class="line">    pchsource <span class="string">&quot;Satsuki/src/skpch&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    files</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.h&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.cpp&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    includedirs</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>游戏引擎</category>
+      </categories>
+      <tags>
+        <tag>编译</tag>
+        <tag>游戏引擎</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Game Engine】P1：引擎事件系统</title>
+    <url>/2023/08/73d34ee8e11a.html</url>
+    <content><![CDATA[<p>引擎事件系统框架编写</p>
+<span id="more"></span>
+
+<h2 id="1-事件类型基础"><a href="#1-事件类型基础" class="headerlink" title="1.事件类型基础"></a>1.事件类型基础</h2><h3 id="1-1-事件类型枚举"><a href="#1-1-事件类型枚举" class="headerlink" title="1.1 事件类型枚举"></a>1.1 事件类型枚举</h3><p>描述事件系统的基础事件类型，用枚举表示。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">EventType</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,</span><br><span class="line">	AppTick, AppUpdate, AppRender,</span><br><span class="line">	KeyPressed, KeyReleased,</span><br><span class="line">	MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-事件分类"><a href="#1-2-事件分类" class="headerlink" title="1.2 事件分类"></a>1.2 事件分类</h3><p>定义了事件分类，并且可以向0进行过滤、偏移；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">EventCategory</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	EventCategoryApplication = <span class="built_in">BIT</span>(<span class="number">0</span>),</span><br><span class="line">	EventCategoryInput = <span class="built_in">BIT</span>(<span class="number">1</span>),</span><br><span class="line">	EventCategoryKeyboard = <span class="built_in">BIT</span>(<span class="number">2</span>),</span><br><span class="line">	EventCategoryMouse = <span class="built_in">BIT</span>(<span class="number">3</span>),</span><br><span class="line">	EventCategoryMouseButton = <span class="built_in">BIT</span>(<span class="number">4</span>)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BIT的定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BIT(x) (1 &lt;&lt; x)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Event基类设计"><a href="#2-Event基类设计" class="headerlink" title="2.Event基类设计"></a>2.Event基类设计</h2><ul>
+<li>内容：<ul>
+<li>m_Handled：用于表示此内容是否已经被处理过；</li>
+<li>IsInCategory：现在处理的事件，是否是属于类型的部分；使用此方法快速的进行过滤； </li>
+<li>GetName：仅用在Debug模式；</li>
+<li>ToString：默认输出名字，也可以继承后修改以及扩展此行为；<ul>
+<li>实现细节：stringstream的性能很差，但目前Debug模式可以先不考虑；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> Event</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">EventDispatcher</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> EventType <span class="title">GetEventType</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">const</span> <span class="type">char</span>* <span class="title">GetName</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">GetCategoryFlags</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> <span class="built_in">GetName</span>(); &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">IsInCategory</span><span class="params">(EventCategory category)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">GetCategoryFlags</span>() &amp; category;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="type">bool</span> m_Handled = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-抽象函数的实现宏"><a href="#2-1-抽象函数的实现宏" class="headerlink" title="2.1 抽象函数的实现宏"></a>2.1 抽象函数的实现宏</h3><p>因为在Event当中有抽象函数需要实现，每一个子类都需要手动进行实现的话会导致浪费。可以将其写成一个宏函数，在子类当中只需传入类型，既可以自动实现其子类的抽象函数的实现；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> EVENT_CLASS_TYPE(type) static EventType GetStaticType() &#123; return EventType::##type; &#125;\</span></span><br><span class="line"><span class="meta">								virtual EventType GetEventType() const override &#123; return GetStaticType(); &#125;\</span></span><br><span class="line"><span class="meta">								virtual const char* GetName() const override &#123; return #type; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-KeyEvent类设计"><a href="#3-KeyEvent类设计" class="headerlink" title="3.KeyEvent类设计"></a>3.KeyEvent类设计</h2><p><strong>KeyEvent概念</strong><br>需要处理案件的事件。并且按键的事件至少具有以下三种状态：</p>
+<ol>
+<li>第一次按下</li>
+<li>按下中</li>
+<li>第一次抬起<br>KeyEvent需要能够处理并表达这三种状态。</li>
+</ol>
+<p><strong>继承</strong><br>KeyEvent是其他更多按键事件的父类，是Event类的子类；</p>
+<p><strong>KeyEvent代码</strong><br>此代码的内容类似于是抽象类，只是用于提供继承；不能实例化一个Key Event；</p>
+<ul>
+<li>内容：<ul>
+<li>构造函数：构造函数被设置为protected，表示此类作用为提供继承；</li>
+<li>Get Key Code：返回KeyCode数值；<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetKeyCode</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_KeyCode; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryKeyboard | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">KeyEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">m_KeyCode</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_KeyCode;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<p><strong>EVENT_CLASS_CATEGORY内容</strong><br>因为KeyBoard键盘输入同时也是一般Input的一种，因此其进行分类时同属于这两种类型；</p>
+<h3 id="3-1-KeyPressedEvent类设计"><a href="#3-1-KeyPressedEvent类设计" class="headerlink" title="3.1 KeyPressedEvent类设计"></a>3.1 KeyPressedEvent类设计</h3><p>此类是一个可以被实际实例化的类；</p>
+<p><strong>构造函数</strong><br>此类的构造函数传入repeatCount，表示此按键的重复次数。当此数值不为0时，此内容表示当前Event在被重复按下；</p>
+<p><strong>ToString重写</strong><br>输出”KeyPressedEvent: “ 加上 KeyCode 的数值；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyPressedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyPressedEvent</span>(<span class="type">int</span> keycode, <span class="type">int</span> repeatCount)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode), <span class="built_in">m_RepeatCount</span>(repeatCount) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetRepeatCount</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_RepeatCount; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyPressedEvent: &quot;</span> &lt;&lt; m_KeyCode &lt;&lt; <span class="string">&quot; (&quot;</span> &lt;&lt; m_RepeatCount &lt;&lt; <span class="string">&quot; repeats)&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyPressed)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">int</span> m_RepeatCount;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-KeyReleasedEvent类设计"><a href="#3-2-KeyReleasedEvent类设计" class="headerlink" title="3.2 KeyReleasedEvent类设计"></a>3.2 KeyReleasedEvent类设计</h3><p>和Pressed类基本一致，只不过没有repeatCount的计数内容；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyReleasedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyReleasedEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyReleasedEvent: &quot;</span> &lt;&lt; m_KeyCode;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="4-EventDispatcher"><a href="#4-EventDispatcher" class="headerlink" title="4.EventDispatcher"></a>4.EventDispatcher</h2><p><strong>作用</strong><br>让我们可以实际的去发布一个事件，基于需要发布事件的类型；<br>创建一个Dispatcher的实例，并且拥有一个Event的引用。在这个Dispatcher中拥有一个Dispatch()方法，可以接受一个EventFn函数。然后如果类型一致，可以实际的在Dispatch中运行这个EventFn的函数。</p>
+<p><strong>构造函数</strong><br>Event基类作为参数，接受各种事件类型，赋值在私有的Event变量上；</p>
+<p><strong>Dispatch()方法</strong><br>在此方法内需要使用上Event，进行判断泛型传入的类型T的事件类型，和当前Dispatch中存储的Event的类型是否一致（通过GetEventType()方法，调用GetStaticType()方法）；<br>一致时，会调用EventFn中存储的函数，并返回bool；</p>
+<p><strong>EventFn函数</strong><br>使用std的function，并且返回bool类型，接受T&amp;引用（可以为任何类型的Event）作为参数；</p>
+<ul>
+<li>补充：<strong>std::function()</strong><ul>
+<li>可以把std::function看做一个函数对象，用于表示并存储函数这个抽象概念。</li>
+<li>std::function的实例可以存储、复制和调用任何可调用对象（函数指针，类成员函数指针，bind表达式等等），存储的可调用对象称为std::function的目标，若std::function不含目标，则称它为空</li>
+</ul>
+</li>
+</ul>
+<p>代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">EventDispatcher</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">	<span class="keyword">using</span> EventFn = std::function&lt;<span class="built_in">bool</span>(T&amp;)&gt;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">EventDispatcher</span>(Event&amp; event)</span><br><span class="line">		: <span class="built_in">m_Event</span>(event)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">	<span class="type">bool</span> <span class="title">Dispatch</span><span class="params">(EventFn&lt;T&gt; func)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (m_Event.<span class="built_in">GetEventType</span>() == T::<span class="built_in">GetStaticType</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			m_Event.m_Handled = <span class="built_in">func</span>(*(T*)&amp;m_Event);</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Event&amp; m_Event;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="5-MouseEvent设计"><a href="#5-MouseEvent设计" class="headerlink" title="5.MouseEvent设计"></a>5.MouseEvent设计</h2><p><strong>MouseMovedEvent</strong><br>传入x、y表示两个坐标位置，用于存储鼠标移动事件所需要的信息；<br>同理MouseScrolledEvent。<br>下面内容基本类似，主要关注构造函数中传入的参数的差别，代表了此种类型事件所实际需要使用到的数据。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseMovedEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseMovedEvent</span>(<span class="type">float</span> x, <span class="type">float</span> y)</span><br><span class="line">		: <span class="built_in">m_MouseX</span>(x), <span class="built_in">m_MouseY</span>(y) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetX</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseX; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetY</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseY; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseMovedEvent: &quot;</span> &lt;&lt; m_MouseX &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_MouseY;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseMoved)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> m_MouseX, m_MouseY;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseScrolledEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseScrolledEvent</span>(<span class="type">float</span> xOffset, <span class="type">float</span> yOffset)</span><br><span class="line">		: <span class="built_in">m_XOffset</span>(xOffset), <span class="built_in">m_YOffset</span>(yOffset) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetXOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_XOffset; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetYOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_YOffset; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseScrolledEvent: &quot;</span> &lt;&lt; <span class="built_in">GetXOffset</span>() &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; <span class="built_in">GetYOffset</span>();</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseScrolled)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> m_XOffset, m_YOffset;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetMouseButton</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Button; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">MouseButtonEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">m_Button</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_Button;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonPressedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseButtonPressedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseButtonPressedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonPressed)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonReleasedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseButtonReleasedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseButtonReleasedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-ApplicationEvent设计"><a href="#6-ApplicationEvent设计" class="headerlink" title="6.ApplicationEvent设计"></a>6.ApplicationEvent设计</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowResizeEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowResizeEvent</span>(<span class="type">unsigned</span> <span class="type">int</span> width, <span class="type">unsigned</span> <span class="type">int</span> height)</span><br><span class="line">		: <span class="built_in">m_Width</span>(width), <span class="built_in">m_Height</span>(height) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetWidth</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Width; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetHeight</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Height; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;WindowResizeEvent: &quot;</span> &lt;&lt; m_Width &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_Height;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowResize)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> m_Width, m_Height;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowCloseEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowCloseEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowClose)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppTickEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppTickEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppTick)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppUpdateEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppUpdateEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppUpdate)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppRenderEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppRenderEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppRender)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>游戏引擎</category>
+      </categories>
+      <tags>
+        <tag>游戏引擎</tag>
+        <tag>C++</tag>
+        <tag>事件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Game Engine】P3：Window抽象与GLFW</title>
+    <url>/2023/09/dad31b7b45e4.html</url>
+    <content><![CDATA[<ol>
+<li>GLFW与premake文件</li>
+<li>项目Premake代码修改</li>
+</ol>
+<span id="more"></span>
+<h2 id="1-GLFW与premake文件"><a href="#1-GLFW与premake文件" class="headerlink" title="1.GLFW与premake文件"></a>1.GLFW与premake文件</h2><p>文件包含代码：<br>引用了项目需要用到的和GLFW相关的代码文件（for windows）</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">files</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="string">&quot;include/GLFW/glfw3.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;include/GLFW/glfw3native.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/glfw_config.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/context.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/init.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/input.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/monitor.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/vulkan.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/window.c&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>以下是完整premake代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">project &quot;GLFW&quot;</span><br><span class="line">    kind &quot;StaticLib&quot;</span><br><span class="line">    language &quot;C&quot;</span><br><span class="line">    </span><br><span class="line">	targetdir (&quot;bin/&quot; .. outputdir .. &quot;/%&#123;prj.name&#125;&quot;)</span><br><span class="line">    objdir (&quot;bin-int/&quot; .. outputdir .. &quot;/%&#123;prj.name&#125;&quot;)</span><br><span class="line"></span><br><span class="line">	files</span><br><span class="line">	&#123;</span><br><span class="line">        &quot;include/GLFW/glfw3.h&quot;,</span><br><span class="line">        &quot;include/GLFW/glfw3native.h&quot;,</span><br><span class="line">        &quot;src/glfw_config.h&quot;,</span><br><span class="line">        &quot;src/context.c&quot;,</span><br><span class="line">        &quot;src/init.c&quot;,</span><br><span class="line">        &quot;src/input.c&quot;,</span><br><span class="line">        &quot;src/monitor.c&quot;,</span><br><span class="line">        &quot;src/vulkan.c&quot;,</span><br><span class="line">        &quot;src/window.c&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	filter &quot;system:windows&quot;</span><br><span class="line">        buildoptions &#123; &quot;-std=c11&quot;, &quot;-lgdi32&quot; &#125;</span><br><span class="line">        systemversion &quot;10.0.17134.0&quot;</span><br><span class="line">        staticruntime &quot;On&quot;</span><br><span class="line">        </span><br><span class="line">        files</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;src/win32_init.c&quot;,</span><br><span class="line">            &quot;src/win32_joystick.c&quot;,</span><br><span class="line">            &quot;src/win32_monitor.c&quot;,</span><br><span class="line">            &quot;src/win32_time.c&quot;,</span><br><span class="line">            &quot;src/win32_thread.c&quot;,</span><br><span class="line">            &quot;src/win32_window.c&quot;,</span><br><span class="line">            &quot;src/wgl_context.c&quot;,</span><br><span class="line">            &quot;src/egl_context.c&quot;,</span><br><span class="line">            &quot;src/osmesa_context.c&quot;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">		defines </span><br><span class="line">		&#123; </span><br><span class="line">            &quot;_GLFW_WIN32&quot;,</span><br><span class="line">            &quot;_CRT_SECURE_NO_WARNINGS&quot;</span><br><span class="line">		&#125;</span><br><span class="line">    filter &#123; &quot;system:windows&quot;, &quot;configurations:Release&quot; &#125;</span><br><span class="line">        buildoptions &quot;/MT&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>给项目添加GLFW代码</strong><br><img src="/../../image/Pasted%20image%2020230905010507.png"></p>
+<h1 id="2-项目premake代码修改"><a href="#2-项目premake代码修改" class="headerlink" title="2.项目premake代码修改"></a>2.项目premake代码修改</h1><p><strong>增加代码，引用GLFW到Satsuki项目</strong></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">-- Include directories relative to root folder (solution directory)</span><br><span class="line"></span><br><span class="line">IncludeDir = <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">IncludeDir<span class="punctuation">[</span><span class="string">&quot;GLFW&quot;</span><span class="punctuation">]</span> = <span class="string">&quot;Satsuki/vendor/GLFW/include&quot;</span></span><br><span class="line"></span><br><span class="line">include <span class="string">&quot;Satsuki/vendor/GLFW&quot;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>include “Satsuki&#x2F;vendor&#x2F;GLFW”<ul>
+<li>将GLFW中的premake代码直接粘贴到这个位置；</li>
+</ul>
+</li>
+<li>IncludeDir[“GLFW”] &#x3D; “Satsuki&#x2F;vendor&#x2F;GLFW&#x2F;include”<ul>
+<li>增加编译时引用的路径；</li>
+</ul>
+</li>
+</ul>
+<p><strong>link设置</strong><br>GLFW作为静态链接库，被项目引用；</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">includedirs</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;%&#123;IncludeDir.GLFW&#125;&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">links</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;GLFW&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;opengl32.lib&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>游戏引擎</category>
+      </categories>
+      <tags>
+        <tag>游戏引擎</tag>
+        <tag>C++</tag>
+        <tag>OpenGL</tag>
+        <tag>GLFW</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【游戏引擎原理】P1：GPU驱动的几何管线</title>
+    <url>/2023/08/fd049e549b6a.html</url>
+    <content><![CDATA[<p>传统渲染问题：<br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。</p>
+<span id="more"></span>
+<h2 id="1-传统渲染管线"><a href="#1-传统渲染管线" class="headerlink" title="1 传统渲染管线"></a>1 传统渲染管线</h2><h3 id="1-1-传统渲染问题"><a href="#1-1-传统渲染问题" class="headerlink" title="1.1 传统渲染问题"></a>1.1 传统渲染问题</h3><p><strong>核心：所有的需求是在CPU那端发起</strong><br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。<br><strong>Draw Graphics API</strong><br>传统渲染管线跑现代游戏无法满足，现代CPU得先把数据准备好，然后再把数据给到GPU；</p>
+<h3 id="1-2-Compute-Shader与GPU驱动管线"><a href="#1-2-Compute-Shader与GPU驱动管线" class="headerlink" title="1.2 Compute Shader与GPU驱动管线"></a>1.2 Compute Shader与GPU驱动管线</h3><p><strong>Compute Shader核心概念</strong><br>计算机不需要再CPU和GPU中来回导数据，所有的计算都在GPU的内部；<br>方法：</p>
+<ol>
+<li>在GPU中内置一些计算模块，很多计算直接在GPU中完成；把很多只有在CPU中才可以做的通用计算放到GPU上面；</li>
+<li>单个Draw Call可以绘制多个Mesh；</li>
+</ol>
+<p><strong>更加进阶的状态：GPU驱动Render管线</strong><br>GPU控制什么对象该被实际的渲染，包括Lod Selection，Visibility Culling On GPU<br>CPU不触碰GPU的数据，尽量让CPU不那么忙；</p>
+<p><strong>GPU驱动Render管线在材质中应用</strong><br>在《刺客信条大革命》中大场景的渲染，大场景当中有大量不可见的物体以及材质；</p>
+<ul>
+<li>解决方法<ul>
+<li>对每个游戏世界中的物体，按照其Mesh把其分成无数个小的Clusters，计算这个小Clusters是否被遮挡</li>
+<li>因为这种小粒度的Cluster在GPU中可以被批量处理，因此实际上性能更高，对于三角形有尽可能高的利用率；</li>
+</ul>
+</li>
+</ul>
+<p><strong>GPU驱动Pipeline概述</strong><br>流程图：<br><img src="/../../image/Pasted%20image%2020230827161631.png"></p>
+<p>CPU阶段进行粗略的Culling，在GPU阶段进行更加精细的Culling，每一个物体被分成不同的Cluster，然后打包进一个非常大的Index Buffer当中。最后一个Draw Call一次性完成计算。<br>核心：通过前面GPU一大堆的计算，一次性将不可见的几何完成绘制；</p>
+<p><strong>Work in CPU Side</strong><br>在CPU端只需要</p>
+<h2 id="2-Occlusion-Culling与相机以及阴影"><a href="#2-Occlusion-Culling与相机以及阴影" class="headerlink" title="2 Occlusion Culling与相机以及阴影"></a>2 Occlusion Culling与相机以及阴影</h2><p>如何将观测或者光照不到的地方的渲染变得尽可能廉价；</p>
+<p><strong>核心概念</strong><br>对于所有基于Cluster渲染的管线而言，Occlusion的计算都是十分关键的部分；<br>而Occlusion的基本思想，就是尽可能快速且低成本的基于当前相机的位置构建index buffer，类似于形成了一层幕布；当想渲染任何一个物体的时候，使用cluster渲染时使用这个index buffer在GPU中快速进行测试，快速将不需要渲染的部分剔除掉；</p>
+<h3 id="2-1-Occlusion-Depth-Generation"><a href="#2-1-Occlusion-Depth-Generation" class="headerlink" title="2.1 Occlusion Depth Generation"></a>2.1 Occlusion Depth Generation</h3><p>遮挡深度生成：这个根据场景生成的Depth Buffer可以被重用；</p>
+<p><strong>深度Pre-Pass与最好的Occluders在完整的像素当中</strong></p>
+<ol>
+<li>选择最好的occluders通过艺术资源或者heuristic</li>
+<li>重新计算occluder</li>
+<li>合并以及重投影与十六分之一的像素版本；</li>
+<li>生成Z-Buffer用于GPU Culling计算；</li>
+</ol>
+<p><strong>两个阶段的Occlusion Culling</strong><br>第一阶段：把上一帧里面的所有物体，依据Z buffer数据测试一遍，对所有通过上一帧Z-Buffer的物体先绘制一遍；把可能可见的物体先跑一遍得出画面；<br>问题：此时得出的z很有可能是错误的，此时应该把所有认为可能不可见的物体也测试一遍Z-Buffer<br>第二阶段：在第一阶段过滤完之后，重新再测试一遍被忽略掉的物体，从而减少大量的渲染量，准确并且高效完成；<br><img src="/../../image/Pasted%20image%2020230827161702.png"></p>
+<h3 id="2-2-可视化内容处理渲染管线"><a href="#2-2-可视化内容处理渲染管线" class="headerlink" title="2.2 可视化内容处理渲染管线"></a>2.2 可视化内容处理渲染管线</h3><p><strong>Visiblity Buffer</strong><br>Visiblity Buffer是一种新的越来越瘦关注的Buffer；<br>如果使用传统的Shading，每一次渲染都需要全部进行处理，处理的数据量非常大，因此可以把这些Texture可以全部打包放到一个Shading当中</p>
+<p><strong>Deferred Shading 与 G-Buffer 存在的意义与问题</strong><br>Deffered Shading：在Deferred Shader中处理很多三角形的场景时，其不会保证优先绘制靠近相机的物体，因此对于同一个像素可能会渲染十几次，因为在这个像素上可能会有多个物体在其射线上；<br>大量的对G-Buffer的读写会产生大量的性能浪费；</p>
+<p><strong>Visiblity Buffer</strong><br>解决方法：在第一帧渲染的时候，就只把几何数据渲染进去，而不是把Texture等其他数据全部在第一帧弄进去；在获得了这些几何体的位置信息后，再将其手动的把每个顶点该有的信息输入进去；<br>Shading阶段时，把几何体的每个像素位置拿到，反算出来其像素点应该有的反射率等信息，接下来对其进行Shading；<br>其非常适合在场景当中有大量的小物体，而且这些物体经常会被其他物体遮挡住；</p>
+<p><strong>Visiblity Buffer与Deferred Shading结合</strong><br>将Visiblity和G-Buffer结合，G-Buffer的数据可以来自于传统渲染管线，也可以来自于Visiblity Buffer渲染管线；</p>
+<h2 id="3-Nanite"><a href="#3-Nanite" class="headerlink" title="3 Nanite"></a>3 Nanite</h2><h3 id="3-1-前言"><a href="#3-1-前言" class="headerlink" title="3.1 前言"></a>3.1 前言</h3><p><strong>要解决的问题</strong><br>每个做Render的目标：在虚拟世界中还原现实世界，但现实世界中具有无限的几何细节。实时渲染的人希望在游戏当中实现无限的几何细节；</p>
+<p><strong>Nanite基本的源头：Virtual Texture</strong><br>在真实的游戏场景当中拥有大量的texture，在游戏引擎中提出Virtual Texture的思想，即在游戏当中、离Camera的Texture精度高，离Camera远的Texture精度低；即先形成一大张的Virtual Texture；</p>
+<p><strong>进一步推到：把几何Geometry也变成Virtual Map</strong><br>需要有一个方法把几何也变成Virtual Map；但这个过程十分困难，因为几何信息的处理比Texture困难很多；</p>
+<ul>
+<li>Voxels方法？<ul>
+<li>难以表达高精度内容</li>
+<li>数据量惊人</li>
+<li>而且目前主流的艺术资产都不是基于Voxel表达的</li>
+</ul>
+</li>
+<li>Subdivision Surfaces？<ul>
+<li>增加几何的精细度</li>
+<li>在实时给几何体细分表面</li>
+</ul>
+</li>
+<li>Map-Based Method?<ul>
+<li>难以表达表面特性</li>
+<li>基于硬件的加密几何</li>
+</ul>
+</li>
+</ul>
+<p><strong>最后结果：基于三角形的几何构建</strong></p>
+<h3 id="3-2-Virtual-Geometry"><a href="#3-2-Virtual-Geometry" class="headerlink" title="3.2 Virtual Geometry"></a>3.2 Virtual Geometry</h3><p><strong>Nanite中的几何表达</strong><br>无论增加多少的几何复杂度，屏幕上能够展示的几何数量终归是有限的，有像素上有一个或两个三角形就够了；<br>可以通过屏幕像素的精度来决定几何物体的精度；</p>
+<ul>
+<li>基于Cluster的几何表达<ul>
+<li>将几何体分成不同的Cluster</li>
+<li>让其根据View来决定Cluster的精度，不同的LOD在Cluster中具有不同的精度</li>
+<li>对于屏幕空间最大化的利用<br><img src="/../../image/Pasted%20image%2020230827161729.png"></li>
+</ul>
+</li>
+</ul>
+<p><strong>Nanite的Cluster细分方法</strong><br>根据View的距离情况，根据LOD进行Cluster的简化，将其合成一份Cluster；<br>因此可以在游戏进行时，可以根据View距离加载不同的LOD；<br><strong>Cluster合并的问题</strong><br>不同LOD等级的物体之间衔接的时候会有问题，即本来是根据同一LOD构建出的几何体现在有部分表面其Cluster变成其他LOD是，分界处衔接有问题；<br>解决方法：把边给锁住；在边缘一直锁着LOD0的边；但是锁边的时候这些边的三角形数量也很高；并且因为人眼对于高频的信号感受力很强，因此对于这种边缘处突然出现的高频信号会有反应；</p>
+<p><strong>对Cluster合并问题的解决：Cluster Group</strong><br>只缩Cluster Group的边，里面的Cluster再随意的去简化；<br>保证了在LOD切换的时候，不会在衔接处明显变化；<br>其希望被锁住的LOD的边在切换的时候不会注意到被缩边的Cluster Group;<br>如图是Cluster Group在不同LOD时变化：<br>乱中有序：底层的Cluster上层可能有多个，并且不会和上层的所有Cluster都产生关系；<br><img src="/../../image/Pasted%20image%2020230827161745.png"></p>
+<h3 id="3-3-QEM"><a href="#3-3-QEM" class="headerlink" title="3.3 QEM"></a>3.3 QEM</h3><p>形成Cluster Group的流水线；<br><strong>LOD Selection For Cluster Group In Paralllel</strong><br>能不能让LOD的Selection可不可以被并行化，从左到右或者从右到左的遍历都有可能是不稳定的；<br>把Cluster节点组成的树状的LOD，变成数组的线性的LOD（通过把Cluster其对应父节点的信息存储进来）</p>
+<ul>
+<li>希望是独立的决策</li>
+</ul>
+]]></content>
+      <categories>
+        <category>游戏引擎</category>
+      </categories>
+      <tags>
+        <tag>游戏引擎</tag>
+        <tag>技术美术</tag>
       </tags>
   </entry>
   <entry>
@@ -753,6 +1197,74 @@
       <tags>
         <tag>操作系统</tag>
         <tag>状态机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 12：进程的地址空间</title>
+    <url>/2023/08/d03400aa93d7.html</url>
+    <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
+<span id="more"></span>
+<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
+<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
+
+<p>查看某一个进程地址空间代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
+<p>当中的37491为进程的id。</p>
+<p><strong>查看结果：</strong><br><img src="/../../image/Pasted%20image%2020230829191538.png"></p>
+<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong></p>
+<ul>
+<li>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。</li>
+<li>proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</li>
+</ul>
+<p>**相关手册：<code>mam 5 proc</code></p>
+<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br><img src="/../../image/Pasted%20image%2020230829191738.png"><br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
+<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
+<hr>
+<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
+<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
+<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
+<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
+<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
+<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
+<p><strong>定义：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
+<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
+<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br><img src="/../../image/Pasted%20image%2020230829191917.png"></p>
+<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
+<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
+<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
+<ul>
+<li>第一步：获得游戏进程的PID（进程号）</li>
+<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
+<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
+<li>第四步：遍历此段内存，找到关键词数据</li>
+<li>第五步：修改被关键字标记的内存</li>
+</ul>
+<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
+<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
+<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
+<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
+<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>进程</tag>
+        <tag>操作系统</tag>
+        <tag>Fork</tag>
+        <tag>Mmap</tag>
       </tags>
   </entry>
   <entry>
@@ -879,271 +1391,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【商业系列】商业计划书大纲与内容</title>
-    <url>/2023/08/efa8d1f054ea.html</url>
-    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
-<ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析</li>
-<li>5、 商业模式</li>
-<li>6、 战略规划<span id="more"></span></li>
-</ul>
-<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容<ul>
-<li>1、项目介绍</li>
-<li>2、核心优势</li>
-</ul>
-</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析<ul>
-<li>1、 市场分析</li>
-<li>2、 竞品分析</li>
-</ul>
-</li>
-<li>5、 商业模式<ul>
-<li>1、 商业模式介绍</li>
-<li>2、 相关数据</li>
-</ul>
-</li>
-<li>6、 战略规划<ul>
-<li>1、 战略目标</li>
-<li>2、 实现路径</li>
-</ul>
-</li>
-</ul>
-<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
-<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
-<ol>
-<li>核心业务内容</li>
-<li>核心优势</li>
-</ol>
-<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
-<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
-<ul>
-<li>分析方法<ul>
-<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
-<li><ol>
-<li>增长型项目（还没开始或刚开始）</li>
-</ol>
-<ul>
-<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>运营型项目（已经开始）</li>
-</ol>
-<ul>
-<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
-<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
-<ul>
-<li>流量矩阵：<ul>
-<li>自媒体流量（自带宣传流量）</li>
-<li>开发团队（丰富开发经验）</li>
-<li>项目案例（Unity3D）</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
-<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
-<ul>
-<li>真实的数据，但是是部分的真实</li>
-</ul>
-<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
-<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
-<ol>
-<li>项目如何盈利？</li>
-<li>项目的流量模式？</li>
-<li>获客转化的路径？</li>
-<li>是否具有可持续性？</li>
-<li>增长的空间以及可能？</li>
-</ol>
-<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
-<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
-<ol>
-<li>确定战略目标，展现当前项目的发展前景</li>
-<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
-</ol>
-]]></content>
-      <categories>
-        <category>商业</category>
-      </categories>
-      <tags>
-        <tag>商业</tag>
-        <tag>创业</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</title>
-    <url>/2023/08/4b26dd1d757b.html</url>
-    <content><![CDATA[<ul>
-<li><ol>
-<li>为什么要有托管堆</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>什么是托管堆</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>垃圾回收算法</li>
-</ol>
-<ul>
-<li><ol>
-<li>引用计数算法</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>引用跟踪算法<span id="more"></span></li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="1-为什么要有托管堆"><a href="#1-为什么要有托管堆" class="headerlink" title="1.为什么要有托管堆"></a>1.为什么要有托管堆</h1><h2 id="1-1-面向对象与资源分配"><a href="#1-1-面向对象与资源分配" class="headerlink" title="1.1 面向对象与资源分配"></a>1.1 面向对象与资源分配</h2><p><strong>面向对象中的资源</strong><br>概念：在面向对象的环境中，任何一种类型都代表了计算机中可供程序使用的一种资源。如果要使用这种资源，就需要为这种资源分配一定的内存；</p>
-<p><strong>资源分配步骤</strong></p>
-<ul>
-<li>第一步<ul>
-<li>调用IL代码<code>newobj</code>，为代表资源的类型分配内存；</li>
-<li>此步骤通常由new操作符来触发并完成；</li>
-</ul>
-</li>
-<li>第二步<ul>
-<li>根据类型的状态设置，初始化内存，设置资源的初始状态并使得此资源可用；</li>
-<li>由类型的实例构造函数来设置初始状态；</li>
-</ul>
-</li>
-<li>第三步<ul>
-<li>访问类型的成员来使用此资源</li>
-</ul>
-</li>
-<li>第四步<ul>
-<li>摧毁资源的状态，以进行垃圾的清理</li>
-</ul>
-</li>
-<li>第五步<ul>
-<li>由GC回收期释放内存</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-为什么需要托管堆来进行垃圾回收"><a href="#1-2-为什么需要托管堆来进行垃圾回收" class="headerlink" title="1.2 为什么需要托管堆来进行垃圾回收"></a>1.2 为什么需要托管堆来进行垃圾回收</h2><p><strong>C++中的例子</strong><br>在需要程序员手动管理内存的语言中（比如当C++不使用shareptr或其他基于对象的指针时），程序员经常会产生两种错误：</p>
-<ol>
-<li>忘记释放不再需要的内存，进而造成内存泄漏；</li>
-<li>尝试使用已经释放的内存，造成安全漏洞；<br>由于这两种错误经常是在程序运行时才能发现，因此程序发生异常时调试困难。</li>
-</ol>
-<p><strong>解决方法：可验证的、类型安全的代码</strong><br>在资源分配阶段中的【第四步】，此步骤若不是由程序员来完成，而是交给程序的托管堆和垃圾回收器来自动进行时，此时程序就能进一步的保证安全；</p>
-<ul>
-<li>托管堆会自动完成垃圾的回收，并且当需要手动进行回收时，托管堆还提供了一个简化的模型；</li>
-</ul>
-<p><strong>补充：需要特殊清理的类型</strong><br>部分包装了本机资源的类型，比如对文件、Socket、数据库连接资源的类型，可能无法使用自动进行的垃圾回收，而是需要程序员使用GC的手动触发；</p>
-<h1 id="2-什么是托管堆"><a href="#2-什么是托管堆" class="headerlink" title="2.什么是托管堆"></a>2.什么是托管堆</h1><h2 id="2-1-托管堆基本概念"><a href="#2-1-托管堆基本概念" class="headerlink" title="2.1 托管堆基本概念"></a>2.1 托管堆基本概念</h2><p><strong>托管堆</strong><br>在C#中，托管堆是一种用于存储和管理托管对象（即运行在CLR中的对象）的内存区域。它是CLR的一部分，为托管对象提供动态内存分配和释放的功能。托管堆是一种自动化内存管理机制，它通过垃圾回收器自动回收不再使用的对象，从而释放内存并确保内存的正确使用。</p>
-<p><strong>NextObjPtr</strong><br>CLR会在程序的托管堆中管理一个指针NextObjPtr，此指针会一直指向下一个对象在队中分配的位置。在最开始时，此指针指向地址空间的基地址；</p>
-<p><strong>内存自动扩张</strong><br>在一个区域的内存备非垃圾对象填满之后，CLR会自动分配更多的区域。此过程会一直进行，直到进程的地址空间被填满；</p>
-<h2 id="2-2-CLR中的new行为"><a href="#2-2-CLR中的new行为" class="headerlink" title="2.2 CLR中的new行为"></a>2.2 CLR中的new行为</h2><p><strong>执行行为</strong><br>C#的new操作符将导致CLR执行以下步骤：</p>
-<ul>
-<li>第一步<ul>
-<li>计算类型的字段(包括从基类型继承的字段)所需的字节数。</li>
-</ul>
-</li>
-<li>第二步<ul>
-<li>加上对象额外所需的两部分开销所需的字节数；</li>
-<li>每个对象都有两个开销字段：<ul>
-<li>类型对象指针</li>
-<li>同步块索引</li>
-</ul>
-</li>
-<li>对于32位应用程序，这两个字段各自需要 32位，所以每个对象要增加8字节。对于64位应用程序，这两个字段各自需要64位，所以每个对象要增加16字节；</li>
-</ul>
-</li>
-<li>第三步<ul>
-<li>检查阶段：<ul>
-<li>CLR检查区域中是否有分配对象所需的字节数。如果托管堆有足够的可用空间，就在NextObiPtr 指针指向的地址处放入对象，为对象分配的字节会被清零；</li>
-</ul>
-</li>
-<li>调用阶段<ul>
-<li>调用类型的构造器，为类型构造器中的this参数传递当前NextObiPtr指向的对象，new操作符返回对象引用；</li>
-<li>在返回这个引用之前，NextObjiPtr指针的值会加上对象占用的字节数来得到一个新值，即下个对象放入托管堆时的地址。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>分配之后的内存，在空间中形式如下简图：<br><img src="/../../image/Pasted%20image%2020230828103459.png" alt="新初始化的托管堆，其中构造了3个对象"></p>
-<h2 id="2-3-托管堆与空间局部化"><a href="#2-3-托管堆与空间局部化" class="headerlink" title="2.3 托管堆与空间局部化"></a>2.3 托管堆与空间局部化</h2><p><strong>空间局部化</strong><br>由于托管堆的分配是在指针之上加一个值，因此其分配的速度非常的快；差不多同时分配的对象彼此间有较强的联系，而且经常差不多在同一时间访问；</p>
-<ul>
-<li><strong>由于托管堆在内存中连续分配这些对象，所以会因为引用的“局部化”(locality)而获得性能上的提升</strong></li>
-</ul>
-<p><strong>具体的优点</strong></p>
-<ul>
-<li>优点一<ul>
-<li>进程的工作集会非常小，应用程序只需使用很少的内存，从而提高了速度；</li>
-</ul>
-</li>
-<li>优点二<ul>
-<li>代码使用的对象可以全部驻留在 CPU 的缓存中。应用程序能以非常快的速度访问这些对象，因为CPU在执行大多数操作不会因Cache Miss而被迫访问较慢的 RAM；</li>
-</ul>
-</li>
-</ul>
-<h1 id="3-垃圾回收算法"><a href="#3-垃圾回收算法" class="headerlink" title="3.垃圾回收算法"></a>3.垃圾回收算法</h1><p>在应用程序调用new操作符创建对象时，可能会没有足够地址空间来分配该对象，此时CLR就需要执行垃圾回收。</p>
-<h2 id="3-1-引用计数算法"><a href="#3-1-引用计数算法" class="headerlink" title="3.1 引用计数算法"></a>3.1 引用计数算法</h2><p><strong>什么是引用计数算法</strong><br>对于对象生存期的管理，有些系统使用的是引用计数算法；<em>比如微软的COM</em></p>
-<p><strong>算法内容</strong><br>堆上的每个对象都维护着一个内存字段，用于统计程序中多少部分正在使用对象。随着每一部分到达代码中某个不再需要对象的地方，就递减对象的计数字段。当计数字段变成0，对象就可以从内存中删除；</p>
-<p><strong>算法问题：循环引用</strong><br>在一些GUI应用程序中，窗口对象将容纳对子UI对象的引用，而子UI对象将容纳对父窗口对象的引用；<br>这种引用会阻止两个对象的计数器达到 0，所以两个对象永远不会删除，即使应用程序本身不再需要窗口。</p>
-<ul>
-<li>CLR不使用引用计数算法，而是使用<strong>引用跟踪算法</strong>；</li>
-</ul>
-<h2 id="3-2-引用跟踪算法"><a href="#3-2-引用跟踪算法" class="headerlink" title="3.2 引用跟踪算法"></a>3.2 引用跟踪算法</h2><p><strong>算法特点</strong><br>引用跟踪算法只关心引用类型的变量，不关心值类型变量。因为只有引用类型的变量才能引用堆上的对象，而值类型变量直接包含值类型实例本身。</p>
-<p><strong>基础概念：根</strong><br>在CLR中，将所有引用类型的变量称为<strong>根</strong>；<br>引用类型变量可以在许多场合使用：</p>
-<ul>
-<li>类的静态字段</li>
-<li>类的实例字段</li>
-<li>方法参数</li>
-<li>局部变量<br>这些内容都可以成为根。</li>
-</ul>
-<h3 id="3-2-1-算法实现"><a href="#3-2-1-算法实现" class="headerlink" title="3.2.1 算法实现"></a>3.2.1 算法实现</h3><p><strong>第一阶段：暂停阶段</strong><br>暂停进程中的所有线程。这防止线程在CLR检查期间访问对象并更改其状态；</p>
-<p><strong>第二阶段：标记阶段</strong></p>
-<ul>
-<li>CLR 遍历堆中的所有对象，将同步块索引字段中的一位设为 0；<em>当此位设为 0 时，表示此对象应该被删除；为 1 时表示不用删除；</em></li>
-<li>设置为 0 之后，表明所有对象都应删除。然后，CLR 检查所有活动根，查看它们引用了哪些对象。如果一个根包含null，CLR忽略这个根并继续检查下个根；</li>
-<li>任何根如果引用了堆上的对象，CLR 都会标记那个对象，也就是将该对象的同步块索引中的位设为 1。一个对象被标记后，CLR 会检查那个对象中的根，标记它们引用的对象。如果发现对象已经标记，就不重新检查对象的字段。这就避免了因为循环引用而产生死循环。</li>
-<li>全部检查完毕后，堆中的对象要么已标记，要么未标记。<ul>
-<li>已标记的对象不能被垃圾回收，因为至少有一个根在引用它。这种对象是<strong>可达reachable</strong>的对象。因为应用程序代码可通过仍在引用它的变量抵达它；</li>
-<li>未标记的对象是<strong>不可达unreachable</strong>的，因为应用程序中不存在使对象能被再次访问的根；</li>
-</ul>
-</li>
-</ul>
-<p>图示为回收之前的托管堆：<br><img src="/../../image/Pasted%20image%2020230828105510.png" alt="回收之前的托管堆"></p>
-<p><strong>第三阶段：压缩阶段</strong><br>CLR对堆中已标记的对象进行“内存位置的转移，压缩所有幸存下来的对象，使它们占用连续的内存空间，如图所示：<br><img src="/../../image/Pasted%20image%2020230828105609.png" alt="垃圾回收之后的托管堆"></p>
-<ul>
-<li>压缩的好处：<ul>
-<li>所有幸存对象在内存中紧挨在一起，恢复了引用的“局部化”，减小了应用程序的工作集，从而提升了将来访问这些对象时的性能；</li>
-<li>解决了原生堆的空间碎片化问题；</li>
-</ul>
-</li>
-<li>内存偏移<ul>
-<li>在内存中移动了对象之后有一个问题待解决：引用幸存对象的根现在引用的还是对象最初在内存中的位置，而非移动之后的位置；</li>
-<li>CLR要从每个根减去所引用的对象在内存中偏移的字节数，保证每个根还是引用和之前一样的对象–只是对象在内存中变换了位置；</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>CSharp</category>
-      </categories>
-      <tags>
-        <tag>CSharp</tag>
-        <tag>垃圾回收</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Lecture 14：C标准库的实现</title>
     <url>/2023/08/68a724658d83.html</url>
     <content><![CDATA[<p>操作系统内核对外面提供的API就是Syscall，而当中和用户交互的就是Shell。而在Shell的外面，OS提供了一个框架性程序，帮助开发者实现应用程序（因为没有人愿意在没有库函数的情况下，直接使用汇编、系统调用来制作应用程序）</p>
@@ -1244,6 +1491,182 @@
       <tags>
         <tag>操作系统</tag>
         <tag>C语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 13：系统调用与Shell</title>
+    <url>/2023/08/3dbfbd52ee49.html</url>
+    <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
+<h3 id="13-1-2-早期的Shell"><a href="#13-1-2-早期的Shell" class="headerlink" title="13.1.2 早期的Shell"></a>13.1.2 早期的Shell</h3><p><strong>概念：</strong><br>早期的OS没有复杂结构，系统调用就像是库函数，那个时代的Shell就是命令行终端机。<br>核心：<strong>Shell就是一门把用户指令翻译为系统调用的编程语言</strong></p>
+<p>手册：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man sh</span><br></pre></td></tr></table></figure>
+<p>这是一个非常简单的手册，包含很多shell的内容，建立对UNIX Shell的基础认识。</p>
+<h2 id="13-2-复刻简易UNIX"><a href="#13-2-复刻简易UNIX" class="headerlink" title="13.2 复刻简易UNIX"></a>13.2 复刻简易UNIX</h2><h3 id="13-2-1-简易UNIX代码初设置"><a href="#13-2-1-简易UNIX代码初设置" class="headerlink" title="13.2.1 简易UNIX代码初设置"></a>13.2.1 简易UNIX代码初设置</h3><p>早期的计算机设计由于性能低下，设计不能太消耗性能以及复杂<br>代码：<a href="http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c</a><br>零库函数依赖、可以作为最小可用的Linux的init程序<br>由于其链接任何库函数，因此可以ffreestanding</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -c -ffreestanding sh-xv6.c -g -O2</span><br><span class="line">ld sh-xv6.o -o sh</span><br></pre></td></tr></table></figure>
+<p>第一行是将其编译，然后第二行将其静态链接<br>当使用反汇编模式进行调试时，直接从_Start()，用C写的这个函数处开始执行。此程序可以直接以命令行的形式进行运行。<br>![[Pasted image 20230827140800.png]]</p>
+<h3 id="12-2-2-第一步：读取命令"><a href="#12-2-2-第一步：读取命令" class="headerlink" title="12.2.2 第一步：读取命令"></a>12.2.2 第一步：读取命令</h3><p>代码：<br>解析：不停的getcmd()来获得用户的输入，这其中直接使用read的系统调用</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nread = <span class="built_in">syscall</span>(SYS_read,<span class="number">0</span>,buf,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>一直读到换行符才停止：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(*(buf++)==<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+<p>将命令读取到buf缓冲区里</p>
+<h3 id="12-2-3-第二步：可能性-解释执行命令"><a href="#12-2-3-第二步：可能性-解释执行命令" class="headerlink" title="12.2.3 第二步：可能性|解释执行命令"></a>12.2.3 第二步：可能性|解释执行命令</h3><p>代码：<br>![[Pasted image 20230301181806.png]]<br>解析：<br>首先判断是不是一条’cd’命令，并且其当中不能有空格<br>使用系统调用，读取buf+3之后的数据</p>
+<h3 id="12-2-4-第二步：可能性-新进程创建"><a href="#12-2-4-第二步：可能性-新进程创建" class="headerlink" title="12.2.4 第二步：可能性|新进程创建"></a>12.2.4 第二步：可能性|新进程创建</h3><p>解析：可能性|如果不是cd命令，此时创建一个新的进程，在新的进程里面把进程解析</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">syscall</span>(SYS_fork) == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">runcmd</span>(<span class="built_in">parsecmd</span>(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
+
+<p>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
+<ul>
+<li>命令与管道<ul>
+<li>管道和命令关系<ul>
+<li>管道的左边和右边都可以任意复杂：   </li>
+<li>可以是一个很长的式子：<code>(echo a;each b;echo c;echo d)|wc -l</code></li>
+<li>把管道左边的输出作为右边的输入，这就是管道的形式语义。</li>
+</ul>
+</li>
+<li>管道解析<ul>
+<li>pipe()创建一个管道，管道返回两个描述符：</li>
+<li>pipe[0]是读口，pipe[1]是写口</li>
+<li>之后会使用fork创建两个新的进程，这两个新的进程完全复制的父进程的状态，因此此时这三个进程完全共享管道，并且共进共出。</li>
+<li>之后将p[0]的文件描述符关闭，后背又将p[1]的文件描述符关掉</li>
+<li>之后再进行Fork，子进程编号为1的进程指向管道的左边，Fork出来的子进程再进行上述出现的行为</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
+<p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
+<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程</p>
+<p><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
+<h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
+<p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
+<p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
+<h3 id="13-3-2-现代Shell展望"><a href="#13-3-2-现代Shell展望" class="headerlink" title="13.3.2 现代Shell展望"></a>13.3.2 现代Shell展望</h3><p>现代的Shell功能不变，都是人和机器之间的API，但是其形式可以发生变化</p>
+<ul>
+<li>界面自带StackOverflow？</li>
+<li>结合神经网络？</li>
+<li>智能补全？</li>
+<li>POPL20</li>
+</ul>
+<h2 id="13-4-终端与任务控制"><a href="#13-4-终端与任务控制" class="headerlink" title="13.4 终端与任务控制"></a>13.4 终端与任务控制</h2><h3 id="13-4-1-终端机制"><a href="#13-4-1-终端机制" class="headerlink" title="13.4.1 终端机制"></a>13.4.1 终端机制</h3><p>问题：为什么有时候使用Ctrl + C可以退出程序，有时候不可以？为什么有些进程可以退出，当管道创建了很多个进程时，使用Ctrl + C 将退出哪个进程？如果时Fork了一个Shell，那使用Ctrl + C 是不是要退出Shell？tmux是怎么实现的？</p>
+<p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
+<p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
+<h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
+<p><strong>信号处理程序：</strong><br><img src="/../../image/Pasted%20image%2020230829192041.png"><br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
+<h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
+<p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 17：动态链接与加载</title>
+    <url>/2023/08/7c3f50531736.html</url>
+    <content><![CDATA[<blockquote>
+<p>前言：可执行文件就是一个描述状态机初始状态的数据结构；<br>问题：<br>    1、可执行文件如何被OS加载？<br>    2、什么是动态链接&#x2F;动态加载？</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="17-1-静态ELF文件加载器"><a href="#17-1-静态ELF文件加载器" class="headerlink" title="17.1 静态ELF文件加载器"></a>17.1 静态ELF文件加载器</h2><h3 id="17-1-1-ELF文件"><a href="#17-1-1-ELF文件" class="headerlink" title="17.1.1 ELF文件"></a>17.1.1 ELF文件</h3><p><strong>ELF文件定义</strong><br>在OS下面的“&#x2F;usr&#x2F;include&#x2F;elf.h”文件中，可以看到ELF文件定义描述；<br><img src="/../../image/Pasted%20image%2020230829193028.png"><br><strong>获得程序的ELF</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">readelf a.out</span><br></pre></td></tr></table></figure>
+<p>使用此指令来获得可执行文件的elf文件信息，并将其翻译出来；<br>ELF文件描述了一个数据结构，这个数据结构描述了进程在execve之后被Loader使用时如何加载；</p>
+<h3 id="17-1-2-ELF加载器"><a href="#17-1-2-ELF加载器" class="headerlink" title="17.1.2 ELF加载器"></a>17.1.2 ELF加载器</h3><p>Loader所作行为：解析数据结构 + 复制信息到内存 + 跳转<br><strong>Loader需加载内容</strong></p>
+<ul>
+<li>1、ELF文件里面的信息</li>
+<li>2、设置一些运行时状态<ul>
+<li>argv</li>
+<li>envp<br>以上两部分内容共同构成进程的初始状态；</li>
+</ul>
+</li>
+</ul>
+<p><strong>Loader实现了解</strong><br>Loader只是个程序，其通过动态链接的方式编译；<br>在编译之后，可以往Loader传入一个参数：比如某个程序，此时Loader会开始将ELF文件搬到指定的位置上，并且可以是使用此Loader加载其他程序。<br>在Loader当中，使用mmap + ELF信息映射到内存当中； Loader解析ELF数据结构，然后把对应内容放到内存；<br>当所有的内容都使用mmap搬进内存之后，可以使用pmap观看其地址空间：<br>可以看到其地址空间当中有两份程序，一份是loader的内存，一份是minimal的内容；即当前ELF所有具体的内容都被加载；</p>
+<h3 id="17-1-3-进程初始状态设置"><a href="#17-1-3-进程初始状态设置" class="headerlink" title="17.1.3 进程初始状态设置"></a>17.1.3 进程初始状态设置</h3><p>完成对于进程的栈以及其他空间的初始化设置；<br>实例化进程Stack：<br><img src="/../../image/Pasted%20image%2020230829193055.png"><br>比如：当中指明了rsp寄存器指向Argument Count，并且8 + rsp执行后续的参数；<br>有了这个手册之后，之后的行为就是把这些内容实现成代码。</p>
+<p><strong>初始化代码实现</strong></p>
+<ol>
+<li>先静态分配一片空间，将此空间设置为栈空间；<ol>
+<li>![[Pasted image 20230329190038.png]]</li>
+</ol>
+</li>
+<li>定义对应的push指令，可以将内容push到栈中；</li>
+<li>对照着实例化进程文档，将内容push到栈上；<ol>
+<li>![[Pasted image 20230329190137.png]]</li>
+<li>argc、argv以及环境变量等，依次压入栈中；</li>
+</ol>
+</li>
+<li>最后执行跳转<ol>
+<li>![[Pasted image 20230329190308.png]]</li>
+<li>将程序的入口地址给到指针，将rdx和rsp清零；</li>
+</ol>
+</li>
+</ol>
+<p><strong>OS、Loader与execve之间关系</strong><br>以上实现的第一个Loader是在OS上实现的，基于操作系统中的open、mmap、close，使用这些系统调用实现了一个execve，因此execve在某种程度上不是必须的，Linux可以基于ld静态链接，加上mmap、open等系统调用，就完成程序的加载。<br>由此可知：相当一部分系统调用可以实现成用户态的；</p>
+<h3 id="17-1-4-Boot-Block-Loader"><a href="#17-1-4-Boot-Block-Loader" class="headerlink" title="17.1.4 Boot Block Loader"></a>17.1.4 Boot Block Loader</h3><p><strong>什么是Boot Block Loader</strong><br>由固件实现的Boot Block Loader，将OS通过固件，一点一点加载到磁盘上、内存里。并且除了这512字节的最开始的block，在这之后还有1024字节的main args，在这之后是OS的Kernel内核文件。</p>
+<p><strong>加载OS内核</strong><br>哪怕ELF文件只有512字节的二进制文件，也可以为其写一个Loader；</p>
+<ul>
+<li>![[Pasted image 20230329191754.png]]<br>把Main函数的参数加载进来，并在之后把elf32复制，创建状态机的状态；<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">load_kernel</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  Elf32_Ehdr *elf32 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  Elf64_Ehdr *elf64 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  <span class="type">int</span> is_ap = boot_record()-&gt;is_ap;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!is_ap) &#123;</span><br><span class="line">    <span class="comment">// load argument (string) to memory</span></span><br><span class="line">    copy_from_disk((<span class="type">void</span> *)MAINARG_ADDR, <span class="number">1024</span>, <span class="number">-1024</span>);</span><br><span class="line">    <span class="comment">// load elf header to memory</span></span><br><span class="line">    copy_from_disk(elf32, <span class="number">4096</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) &#123;</span><br><span class="line">      load_elf64(elf64);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      load_elf32(elf32);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// everything should be loaded</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf64-&gt;e_entry)();<span class="comment">//设置程序进入点</span></span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf32-&gt;e_entry)();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="17-2-Linux内核加载器"><a href="#17-2-Linux内核加载器" class="headerlink" title="17.2 Linux内核加载器"></a>17.2 Linux内核加载器</h2><p>使用make进行编译，然后即可以对其进行调试；之后可以使用GDB，和调试其他的可执行程序一样来调试这个Linux代码，只要将BreakPoint放在代码的EntryPoint上即可。<br>之后如果想进行进一步的调试，就得开始使用一些更加现代的工具以及IDE，比如VSCode来把Linux内核放入到VSCode当中；<br>可以将Linux生成的哪些链接信息给到VSCode，这样就可以在编辑界面当中来动态的获得一个内容的链接内容；</p>
+<h2 id="17-3-动态链接与加载"><a href="#17-3-动态链接与加载" class="headerlink" title="17.3 动态链接与加载"></a>17.3 动态链接与加载</h2><h3 id="17-3-1-为什么需要动态链接"><a href="#17-3-1-为什么需要动态链接" class="headerlink" title="17.3.1 为什么需要动态链接"></a>17.3.1 为什么需要动态链接</h3><p><strong>静态链接问题</strong></p>
+<ul>
+<li>随着项目越来越大，库函数越来越大，文件系统会越来越膨胀，需要占有大量的磁盘空间；即不希望每个库函数都在可执行文件里面进行库函数的拷贝；</li>
+<li>同时，大型项目有把应用程序拆开的需求；</li>
+</ul>
+<p><strong>动态链接</strong><br>只要库函数遵循一定的标准，那么就可以把这个库在运行动态的链接；编译一部分，不用重新链接；</p>
+<p><strong>工业界实际的ELF问题</strong><br>ELF是一个数据结构，这个数据结构当中有专门的符号表，将一些概念上紧密相关的东西在数据结构中通过符号表（为了提升性能）强行拆散；</p>
+<h3 id="17-3-2-自顶向下设计的动态链接实现"><a href="#17-3-2-自顶向下设计的动态链接实现" class="headerlink" title="17.3.2 自顶向下设计的动态链接实现"></a>17.3.2 自顶向下设计的动态链接实现</h3><p><strong>基本假设</strong><br>假设所有的加载器、编译器、链接器都完全收你控制，此时生成一个最小的用于动态链接的数据结构，然后再在此基础上针对ELF进行优化；</p>
+<p><strong>最小的ELF</strong><br>当想要实现自己的库函数，当中有一个putchar的符号需要被动态加载，如何进行设计？<br>简化之后，动态链接最基本的行为：</p>
+<ul>
+<li>LOAD（“libc.dl”）&#x2F;&#x2F;加载动态库</li>
+<li>IMPORT（putchar）&#x2F;&#x2F;加载外部符号</li>
+<li>EXPORT（hello）&#x2F;&#x2F;为动态库导出符号</li>
+<li>在代码中引用一个外部库的符号</li>
+</ul>
+<h4 id="17-3-2-1-最小加载器实现"><a href="#17-3-2-1-最小加载器实现" class="headerlink" title="17.3.2.1 最小加载器实现"></a>17.3.2.1 最小加载器实现</h4><p>JYY实现的最小动态链接加载器；<br>![[Pasted image 20230330174916.png]]<br>自己实现的最简单的二进制文件格式：<br>![[Pasted image 20230330175114.png]]</p>
+<h4 id="17-3-3-2-动态链接Header定义"><a href="#17-3-3-2-动态链接Header定义" class="headerlink" title="17.3.3.2 动态链接Header定义"></a>17.3.3.2 动态链接Header定义</h4><p>使用此Header定义此二进制可执行文件的格式；<br>最简单的二进制动态链接文件：就是由一个头文件和一个符号表构成的；</p>
+<p><strong>dl_Header代码：</strong><br>![[Pasted image 20230414182843.png]]<br><strong>dl_Header图示：</strong><br>![[Lecture 17：动态链接与加载 2023-04-14 18.22.19.excalidraw]]</p>
+<p><strong>定义的四个宏</strong><br>![[Pasted image 20230414182950.png]]<br>第一个：IMPORT</p>
+<ol>
+<li>在Imoort当中使用DSYM函数</li>
+<li>在DSYM函数中当中传入sym（比如说是putchar，目标链接函数名称）</li>
+<li>当前sym当中传入间接寻址的地址rip，然后putchar指向symbol当中的offset。<br>第二个：EXPORT<br>向当中传入一个外部符号的调用，为了导出这个符号，在offset当中保存这个符号的相对于符号头部的偏移量；</li>
+</ol>
+<p><strong>程序预编译之后</strong><br>![[Pasted image 20230414184042.png]]<br>每一个symbol都被对齐到32字节，offset开始时为0，此时加载器发现了这个符号的offset的值为零，此时就会开始间接调转，查询符号表，将地址填入到这当中。</p>
+<p>符号链接：当你想要跳转到一个你所不知道的地址上时，就现找一块数据（offset）填上零，然后做一个间接跳转，在加载器进行加载的时候，查符号表，将地址填进去；</p>
+<p><strong>二进制视角文件</strong><br>![[Pasted image 20230414185023.png]]<br>第20行，前面八位的全零部分标志，以及libc.dl表示的需要链接的程序；<br>包括90，a0部分的全零内容，对应的多个struct symbol之后的全零字段；<br>然后c0,d0之后就是代码的部分；</p>
+<h3 id="17-3-3-对动态链接定义的加载"><a href="#17-3-3-对动态链接定义的加载" class="headerlink" title="17.3.3 对动态链接定义的加载"></a>17.3.3 对动态链接定义的加载</h3><p><strong>对dl的加载代码：</strong><br>![[Pasted image 20230414185311.png]]<br>就是扫描符号表，将dl二进制文件中对应的符号找到其需要的地址；碰到LOAD就打印其名称，碰到EXTERN就打印其对应内容；</p>
+<p><strong>objump实现</strong><br>![[Pasted image 20230414185450.png]]<br>两个For循环内的内容：</p>
+<ul>
+<li>第一层for循环：遍历符号表</li>
+<li>第二层：遍历代码的每一个字节<ul>
+<li>当代码的某一个字节刚好对应某一个符号的时候，执行一个反汇编，使用ndisasm反汇编器将代码输出出来；</li>
+</ul>
+</li>
+</ul>
+<p><strong>加载器主要部分：dlopen</strong><br>![[Pasted image 20230414190056.png]]<br>首先获得dl的hdr头文件，然后把path文件打开，解析文件头；<br>通过解析文件头知道了文件有多大后，使用mmap将其需要的内容直接映射到内存当中；<br>如果内存映射成功，在for循环内遍历符号表，如果符号表当中是+号则进行递归加载，如果是问号，则直接赋值offset内容；</p>
+<h3 id="17-3-4-自己设计DL文件中的缺陷"><a href="#17-3-4-自己设计DL文件中的缺陷" class="headerlink" title="17.3.4 自己设计DL文件中的缺陷"></a>17.3.4 自己设计DL文件中的缺陷</h3><p><strong>代码分段</strong><br>自己编写的代码只能可读可写可执行，想要不同部分不同类型，就需要进行分段；<br><strong>指定加载器</strong><br>需要指定一个加载器</p>
+<p>写一个编译器的时候，在编译器的视角里面，C代码当中出现的函数，不知道其是静态链接的还是动态链接；不知道是用call还是call DASM，而且不知道外部符号在哪里；并且call是不需要间接跳转的；<br>当链接时发现是一个动态链接符号的话，就需要靠plt去找内容，因此就发明了GOT和PLT；</p>
+<p>全局偏移表：<br>![[Pasted image 20230414191207.png]]<br>在ELF文件之下：<br>![[Pasted image 20230414191222.png]]<br>所有的间接跳转，全部都在PLT里面；</p>
+<p><strong>GOT</strong><br>我们的符号表就是GOT（Global Offset Table）</p>
+<p><strong>对于静态、动态链接的统一</strong><br>无论静态动态，都统一使静态链接先；<br>然后增加一层间接层：Procedure Linkage Table（PLT），将所有未被解析的符号都统一翻译成call。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">putchar</span> PLT:</span><br><span class="line">	call DSYM（<span class="built_in">putchar</span>）</span><br><span class="line">main:</span><br><span class="line">	call <span class="built_in">putchar</span> PLT</span><br></pre></td></tr></table></figure>
+
+<p>作业：读实例代码；</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>链接</tag>
+        <tag>ELF</tag>
       </tags>
   </entry>
   <entry>
@@ -1399,110 +1822,9 @@
       </categories>
       <tags>
         <tag>操作系统</tag>
+        <tag>链接</tag>
         <tag>可执行文件</tag>
-        <tag>链接</tag>
         <tag>汇编</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 17：动态链接与加载</title>
-    <url>/2023/08/7c3f50531736.html</url>
-    <content><![CDATA[<blockquote>
-<p>前言：可执行文件就是一个描述状态机初始状态的数据结构；<br>问题：<br>    1、可执行文件如何被OS加载？<br>    2、什么是动态链接&#x2F;动态加载？</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="17-1-静态ELF文件加载器"><a href="#17-1-静态ELF文件加载器" class="headerlink" title="17.1 静态ELF文件加载器"></a>17.1 静态ELF文件加载器</h2><h3 id="17-1-1-ELF文件"><a href="#17-1-1-ELF文件" class="headerlink" title="17.1.1 ELF文件"></a>17.1.1 ELF文件</h3><p><strong>ELF文件定义</strong><br>在OS下面的“&#x2F;usr&#x2F;include&#x2F;elf.h”文件中，可以看到ELF文件定义描述；<br><img src="/../../image/Pasted%20image%2020230829193028.png"><br><strong>获得程序的ELF</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">readelf a.out</span><br></pre></td></tr></table></figure>
-<p>使用此指令来获得可执行文件的elf文件信息，并将其翻译出来；<br>ELF文件描述了一个数据结构，这个数据结构描述了进程在execve之后被Loader使用时如何加载；</p>
-<h3 id="17-1-2-ELF加载器"><a href="#17-1-2-ELF加载器" class="headerlink" title="17.1.2 ELF加载器"></a>17.1.2 ELF加载器</h3><p>Loader所作行为：解析数据结构 + 复制信息到内存 + 跳转<br><strong>Loader需加载内容</strong></p>
-<ul>
-<li>1、ELF文件里面的信息</li>
-<li>2、设置一些运行时状态<ul>
-<li>argv</li>
-<li>envp<br>以上两部分内容共同构成进程的初始状态；</li>
-</ul>
-</li>
-</ul>
-<p><strong>Loader实现了解</strong><br>Loader只是个程序，其通过动态链接的方式编译；<br>在编译之后，可以往Loader传入一个参数：比如某个程序，此时Loader会开始将ELF文件搬到指定的位置上，并且可以是使用此Loader加载其他程序。<br>在Loader当中，使用mmap + ELF信息映射到内存当中； Loader解析ELF数据结构，然后把对应内容放到内存；<br>当所有的内容都使用mmap搬进内存之后，可以使用pmap观看其地址空间：<br>可以看到其地址空间当中有两份程序，一份是loader的内存，一份是minimal的内容；即当前ELF所有具体的内容都被加载；</p>
-<h3 id="17-1-3-进程初始状态设置"><a href="#17-1-3-进程初始状态设置" class="headerlink" title="17.1.3 进程初始状态设置"></a>17.1.3 进程初始状态设置</h3><p>完成对于进程的栈以及其他空间的初始化设置；<br>实例化进程Stack：<br><img src="/../../image/Pasted%20image%2020230829193055.png"><br>比如：当中指明了rsp寄存器指向Argument Count，并且8 + rsp执行后续的参数；<br>有了这个手册之后，之后的行为就是把这些内容实现成代码。</p>
-<p><strong>初始化代码实现</strong></p>
-<ol>
-<li>先静态分配一片空间，将此空间设置为栈空间；<ol>
-<li>![[Pasted image 20230329190038.png]]</li>
-</ol>
-</li>
-<li>定义对应的push指令，可以将内容push到栈中；</li>
-<li>对照着实例化进程文档，将内容push到栈上；<ol>
-<li>![[Pasted image 20230329190137.png]]</li>
-<li>argc、argv以及环境变量等，依次压入栈中；</li>
-</ol>
-</li>
-<li>最后执行跳转<ol>
-<li>![[Pasted image 20230329190308.png]]</li>
-<li>将程序的入口地址给到指针，将rdx和rsp清零；</li>
-</ol>
-</li>
-</ol>
-<p><strong>OS、Loader与execve之间关系</strong><br>以上实现的第一个Loader是在OS上实现的，基于操作系统中的open、mmap、close，使用这些系统调用实现了一个execve，因此execve在某种程度上不是必须的，Linux可以基于ld静态链接，加上mmap、open等系统调用，就完成程序的加载。<br>由此可知：相当一部分系统调用可以实现成用户态的；</p>
-<h3 id="17-1-4-Boot-Block-Loader"><a href="#17-1-4-Boot-Block-Loader" class="headerlink" title="17.1.4 Boot Block Loader"></a>17.1.4 Boot Block Loader</h3><p><strong>什么是Boot Block Loader</strong><br>由固件实现的Boot Block Loader，将OS通过固件，一点一点加载到磁盘上、内存里。并且除了这512字节的最开始的block，在这之后还有1024字节的main args，在这之后是OS的Kernel内核文件。</p>
-<p><strong>加载OS内核</strong><br>哪怕ELF文件只有512字节的二进制文件，也可以为其写一个Loader；</p>
-<ul>
-<li>![[Pasted image 20230329191754.png]]<br>把Main函数的参数加载进来，并在之后把elf32复制，创建状态机的状态；<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">load_kernel</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  Elf32_Ehdr *elf32 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  Elf64_Ehdr *elf64 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  <span class="type">int</span> is_ap = boot_record()-&gt;is_ap;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!is_ap) &#123;</span><br><span class="line">    <span class="comment">// load argument (string) to memory</span></span><br><span class="line">    copy_from_disk((<span class="type">void</span> *)MAINARG_ADDR, <span class="number">1024</span>, <span class="number">-1024</span>);</span><br><span class="line">    <span class="comment">// load elf header to memory</span></span><br><span class="line">    copy_from_disk(elf32, <span class="number">4096</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) &#123;</span><br><span class="line">      load_elf64(elf64);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      load_elf32(elf32);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// everything should be loaded</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf64-&gt;e_entry)();<span class="comment">//设置程序进入点</span></span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf32-&gt;e_entry)();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="17-2-Linux内核加载器"><a href="#17-2-Linux内核加载器" class="headerlink" title="17.2 Linux内核加载器"></a>17.2 Linux内核加载器</h2><p>使用make进行编译，然后即可以对其进行调试；之后可以使用GDB，和调试其他的可执行程序一样来调试这个Linux代码，只要将BreakPoint放在代码的EntryPoint上即可。<br>之后如果想进行进一步的调试，就得开始使用一些更加现代的工具以及IDE，比如VSCode来把Linux内核放入到VSCode当中；<br>可以将Linux生成的哪些链接信息给到VSCode，这样就可以在编辑界面当中来动态的获得一个内容的链接内容；</p>
-<h2 id="17-3-动态链接与加载"><a href="#17-3-动态链接与加载" class="headerlink" title="17.3 动态链接与加载"></a>17.3 动态链接与加载</h2><h3 id="17-3-1-为什么需要动态链接"><a href="#17-3-1-为什么需要动态链接" class="headerlink" title="17.3.1 为什么需要动态链接"></a>17.3.1 为什么需要动态链接</h3><p><strong>静态链接问题</strong></p>
-<ul>
-<li>随着项目越来越大，库函数越来越大，文件系统会越来越膨胀，需要占有大量的磁盘空间；即不希望每个库函数都在可执行文件里面进行库函数的拷贝；</li>
-<li>同时，大型项目有把应用程序拆开的需求；</li>
-</ul>
-<p><strong>动态链接</strong><br>只要库函数遵循一定的标准，那么就可以把这个库在运行动态的链接；编译一部分，不用重新链接；</p>
-<p><strong>工业界实际的ELF问题</strong><br>ELF是一个数据结构，这个数据结构当中有专门的符号表，将一些概念上紧密相关的东西在数据结构中通过符号表（为了提升性能）强行拆散；</p>
-<h3 id="17-3-2-自顶向下设计的动态链接实现"><a href="#17-3-2-自顶向下设计的动态链接实现" class="headerlink" title="17.3.2 自顶向下设计的动态链接实现"></a>17.3.2 自顶向下设计的动态链接实现</h3><p><strong>基本假设</strong><br>假设所有的加载器、编译器、链接器都完全收你控制，此时生成一个最小的用于动态链接的数据结构，然后再在此基础上针对ELF进行优化；</p>
-<p><strong>最小的ELF</strong><br>当想要实现自己的库函数，当中有一个putchar的符号需要被动态加载，如何进行设计？<br>简化之后，动态链接最基本的行为：</p>
-<ul>
-<li>LOAD（“libc.dl”）&#x2F;&#x2F;加载动态库</li>
-<li>IMPORT（putchar）&#x2F;&#x2F;加载外部符号</li>
-<li>EXPORT（hello）&#x2F;&#x2F;为动态库导出符号</li>
-<li>在代码中引用一个外部库的符号</li>
-</ul>
-<h4 id="17-3-2-1-最小加载器实现"><a href="#17-3-2-1-最小加载器实现" class="headerlink" title="17.3.2.1 最小加载器实现"></a>17.3.2.1 最小加载器实现</h4><p>JYY实现的最小动态链接加载器；<br>![[Pasted image 20230330174916.png]]<br>自己实现的最简单的二进制文件格式：<br>![[Pasted image 20230330175114.png]]</p>
-<h4 id="17-3-3-2-动态链接Header定义"><a href="#17-3-3-2-动态链接Header定义" class="headerlink" title="17.3.3.2 动态链接Header定义"></a>17.3.3.2 动态链接Header定义</h4><p>使用此Header定义此二进制可执行文件的格式；<br>最简单的二进制动态链接文件：就是由一个头文件和一个符号表构成的；</p>
-<p><strong>dl_Header代码：</strong><br>![[Pasted image 20230414182843.png]]<br><strong>dl_Header图示：</strong><br>![[Lecture 17：动态链接与加载 2023-04-14 18.22.19.excalidraw]]</p>
-<p><strong>定义的四个宏</strong><br>![[Pasted image 20230414182950.png]]<br>第一个：IMPORT</p>
-<ol>
-<li>在Imoort当中使用DSYM函数</li>
-<li>在DSYM函数中当中传入sym（比如说是putchar，目标链接函数名称）</li>
-<li>当前sym当中传入间接寻址的地址rip，然后putchar指向symbol当中的offset。<br>第二个：EXPORT<br>向当中传入一个外部符号的调用，为了导出这个符号，在offset当中保存这个符号的相对于符号头部的偏移量；</li>
-</ol>
-<p><strong>程序预编译之后</strong><br>![[Pasted image 20230414184042.png]]<br>每一个symbol都被对齐到32字节，offset开始时为0，此时加载器发现了这个符号的offset的值为零，此时就会开始间接调转，查询符号表，将地址填入到这当中。</p>
-<p>符号链接：当你想要跳转到一个你所不知道的地址上时，就现找一块数据（offset）填上零，然后做一个间接跳转，在加载器进行加载的时候，查符号表，将地址填进去；</p>
-<p><strong>二进制视角文件</strong><br>![[Pasted image 20230414185023.png]]<br>第20行，前面八位的全零部分标志，以及libc.dl表示的需要链接的程序；<br>包括90，a0部分的全零内容，对应的多个struct symbol之后的全零字段；<br>然后c0,d0之后就是代码的部分；</p>
-<h3 id="17-3-3-对动态链接定义的加载"><a href="#17-3-3-对动态链接定义的加载" class="headerlink" title="17.3.3 对动态链接定义的加载"></a>17.3.3 对动态链接定义的加载</h3><p><strong>对dl的加载代码：</strong><br>![[Pasted image 20230414185311.png]]<br>就是扫描符号表，将dl二进制文件中对应的符号找到其需要的地址；碰到LOAD就打印其名称，碰到EXTERN就打印其对应内容；</p>
-<p><strong>objump实现</strong><br>![[Pasted image 20230414185450.png]]<br>两个For循环内的内容：</p>
-<ul>
-<li>第一层for循环：遍历符号表</li>
-<li>第二层：遍历代码的每一个字节<ul>
-<li>当代码的某一个字节刚好对应某一个符号的时候，执行一个反汇编，使用ndisasm反汇编器将代码输出出来；</li>
-</ul>
-</li>
-</ul>
-<p><strong>加载器主要部分：dlopen</strong><br>![[Pasted image 20230414190056.png]]<br>首先获得dl的hdr头文件，然后把path文件打开，解析文件头；<br>通过解析文件头知道了文件有多大后，使用mmap将其需要的内容直接映射到内存当中；<br>如果内存映射成功，在for循环内遍历符号表，如果符号表当中是+号则进行递归加载，如果是问号，则直接赋值offset内容；</p>
-<h3 id="17-3-4-自己设计DL文件中的缺陷"><a href="#17-3-4-自己设计DL文件中的缺陷" class="headerlink" title="17.3.4 自己设计DL文件中的缺陷"></a>17.3.4 自己设计DL文件中的缺陷</h3><p><strong>代码分段</strong><br>自己编写的代码只能可读可写可执行，想要不同部分不同类型，就需要进行分段；<br><strong>指定加载器</strong><br>需要指定一个加载器</p>
-<p>写一个编译器的时候，在编译器的视角里面，C代码当中出现的函数，不知道其是静态链接的还是动态链接；不知道是用call还是call DASM，而且不知道外部符号在哪里；并且call是不需要间接跳转的；<br>当链接时发现是一个动态链接符号的话，就需要靠plt去找内容，因此就发明了GOT和PLT；</p>
-<p>全局偏移表：<br>![[Pasted image 20230414191207.png]]<br>在ELF文件之下：<br>![[Pasted image 20230414191222.png]]<br>所有的间接跳转，全部都在PLT里面；</p>
-<p><strong>GOT</strong><br>我们的符号表就是GOT（Global Offset Table）</p>
-<p><strong>对于静态、动态链接的统一</strong><br>无论静态动态，都统一使静态链接先；<br>然后增加一层间接层：Procedure Linkage Table（PLT），将所有未被解析的符号都统一翻译成call。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">putchar</span> PLT:</span><br><span class="line">	call DSYM（<span class="built_in">putchar</span>）</span><br><span class="line">main:</span><br><span class="line">	call <span class="built_in">putchar</span> PLT</span><br></pre></td></tr></table></figure>
-
-<p>作业：读实例代码；</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>链接</tag>
-        <tag>ELF</tag>
       </tags>
   </entry>
   <entry>
@@ -1666,275 +1988,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Lecture 29：Xv6文件系统实现</title>
-    <url>/2023/09/a4bbdf6f0414.html</url>
-    <content><![CDATA[<p><strong>什么是文件系统</strong><br>图书馆支持的所有操作，就是文件系统需要的所有操作；</p>
-<ul>
-<li>新建一个书架-&gt;新建文件夹</li>
-<li>在书架的基础上：加上一本书</li>
-<li>书签：文件描述符</li>
-</ul>
-<p><strong>FAT文件系统实现</strong><br>使用链表将一个个的文件Cluster连起来；在目录的最前面使用metadata来描述一些元信息：文件大小、目录结构等等；<br>这些链表如果是顺序存储情况下，在内存里面也将是连续的。但如果出现不是线性的存储，则其链表以及Cluster可能会分布在内存的各地；<br><img src="/../../image/Pasted%20image%2020230904200953.png"></p>
-<ul>
-<li>UNIX文件系统实现<ul>
-<li>UNIX的文件系统，把以上的FAT当中用于连接cluster的链表全部存储在了内存当中的一个固定的地方，此时可以通过读取此固定的地方来知道如何对文件进行操作；<span id="more"></span></li>
-</ul>
-</li>
-</ul>
-<h2 id="1-mkfs：创建文件系统"><a href="#1-mkfs：创建文件系统" class="headerlink" title="1.mkfs：创建文件系统"></a>1.mkfs：创建文件系统</h2><p><strong>实现：只管分配，不管回收</strong><br>这个mkfs就是只管分配，不管回收的代码；</p>
-<ul>
-<li>rsect&#x2F;wsect (bread&#x2F;bwrite)</li>
-<li>balloc&#x2F;bzero</li>
-<li>ialloc</li>
-<li>iappend</li>
-<li>rinode&#x2F;winode<br>不管是FAT还是UNIX，最基础的内容都是rsect和wsect函数（由OS提供）；</li>
-</ul>
-<p><strong>如何阅读xv6的文件系统部分代码</strong><br>无论代码多么复杂，最后都会变成rsect和wsect这两个接口的调用；<br>因此只要可以把这两个接口的调用全部找出来，就可以更轻松的阅读这部分代码；</p>
-<ul>
-<li>用Python写的控制gdb的脚本<ul>
-<li>trace(gdb.Breakpoint)：打一个break点；<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TRACED = <span class="string">&#x27;bwrite balloc ialloc iappend rinode winode rsect wsect&#x27;</span>.split()</span><br><span class="line">IGNORE = <span class="string">&#x27;ip xp buf&#x27;</span>.split()</span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">trace</span>(gdb.Breakpoint):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">stop</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        f, bt = gdb.selected_frame(), []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> f <span class="keyword">and</span> f.is_valid():</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (name := f.name()) <span class="keyword">in</span> TRACED:</span><br><span class="line"></span><br><span class="line">                lvars = [<span class="string">f&#x27;<span class="subst">&#123;sym.name&#125;</span>=<span class="subst">&#123;sym.value(f)&#125;</span>&#x27;</span></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> sym <span class="keyword">in</span> f.block()</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> sym.is_argument <span class="keyword">and</span> sym.name <span class="keyword">not</span> <span class="keyword">in</span> IGNORE]</span><br><span class="line"></span><br><span class="line">                bt.append(<span class="string">f&#x27;\033[32m<span class="subst">&#123;name&#125;</span>\033[0m(<span class="subst">&#123;<span class="string">&quot;, &quot;</span>.join(lvars)&#125;</span>)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            f = f.older()</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;    &#x27;</span> * (<span class="built_in">len</span>(bt) - <span class="number">1</span>) + bt[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span> <span class="comment"># won&#x27;t stop at this breakpoint</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">gdb.execute(<span class="string">&#x27;set prompt off&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;set pagination off&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> fn <span class="keyword">in</span> TRACED:</span><br><span class="line">    trace(fn)</span><br><span class="line">gdb.execute(<span class="string">&#x27;run fs.img README user/_ls&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;quit&#x27;</span>)</span><br></pre></td></tr></table></figure>
-使用此指令来执行以上代码：<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gdb -ex &#x27;source mkfs/trace.py&#x27; mkfs/mkfs</span><br></pre></td></tr></table></figure>
-mkfs就是在磁盘上创建了一个数据结构，这个数据结构就是往一个文件的后背写入一些数据，不用管怎么删除。将代码最终变成bread和bwrite；</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>文件系统</tag>
-        <tag>操作系统</tag>
-        <tag>xv6</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Game Engine】P1：引擎事件系统</title>
-    <url>/2023/08/73d34ee8e11a.html</url>
-    <content><![CDATA[<p>引擎事件系统框架编写</p>
-<span id="more"></span>
-
-<h2 id="1-事件类型基础"><a href="#1-事件类型基础" class="headerlink" title="1.事件类型基础"></a>1.事件类型基础</h2><h3 id="1-1-事件类型枚举"><a href="#1-1-事件类型枚举" class="headerlink" title="1.1 事件类型枚举"></a>1.1 事件类型枚举</h3><p>描述事件系统的基础事件类型，用枚举表示。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">EventType</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,</span><br><span class="line">	AppTick, AppUpdate, AppRender,</span><br><span class="line">	KeyPressed, KeyReleased,</span><br><span class="line">	MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-2-事件分类"><a href="#1-2-事件分类" class="headerlink" title="1.2 事件分类"></a>1.2 事件分类</h3><p>定义了事件分类，并且可以向0进行过滤、偏移；</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">EventCategory</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	EventCategoryApplication = <span class="built_in">BIT</span>(<span class="number">0</span>),</span><br><span class="line">	EventCategoryInput = <span class="built_in">BIT</span>(<span class="number">1</span>),</span><br><span class="line">	EventCategoryKeyboard = <span class="built_in">BIT</span>(<span class="number">2</span>),</span><br><span class="line">	EventCategoryMouse = <span class="built_in">BIT</span>(<span class="number">3</span>),</span><br><span class="line">	EventCategoryMouseButton = <span class="built_in">BIT</span>(<span class="number">4</span>)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BIT的定义如下：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BIT(x) (1 &lt;&lt; x)</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-Event基类设计"><a href="#2-Event基类设计" class="headerlink" title="2.Event基类设计"></a>2.Event基类设计</h2><ul>
-<li>内容：<ul>
-<li>m_Handled：用于表示此内容是否已经被处理过；</li>
-<li>IsInCategory：现在处理的事件，是否是属于类型的部分；使用此方法快速的进行过滤； </li>
-<li>GetName：仅用在Debug模式；</li>
-<li>ToString：默认输出名字，也可以继承后修改以及扩展此行为；<ul>
-<li>实现细节：stringstream的性能很差，但目前Debug模式可以先不考虑；</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> Event</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">EventDispatcher</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> EventType <span class="title">GetEventType</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">const</span> <span class="type">char</span>* <span class="title">GetName</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">GetCategoryFlags</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> <span class="built_in">GetName</span>(); &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">IsInCategory</span><span class="params">(EventCategory category)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">GetCategoryFlags</span>() &amp; category;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="type">bool</span> m_Handled = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-1-抽象函数的实现宏"><a href="#2-1-抽象函数的实现宏" class="headerlink" title="2.1 抽象函数的实现宏"></a>2.1 抽象函数的实现宏</h3><p>因为在Event当中有抽象函数需要实现，每一个子类都需要手动进行实现的话会导致浪费。可以将其写成一个宏函数，在子类当中只需传入类型，既可以自动实现其子类的抽象函数的实现；</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> EVENT_CLASS_TYPE(type) static EventType GetStaticType() &#123; return EventType::##type; &#125;\</span></span><br><span class="line"><span class="meta">								virtual EventType GetEventType() const override &#123; return GetStaticType(); &#125;\</span></span><br><span class="line"><span class="meta">								virtual const char* GetName() const override &#123; return #type; &#125;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-KeyEvent类设计"><a href="#3-KeyEvent类设计" class="headerlink" title="3.KeyEvent类设计"></a>3.KeyEvent类设计</h2><p><strong>KeyEvent概念</strong><br>需要处理案件的事件。并且按键的事件至少具有以下三种状态：</p>
-<ol>
-<li>第一次按下</li>
-<li>按下中</li>
-<li>第一次抬起<br>KeyEvent需要能够处理并表达这三种状态。</li>
-</ol>
-<p><strong>继承</strong><br>KeyEvent是其他更多按键事件的父类，是Event类的子类；</p>
-<p><strong>KeyEvent代码</strong><br>此代码的内容类似于是抽象类，只是用于提供继承；不能实例化一个Key Event；</p>
-<ul>
-<li>内容：<ul>
-<li>构造函数：构造函数被设置为protected，表示此类作用为提供继承；</li>
-<li>Get Key Code：返回KeyCode数值；<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetKeyCode</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_KeyCode; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryKeyboard | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">KeyEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">m_KeyCode</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_KeyCode;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<p><strong>EVENT_CLASS_CATEGORY内容</strong><br>因为KeyBoard键盘输入同时也是一般Input的一种，因此其进行分类时同属于这两种类型；</p>
-<h3 id="3-1-KeyPressedEvent类设计"><a href="#3-1-KeyPressedEvent类设计" class="headerlink" title="3.1 KeyPressedEvent类设计"></a>3.1 KeyPressedEvent类设计</h3><p>此类是一个可以被实际实例化的类；</p>
-<p><strong>构造函数</strong><br>此类的构造函数传入repeatCount，表示此按键的重复次数。当此数值不为0时，此内容表示当前Event在被重复按下；</p>
-<p><strong>ToString重写</strong><br>输出”KeyPressedEvent: “ 加上 KeyCode 的数值；</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyPressedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyPressedEvent</span>(<span class="type">int</span> keycode, <span class="type">int</span> repeatCount)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode), <span class="built_in">m_RepeatCount</span>(repeatCount) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetRepeatCount</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_RepeatCount; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyPressedEvent: &quot;</span> &lt;&lt; m_KeyCode &lt;&lt; <span class="string">&quot; (&quot;</span> &lt;&lt; m_RepeatCount &lt;&lt; <span class="string">&quot; repeats)&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyPressed)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">int</span> m_RepeatCount;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-2-KeyReleasedEvent类设计"><a href="#3-2-KeyReleasedEvent类设计" class="headerlink" title="3.2 KeyReleasedEvent类设计"></a>3.2 KeyReleasedEvent类设计</h3><p>和Pressed类基本一致，只不过没有repeatCount的计数内容；</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyReleasedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyReleasedEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyReleasedEvent: &quot;</span> &lt;&lt; m_KeyCode;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="4-EventDispatcher"><a href="#4-EventDispatcher" class="headerlink" title="4.EventDispatcher"></a>4.EventDispatcher</h2><p><strong>作用</strong><br>让我们可以实际的去发布一个事件，基于需要发布事件的类型；<br>创建一个Dispatcher的实例，并且拥有一个Event的引用。在这个Dispatcher中拥有一个Dispatch()方法，可以接受一个EventFn函数。然后如果类型一致，可以实际的在Dispatch中运行这个EventFn的函数。</p>
-<p><strong>构造函数</strong><br>Event基类作为参数，接受各种事件类型，赋值在私有的Event变量上；</p>
-<p><strong>Dispatch()方法</strong><br>在此方法内需要使用上Event，进行判断泛型传入的类型T的事件类型，和当前Dispatch中存储的Event的类型是否一致（通过GetEventType()方法，调用GetStaticType()方法）；<br>一致时，会调用EventFn中存储的函数，并返回bool；</p>
-<p><strong>EventFn函数</strong><br>使用std的function，并且返回bool类型，接受T&amp;引用（可以为任何类型的Event）作为参数；</p>
-<ul>
-<li>补充：<strong>std::function()</strong><ul>
-<li>可以把std::function看做一个函数对象，用于表示并存储函数这个抽象概念。</li>
-<li>std::function的实例可以存储、复制和调用任何可调用对象（函数指针，类成员函数指针，bind表达式等等），存储的可调用对象称为std::function的目标，若std::function不含目标，则称它为空</li>
-</ul>
-</li>
-</ul>
-<p>代码：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">EventDispatcher</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">	<span class="keyword">using</span> EventFn = std::function&lt;<span class="built_in">bool</span>(T&amp;)&gt;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">EventDispatcher</span>(Event&amp; event)</span><br><span class="line">		: <span class="built_in">m_Event</span>(event)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">	<span class="type">bool</span> <span class="title">Dispatch</span><span class="params">(EventFn&lt;T&gt; func)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (m_Event.<span class="built_in">GetEventType</span>() == T::<span class="built_in">GetStaticType</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			m_Event.m_Handled = <span class="built_in">func</span>(*(T*)&amp;m_Event);</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Event&amp; m_Event;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="5-MouseEvent设计"><a href="#5-MouseEvent设计" class="headerlink" title="5.MouseEvent设计"></a>5.MouseEvent设计</h2><p><strong>MouseMovedEvent</strong><br>传入x、y表示两个坐标位置，用于存储鼠标移动事件所需要的信息；<br>同理MouseScrolledEvent。<br>下面内容基本类似，主要关注构造函数中传入的参数的差别，代表了此种类型事件所实际需要使用到的数据。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseMovedEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseMovedEvent</span>(<span class="type">float</span> x, <span class="type">float</span> y)</span><br><span class="line">		: <span class="built_in">m_MouseX</span>(x), <span class="built_in">m_MouseY</span>(y) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetX</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseX; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetY</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseY; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseMovedEvent: &quot;</span> &lt;&lt; m_MouseX &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_MouseY;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseMoved)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> m_MouseX, m_MouseY;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseScrolledEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseScrolledEvent</span>(<span class="type">float</span> xOffset, <span class="type">float</span> yOffset)</span><br><span class="line">		: <span class="built_in">m_XOffset</span>(xOffset), <span class="built_in">m_YOffset</span>(yOffset) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetXOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_XOffset; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetYOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_YOffset; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseScrolledEvent: &quot;</span> &lt;&lt; <span class="built_in">GetXOffset</span>() &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; <span class="built_in">GetYOffset</span>();</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseScrolled)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> m_XOffset, m_YOffset;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetMouseButton</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Button; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">MouseButtonEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">m_Button</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_Button;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonPressedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseButtonPressedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseButtonPressedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonPressed)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonReleasedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseButtonReleasedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseButtonReleasedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-ApplicationEvent设计"><a href="#6-ApplicationEvent设计" class="headerlink" title="6.ApplicationEvent设计"></a>6.ApplicationEvent设计</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowResizeEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowResizeEvent</span>(<span class="type">unsigned</span> <span class="type">int</span> width, <span class="type">unsigned</span> <span class="type">int</span> height)</span><br><span class="line">		: <span class="built_in">m_Width</span>(width), <span class="built_in">m_Height</span>(height) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetWidth</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Width; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetHeight</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Height; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;WindowResizeEvent: &quot;</span> &lt;&lt; m_Width &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_Height;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowResize)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> m_Width, m_Height;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowCloseEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowCloseEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowClose)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppTickEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppTickEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppTick)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppUpdateEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppUpdateEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppUpdate)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppRenderEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppRenderEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppRender)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>游戏引擎</category>
-      </categories>
-      <tags>
-        <tag>游戏引擎</tag>
-        <tag>事件</tag>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Game Engine】P2：Precompiled Header</title>
-    <url>/2023/08/d5920372157c.html</url>
-    <content><![CDATA[<p>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。</p>
-<span id="more"></span>
-<h1 id="1-编写预编译头"><a href="#1-编写预编译头" class="headerlink" title="1.编写预编译头"></a>1.编写预编译头</h1><p><strong>C++中的PCH</strong><br>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。以下是负责的.h代码；</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_set&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HZ_PLATFORM_WINDOWS</span></span><br><span class="line">	<span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<h1 id="2-将预编译头内容加入到premake"><a href="#2-将预编译头内容加入到premake" class="headerlink" title="2.将预编译头内容加入到premake"></a>2.将预编译头内容加入到premake</h1><p>加入到Premake中<br>需要把内容加入到premake当中：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">project <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    location <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    kind <span class="string">&quot;SharedLib&quot;</span></span><br><span class="line"></span><br><span class="line">    language <span class="string">&quot;C++&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">targetdir</span> (<span class="string">&quot;bin/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">objdir</span> (<span class="string">&quot;bin-int/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    pchheader <span class="string">&quot;skpch.h&quot;</span></span><br><span class="line"></span><br><span class="line">    pchsource <span class="string">&quot;Satsuki/src/skpch&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    files</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.h&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.cpp&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    includedirs</span><br><span class="line">x</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>游戏引擎</category>
-      </categories>
-      <tags>
-        <tag>游戏引擎</tag>
-        <tag>C++</tag>
-        <tag>编译</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Game Engine】P3：Window抽象与GLFW</title>
-    <url>/2023/09/dad31b7b45e4.html</url>
-    <content><![CDATA[<ol>
-<li>GLFW与premake文件</li>
-<li>项目Premake代码修改</li>
-</ol>
-<span id="more"></span>
-<h2 id="1-GLFW与premake文件"><a href="#1-GLFW与premake文件" class="headerlink" title="1.GLFW与premake文件"></a>1.GLFW与premake文件</h2><p>文件包含代码：<br>引用了项目需要用到的和GLFW相关的代码文件（for windows）</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">files</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="string">&quot;include/GLFW/glfw3.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;include/GLFW/glfw3native.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/glfw_config.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/context.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/init.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/input.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/monitor.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/vulkan.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/window.c&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-
-<p>以下是完整premake代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">project &quot;GLFW&quot;</span><br><span class="line">    kind &quot;StaticLib&quot;</span><br><span class="line">    language &quot;C&quot;</span><br><span class="line">    </span><br><span class="line">	targetdir (&quot;bin/&quot; .. outputdir .. &quot;/%&#123;prj.name&#125;&quot;)</span><br><span class="line">    objdir (&quot;bin-int/&quot; .. outputdir .. &quot;/%&#123;prj.name&#125;&quot;)</span><br><span class="line"></span><br><span class="line">	files</span><br><span class="line">	&#123;</span><br><span class="line">        &quot;include/GLFW/glfw3.h&quot;,</span><br><span class="line">        &quot;include/GLFW/glfw3native.h&quot;,</span><br><span class="line">        &quot;src/glfw_config.h&quot;,</span><br><span class="line">        &quot;src/context.c&quot;,</span><br><span class="line">        &quot;src/init.c&quot;,</span><br><span class="line">        &quot;src/input.c&quot;,</span><br><span class="line">        &quot;src/monitor.c&quot;,</span><br><span class="line">        &quot;src/vulkan.c&quot;,</span><br><span class="line">        &quot;src/window.c&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	filter &quot;system:windows&quot;</span><br><span class="line">        buildoptions &#123; &quot;-std=c11&quot;, &quot;-lgdi32&quot; &#125;</span><br><span class="line">        systemversion &quot;10.0.17134.0&quot;</span><br><span class="line">        staticruntime &quot;On&quot;</span><br><span class="line">        </span><br><span class="line">        files</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;src/win32_init.c&quot;,</span><br><span class="line">            &quot;src/win32_joystick.c&quot;,</span><br><span class="line">            &quot;src/win32_monitor.c&quot;,</span><br><span class="line">            &quot;src/win32_time.c&quot;,</span><br><span class="line">            &quot;src/win32_thread.c&quot;,</span><br><span class="line">            &quot;src/win32_window.c&quot;,</span><br><span class="line">            &quot;src/wgl_context.c&quot;,</span><br><span class="line">            &quot;src/egl_context.c&quot;,</span><br><span class="line">            &quot;src/osmesa_context.c&quot;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">		defines </span><br><span class="line">		&#123; </span><br><span class="line">            &quot;_GLFW_WIN32&quot;,</span><br><span class="line">            &quot;_CRT_SECURE_NO_WARNINGS&quot;</span><br><span class="line">		&#125;</span><br><span class="line">    filter &#123; &quot;system:windows&quot;, &quot;configurations:Release&quot; &#125;</span><br><span class="line">        buildoptions &quot;/MT&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>给项目添加GLFW代码</strong><br><img src="/../../image/Pasted%20image%2020230905010507.png"></p>
-<h1 id="2-项目premake代码修改"><a href="#2-项目premake代码修改" class="headerlink" title="2.项目premake代码修改"></a>2.项目premake代码修改</h1><p><strong>增加代码，引用GLFW到Satsuki项目</strong></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">-- Include directories relative to root folder (solution directory)</span><br><span class="line"></span><br><span class="line">IncludeDir = <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">IncludeDir<span class="punctuation">[</span><span class="string">&quot;GLFW&quot;</span><span class="punctuation">]</span> = <span class="string">&quot;Satsuki/vendor/GLFW/include&quot;</span></span><br><span class="line"></span><br><span class="line">include <span class="string">&quot;Satsuki/vendor/GLFW&quot;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>include “Satsuki&#x2F;vendor&#x2F;GLFW”<ul>
-<li>将GLFW中的premake代码直接粘贴到这个位置；</li>
-</ul>
-</li>
-<li>IncludeDir[“GLFW”] &#x3D; “Satsuki&#x2F;vendor&#x2F;GLFW&#x2F;include”<ul>
-<li>增加编译时引用的路径；</li>
-</ul>
-</li>
-</ul>
-<p><strong>link设置</strong><br>GLFW作为静态链接库，被项目引用；</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">includedirs</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;%&#123;IncludeDir.GLFW&#125;&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">links</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;GLFW&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;opengl32.lib&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>游戏引擎</category>
-      </categories>
-      <tags>
-        <tag>游戏引擎</tag>
-        <tag>C++</tag>
-        <tag>OpenGL</tag>
-        <tag>GLFW</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【游戏引擎原理】P1：GPU驱动的几何管线</title>
-    <url>/2023/08/fd049e549b6a.html</url>
-    <content><![CDATA[<p>传统渲染问题：<br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。</p>
-<span id="more"></span>
-<h2 id="1-传统渲染管线"><a href="#1-传统渲染管线" class="headerlink" title="1 传统渲染管线"></a>1 传统渲染管线</h2><h3 id="1-1-传统渲染问题"><a href="#1-1-传统渲染问题" class="headerlink" title="1.1 传统渲染问题"></a>1.1 传统渲染问题</h3><p><strong>核心：所有的需求是在CPU那端发起</strong><br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。<br><strong>Draw Graphics API</strong><br>传统渲染管线跑现代游戏无法满足，现代CPU得先把数据准备好，然后再把数据给到GPU；</p>
-<h3 id="1-2-Compute-Shader与GPU驱动管线"><a href="#1-2-Compute-Shader与GPU驱动管线" class="headerlink" title="1.2 Compute Shader与GPU驱动管线"></a>1.2 Compute Shader与GPU驱动管线</h3><p><strong>Compute Shader核心概念</strong><br>计算机不需要再CPU和GPU中来回导数据，所有的计算都在GPU的内部；<br>方法：</p>
-<ol>
-<li>在GPU中内置一些计算模块，很多计算直接在GPU中完成；把很多只有在CPU中才可以做的通用计算放到GPU上面；</li>
-<li>单个Draw Call可以绘制多个Mesh；</li>
-</ol>
-<p><strong>更加进阶的状态：GPU驱动Render管线</strong><br>GPU控制什么对象该被实际的渲染，包括Lod Selection，Visibility Culling On GPU<br>CPU不触碰GPU的数据，尽量让CPU不那么忙；</p>
-<p><strong>GPU驱动Render管线在材质中应用</strong><br>在《刺客信条大革命》中大场景的渲染，大场景当中有大量不可见的物体以及材质；</p>
-<ul>
-<li>解决方法<ul>
-<li>对每个游戏世界中的物体，按照其Mesh把其分成无数个小的Clusters，计算这个小Clusters是否被遮挡</li>
-<li>因为这种小粒度的Cluster在GPU中可以被批量处理，因此实际上性能更高，对于三角形有尽可能高的利用率；</li>
-</ul>
-</li>
-</ul>
-<p><strong>GPU驱动Pipeline概述</strong><br>流程图：<br><img src="/../../image/Pasted%20image%2020230827161631.png"></p>
-<p>CPU阶段进行粗略的Culling，在GPU阶段进行更加精细的Culling，每一个物体被分成不同的Cluster，然后打包进一个非常大的Index Buffer当中。最后一个Draw Call一次性完成计算。<br>核心：通过前面GPU一大堆的计算，一次性将不可见的几何完成绘制；</p>
-<p><strong>Work in CPU Side</strong><br>在CPU端只需要</p>
-<h2 id="2-Occlusion-Culling与相机以及阴影"><a href="#2-Occlusion-Culling与相机以及阴影" class="headerlink" title="2 Occlusion Culling与相机以及阴影"></a>2 Occlusion Culling与相机以及阴影</h2><p>如何将观测或者光照不到的地方的渲染变得尽可能廉价；</p>
-<p><strong>核心概念</strong><br>对于所有基于Cluster渲染的管线而言，Occlusion的计算都是十分关键的部分；<br>而Occlusion的基本思想，就是尽可能快速且低成本的基于当前相机的位置构建index buffer，类似于形成了一层幕布；当想渲染任何一个物体的时候，使用cluster渲染时使用这个index buffer在GPU中快速进行测试，快速将不需要渲染的部分剔除掉；</p>
-<h3 id="2-1-Occlusion-Depth-Generation"><a href="#2-1-Occlusion-Depth-Generation" class="headerlink" title="2.1 Occlusion Depth Generation"></a>2.1 Occlusion Depth Generation</h3><p>遮挡深度生成：这个根据场景生成的Depth Buffer可以被重用；</p>
-<p><strong>深度Pre-Pass与最好的Occluders在完整的像素当中</strong></p>
-<ol>
-<li>选择最好的occluders通过艺术资源或者heuristic</li>
-<li>重新计算occluder</li>
-<li>合并以及重投影与十六分之一的像素版本；</li>
-<li>生成Z-Buffer用于GPU Culling计算；</li>
-</ol>
-<p><strong>两个阶段的Occlusion Culling</strong><br>第一阶段：把上一帧里面的所有物体，依据Z buffer数据测试一遍，对所有通过上一帧Z-Buffer的物体先绘制一遍；把可能可见的物体先跑一遍得出画面；<br>问题：此时得出的z很有可能是错误的，此时应该把所有认为可能不可见的物体也测试一遍Z-Buffer<br>第二阶段：在第一阶段过滤完之后，重新再测试一遍被忽略掉的物体，从而减少大量的渲染量，准确并且高效完成；<br><img src="/../../image/Pasted%20image%2020230827161702.png"></p>
-<h3 id="2-2-可视化内容处理渲染管线"><a href="#2-2-可视化内容处理渲染管线" class="headerlink" title="2.2 可视化内容处理渲染管线"></a>2.2 可视化内容处理渲染管线</h3><p><strong>Visiblity Buffer</strong><br>Visiblity Buffer是一种新的越来越瘦关注的Buffer；<br>如果使用传统的Shading，每一次渲染都需要全部进行处理，处理的数据量非常大，因此可以把这些Texture可以全部打包放到一个Shading当中</p>
-<p><strong>Deferred Shading 与 G-Buffer 存在的意义与问题</strong><br>Deffered Shading：在Deferred Shader中处理很多三角形的场景时，其不会保证优先绘制靠近相机的物体，因此对于同一个像素可能会渲染十几次，因为在这个像素上可能会有多个物体在其射线上；<br>大量的对G-Buffer的读写会产生大量的性能浪费；</p>
-<p><strong>Visiblity Buffer</strong><br>解决方法：在第一帧渲染的时候，就只把几何数据渲染进去，而不是把Texture等其他数据全部在第一帧弄进去；在获得了这些几何体的位置信息后，再将其手动的把每个顶点该有的信息输入进去；<br>Shading阶段时，把几何体的每个像素位置拿到，反算出来其像素点应该有的反射率等信息，接下来对其进行Shading；<br>其非常适合在场景当中有大量的小物体，而且这些物体经常会被其他物体遮挡住；</p>
-<p><strong>Visiblity Buffer与Deferred Shading结合</strong><br>将Visiblity和G-Buffer结合，G-Buffer的数据可以来自于传统渲染管线，也可以来自于Visiblity Buffer渲染管线；</p>
-<h2 id="3-Nanite"><a href="#3-Nanite" class="headerlink" title="3 Nanite"></a>3 Nanite</h2><h3 id="3-1-前言"><a href="#3-1-前言" class="headerlink" title="3.1 前言"></a>3.1 前言</h3><p><strong>要解决的问题</strong><br>每个做Render的目标：在虚拟世界中还原现实世界，但现实世界中具有无限的几何细节。实时渲染的人希望在游戏当中实现无限的几何细节；</p>
-<p><strong>Nanite基本的源头：Virtual Texture</strong><br>在真实的游戏场景当中拥有大量的texture，在游戏引擎中提出Virtual Texture的思想，即在游戏当中、离Camera的Texture精度高，离Camera远的Texture精度低；即先形成一大张的Virtual Texture；</p>
-<p><strong>进一步推到：把几何Geometry也变成Virtual Map</strong><br>需要有一个方法把几何也变成Virtual Map；但这个过程十分困难，因为几何信息的处理比Texture困难很多；</p>
-<ul>
-<li>Voxels方法？<ul>
-<li>难以表达高精度内容</li>
-<li>数据量惊人</li>
-<li>而且目前主流的艺术资产都不是基于Voxel表达的</li>
-</ul>
-</li>
-<li>Subdivision Surfaces？<ul>
-<li>增加几何的精细度</li>
-<li>在实时给几何体细分表面</li>
-</ul>
-</li>
-<li>Map-Based Method?<ul>
-<li>难以表达表面特性</li>
-<li>基于硬件的加密几何</li>
-</ul>
-</li>
-</ul>
-<p><strong>最后结果：基于三角形的几何构建</strong></p>
-<h3 id="3-2-Virtual-Geometry"><a href="#3-2-Virtual-Geometry" class="headerlink" title="3.2 Virtual Geometry"></a>3.2 Virtual Geometry</h3><p><strong>Nanite中的几何表达</strong><br>无论增加多少的几何复杂度，屏幕上能够展示的几何数量终归是有限的，有像素上有一个或两个三角形就够了；<br>可以通过屏幕像素的精度来决定几何物体的精度；</p>
-<ul>
-<li>基于Cluster的几何表达<ul>
-<li>将几何体分成不同的Cluster</li>
-<li>让其根据View来决定Cluster的精度，不同的LOD在Cluster中具有不同的精度</li>
-<li>对于屏幕空间最大化的利用<br><img src="/../../image/Pasted%20image%2020230827161729.png"></li>
-</ul>
-</li>
-</ul>
-<p><strong>Nanite的Cluster细分方法</strong><br>根据View的距离情况，根据LOD进行Cluster的简化，将其合成一份Cluster；<br>因此可以在游戏进行时，可以根据View距离加载不同的LOD；<br><strong>Cluster合并的问题</strong><br>不同LOD等级的物体之间衔接的时候会有问题，即本来是根据同一LOD构建出的几何体现在有部分表面其Cluster变成其他LOD是，分界处衔接有问题；<br>解决方法：把边给锁住；在边缘一直锁着LOD0的边；但是锁边的时候这些边的三角形数量也很高；并且因为人眼对于高频的信号感受力很强，因此对于这种边缘处突然出现的高频信号会有反应；</p>
-<p><strong>对Cluster合并问题的解决：Cluster Group</strong><br>只缩Cluster Group的边，里面的Cluster再随意的去简化；<br>保证了在LOD切换的时候，不会在衔接处明显变化；<br>其希望被锁住的LOD的边在切换的时候不会注意到被缩边的Cluster Group;<br>如图是Cluster Group在不同LOD时变化：<br>乱中有序：底层的Cluster上层可能有多个，并且不会和上层的所有Cluster都产生关系；<br><img src="/../../image/Pasted%20image%2020230827161745.png"></p>
-<h3 id="3-3-QEM"><a href="#3-3-QEM" class="headerlink" title="3.3 QEM"></a>3.3 QEM</h3><p>形成Cluster Group的流水线；<br><strong>LOD Selection For Cluster Group In Paralllel</strong><br>能不能让LOD的Selection可不可以被并行化，从左到右或者从右到左的遍历都有可能是不稳定的；<br>把Cluster节点组成的树状的LOD，变成数组的线性的LOD（通过把Cluster其对应父节点的信息存储进来）</p>
-<ul>
-<li>希望是独立的决策</li>
-</ul>
-]]></content>
-      <categories>
-        <category>游戏引擎</category>
-      </categories>
-      <tags>
-        <tag>游戏引擎</tag>
-        <tag>技术美术</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>AI时代个人生存指南</title>
     <url>/2023/08/62011fb26306.html</url>
     <content><![CDATA[<p>内容大纲：</p>
@@ -2054,146 +2107,93 @@ mkfs就是在磁盘上创建了一个数据结构，这个数据结构就是往�
       </tags>
   </entry>
   <entry>
-    <title>Lecture 12：进程的地址空间</title>
-    <url>/2023/08/d03400aa93d7.html</url>
-    <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
-<span id="more"></span>
-<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
-<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
-
-<p>查看某一个进程地址空间代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
-<p>当中的37491为进程的id。</p>
-<p><strong>查看结果：</strong><br><img src="/../../image/Pasted%20image%2020230829191538.png"></p>
-<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong></p>
+    <title>Lecture 29：Xv6文件系统实现</title>
+    <url>/2023/09/a4bbdf6f0414.html</url>
+    <content><![CDATA[<p><strong>什么是文件系统</strong><br>图书馆支持的所有操作，就是文件系统需要的所有操作；</p>
 <ul>
-<li>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。</li>
-<li>proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</li>
+<li>新建一个书架-&gt;新建文件夹</li>
+<li>在书架的基础上：加上一本书</li>
+<li>书签：文件描述符</li>
 </ul>
-<p>**相关手册：<code>mam 5 proc</code></p>
-<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br><img src="/../../image/Pasted%20image%2020230829191738.png"><br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
-<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
-<hr>
-<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
-<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
-<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
-<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
-<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
-<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
-<p><strong>定义：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
-<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
-<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br><img src="/../../image/Pasted%20image%2020230829191917.png"></p>
-<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
-<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
-<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
+<p><strong>FAT文件系统实现</strong><br>使用链表将一个个的文件Cluster连起来；在目录的最前面使用metadata来描述一些元信息：文件大小、目录结构等等；<br>这些链表如果是顺序存储情况下，在内存里面也将是连续的。但如果出现不是线性的存储，则其链表以及Cluster可能会分布在内存的各地；<br><img src="/../../image/Pasted%20image%2020230904200953.png"></p>
 <ul>
-<li>第一步：获得游戏进程的PID（进程号）</li>
-<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
-<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
-<li>第四步：遍历此段内存，找到关键词数据</li>
-<li>第五步：修改被关键字标记的内存</li>
+<li>UNIX文件系统实现<ul>
+<li>UNIX的文件系统，把以上的FAT当中用于连接cluster的链表全部存储在了内存当中的一个固定的地方，此时可以通过读取此固定的地方来知道如何对文件进行操作；<span id="more"></span></li>
 </ul>
-<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
-<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
-<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
-<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
-<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
+</li>
+</ul>
+<h2 id="1-mkfs：创建文件系统"><a href="#1-mkfs：创建文件系统" class="headerlink" title="1.mkfs：创建文件系统"></a>1.mkfs：创建文件系统</h2><p><strong>实现：只管分配，不管回收</strong><br>这个mkfs就是只管分配，不管回收的代码；</p>
+<ul>
+<li>rsect&#x2F;wsect (bread&#x2F;bwrite)</li>
+<li>balloc&#x2F;bzero</li>
+<li>ialloc</li>
+<li>iappend</li>
+<li>rinode&#x2F;winode<br>不管是FAT还是UNIX，最基础的内容都是rsect和wsect函数（由OS提供）；</li>
+</ul>
+<p><strong>如何阅读xv6的文件系统部分代码</strong><br>无论代码多么复杂，最后都会变成rsect和wsect这两个接口的调用；<br>因此只要可以把这两个接口的调用全部找出来，就可以更轻松的阅读这部分代码；</p>
+<ul>
+<li>用Python写的控制gdb的脚本<ul>
+<li>trace(gdb.Breakpoint)：打一个break点；<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TRACED = <span class="string">&#x27;bwrite balloc ialloc iappend rinode winode rsect wsect&#x27;</span>.split()</span><br><span class="line">IGNORE = <span class="string">&#x27;ip xp buf&#x27;</span>.split()</span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">trace</span>(gdb.Breakpoint):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">stop</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        f, bt = gdb.selected_frame(), []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> f <span class="keyword">and</span> f.is_valid():</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (name := f.name()) <span class="keyword">in</span> TRACED:</span><br><span class="line"></span><br><span class="line">                lvars = [<span class="string">f&#x27;<span class="subst">&#123;sym.name&#125;</span>=<span class="subst">&#123;sym.value(f)&#125;</span>&#x27;</span></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> sym <span class="keyword">in</span> f.block()</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> sym.is_argument <span class="keyword">and</span> sym.name <span class="keyword">not</span> <span class="keyword">in</span> IGNORE]</span><br><span class="line"></span><br><span class="line">                bt.append(<span class="string">f&#x27;\033[32m<span class="subst">&#123;name&#125;</span>\033[0m(<span class="subst">&#123;<span class="string">&quot;, &quot;</span>.join(lvars)&#125;</span>)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            f = f.older()</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;    &#x27;</span> * (<span class="built_in">len</span>(bt) - <span class="number">1</span>) + bt[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span> <span class="comment"># won&#x27;t stop at this breakpoint</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">gdb.execute(<span class="string">&#x27;set prompt off&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;set pagination off&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> fn <span class="keyword">in</span> TRACED:</span><br><span class="line">    trace(fn)</span><br><span class="line">gdb.execute(<span class="string">&#x27;run fs.img README user/_ls&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;quit&#x27;</span>)</span><br></pre></td></tr></table></figure>
+使用此指令来执行以上代码：<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gdb -ex &#x27;source mkfs/trace.py&#x27; mkfs/mkfs</span><br></pre></td></tr></table></figure>
+mkfs就是在磁盘上创建了一个数据结构，这个数据结构就是往一个文件的后背写入一些数据，不用管怎么删除。将代码最终变成bread和bwrite；</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>操作系统</category>
       </categories>
       <tags>
-        <tag>进程</tag>
+        <tag>文件系统</tag>
         <tag>操作系统</tag>
-        <tag>Fork</tag>
-        <tag>Mmap</tag>
+        <tag>xv6</tag>
       </tags>
   </entry>
   <entry>
-    <title>Lecture 13：系统调用与Shell</title>
-    <url>/2023/08/3dbfbd52ee49.html</url>
-    <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
-<h3 id="13-1-2-早期的Shell"><a href="#13-1-2-早期的Shell" class="headerlink" title="13.1.2 早期的Shell"></a>13.1.2 早期的Shell</h3><p><strong>概念：</strong><br>早期的OS没有复杂结构，系统调用就像是库函数，那个时代的Shell就是命令行终端机。<br>核心：<strong>Shell就是一门把用户指令翻译为系统调用的编程语言</strong></p>
-<p>手册：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man sh</span><br></pre></td></tr></table></figure>
-<p>这是一个非常简单的手册，包含很多shell的内容，建立对UNIX Shell的基础认识。</p>
-<h2 id="13-2-复刻简易UNIX"><a href="#13-2-复刻简易UNIX" class="headerlink" title="13.2 复刻简易UNIX"></a>13.2 复刻简易UNIX</h2><h3 id="13-2-1-简易UNIX代码初设置"><a href="#13-2-1-简易UNIX代码初设置" class="headerlink" title="13.2.1 简易UNIX代码初设置"></a>13.2.1 简易UNIX代码初设置</h3><p>早期的计算机设计由于性能低下，设计不能太消耗性能以及复杂<br>代码：<a href="http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">http://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c</a><br>零库函数依赖、可以作为最小可用的Linux的init程序<br>由于其链接任何库函数，因此可以ffreestanding</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -c -ffreestanding sh-xv6.c -g -O2</span><br><span class="line">ld sh-xv6.o -o sh</span><br></pre></td></tr></table></figure>
-<p>第一行是将其编译，然后第二行将其静态链接<br>当使用反汇编模式进行调试时，直接从_Start()，用C写的这个函数处开始执行。此程序可以直接以命令行的形式进行运行。<br>![[Pasted image 20230827140800.png]]</p>
-<h3 id="12-2-2-第一步：读取命令"><a href="#12-2-2-第一步：读取命令" class="headerlink" title="12.2.2 第一步：读取命令"></a>12.2.2 第一步：读取命令</h3><p>代码：<br>解析：不停的getcmd()来获得用户的输入，这其中直接使用read的系统调用</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nread = <span class="built_in">syscall</span>(SYS_read,<span class="number">0</span>,buf,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-<p>一直读到换行符才停止：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(*(buf++)==<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
-<p>将命令读取到buf缓冲区里</p>
-<h3 id="12-2-3-第二步：可能性-解释执行命令"><a href="#12-2-3-第二步：可能性-解释执行命令" class="headerlink" title="12.2.3 第二步：可能性|解释执行命令"></a>12.2.3 第二步：可能性|解释执行命令</h3><p>代码：<br>![[Pasted image 20230301181806.png]]<br>解析：<br>首先判断是不是一条’cd’命令，并且其当中不能有空格<br>使用系统调用，读取buf+3之后的数据</p>
-<h3 id="12-2-4-第二步：可能性-新进程创建"><a href="#12-2-4-第二步：可能性-新进程创建" class="headerlink" title="12.2.4 第二步：可能性|新进程创建"></a>12.2.4 第二步：可能性|新进程创建</h3><p>解析：可能性|如果不是cd命令，此时创建一个新的进程，在新的进程里面把进程解析</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">syscall</span>(SYS_fork) == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">runcmd</span>(<span class="built_in">parsecmd</span>(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-2-5-第三步：程序解释器"><a href="#12-2-5-第三步：程序解释器" class="headerlink" title="12.2.5 第三步：程序解释器"></a>12.2.5 第三步：程序解释器</h3><p>其行为就和表达式求值一模一样。<br>求值表达式：<br>eval评估根节点，然后递归的评估子节点，等到两边的值都返回之后得到最后的解。Shell的每一个语句都有其语义。<br>命令解释：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">( echo a ; echo b) | wc -l</span><br></pre></td></tr></table></figure>
-
-<p>每执行一个命令，其实就是使用execve()创建一个新的进程，函数的参数就是传入的命令。首先递归的执行左边的部分，然后再递归的执行右边的部分。</p>
+    <title>Prompt编写指南</title>
+    <url>/2023/08/081ae7892f5f.html</url>
+    <content><![CDATA[<p>内容大纲：</p>
 <ul>
-<li>命令与管道<ul>
-<li>管道和命令关系<ul>
-<li>管道的左边和右边都可以任意复杂：   </li>
-<li>可以是一个很长的式子：<code>(echo a;each b;echo c;echo d)|wc -l</code></li>
-<li>把管道左边的输出作为右边的输入，这就是管道的形式语义。</li>
-</ul>
-</li>
-<li>管道解析<ul>
-<li>pipe()创建一个管道，管道返回两个描述符：</li>
-<li>pipe[0]是读口，pipe[1]是写口</li>
-<li>之后会使用fork创建两个新的进程，这两个新的进程完全复制的父进程的状态，因此此时这三个进程完全共享管道，并且共进共出。</li>
-<li>之后将p[0]的文件描述符关闭，后背又将p[1]的文件描述符关掉</li>
-<li>之后再进行Fork，子进程编号为1的进程指向管道的左边，Fork出来的子进程再进行上述出现的行为</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="12-2-5-1-将strace中信息保存至文件"><a href="#12-2-5-1-将strace中信息保存至文件" class="headerlink" title="12.2.5.1 将strace中信息保存至文件"></a>12.2.5.1 将strace中信息保存至文件</h4><p>对sh进行使用，然后保存其strace获得的系统调用信息，将其保存至文件当中：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace -f -o /tmp/strace.log ./sh</span><br></pre></td></tr></table></figure>
-<p>打开strace.log文件之后，即可看到系统调用存储成文件后的内容：<br>首先读取指令，使用fork创建进程：<br>![[Pasted image 20230303170109.png]]<br>然后主进程打印内容，退出子进程：</p>
-<h2 id="13-3-UNIX-Shell"><a href="#13-3-UNIX-Shell" class="headerlink" title="13.3 UNIX Shell"></a>13.3 UNIX Shell</h2><p>UNIX Shell就是编程语言，写命令行就是编程</p>
-<p><strong>Shell与Job Control</strong><br>即使是1990年代的Shell，也可以实现现在的操作系统的Job控制功能，只不过是使用的命令行，而非图形化界面</p>
-<h3 id="13-3-1-Shell作为OS封装的API"><a href="#13-3-1-Shell作为OS封装的API" class="headerlink" title="13.3.1 Shell作为OS封装的API"></a>13.3.1 Shell作为OS封装的API</h3><p>我们需要一个用户能够直接操作的程序，管理操作系统对象，Shell就是操作系统的外壳，帮助人类和OS进行交互</p>
-<p><strong>1970年代的Shell</strong><br>1970年代的命令，在“自然语言”和“机器语言”以及计算机的算力之间达到平衡。<br>但其也有缺点，比如命令之间的优先级，以及不同的Shell对编程语言的解读是不一样的</p>
-<p><strong>空格带来的麻烦</strong><br>文本数据当中，对于空格的不同理解以及行为导致的程序后果<br>PowerShell：使用对象流管道解决</p>
-<h3 id="13-3-2-现代Shell展望"><a href="#13-3-2-现代Shell展望" class="headerlink" title="13.3.2 现代Shell展望"></a>13.3.2 现代Shell展望</h3><p>现代的Shell功能不变，都是人和机器之间的API，但是其形式可以发生变化</p>
+<li><ol>
+<li>基础知识</li>
+</ol>
 <ul>
-<li>界面自带StackOverflow？</li>
-<li>结合神经网络？</li>
-<li>智能补全？</li>
-<li>POPL20</li>
+<li>1.1 两种LLM</li>
+<li>1.2 提问原则</li>
 </ul>
-<h2 id="13-4-终端与任务控制"><a href="#13-4-终端与任务控制" class="headerlink" title="13.4 终端与任务控制"></a>13.4 终端与任务控制</h2><h3 id="13-4-1-终端机制"><a href="#13-4-1-终端机制" class="headerlink" title="13.4.1 终端机制"></a>13.4.1 终端机制</h3><p>问题：为什么有时候使用Ctrl + C可以退出程序，有时候不可以？为什么有些进程可以退出，当管道创建了很多个进程时，使用Ctrl + C 将退出哪个进程？如果时Fork了一个Shell，那使用Ctrl + C 是不是要退出Shell？tmux是怎么实现的？</p>
-<p><strong>解决方案：终端</strong><br>Shell连接了人和程序，而人和机器之间交互的设备就是输入和输出设备，这个设备就是终端<br>终端是UNIX当中一类特别的设备，其也作为文件来存在，可以在文件系统中新建多个终端，同时以多个窗口来访问</p>
-<p><strong>tmux原理</strong><br>可以使用strace来读取tmux的行为，将其信息保存在文件系统中；<br>不管当前是哪一个窗口，tmux都会把当前的输入捕捉下来，然后相应的将按键的信息转发给不同的终端</p>
-<h3 id="13-4-2-信号机制"><a href="#13-4-2-信号机制" class="headerlink" title="13.4.2 信号机制"></a>13.4.2 信号机制</h3><p>信号是终端产生的（比如Ctrl + C是一个信号），给前台进程发一个信号，收到信号之后会有对于的信号处理程序</p>
-<p><strong>信号处理程序：</strong><br><img src="/../../image/Pasted%20image%2020230829192041.png"><br>Ctrl + C 给所有的前台的进程发信号，UNIX世界当中，登陆了Shell当中会先打开Session，然后进入进程组，这些进程组可以放在前台或者后台。前台组无论什么进程，创建进程后都是前台复制过来的，属于前台进程。此时按下Ctrl + C就会对前台的所有进程发送信号</p>
-<h4 id="13-4-2-1-Job-Control机制"><a href="#13-4-2-1-Job-Control机制" class="headerlink" title="13.4.2.1 Job Control机制"></a>13.4.2.1 Job Control机制</h4><p>手册：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">man setpgid</span><br></pre></td></tr></table></figure>
-<p>手册当中告诉，每个session就是一个单独的控制终端，在任何时候，只有一个进程组是前台的进程组，Ctrl + C会给前台的所有进程发送信号。如果有好几个进程组都是前台进程，则此时往前台发送数据可能会产生数据竞争。</p>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1.基础知识"></a>1.基础知识</h1><h2 id="1-1-两种LLM"><a href="#1-1-两种LLM" class="headerlink" title="1.1 两种LLM"></a>1.1 两种LLM</h2><p><strong>Base LLM</strong><br>基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。</p>
+<p><strong>Instruction Tuned LLM</strong><br>这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。<br>对于大部分情况下，都为使用ITLLM进行学习以及开发。</p>
+<ul>
+<li>因为ITLLM是基于指令（关键词）进行的矫正、输出，因此当结果不合适时，应对重写选择合适的指令；</li>
+</ul>
+<h2 id="1-2-提问原则"><a href="#1-2-提问原则" class="headerlink" title="1.2 提问原则"></a>1.2 提问原则</h2><h3 id="1-2-1-原则一：编写明确、具体的指令"><a href="#1-2-1-原则一：编写明确、具体的指令" class="headerlink" title="1.2.1 原则一：编写明确、具体的指令"></a>1.2.1 原则一：编写明确、具体的指令</h3><p>明确 不等于 简短，为了明确的指令，可以提供更多的描述，来保证上下文信息的重组；</p>
+<p><strong>具体方法1：使用分隔符清楚的指示输入的不同部分</strong></p>
+<ul>
+<li>分隔符可以是任何清晰的符号：引号、分割号、三引号、XML标记等</li>
+<li>让模型知道：这是一个单独的部分</li>
+</ul>
+<p><strong>具体方法2：要求结构化的输出</strong><br>可以要求HTML、JSON、XML、MD等具体格式的输出；</p>
+<p><strong>具体方法3：要求模型检查条件是否被满足</strong><br>当问题是基于某些假设时，可以先让模型检查这些假设；如果不满足条件，则指示停止尝试完全完成这些任务。</p>
+<p><strong>具体方法4：少量训练提示</strong><br>在前面有成功回答的问题时，可以要求模型，它的任务是以一致的风格回答问题；</p>
+<h3 id="1-2-2-原则二：给模型时间去思考"><a href="#1-2-2-原则二：给模型时间去思考" class="headerlink" title="1.2.2 原则二：给模型时间去思考"></a>1.2.2 原则二：给模型时间去思考</h3><p>模型无法处理过于复杂的问题。因此需要给模型“时间”去思考；</p>
+<p><strong>具体方法1：指定完成任务所需的步骤</strong><br>具体指明回答时的步骤，比如：<br><em>第一步：总结要点<br>第二步：将要点翻译成英文<br>第三步：列出每一个要点的名称以及总结<br>第四步：输出JSON格式的内容</em></p>
+<p><strong>具体方法2：指示模型在做出结论之前，先思考解决方案</strong><br>在模型给出具体的答案之前，先给时间去进行问题的实际思考；<br>比如让模型先用自己的计算方法进行计算，然后再和给出的答案进行比较；<br>*1、先给出你自己的解决方案<br>2、再该处你自己的解决方案之前，不要决定解决方案是否正确<br>*</p>
+<p><strong>具体方法3：面对幻觉时，要求模型先给出引用，再基于引用给出答案</strong><br>由于模型并不知道自己知识的边界，因此可能会编造出看起来十分正确的回答；<br>为了解决这种问题，可以要求：</p>
+<ol>
+<li>模型先给出针对问题的答案的引用；</li>
+<li>要求模型基于这些引用，回答相关问题；</li>
+</ol>
 ]]></content>
       <categories>
-        <category>操作系统</category>
+        <category>人工智能</category>
       </categories>
       <tags>
-        <tag>操作系统</tag>
-        <tag>Shell</tag>
+        <tag>AI</tag>
+        <tag>ChatGPT</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
 </search>
