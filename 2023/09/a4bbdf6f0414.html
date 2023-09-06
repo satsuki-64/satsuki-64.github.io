@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230904200953.png">
 <meta property="article:published_time" content="2023-09-04T11:56:42.000Z">
-<meta property="article:modified_time" content="2023-09-04T17:34:50.175Z">
+<meta property="article:modified_time" content="2023-09-05T14:31:55.029Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="文件系统">
 <meta property="article:tag" content="操作系统">
@@ -145,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-mkfs%EF%BC%9A%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-text">1.mkfs：创建文件系统</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-mkfs%EF%BC%9A%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-text">1.mkfs：创建文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-mkfs-%E9%97%AE%E9%A2%98"><span class="nav-text">1.1 mkfs 问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-buffer-cache"><span class="nav-text">2.buffer cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-buffer-cache-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">2.1 buffer cache 基础概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E8%B0%83%E8%AF%95%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="nav-text">2.2 调试系统调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D"><span class="nav-text">3.崩溃恢复</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -160,7 +160,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -171,7 +171,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -245,7 +245,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-05 01:34:50" itemprop="dateModified" datetime="2023-09-05T01:34:50+08:00">2023-09-05</time>
+      <time title="修改时间：2023-09-05 22:31:55" itemprop="dateModified" datetime="2023-09-05T22:31:55+08:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -292,10 +292,51 @@
 <li>用Python写的控制gdb的脚本<ul>
 <li>trace(gdb.Breakpoint)：打一个break点；<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">TRACED = <span class="string">&#x27;bwrite balloc ialloc iappend rinode winode rsect wsect&#x27;</span>.split()</span><br><span class="line">IGNORE = <span class="string">&#x27;ip xp buf&#x27;</span>.split()</span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">trace</span>(gdb.Breakpoint):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">stop</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        f, bt = gdb.selected_frame(), []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> f <span class="keyword">and</span> f.is_valid():</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (name := f.name()) <span class="keyword">in</span> TRACED:</span><br><span class="line"></span><br><span class="line">                lvars = [<span class="string">f&#x27;<span class="subst">&#123;sym.name&#125;</span>=<span class="subst">&#123;sym.value(f)&#125;</span>&#x27;</span></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> sym <span class="keyword">in</span> f.block()</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> sym.is_argument <span class="keyword">and</span> sym.name <span class="keyword">not</span> <span class="keyword">in</span> IGNORE]</span><br><span class="line"></span><br><span class="line">                bt.append(<span class="string">f&#x27;\033[32m<span class="subst">&#123;name&#125;</span>\033[0m(<span class="subst">&#123;<span class="string">&quot;, &quot;</span>.join(lvars)&#125;</span>)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            f = f.older()</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;    &#x27;</span> * (<span class="built_in">len</span>(bt) - <span class="number">1</span>) + bt[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span> <span class="comment"># won&#x27;t stop at this breakpoint</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">gdb.execute(<span class="string">&#x27;set prompt off&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;set pagination off&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> fn <span class="keyword">in</span> TRACED:</span><br><span class="line">    trace(fn)</span><br><span class="line">gdb.execute(<span class="string">&#x27;run fs.img README user/_ls&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;quit&#x27;</span>)</span><br></pre></td></tr></table></figure>
 使用此指令来执行以上代码：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb -ex &#x27;source mkfs/trace.py&#x27; mkfs/mkfs</span><br></pre></td></tr></table></figure>
-mkfs就是在磁盘上创建了一个数据结构，这个数据结构就是往一个文件的后背写入一些数据，不用管怎么删除。将代码最终变成bread和bwrite；</li>
+mkfs 就是在磁盘上创建了一个数据结构，这个数据结构就是往一个文件的后背写入一些数据，不用管怎么删除。将代码最终变成 bread 和 bwrite；</li>
 </ul>
 </li>
 </ul>
+<h3 id="1-1-mkfs-问题"><a href="#1-1-mkfs-问题" class="headerlink" title="1.1 mkfs 问题"></a>1.1 mkfs 问题</h3><p><strong>mkfs 问题</strong><br>使用 mkfs 的时候，其会使用大量的 bread 和 bwrite ，并且一个简单的目录创建也会使用大量的代码。为了优化性能，另一种设计是使用 buffer cache 的技术。</p>
+<h2 id="2-buffer-cache"><a href="#2-buffer-cache" class="headerlink" title="2.buffer cache"></a>2.buffer cache</h2><h3 id="2-1-buffer-cache-基础概念"><a href="#2-1-buffer-cache-基础概念" class="headerlink" title="2.1 buffer cache 基础概念"></a>2.1 buffer cache 基础概念</h3><p><strong>什么是 buffer cache</strong><br>在计算机操作系统中，Buffer Cache（缓冲区高速缓存）是一种机制，用于加速对磁盘和其他块设备的访问。它通过在内存中维护一个缓冲区来实现。</p>
+<p><strong>作用：</strong><br>Buffer Cache 在操作系统中扮演着重要的角色，具体包括以下作用：</p>
+<ol>
+<li><strong>加速磁盘访问</strong>：通过存储最近读取的数据块，Buffer Cache 减少了直接从磁盘读取数据的次数，提高了读取操作的速度。  </li>
+<li><strong>减少磁盘访问次数</strong>：当应用程序读取磁盘数据时，操作系统首先检查缓冲区是否存在所需的数据块，如果缓冲区中已有数据，直接从内存获取避免了频繁的磁盘访问。 </li>
+<li><strong>优化写入操作</strong>：Buffer Cache 也用于写入操作。当应用程序要写入数据到磁盘时，操作系统首先将数据写入缓冲区，并记录更新信息。通过延迟将数据刷新到磁盘，系统可以在内存中进行高效的数据操作。</li>
+</ol>
+<p><strong>如何优化 buffer cache ?</strong><br>使用一定的算法，预测哪一些部分的数据更经常的被使用，然后提前将其读入到 buffer cache 当中；</p>
+<h3 id="2-2-调试系统调用"><a href="#2-2-调试系统调用" class="headerlink" title="2.2 调试系统调用"></a>2.2 调试系统调用</h3><p><strong>写操作实现</strong><br>一个写的操作，会被分成很多个更小的写的操作；</p>
+<ul>
+<li>1 GB 文件的写入<ul>
+<li>拆分成若干个 4 kb 的文件；</li>
+<li>每一个小的 4 kb 文件可能可以执行 all or nothing 操作；</li>
+</ul>
+</li>
+<li>写入指令<ul>
+<li>应用程序实际上使用的不是 bwrite ，应用程序使用的是 logwrite 方法；</li>
+<li>因为 bwrite 指令在进行存储的时候不具有原子性；<ul>
+<li>一个写操作会对 block 的多个数据记录项进行修改；</li>
+<li>bitmap</li>
+<li>block </li>
+<li>superdata</li>
+<li>这些操作必须全部都进行，不然就会出现数据不一致；</li>
+</ul>
+</li>
+<li><strong>所有对于磁盘的写都会变成对于日志的写</strong>；</li>
+<li>然后再进行整块的写入；</li>
+</ul>
+</li>
+<li>写入的时机<ul>
+<li>执行 <code>end_op</code> 的时候；</li>
+<li>执行一个 <code>commit()</code> 方法；</li>
+<li>核心：<strong>由 log 系统调用 bread 和 bwrite 方法</strong>；</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-崩溃恢复"><a href="#3-崩溃恢复" class="headerlink" title="3.崩溃恢复"></a>3.崩溃恢复</h2><p><strong>问题：是否可以恢复已经崩溃的代码？</strong><br>Xv 6 是否真的在崩溃发生后，可以把内容恢复回来；</p>
+<p><strong>故障注入</strong><br>Crash &#x3D; 断电；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">crash</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> count = <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">if</span> (--count &lt; <span class="number">0</span>) </span><br><span class="line">	&#123;</span><br><span class="line">	  <span class="built_in">printf</span>(<span class="string">&quot;crash\n&quot;</span>);</span><br><span class="line">	  *((<span class="type">int</span> *)<span class="number">0x100000</span>) = <span class="number">0x5555</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以设置一个计数器为 count，每一次执行 bread 的时候此 count 都会减一；<br>当其小于零时，会执行 <code>*((int *)0x100000) = 0x5555;</code> 代码，然后虚拟机就可以关闭；</p>
 
     </div>
 
@@ -354,7 +395,7 @@ mkfs就是在磁盘上创建了一个数据结构，这个数据结构就是往�
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共40.2k字</span>
+  <span class="post-count">博客全站共42.6k字</span>
 </div>
     </div>
   </footer>

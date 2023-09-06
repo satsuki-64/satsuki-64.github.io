@@ -20,29 +20,38 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="内容大纲：   ChatGPT使用基础   1.1 ChatGPT的使用之道 1.2 ChatGPT的使用之术    Midjourney使用基础   2.1 Midjourney的使用之道 2.2 Midjourney的使用之术">
+    <meta name="description" content="内容大纲：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AI时代个人生存指南">
-<meta property="og:url" content="https://satsuki-64.github.io/2023/08/62011fb26306.html">
+<meta property="og:title" content="【CSharp系列】CLR寄宿与AppDomain（2）-- 跨越AppDomain边界访问对象">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/09/a1092601f220.html">
 <meta property="og:site_name" content="Satsuki的博客">
-<meta property="og:description" content="内容大纲：   ChatGPT使用基础   1.1 ChatGPT的使用之道 1.2 ChatGPT的使用之术    Midjourney使用基础   2.1 Midjourney的使用之道 2.2 Midjourney的使用之术">
+<meta property="og:description" content="内容大纲：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-08-29T04:49:30.000Z">
-<meta property="article:modified_time" content="2023-09-01T07:45:15.889Z">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114123.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114139.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114150.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114204.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114214.png">
+<meta property="article:published_time" content="2023-09-05T03:34:33.000Z">
+<meta property="article:modified_time" content="2023-09-05T08:54:25.925Z">
 <meta property="article:author" content="Satsuki">
-<meta property="article:tag" content="AI">
-<meta property="article:tag" content="工具">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="CLR">
+<meta property="article:tag" content="AppDomain">
+<meta property="article:tag" content="进程">
+<meta property="article:tag" content="Windows">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114123.png">
 
 
-<link rel="canonical" href="https://satsuki-64.github.io/2023/08/62011fb26306.html">
+<link rel="canonical" href="https://satsuki-64.github.io/2023/09/a1092601f220.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/08/62011fb26306.html","path":"2023/08/62011fb26306.html","title":"AI时代个人生存指南"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/09/a1092601f220.html","path":"2023/09/a1092601f220.html","title":"【CSharp系列】CLR寄宿与AppDomain（2）-- 跨越AppDomain边界访问对象"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>AI时代个人生存指南 | Satsuki的博客</title>
+<title>【CSharp系列】CLR寄宿与AppDomain（2）-- 跨越AppDomain边界访问对象 | Satsuki的博客</title>
   
 
 
@@ -142,7 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Chat-GPT%E4%BD%BF%E7%94%A8%E5%9F%BA%E7%A1%80"><span class="nav-text">1.Chat GPT使用基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-ChatGPT%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B9%8B%E9%81%93"><span class="nav-text">1.1 ChatGPT的使用之道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-ChatGPT%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B9%8B%E6%9C%AF"><span class="nav-text">1.2 ChatGPT的使用之术</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Midjourney%E4%BD%BF%E7%94%A8%E5%9F%BA%E7%A1%80"><span class="nav-text">2.Midjourney使用基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Midjourney%E4%BD%BF%E7%94%A8%E4%B9%8B%E9%81%93"><span class="nav-text">2.1 Midjourney使用之道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Midjourney%E4%BD%BF%E7%94%A8%E4%B9%8B%E6%9C%AF"><span class="nav-text">2.2 Midjourney使用之术</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%B7%A8AppDomain%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">1.跨AppDomain基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-AppDomain%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7"><span class="nav-text">1.1 AppDomain基本属性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8C%89%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%E8%BF%9B%E8%A1%8C%E8%B7%A8AppDomain%E9%80%9A%E4%BF%A1"><span class="nav-text">2.按引用传递进行跨AppDomain通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81%E9%99%84%E5%BD%95"><span class="nav-text">完整代码附录</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -206,7 +215,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/62011fb26306.html">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/09/a1092601f220.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo.png">
@@ -219,12 +228,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="AI时代个人生存指南 | Satsuki的博客">
+      <meta itemprop="name" content="【CSharp系列】CLR寄宿与AppDomain（2）-- 跨越AppDomain边界访问对象 | Satsuki的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          AI时代个人生存指南
+          【CSharp系列】CLR寄宿与AppDomain（2）-- 跨越AppDomain边界访问对象
         </h1>
 
         <div class="post-meta-container">
@@ -234,15 +243,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2023-08-29 12:49:30" itemprop="dateCreated datePublished" datetime="2023-08-29T12:49:30+08:00">2023-08-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-01 15:45:15" itemprop="dateModified" datetime="2023-09-01T15:45:15+08:00">2023-09-01</time>
+      <time title="创建时间：2023-09-05 11:34:33 / 修改时间：16:54:25" itemprop="dateCreated datePublished" datetime="2023-09-05T11:34:33+08:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -250,7 +253,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+          <a href="/categories/CSharp/" itemprop="url" rel="index"><span itemprop="name">CSharp</span></a>
         </span>
     </span>
 
@@ -264,112 +267,83 @@
     
     
     <div class="post-body" itemprop="articleBody"><p>内容大纲：</p>
+<span id="more"></span>
+<h1 id="1-跨AppDomain基本概念"><a href="#1-跨AppDomain基本概念" class="headerlink" title="1.跨AppDomain基本概念"></a>1.跨AppDomain基本概念</h1><p>一个 AppDomain 中的代码可以和另一个 AppDomain 中的类型和对象通信，但只能通过良好定义的机制进行。<br>以下代码演示了以下三种类型在构造时的不同行为：</p>
+<ol>
+<li>“按引用封送”(Marshal-by-Reference)类型；</li>
+<li>“按值封送”(Marshalby-Value)类型；</li>
+<li>完全不能封送的类型；<br>代码还演示了创建它们的 AppDomain 卸载时这些对象的不同行为。</li>
+</ol>
+<h2 id="1-1-AppDomain基本属性"><a href="#1-1-AppDomain基本属性" class="headerlink" title="1.1 AppDomain基本属性"></a>1.1 AppDomain基本属性</h2><p>Marshalling方法首先获得一个 AppDomain 对象引用，当前调用线程正在该 AppDomain 中执行；</p>
+<p><strong>线程与AppDomain关系</strong></p>
 <ul>
-<li><ol>
-<li>ChatGPT使用基础</li>
+<li>在Windows中，线程总是在一个进程的上下文中创建，而且线程的整个生存期都在该进程的生存期内；</li>
+<li><strong>线程和AppDomain没有一对一关系</strong>；<ul>
+<li>AppDomain 是一项CLR的功能，Windows对AppDomain一无所知；</li>
+<li>由于一个Windows进程可包含多个AppDomain，所以线程能执行一个AppDomain中的代码，再执行另一个AppDomain中的代码；</li>
+<li>从CLR的角度看，线程一次只能执行一个 AppDomain 中的代码；</li>
+</ul>
+</li>
+<li>线程可调用 System.Threading.Thread 的静态方法GetDomain，来向CLR询问它正在哪个AppDomain中执行；</li>
+</ul>
+<p><strong>友好名称</strong><br>AppDomain创建后可被赋予一个友好名称；</p>
+<ul>
+<li>它是用于标识AppDomain的一个String；</li>
+<li>友好名称主要是为了方便调试，由于CLR要在我们的任何代码执行前创建默认 AppDomain，所以使用可执行文件的文件名作为默认的 AppDomain 友好名称；</li>
+<li>Marshalling 方法使用System.AppDomain的只读FriendlyName属性来查询默认AppDomain的友好名称。</li>
+</ul>
+<h1 id="2-按引用传递进行跨AppDomain通信"><a href="#2-按引用传递进行跨AppDomain通信" class="headerlink" title="2.按引用传递进行跨AppDomain通信"></a>2.按引用传递进行跨AppDomain通信</h1><p><strong>创建新AppDomain</strong><br>通过调用<code>System.AppDomain</code>的静态方法<code>CreateDomain()</code>来指示同一个Window进程中，创建一个AppDomain；</p>
+<p><strong>CreateDomain方法</strong><br>CreateDomain 方法内部会在进程中新建一个AppDomain，该AppDomain将被赋予指定的友好名称、安全性和配置设置；<br>新 AppDomain 有自己的 Loader 堆，这个堆目前是空的，因为还没有程序集加载到新AppDomain中；<br>创建AppDomain时，CLR不在这个AppDomain中创建任何线程。AppDomain中也不会运行代码，除非显式地让一个线程调用AppDomain中的代码。</p>
+<ul>
+<li>参数一<ul>
+<li>代表新的AppDomain的友好名称的String；</li>
+</ul>
+</li>
+<li>参数二<ul>
+<li>用于设置新的AppDomain的权限集合；</li>
+<li><code>System.Security.Policy.Evidence</code>用于计算权限集，传递null时表示继承自创建它的AppDomain；</li>
+<li>构建权限集：<code>System.Security.PermissionSet</code>；</li>
+</ul>
+</li>
+<li>参数三<ul>
+<li>用于设置新的AppDomain的属性配置；</li>
+<li>可以使用<code>AppDomainSetup</code>来进行特殊配置；</li>
+</ul>
+</li>
+</ul>
+<p><strong>在新AppDomain中创建类型实例</strong><br>在新AppDomain中创建类型实例主要分为两个步骤：</p>
+<ol>
+<li>将程序集加载到新的AppDomain中；</li>
+<li>构造程序集中定义类型的实例（由CreateInstanceAndUnwrap方法实现）；</li>
 </ol>
 <ul>
-<li>1.1 ChatGPT的使用之道</li>
-<li>1.2 ChatGPT的使用之术</li>
-</ul>
+<li>CreateInstanceAndUnwrap 方法<ul>
+<li>参数一：标识了想在新AppDomain中加载的程序集；</li>
+<li>参数二：标识了想构建其实例的那个类型的名称；</li>
+<li>内部实现：<ul>
+<li><ol>
+<li>CreateInstanceAndUnwrap 方法导致调用线程从当前 AppDomain 切换新的 AppDomain，线程将指定的程序集加载到新的AppDomain当中</li>
+</ol>
 </li>
 <li><ol start="2">
-<li>Midjourney使用基础</li>
+<li>扫描程序集的类型定义元数据表，查找参数二中传入的指定的类型；</li>
 </ol>
-<ul>
-<li>2.1 Midjourney的使用之道</li>
-<li>2.2 Midjourney的使用之术<span id="more"></span></li>
+</li>
+<li><ol start="3">
+<li>调用将找到的类型的无参构造函数；</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>返回默认 AppDomain ，使用返回的对象引用；</li>
+</ol>
+</li>
 </ul>
 </li>
 </ul>
-<h1 id="1-Chat-GPT使用基础"><a href="#1-Chat-GPT使用基础" class="headerlink" title="1.Chat GPT使用基础"></a>1.Chat GPT使用基础</h1><p><strong>核心思想：拥抱AI，理解AI，成为AI</strong></p>
-<ul>
-<li>拥抱AI<ul>
-<li>率先掌握AI技能，掌握竞争优势；</li>
-</ul>
-</li>
-<li>理解AI<ul>
-<li>知道AI的能力，知道AI能做什么；</li>
-<li>同时反推自己的发展方向：AI不能做什么，就是人未来能做的事情；</li>
-</ul>
-</li>
-<li>成为AI<ul>
-<li>率先向AI学习，让自己的思维和AI同步；</li>
-<li>谁和AI最像，谁就获得了第一批AI带来的绝对优势；</li>
-</ul>
 </li>
 </ul>
-<h2 id="1-1-ChatGPT的使用之道"><a href="#1-1-ChatGPT的使用之道" class="headerlink" title="1.1 ChatGPT的使用之道"></a>1.1 ChatGPT的使用之道</h2><p><strong>前言：关于prompt</strong><br>虽然目前依然需要使用prompt来辅助AI，但未来的AI发展是其越来越理解人类想要什么，而不需要使用prompt来提示；</p>
-<blockquote>
-<p><em>prompt教程推荐：吴恩达的prompt视频（适合程序员）：<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&vd_source=3f70c2a1700b0323e22826080d18a119">https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f70c2a1700b0323e22826080d18a119</a></em></p>
-</blockquote>
-<p><strong>概念：ChatGPT能做什么</strong><br>首先思考AI能做什么，在了解AI能做的事情的情况下，再思考应该让它如何做这件事情；<br>AI的画像：<strong>一个学习过网上所有知识，保守而道德的名校大学生。理性思考5秒钟，回答10句话。</strong></p>
-<ul>
-<li>知识：只存留在2021年；</li>
-<li>保守：没有独特思想；</li>
-<li>道德：有人类设定的道德包袱；</li>
-<li>名校本科生水平：不接受过于复杂的问题，可以回答大部分知识问题；</li>
-<li>理性思考5秒钟：不能接受过度复杂问题；</li>
-</ul>
-<p><strong>道一：Chat GPT的道德</strong><br>AI的回答是很道德的回答。当和价值立场或者观点相关的问题时，只会给出不同的立场，而不表达观点；</p>
-<ul>
-<li>甚至会出现<strong>道德在事实之上</strong>；</li>
-<li>为了保证道德的限制，甚至让道德在事实之上；<br><em>或许道德极大的限制了LLM的能力。</em></li>
-</ul>
-<p><strong>道二：Chat GPT的知识</strong><br>一般本科大学生的知识它都会；并且理解能力强。</p>
-<p><strong>道三：Chat GPT的提问</strong><br>对于提问，遵循两个原则：<strong>拆分、直接</strong>；</p>
-<ul>
-<li>直接：<ul>
-<li>提问不能太复杂，但是可以很困难；</li>
-</ul>
-</li>
-<li>拆分：<ul>
-<li>回答内容不能太长，所以一开始就设计多个问题，对各个部分拆分提问；</li>
-<li>对很长内容的提问：先提问大纲内容，再对每个大纲的细分内容进行提问；</li>
-</ul>
-</li>
-</ul>
-<p><strong>道四：面对AI的幻觉</strong><br>AI是语言生成模型，即按照上一句话生成下一句话；</p>
-<ul>
-<li>AI会出现强行回答，AI自己也无法分辨真假；</li>
-<li>如何面对AI回答的幻觉：<ul>
-<li>逻辑推演；</li>
-<li>拥有常识；</li>
-<li>自行验证；</li>
-</ul>
-</li>
-</ul>
-<p><strong>道五：把寻找和使用AI工具，纳入接受新工作的思考流程</strong><br>在接受一份新工作的时候，首先就可以想一想：当中有哪些工作是AI可以做的；并且把它纳入到生成流程当中。</p>
-<p><strong>补充：AI大模型的数据截止到2021年</strong><br>在2021年之前的数据，在LLM当中都有；但2021年之后的数据，AI自己也需要去查（通过OpenAI的服务器去访问这些网站）；</p>
-<p><strong>应用场合</strong></p>
-<ul>
-<li>文字工作<ul>
-<li>套路文章创作，润色，翻译，取标题，举例子</li>
-</ul>
-</li>
-<li>生活助手<ul>
-<li>普通问题咨询</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-ChatGPT的使用之术"><a href="#1-2-ChatGPT的使用之术" class="headerlink" title="1.2 ChatGPT的使用之术"></a>1.2 ChatGPT的使用之术</h2><p><strong>术一：描述好背景信息</strong><br>在向AI咨询一个问题前，一定要先描述好问题的背景信息；<br>如果不清楚描述什么背景，可以<strong>向AI提问，这个问题需要了解什么背景信息</strong>；</p>
-<p><strong>术二：提问计算方法，再得到结果</strong><br>如果直接问AI一个问题的答案，AI可能难以回答。但是如果提问AI一个问题的计算方法，AI的回答正确率更高；</p>
-<ul>
-<li>AI知道计算的方法，但不擅长计算</li>
-<li>对AI进行复杂计算的提问：可以<strong>先问过程，再顺着过程问答案</strong>；</li>
-</ul>
-<p><strong>术三：让他扮演一个角色</strong><br>让他扮演一个角色，作为一个角色来回答你的问题；<br><em>你现是一个作家、你现在是一个软件公司的文案总监、你现在是一个法律顾问</em></p>
-<h1 id="2-Midjourney使用基础"><a href="#2-Midjourney使用基础" class="headerlink" title="2.Midjourney使用基础"></a>2.Midjourney使用基础</h1><h2 id="2-1-Midjourney使用之道"><a href="#2-1-Midjourney使用之道" class="headerlink" title="2.1 Midjourney使用之道"></a>2.1 Midjourney使用之道</h2><p><strong>道一：创作具有艺术感的图像</strong><br>AI绘画可以模仿多种艺术风格，创造性的运用绘画技巧，并进行独特的构图和色彩搭配；</p>
-<p><strong>道二：难以处理复杂边缘、空间关系的物体</strong><br>这与扩散模型的原理有关。现阶段，扩散模型可学习的样本图片的清晰度普遍较低，导致模型在处理某些细节时需要进行“猜测”。因此，我们常常发现AI绘制的手指存在错误，其他具有复杂边缘的物体也存在同样的问题。另外，扩散模型并非从空间角度理解图像，因此在处理物体间复杂的空间关系时，AI可能会遇到困难</p>
-<p><strong>道三：难以同时绘制多个对象，并且每个对象有不同的属性</strong><br>AI可能无法准确理解多个对象和这些对象之间的属性关系，或者可能会忽略掉一些关键属性。 </p>
-<h2 id="2-2-Midjourney使用之术"><a href="#2-2-Midjourney使用之术" class="headerlink" title="2.2 Midjourney使用之术"></a>2.2 Midjourney使用之术</h2><p><strong>术一：Prompt能力</strong><br>使用明确且具体的语言，来描述任务；</p>
-<p><strong>术二：用尽可能清晰的语言</strong><br>Midjourney的语言文字理解能力不如Chat GPT；</p>
-<p><strong>术三：工具本身的熟练程度</strong></p>
-<ul>
-<li>设置宽高比；</li>
-<li>混乱程度；</li>
-<li>使用种子；</li>
-</ul>
+<h1 id="完整代码附录"><a href="#完整代码附录" class="headerlink" title="完整代码附录"></a>完整代码附录</h1><p><img src="/../../image/Pasted%20image%2020230905114123.png"><br><img src="/../../image/Pasted%20image%2020230905114139.png"><br><img src="/../../image/Pasted%20image%2020230905114150.png"><br><img src="/../../image/Pasted%20image%2020230905114204.png"><br><img src="/../../image/Pasted%20image%2020230905114214.png"></p>
+<p>你好 winsadwanidw 你的，windows, C#</p>
 
     </div>
 
@@ -379,22 +353,22 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/AI/" rel="tag"><i class="fa fa-tag"></i> AI</a>
-              <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"><i class="fa fa-tag"></i> 工具</a>
+              <a href="/tags/CSharp/" rel="tag"><i class="fa fa-tag"></i> CSharp</a>
+              <a href="/tags/CLR/" rel="tag"><i class="fa fa-tag"></i> CLR</a>
+              <a href="/tags/AppDomain/" rel="tag"><i class="fa fa-tag"></i> AppDomain</a>
+              <a href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 进程</a>
+              <a href="/tags/Windows/" rel="tag"><i class="fa fa-tag"></i> Windows</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/08/2d466e9f916b.html" rel="prev" title="【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法">
-                  <i class="fa fa-angle-left"></i> 【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法
+                <a href="/2023/09/dad31b7b45e4.html" rel="prev" title="【Game Engine】P3：Window抽象与GLFW">
+                  <i class="fa fa-angle-left"></i> 【Game Engine】P3：Window抽象与GLFW
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/08/92c8110645cf.html" rel="next" title="Lecture 16：什么是可执行文件">
-                  Lecture 16：什么是可执行文件 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
