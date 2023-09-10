@@ -20,20 +20,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="内容大纲：">
+    <meta name="description" content="内容大纲：  1 跨 AppDomain 基本概念 1.1 App Domain 基本属性   2 按引用传递进行跨 AppDomain 通信 2.1 MarshalByRefType 类型与按引用传递 2.2 卸载 AppDomain 与静态成员   3 按值传递进行跨 AppDomain 通信">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【CSharp系列】CLR寄宿与AppDomain（2）-- 跨越AppDomain边界访问对象">
 <meta property="og:url" content="https://satsuki-64.github.io/2023/09/a1092601f220.html">
 <meta property="og:site_name" content="Satsuki的博客">
-<meta property="og:description" content="内容大纲：">
+<meta property="og:description" content="内容大纲：  1 跨 AppDomain 基本概念 1.1 App Domain 基本属性   2 按引用传递进行跨 AppDomain 通信 2.1 MarshalByRefType 类型与按引用传递 2.2 卸载 AppDomain 与静态成员   3 按值传递进行跨 AppDomain 通信">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114123.png">
-<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114139.png">
-<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114150.png">
-<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114204.png">
-<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114214.png">
 <meta property="article:published_time" content="2023-09-05T03:34:33.000Z">
-<meta property="article:modified_time" content="2023-09-05T08:54:25.925Z">
+<meta property="article:modified_time" content="2023-09-07T11:25:34.794Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="CSharp">
 <meta property="article:tag" content="CLR">
@@ -41,7 +36,6 @@
 <meta property="article:tag" content="进程">
 <meta property="article:tag" content="Windows">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905114123.png">
 
 
 <link rel="canonical" href="https://satsuki-64.github.io/2023/09/a1092601f220.html">
@@ -151,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%B7%A8AppDomain%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">1.跨AppDomain基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-AppDomain%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7"><span class="nav-text">1.1 AppDomain基本属性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8C%89%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%E8%BF%9B%E8%A1%8C%E8%B7%A8AppDomain%E9%80%9A%E4%BF%A1"><span class="nav-text">2.按引用传递进行跨AppDomain通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81%E9%99%84%E5%BD%95"><span class="nav-text">完整代码附录</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%B7%A8-AppDomain-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">1 跨 AppDomain 基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-AppDomain%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7"><span class="nav-text">1.1 AppDomain基本属性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8C%89%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%E8%BF%9B%E8%A1%8C%E8%B7%A8-AppDomain-%E9%80%9A%E4%BF%A1"><span class="nav-text">2 按引用传递进行跨 AppDomain 通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-MarshalByRefType-%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%8C%89%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92"><span class="nav-text">2.1 MarshalByRefType 类型与按引用传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%8D%B8%E8%BD%BD-AppDomain-%E4%B8%8E%E9%9D%99%E6%80%81%E6%88%90%E5%91%98"><span class="nav-text">2.2 卸载 AppDomain 与静态成员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8C%89%E5%80%BC%E4%BC%A0%E9%80%92%E8%BF%9B%E8%A1%8C%E8%B7%A8-AppDomain-%E9%80%9A%E4%BF%A1"><span class="nav-text">3 按值传递进行跨 AppDomain 通信</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -166,7 +160,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -177,7 +171,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">37</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -243,9 +237,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-09-05 11:34:33 / 修改时间：16:54:25" itemprop="dateCreated datePublished" datetime="2023-09-05T11:34:33+08:00">2023-09-05</time>
+      <time title="创建时间：2023-09-05 11:34:33" itemprop="dateCreated datePublished" datetime="2023-09-05T11:34:33+08:00">2023-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-07 19:25:34" itemprop="dateModified" datetime="2023-09-07T19:25:34+08:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -267,8 +267,19 @@
     
     
     <div class="post-body" itemprop="articleBody"><p>内容大纲：</p>
-<span id="more"></span>
-<h1 id="1-跨AppDomain基本概念"><a href="#1-跨AppDomain基本概念" class="headerlink" title="1.跨AppDomain基本概念"></a>1.跨AppDomain基本概念</h1><p>一个 AppDomain 中的代码可以和另一个 AppDomain 中的类型和对象通信，但只能通过良好定义的机制进行。<br>以下代码演示了以下三种类型在构造时的不同行为：</p>
+<ul>
+<li>1 跨 AppDomain 基本概念<ul>
+<li>1.1 App Domain 基本属性</li>
+</ul>
+</li>
+<li>2 按引用传递进行跨 AppDomain 通信<ul>
+<li>2.1 MarshalByRefType 类型与按引用传递</li>
+<li>2.2 卸载 AppDomain 与静态成员</li>
+</ul>
+</li>
+<li>3 按值传递进行跨 AppDomain 通信<span id="more"></span></li>
+</ul>
+<h1 id="1-跨-AppDomain-基本概念"><a href="#1-跨-AppDomain-基本概念" class="headerlink" title="1 跨 AppDomain 基本概念"></a>1 跨 AppDomain 基本概念</h1><p>一个 AppDomain 中的代码可以和另一个 AppDomain 中的类型和对象通信，但只能通过良好定义的机制进行。<br>以下代码演示了以下三种类型在构造时的不同行为：</p>
 <ol>
 <li>“按引用封送”(Marshal-by-Reference)类型；</li>
 <li>“按值封送”(Marshalby-Value)类型；</li>
@@ -292,7 +303,7 @@
 <li>友好名称主要是为了方便调试，由于CLR要在我们的任何代码执行前创建默认 AppDomain，所以使用可执行文件的文件名作为默认的 AppDomain 友好名称；</li>
 <li>Marshalling 方法使用System.AppDomain的只读FriendlyName属性来查询默认AppDomain的友好名称。</li>
 </ul>
-<h1 id="2-按引用传递进行跨AppDomain通信"><a href="#2-按引用传递进行跨AppDomain通信" class="headerlink" title="2.按引用传递进行跨AppDomain通信"></a>2.按引用传递进行跨AppDomain通信</h1><p><strong>创建新AppDomain</strong><br>通过调用<code>System.AppDomain</code>的静态方法<code>CreateDomain()</code>来指示同一个Window进程中，创建一个AppDomain；</p>
+<h1 id="2-按引用传递进行跨-AppDomain-通信"><a href="#2-按引用传递进行跨-AppDomain-通信" class="headerlink" title="2 按引用传递进行跨 AppDomain 通信"></a>2 按引用传递进行跨 AppDomain 通信</h1><p><strong>创建新AppDomain</strong><br>通过调用<code>System.AppDomain</code>的静态方法<code>CreateDomain()</code>来指示同一个Window进程中，创建一个AppDomain；</p>
 <p><strong>CreateDomain方法</strong><br>CreateDomain 方法内部会在进程中新建一个AppDomain，该AppDomain将被赋予指定的友好名称、安全性和配置设置；<br>新 AppDomain 有自己的 Loader 堆，这个堆目前是空的，因为还没有程序集加载到新AppDomain中；<br>创建AppDomain时，CLR不在这个AppDomain中创建任何线程。AppDomain中也不会运行代码，除非显式地让一个线程调用AppDomain中的代码。</p>
 <ul>
 <li>参数一<ul>
@@ -342,8 +353,59 @@
 </ul>
 </li>
 </ul>
-<h1 id="完整代码附录"><a href="#完整代码附录" class="headerlink" title="完整代码附录"></a>完整代码附录</h1><p><img src="/../../image/Pasted%20image%2020230905114123.png"><br><img src="/../../image/Pasted%20image%2020230905114139.png"><br><img src="/../../image/Pasted%20image%2020230905114150.png"><br><img src="/../../image/Pasted%20image%2020230905114204.png"><br><img src="/../../image/Pasted%20image%2020230905114214.png"></p>
-<p>你好 winsadwanidw 你的，windows, C#</p>
+<p><strong>按引用传递问题：CLR 不允许一个 AppDomain 中的变量引用另一个 AppDomain 中创建的对象</strong><br>CLR 不允许一个 AppDomain 中的变量引用另一个 AppDomain 中创建的对象。如果 CreateInstanceAndUnwrap 直接返回对象引用，隔离性就会被打破，而隔离是 AppDomain 的全部目的。<br>因此，CreateInstanceAndUnwrap 在返回对象引用前要执行一些额外的逻辑，并且使用 MarshalByRefType 类型进行实例的传递；</p>
+<h2 id="2-1-MarshalByRefType-类型与按引用传递"><a href="#2-1-MarshalByRefType-类型与按引用传递" class="headerlink" title="2.1 MarshalByRefType 类型与按引用传递"></a>2.1 MarshalByRefType 类型与按引用传递</h2><p><strong><code>MarshalByRefType</code> 和 <code>AppDomain</code> 的关系</strong><br><code>AppDomain</code>是C#中用于隔离和管理应用程序运行环境的单元。每个<code>AppDomain</code>都有自己的内存空间和加载的程序集集合。当需要在不同的<code>AppDomain</code>之间进行对象通信时，可以使用<code>MarshalByRefType</code>类型。<br>通过将继承自 <code>MarshalByRefType</code> 的对象实例传递到不同的 <code>AppDomain</code> 中，可以在目标 <code>AppDomain</code> 中创建该对象的代理引用。通过这个代理引用，可以实现在不同的 <code>AppDomain</code> 中调用对象的方法，并在本地应用程序域中获取返回的结果。</p>
+<p><strong>MarshalByRefType 类型介绍</strong><br>MarshalByRefType 类型从 System. MarshalByRefObject 派生，当使用 CreateInstanceAndUnwrap 方法发现其封装的对象是继承自 MarshalByRefType 类型时，CLR 就会跨 AppDomain 边界按照引用传递对象。</p>
+<ul>
+<li>从 MarshalByRefType 派生的类型可以定义实例字段，只不过这些实例字段不会成为代理类型的一部分，也不会包含在代理对象当中；</li>
+<li>当写代码对派生自 MarshalByRefType 类型的实例进行读写时，JIT 编译器会自动生成代码，分别调用方法来使用代理对象。其利用反射的机制来获得数值；</li>
+</ul>
+<p><strong>引用传递过程分析</strong></p>
+<ul>
+<li>第一步：检查<ul>
+<li>检查类型是否是继承自 System. MarshalByRefObject，如果继承自其，再进入以下内容；</li>
+</ul>
+</li>
+<li>第二步：创建代理实例<ul>
+<li>CLR 在目标 AppDomain 的 Loader 堆当中创建一个代理类型；</li>
+<li>代理类型使用原属类型的元数据定义，有完全一样的实例成员 (属性、事件和方法)；</li>
+<li>但实例字段不会成为代理类型的一部分，其确实定义了几个自己的实例字段，但这些字段和原始类型的不一致。相反，这些字段只是指出哪个 AppDomain “拥有”真实的对象，以及如何在拥有对象的 AppDomain 中找到真实的对象；</li>
+</ul>
+</li>
+<li>第三步：返回代理<ul>
+<li>第二步定义好代理类型后，接下来使用 CreateInstanceAndUnwrap 方法创建代理类型的实例，初始化它的字段来标识源 AppDomain 和目标 AppDomain 区别，将此代理返回给目标 AppDomain 。</li>
+</ul>
+</li>
+<li>第四步：使用代理方法与字段<ul>
+<li>此时可以使用代理实现来获得对象中的信息字段，将调用线程从默认的 AppDomain 切换为目标 AppDomainde ；</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-卸载-AppDomain-与静态成员"><a href="#2-2-卸载-AppDomain-与静态成员" class="headerlink" title="2.2 卸载 AppDomain 与静态成员"></a>2.2 卸载 AppDomain 与静态成员</h2><p><strong>卸载 AppDomain</strong><br>应用程序调用 AppDomain 类的公共静态 Unload 方法，这会强制 CLR 卸载指定的 AppDomain ，并且包括加载到其中的所有程序集，并强制执行一次垃圾回收，以释放由卸载的 AppDomain 中的代码创建的所有对象。</p>
+<ul>
+<li>默认 AppDomain 的 mbrt 变量仍然引用一个有效的代理对象，但代理对象已不再引用一个有效的 AppDomain ，因为它已经卸载；</li>
+</ul>
+<p><strong>静态成员与引用访问</strong><br>静态成员的调用总是在 AppDomain 当中进行，调用静态成员时没有代理对象，所以不 hi 发生 AppDomain 的切换；</p>
+<ul>
+<li>类型的静态成员在一个 AppDomain 中执行，实例成员却在另一个 AppDomain 中执行，这不是一种好的编程模型；</li>
+</ul>
+<p><strong>如何对引用对象进行垃圾回收：租约管理器</strong><br>由于第二个 AppDomain 中没有根，所以代理引用的原始对象可以被垃圾回收。这当然不理想，但另一方面，假如将原始对象不确定地留在内存中，代理可能不再引用它，而原始对象依然存活：这同样不理想。</p>
+<ul>
+<li>CLR 解决这个问题的办法是使用一个<strong>租约管理器</strong>；</li>
+<li>对象的代理创建好之后，CLR 保持对象存活 5 分钟。5 分钟内没有通过租约管理器发出调用，对象就会失效，下次垃圾回收释放它的内存；</li>
+<li>每发出一次对对象的调用，“租约管理器”都会续订对象的租期，保证它在接下来的 2 分钟内在内存中保持存活；</li>
+</ul>
+<h1 id="3-按值传递进行跨-AppDomain-通信"><a href="#3-按值传递进行跨-AppDomain-通信" class="headerlink" title="3 按值传递进行跨 AppDomain 通信"></a>3 按值传递进行跨 AppDomain 通信</h1><p><strong>使用 MarshalByValType 类型实例进行传递</strong><br>MarshalByValType 类型不从 System. MarshalByRefObject 类型继承，因此其不是通过引用的方式来进行实例的传递；</p>
+<ul>
+<li>按值传递的含义是：<strong>通过对象的序列化，将其以字节数组的方式在跨 AppDomain 之间进行传递</strong>；</li>
+</ul>
+<p><strong>MarshalByValType 类型介绍</strong></p>
+<ul>
+<li>MarshalByValType 标记了序列化的特性 <code>[Serializable]</code>，当源 AppDomain 想要向目标 AppDomain 发送一个对象时，其将对象的实例字段序列化成一个字节数组；</li>
+<li>字节数组从源 App Domain 复制到目标 AppDomain 当中，然后在目标的 AppDomain 当中反序列化此字节数组；</li>
+<li>CLR 创建此类型的实例，并利用字节数组当中的数值初始化对象的字段。即 CLR 在目标 AppDomain 中精确复制了源对象；</li>
+<li><code>MethdoWithReturn</code> 方法返回这个副本的引用，完成按值封送；<br>使用按值封送的对象，其<strong>在不同的 AppDomain 当中拥有独立的生存周期，它们的状态也可以独立的更改</strong>；</li>
+</ul>
 
     </div>
 
@@ -369,6 +431,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2023/09/2e32d53e0557.html" rel="next" title="Lecture 30：现代存储系统">
+                  Lecture 30：现代存储系统 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -401,7 +466,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共42.6k字</span>
+  <span class="post-count">博客全站共47.8k字</span>
 </div>
     </div>
   </footer>

@@ -1,11 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>AI时代个人生存指南</title>
+    <url>/2023/08/62011fb26306.html</url>
+    <content><![CDATA[<p>内容大纲：</p>
+<ul>
+<li><ol>
+<li>ChatGPT使用基础</li>
+</ol>
+<ul>
+<li>1.1 ChatGPT的使用之道</li>
+<li>1.2 ChatGPT的使用之术</li>
+</ul>
+</li>
+<li><ol start="2">
+<li>Midjourney使用基础</li>
+</ol>
+<ul>
+<li>2.1 Midjourney的使用之道</li>
+<li>2.2 Midjourney的使用之术<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h1 id="1-Chat-GPT使用基础"><a href="#1-Chat-GPT使用基础" class="headerlink" title="1.Chat GPT使用基础"></a>1.Chat GPT使用基础</h1><p><strong>核心思想：拥抱AI，理解AI，成为AI</strong></p>
+<ul>
+<li>拥抱AI<ul>
+<li>率先掌握AI技能，掌握竞争优势；</li>
+</ul>
+</li>
+<li>理解AI<ul>
+<li>知道AI的能力，知道AI能做什么；</li>
+<li>同时反推自己的发展方向：AI不能做什么，就是人未来能做的事情；</li>
+</ul>
+</li>
+<li>成为AI<ul>
+<li>率先向AI学习，让自己的思维和AI同步；</li>
+<li>谁和AI最像，谁就获得了第一批AI带来的绝对优势；</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-1-ChatGPT的使用之道"><a href="#1-1-ChatGPT的使用之道" class="headerlink" title="1.1 ChatGPT的使用之道"></a>1.1 ChatGPT的使用之道</h2><p><strong>前言：关于prompt</strong><br>虽然目前依然需要使用prompt来辅助AI，但未来的AI发展是其越来越理解人类想要什么，而不需要使用prompt来提示；</p>
+<blockquote>
+<p><em>prompt教程推荐：吴恩达的prompt视频（适合程序员）：<br><a href="https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&vd_source=3f70c2a1700b0323e22826080d18a119">https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f70c2a1700b0323e22826080d18a119</a></em></p>
+</blockquote>
+<p><strong>概念：ChatGPT能做什么</strong><br>首先思考AI能做什么，在了解AI能做的事情的情况下，再思考应该让它如何做这件事情；<br>AI的画像：<strong>一个学习过网上所有知识，保守而道德的名校大学生。理性思考5秒钟，回答10句话。</strong></p>
+<ul>
+<li>知识：只存留在2021年；</li>
+<li>保守：没有独特思想；</li>
+<li>道德：有人类设定的道德包袱；</li>
+<li>名校本科生水平：不接受过于复杂的问题，可以回答大部分知识问题；</li>
+<li>理性思考5秒钟：不能接受过度复杂问题；</li>
+</ul>
+<p><strong>道一：Chat GPT的道德</strong><br>AI的回答是很道德的回答。当和价值立场或者观点相关的问题时，只会给出不同的立场，而不表达观点；</p>
+<ul>
+<li>甚至会出现<strong>道德在事实之上</strong>；</li>
+<li>为了保证道德的限制，甚至让道德在事实之上；<br><em>或许道德极大的限制了LLM的能力。</em></li>
+</ul>
+<p><strong>道二：Chat GPT的知识</strong><br>一般本科大学生的知识它都会；并且理解能力强。</p>
+<p><strong>道三：Chat GPT的提问</strong><br>对于提问，遵循两个原则：<strong>拆分、直接</strong>；</p>
+<ul>
+<li>直接：<ul>
+<li>提问不能太复杂，但是可以很困难；</li>
+</ul>
+</li>
+<li>拆分：<ul>
+<li>回答内容不能太长，所以一开始就设计多个问题，对各个部分拆分提问；</li>
+<li>对很长内容的提问：先提问大纲内容，再对每个大纲的细分内容进行提问；</li>
+</ul>
+</li>
+</ul>
+<p><strong>道四：面对AI的幻觉</strong><br>AI是语言生成模型，即按照上一句话生成下一句话；</p>
+<ul>
+<li>AI会出现强行回答，AI自己也无法分辨真假；</li>
+<li>如何面对AI回答的幻觉：<ul>
+<li>逻辑推演；</li>
+<li>拥有常识；</li>
+<li>自行验证；</li>
+</ul>
+</li>
+</ul>
+<p><strong>道五：把寻找和使用AI工具，纳入接受新工作的思考流程</strong><br>在接受一份新工作的时候，首先就可以想一想：当中有哪些工作是AI可以做的；并且把它纳入到生成流程当中。</p>
+<p><strong>补充：AI大模型的数据截止到2021年</strong><br>在2021年之前的数据，在LLM当中都有；但2021年之后的数据，AI自己也需要去查（通过OpenAI的服务器去访问这些网站）；</p>
+<p><strong>应用场合</strong></p>
+<ul>
+<li>文字工作<ul>
+<li>套路文章创作，润色，翻译，取标题，举例子</li>
+</ul>
+</li>
+<li>生活助手<ul>
+<li>普通问题咨询</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-ChatGPT的使用之术"><a href="#1-2-ChatGPT的使用之术" class="headerlink" title="1.2 ChatGPT的使用之术"></a>1.2 ChatGPT的使用之术</h2><p><strong>术一：描述好背景信息</strong><br>在向AI咨询一个问题前，一定要先描述好问题的背景信息；<br>如果不清楚描述什么背景，可以<strong>向AI提问，这个问题需要了解什么背景信息</strong>；</p>
+<p><strong>术二：提问计算方法，再得到结果</strong><br>如果直接问AI一个问题的答案，AI可能难以回答。但是如果提问AI一个问题的计算方法，AI的回答正确率更高；</p>
+<ul>
+<li>AI知道计算的方法，但不擅长计算</li>
+<li>对AI进行复杂计算的提问：可以<strong>先问过程，再顺着过程问答案</strong>；</li>
+</ul>
+<p><strong>术三：让他扮演一个角色</strong><br>让他扮演一个角色，作为一个角色来回答你的问题；<br><em>你现是一个作家、你现在是一个软件公司的文案总监、你现在是一个法律顾问</em></p>
+<h1 id="2-Midjourney使用基础"><a href="#2-Midjourney使用基础" class="headerlink" title="2.Midjourney使用基础"></a>2.Midjourney使用基础</h1><h2 id="2-1-Midjourney使用之道"><a href="#2-1-Midjourney使用之道" class="headerlink" title="2.1 Midjourney使用之道"></a>2.1 Midjourney使用之道</h2><p><strong>道一：创作具有艺术感的图像</strong><br>AI绘画可以模仿多种艺术风格，创造性的运用绘画技巧，并进行独特的构图和色彩搭配；</p>
+<p><strong>道二：难以处理复杂边缘、空间关系的物体</strong><br>这与扩散模型的原理有关。现阶段，扩散模型可学习的样本图片的清晰度普遍较低，导致模型在处理某些细节时需要进行“猜测”。因此，我们常常发现AI绘制的手指存在错误，其他具有复杂边缘的物体也存在同样的问题。另外，扩散模型并非从空间角度理解图像，因此在处理物体间复杂的空间关系时，AI可能会遇到困难</p>
+<p><strong>道三：难以同时绘制多个对象，并且每个对象有不同的属性</strong><br>AI可能无法准确理解多个对象和这些对象之间的属性关系，或者可能会忽略掉一些关键属性。 </p>
+<h2 id="2-2-Midjourney使用之术"><a href="#2-2-Midjourney使用之术" class="headerlink" title="2.2 Midjourney使用之术"></a>2.2 Midjourney使用之术</h2><p><strong>术一：Prompt能力</strong><br>使用明确且具体的语言，来描述任务；</p>
+<p><strong>术二：用尽可能清晰的语言</strong><br>Midjourney的语言文字理解能力不如Chat GPT；</p>
+<p><strong>术三：工具本身的熟练程度</strong></p>
+<ul>
+<li>设置宽高比；</li>
+<li>混乱程度；</li>
+<li>使用种子；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Prompt编写指南</title>
+    <url>/2023/08/081ae7892f5f.html</url>
+    <content><![CDATA[<p>内容大纲：</p>
+<ul>
+<li><ol>
+<li>基础知识</li>
+</ol>
+<ul>
+<li>1.1 两种LLM</li>
+<li>1.2 提问原则</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1.基础知识"></a>1.基础知识</h1><h2 id="1-1-两种LLM"><a href="#1-1-两种LLM" class="headerlink" title="1.1 两种LLM"></a>1.1 两种LLM</h2><p><strong>Base LLM</strong><br>基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。</p>
+<p><strong>Instruction Tuned LLM</strong><br>这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。<br>对于大部分情况下，都为使用ITLLM进行学习以及开发。</p>
+<ul>
+<li>因为ITLLM是基于指令（关键词）进行的矫正、输出，因此当结果不合适时，应对重写选择合适的指令；</li>
+</ul>
+<h2 id="1-2-提问原则"><a href="#1-2-提问原则" class="headerlink" title="1.2 提问原则"></a>1.2 提问原则</h2><h3 id="1-2-1-原则一：编写明确、具体的指令"><a href="#1-2-1-原则一：编写明确、具体的指令" class="headerlink" title="1.2.1 原则一：编写明确、具体的指令"></a>1.2.1 原则一：编写明确、具体的指令</h3><p>明确 不等于 简短，为了明确的指令，可以提供更多的描述，来保证上下文信息的重组；</p>
+<p><strong>具体方法1：使用分隔符清楚的指示输入的不同部分</strong></p>
+<ul>
+<li>分隔符可以是任何清晰的符号：引号、分割号、三引号、XML标记等</li>
+<li>让模型知道：这是一个单独的部分</li>
+</ul>
+<p><strong>具体方法2：要求结构化的输出</strong><br>可以要求HTML、JSON、XML、MD等具体格式的输出；</p>
+<p><strong>具体方法3：要求模型检查条件是否被满足</strong><br>当问题是基于某些假设时，可以先让模型检查这些假设；如果不满足条件，则指示停止尝试完全完成这些任务。</p>
+<p><strong>具体方法4：少量训练提示</strong><br>在前面有成功回答的问题时，可以要求模型，它的任务是以一致的风格回答问题；</p>
+<h3 id="1-2-2-原则二：给模型时间去思考"><a href="#1-2-2-原则二：给模型时间去思考" class="headerlink" title="1.2.2 原则二：给模型时间去思考"></a>1.2.2 原则二：给模型时间去思考</h3><p>模型无法处理过于复杂的问题。因此需要给模型“时间”去思考；</p>
+<p><strong>具体方法1：指定完成任务所需的步骤</strong><br>具体指明回答时的步骤，比如：<br><em>第一步：总结要点<br>第二步：将要点翻译成英文<br>第三步：列出每一个要点的名称以及总结<br>第四步：输出JSON格式的内容</em></p>
+<p><strong>具体方法2：指示模型在做出结论之前，先思考解决方案</strong><br>在模型给出具体的答案之前，先给时间去进行问题的实际思考；<br>比如让模型先用自己的计算方法进行计算，然后再和给出的答案进行比较；<br><em>1、先给出你自己的解决方案</em><br><em>2、再该处你自己的解决方案之前，不要决定解决方案是否正确</em></p>
+<p><strong>具体方法3：面对幻觉时，要求模型先给出引用，再基于引用给出答案</strong><br>由于模型并不知道自己知识的边界，因此可能会编造出看起来十分正确的回答；<br>为了解决这种问题，可以要求：</p>
+<ol>
+<li>模型先给出针对问题的答案的引用；</li>
+<li>要求模型基于这些引用，回答相关问题；</li>
+</ol>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>ChatGPT</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【CSharp系列】CLR寄宿与AppDomain（1）-- 基本概念</title>
     <url>/2023/09/a5b39cbba297.html</url>
     <content><![CDATA[<p>内容大纲：</p>
 <span id="more"></span>
-<h1 id="1-CLR寄宿与AppDomain介绍"><a href="#1-CLR寄宿与AppDomain介绍" class="headerlink" title="1.CLR寄宿与AppDomain介绍"></a>1.CLR寄宿与AppDomain介绍</h1><p><strong>寄宿（hosting）基本概念</strong><br>CLR寄宿（Common Language Runtime Hosting）是指将托管代码与CLR（Common Language Runtime）进行交互的过程。 在C#中，CLR作为执行环境负责加载、执行和管理托管代码。 CLR寄宿则允许在托管环境之外，通过与CLR通信来扩展和控制CLR的行为。</p>
+<h1 id="1-CLR-寄宿与-AppDomain-介绍"><a href="#1-CLR-寄宿与-AppDomain-介绍" class="headerlink" title="1 CLR 寄宿与 AppDomain 介绍"></a>1 CLR 寄宿与 AppDomain 介绍</h1><p><strong>寄宿（hosting）基本概念</strong><br>CLR寄宿（Common Language Runtime Hosting）是指将托管代码与CLR（Common Language Runtime）进行交互的过程。 在C#中，CLR作为执行环境负责加载、执行和管理托管代码。 CLR寄宿则允许在托管环境之外，通过与CLR通信来扩展和控制CLR的行为。</p>
 <ul>
 <li>寄宿使得任何应用程序都可以使用CLR的功能，并且它使得现有的应用程序能部分使用托管代码编写；</li>
 <li>寄宿为应用程序提供了编程的接口，来进一步的自定义以及扩展；<ul>
@@ -30,7 +196,7 @@
 <li>动态加载和卸载程序集：AppDomain允许在运行时动态加载和卸载程序集，从而实现动态扩展应用程序的功能。 这对于需要灵活加载和卸载托管代码的场景非常有用。</li>
 <li>安全隔离：每个AppDomain都有自己的安全策略和权限设置，可以提供一定程度的安全隔离。 这对于需要运行不可信代码或实现多级安全权限管理的应用程序非常重要。</li>
 </ol>
-<h1 id="2-CLR寄宿基础"><a href="#2-CLR寄宿基础" class="headerlink" title="2.CLR寄宿基础"></a>2.CLR寄宿基础</h1><p><strong>CLR寄宿运行环境</strong><br>因为NETFramework在Windows平台的顶部运行，所以.NET Framework必须用Windows能理解的技术来构建，即所有托管模块和程序集文件都必须使用 Windows PE文件格式，而且要么是Windows EXE文件，要么是DLL文件；</p>
+<h1 id="2-CLR-寄宿基础"><a href="#2-CLR-寄宿基础" class="headerlink" title="2 CLR 寄宿基础"></a>2 CLR 寄宿基础</h1><p><strong>CLR寄宿运行环境</strong><br>因为NETFramework在Windows平台的顶部运行，所以.NET Framework必须用Windows能理解的技术来构建，即所有托管模块和程序集文件都必须使用 Windows PE文件格式，而且要么是Windows EXE文件，要么是DLL文件；</p>
 <ul>
 <li>对CLR开发<ul>
 <li><ol>
@@ -68,7 +234,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="3-AppDomain基础"><a href="#3-AppDomain基础" class="headerlink" title="3.AppDomain基础"></a>3.AppDomain基础</h1><p><strong>AppDomain基础概念介绍</strong><br>AppDomain 是为了提供隔离而设计的。</p>
+<h1 id="3-AppDomain-基础"><a href="#3-AppDomain-基础" class="headerlink" title="3 AppDomain 基础"></a>3 AppDomain 基础</h1><p><strong>AppDomain基础概念介绍</strong><br>AppDomain 是为了提供隔离而设计的。</p>
 <ul>
 <li>CLR COM 服务器初始时会创建一个AppDomain；</li>
 <li>AppDomain 是一组程序集的逻辑容器，CLR初始化时创建的第一个AppDomain称为“默认AppDomain”，这个默认的AppDomain只有在Windows进程终止时才会被销毁；</li>
@@ -120,8 +286,19 @@
     <title>【CSharp系列】CLR寄宿与AppDomain（2）-- 跨越AppDomain边界访问对象</title>
     <url>/2023/09/a1092601f220.html</url>
     <content><![CDATA[<p>内容大纲：</p>
-<span id="more"></span>
-<h1 id="1-跨AppDomain基本概念"><a href="#1-跨AppDomain基本概念" class="headerlink" title="1.跨AppDomain基本概念"></a>1.跨AppDomain基本概念</h1><p>一个 AppDomain 中的代码可以和另一个 AppDomain 中的类型和对象通信，但只能通过良好定义的机制进行。<br>以下代码演示了以下三种类型在构造时的不同行为：</p>
+<ul>
+<li>1 跨 AppDomain 基本概念<ul>
+<li>1.1 App Domain 基本属性</li>
+</ul>
+</li>
+<li>2 按引用传递进行跨 AppDomain 通信<ul>
+<li>2.1 MarshalByRefType 类型与按引用传递</li>
+<li>2.2 卸载 AppDomain 与静态成员</li>
+</ul>
+</li>
+<li>3 按值传递进行跨 AppDomain 通信<span id="more"></span></li>
+</ul>
+<h1 id="1-跨-AppDomain-基本概念"><a href="#1-跨-AppDomain-基本概念" class="headerlink" title="1 跨 AppDomain 基本概念"></a>1 跨 AppDomain 基本概念</h1><p>一个 AppDomain 中的代码可以和另一个 AppDomain 中的类型和对象通信，但只能通过良好定义的机制进行。<br>以下代码演示了以下三种类型在构造时的不同行为：</p>
 <ol>
 <li>“按引用封送”(Marshal-by-Reference)类型；</li>
 <li>“按值封送”(Marshalby-Value)类型；</li>
@@ -145,7 +322,7 @@
 <li>友好名称主要是为了方便调试，由于CLR要在我们的任何代码执行前创建默认 AppDomain，所以使用可执行文件的文件名作为默认的 AppDomain 友好名称；</li>
 <li>Marshalling 方法使用System.AppDomain的只读FriendlyName属性来查询默认AppDomain的友好名称。</li>
 </ul>
-<h1 id="2-按引用传递进行跨AppDomain通信"><a href="#2-按引用传递进行跨AppDomain通信" class="headerlink" title="2.按引用传递进行跨AppDomain通信"></a>2.按引用传递进行跨AppDomain通信</h1><p><strong>创建新AppDomain</strong><br>通过调用<code>System.AppDomain</code>的静态方法<code>CreateDomain()</code>来指示同一个Window进程中，创建一个AppDomain；</p>
+<h1 id="2-按引用传递进行跨-AppDomain-通信"><a href="#2-按引用传递进行跨-AppDomain-通信" class="headerlink" title="2 按引用传递进行跨 AppDomain 通信"></a>2 按引用传递进行跨 AppDomain 通信</h1><p><strong>创建新AppDomain</strong><br>通过调用<code>System.AppDomain</code>的静态方法<code>CreateDomain()</code>来指示同一个Window进程中，创建一个AppDomain；</p>
 <p><strong>CreateDomain方法</strong><br>CreateDomain 方法内部会在进程中新建一个AppDomain，该AppDomain将被赋予指定的友好名称、安全性和配置设置；<br>新 AppDomain 有自己的 Loader 堆，这个堆目前是空的，因为还没有程序集加载到新AppDomain中；<br>创建AppDomain时，CLR不在这个AppDomain中创建任何线程。AppDomain中也不会运行代码，除非显式地让一个线程调用AppDomain中的代码。</p>
 <ul>
 <li>参数一<ul>
@@ -195,8 +372,59 @@
 </ul>
 </li>
 </ul>
-<h1 id="完整代码附录"><a href="#完整代码附录" class="headerlink" title="完整代码附录"></a>完整代码附录</h1><p><img src="/../../image/Pasted%20image%2020230905114123.png"><br><img src="/../../image/Pasted%20image%2020230905114139.png"><br><img src="/../../image/Pasted%20image%2020230905114150.png"><br><img src="/../../image/Pasted%20image%2020230905114204.png"><br><img src="/../../image/Pasted%20image%2020230905114214.png"></p>
-<p>你好 winsadwanidw 你的，windows, C#</p>
+<p><strong>按引用传递问题：CLR 不允许一个 AppDomain 中的变量引用另一个 AppDomain 中创建的对象</strong><br>CLR 不允许一个 AppDomain 中的变量引用另一个 AppDomain 中创建的对象。如果 CreateInstanceAndUnwrap 直接返回对象引用，隔离性就会被打破，而隔离是 AppDomain 的全部目的。<br>因此，CreateInstanceAndUnwrap 在返回对象引用前要执行一些额外的逻辑，并且使用 MarshalByRefType 类型进行实例的传递；</p>
+<h2 id="2-1-MarshalByRefType-类型与按引用传递"><a href="#2-1-MarshalByRefType-类型与按引用传递" class="headerlink" title="2.1 MarshalByRefType 类型与按引用传递"></a>2.1 MarshalByRefType 类型与按引用传递</h2><p><strong><code>MarshalByRefType</code> 和 <code>AppDomain</code> 的关系</strong><br><code>AppDomain</code>是C#中用于隔离和管理应用程序运行环境的单元。每个<code>AppDomain</code>都有自己的内存空间和加载的程序集集合。当需要在不同的<code>AppDomain</code>之间进行对象通信时，可以使用<code>MarshalByRefType</code>类型。<br>通过将继承自 <code>MarshalByRefType</code> 的对象实例传递到不同的 <code>AppDomain</code> 中，可以在目标 <code>AppDomain</code> 中创建该对象的代理引用。通过这个代理引用，可以实现在不同的 <code>AppDomain</code> 中调用对象的方法，并在本地应用程序域中获取返回的结果。</p>
+<p><strong>MarshalByRefType 类型介绍</strong><br>MarshalByRefType 类型从 System. MarshalByRefObject 派生，当使用 CreateInstanceAndUnwrap 方法发现其封装的对象是继承自 MarshalByRefType 类型时，CLR 就会跨 AppDomain 边界按照引用传递对象。</p>
+<ul>
+<li>从 MarshalByRefType 派生的类型可以定义实例字段，只不过这些实例字段不会成为代理类型的一部分，也不会包含在代理对象当中；</li>
+<li>当写代码对派生自 MarshalByRefType 类型的实例进行读写时，JIT 编译器会自动生成代码，分别调用方法来使用代理对象。其利用反射的机制来获得数值；</li>
+</ul>
+<p><strong>引用传递过程分析</strong></p>
+<ul>
+<li>第一步：检查<ul>
+<li>检查类型是否是继承自 System. MarshalByRefObject，如果继承自其，再进入以下内容；</li>
+</ul>
+</li>
+<li>第二步：创建代理实例<ul>
+<li>CLR 在目标 AppDomain 的 Loader 堆当中创建一个代理类型；</li>
+<li>代理类型使用原属类型的元数据定义，有完全一样的实例成员 (属性、事件和方法)；</li>
+<li>但实例字段不会成为代理类型的一部分，其确实定义了几个自己的实例字段，但这些字段和原始类型的不一致。相反，这些字段只是指出哪个 AppDomain “拥有”真实的对象，以及如何在拥有对象的 AppDomain 中找到真实的对象；</li>
+</ul>
+</li>
+<li>第三步：返回代理<ul>
+<li>第二步定义好代理类型后，接下来使用 CreateInstanceAndUnwrap 方法创建代理类型的实例，初始化它的字段来标识源 AppDomain 和目标 AppDomain 区别，将此代理返回给目标 AppDomain 。</li>
+</ul>
+</li>
+<li>第四步：使用代理方法与字段<ul>
+<li>此时可以使用代理实现来获得对象中的信息字段，将调用线程从默认的 AppDomain 切换为目标 AppDomainde ；</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-卸载-AppDomain-与静态成员"><a href="#2-2-卸载-AppDomain-与静态成员" class="headerlink" title="2.2 卸载 AppDomain 与静态成员"></a>2.2 卸载 AppDomain 与静态成员</h2><p><strong>卸载 AppDomain</strong><br>应用程序调用 AppDomain 类的公共静态 Unload 方法，这会强制 CLR 卸载指定的 AppDomain ，并且包括加载到其中的所有程序集，并强制执行一次垃圾回收，以释放由卸载的 AppDomain 中的代码创建的所有对象。</p>
+<ul>
+<li>默认 AppDomain 的 mbrt 变量仍然引用一个有效的代理对象，但代理对象已不再引用一个有效的 AppDomain ，因为它已经卸载；</li>
+</ul>
+<p><strong>静态成员与引用访问</strong><br>静态成员的调用总是在 AppDomain 当中进行，调用静态成员时没有代理对象，所以不 hi 发生 AppDomain 的切换；</p>
+<ul>
+<li>类型的静态成员在一个 AppDomain 中执行，实例成员却在另一个 AppDomain 中执行，这不是一种好的编程模型；</li>
+</ul>
+<p><strong>如何对引用对象进行垃圾回收：租约管理器</strong><br>由于第二个 AppDomain 中没有根，所以代理引用的原始对象可以被垃圾回收。这当然不理想，但另一方面，假如将原始对象不确定地留在内存中，代理可能不再引用它，而原始对象依然存活：这同样不理想。</p>
+<ul>
+<li>CLR 解决这个问题的办法是使用一个<strong>租约管理器</strong>；</li>
+<li>对象的代理创建好之后，CLR 保持对象存活 5 分钟。5 分钟内没有通过租约管理器发出调用，对象就会失效，下次垃圾回收释放它的内存；</li>
+<li>每发出一次对对象的调用，“租约管理器”都会续订对象的租期，保证它在接下来的 2 分钟内在内存中保持存活；</li>
+</ul>
+<h1 id="3-按值传递进行跨-AppDomain-通信"><a href="#3-按值传递进行跨-AppDomain-通信" class="headerlink" title="3 按值传递进行跨 AppDomain 通信"></a>3 按值传递进行跨 AppDomain 通信</h1><p><strong>使用 MarshalByValType 类型实例进行传递</strong><br>MarshalByValType 类型不从 System. MarshalByRefObject 类型继承，因此其不是通过引用的方式来进行实例的传递；</p>
+<ul>
+<li>按值传递的含义是：<strong>通过对象的序列化，将其以字节数组的方式在跨 AppDomain 之间进行传递</strong>；</li>
+</ul>
+<p><strong>MarshalByValType 类型介绍</strong></p>
+<ul>
+<li>MarshalByValType 标记了序列化的特性 <code>[Serializable]</code>，当源 AppDomain 想要向目标 AppDomain 发送一个对象时，其将对象的实例字段序列化成一个字节数组；</li>
+<li>字节数组从源 App Domain 复制到目标 AppDomain 当中，然后在目标的 AppDomain 当中反序列化此字节数组；</li>
+<li>CLR 创建此类型的实例，并利用字节数组当中的数值初始化对象的字段。即 CLR 在目标 AppDomain 中精确复制了源对象；</li>
+<li><code>MethdoWithReturn</code> 方法返回这个副本的引用，完成按值封送；<br>使用按值封送的对象，其<strong>在不同的 AppDomain 当中拥有独立的生存周期，它们的状态也可以独立的更改</strong>；</li>
+</ul>
 ]]></content>
       <categories>
         <category>CSharp</category>
@@ -295,7 +523,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="1-为什么要有托管堆"><a href="#1-为什么要有托管堆" class="headerlink" title="1.为什么要有托管堆"></a>1.为什么要有托管堆</h1><h2 id="1-1-面向对象与资源分配"><a href="#1-1-面向对象与资源分配" class="headerlink" title="1.1 面向对象与资源分配"></a>1.1 面向对象与资源分配</h2><p><strong>面向对象中的资源</strong><br>概念：在面向对象的环境中，任何一种类型都代表了计算机中可供程序使用的一种资源。如果要使用这种资源，就需要为这种资源分配一定的内存；</p>
+<h1 id="1-为什么要有托管堆"><a href="#1-为什么要有托管堆" class="headerlink" title="1 为什么要有托管堆"></a>1 为什么要有托管堆</h1><h2 id="1-1-面向对象与资源分配"><a href="#1-1-面向对象与资源分配" class="headerlink" title="1.1 面向对象与资源分配"></a>1.1 面向对象与资源分配</h2><p><strong>面向对象中的资源</strong><br>概念：在面向对象的环境中，任何一种类型都代表了计算机中可供程序使用的一种资源。如果要使用这种资源，就需要为这种资源分配一定的内存；</p>
 <p><strong>资源分配步骤</strong></p>
 <ul>
 <li>第一步<ul>
@@ -331,7 +559,7 @@
 <li>托管堆会自动完成垃圾的回收，并且当需要手动进行回收时，托管堆还提供了一个简化的模型；</li>
 </ul>
 <p><strong>补充：需要特殊清理的类型</strong><br>部分包装了本机资源的类型，比如对文件、Socket、数据库连接资源的类型，可能无法使用自动进行的垃圾回收，而是需要程序员使用GC的手动触发；</p>
-<h1 id="2-什么是托管堆"><a href="#2-什么是托管堆" class="headerlink" title="2.什么是托管堆"></a>2.什么是托管堆</h1><h2 id="2-1-托管堆基本概念"><a href="#2-1-托管堆基本概念" class="headerlink" title="2.1 托管堆基本概念"></a>2.1 托管堆基本概念</h2><p><strong>托管堆</strong><br>在C#中，托管堆是一种用于存储和管理托管对象（即运行在CLR中的对象）的内存区域。它是CLR的一部分，为托管对象提供动态内存分配和释放的功能。托管堆是一种自动化内存管理机制，它通过垃圾回收器自动回收不再使用的对象，从而释放内存并确保内存的正确使用。</p>
+<h1 id="2-什么是托管堆"><a href="#2-什么是托管堆" class="headerlink" title="2 什么是托管堆"></a>2 什么是托管堆</h1><h2 id="2-1-托管堆基本概念"><a href="#2-1-托管堆基本概念" class="headerlink" title="2.1 托管堆基本概念"></a>2.1 托管堆基本概念</h2><p><strong>托管堆</strong><br>在C#中，托管堆是一种用于存储和管理托管对象（即运行在CLR中的对象）的内存区域。它是CLR的一部分，为托管对象提供动态内存分配和释放的功能。托管堆是一种自动化内存管理机制，它通过垃圾回收器自动回收不再使用的对象，从而释放内存并确保内存的正确使用。</p>
 <p><strong>NextObjPtr</strong><br>CLR会在程序的托管堆中管理一个指针NextObjPtr，此指针会一直指向下一个对象在队中分配的位置。在最开始时，此指针指向地址空间的基地址；</p>
 <p><strong>内存自动扩张</strong><br>在一个区域的内存备非垃圾对象填满之后，CLR会自动分配更多的区域。此过程会一直进行，直到进程的地址空间被填满；</p>
 <h2 id="2-2-CLR中的new行为"><a href="#2-2-CLR中的new行为" class="headerlink" title="2.2 CLR中的new行为"></a>2.2 CLR中的new行为</h2><p><strong>执行行为</strong><br>C#的new操作符将导致CLR执行以下步骤：</p>
@@ -379,7 +607,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="3-垃圾回收算法"><a href="#3-垃圾回收算法" class="headerlink" title="3.垃圾回收算法"></a>3.垃圾回收算法</h1><p>在应用程序调用new操作符创建对象时，可能会没有足够地址空间来分配该对象，此时CLR就需要执行垃圾回收。</p>
+<h1 id="3-垃圾回收算法"><a href="#3-垃圾回收算法" class="headerlink" title="3 垃圾回收算法"></a>3 垃圾回收算法</h1><p>在应用程序调用new操作符创建对象时，可能会没有足够地址空间来分配该对象，此时CLR就需要执行垃圾回收。</p>
 <h2 id="3-1-引用计数算法"><a href="#3-1-引用计数算法" class="headerlink" title="3.1 引用计数算法"></a>3.1 引用计数算法</h2><p><strong>什么是引用计数算法</strong><br>对于对象生存期的管理，有些系统使用的是引用计数算法；<em>比如微软的COM</em></p>
 <p><strong>算法内容</strong><br>堆上的每个对象都维护着一个内存字段，用于统计程序中多少部分正在使用对象。随着每一部分到达代码中某个不再需要对象的地方，就递减对象的计数字段。当计数字段变成0，对象就可以从内存中删除；</p>
 <p><strong>算法问题：循环引用</strong><br>在一些GUI应用程序中，窗口对象将容纳对子UI对象的引用，而子UI对象将容纳对父窗口对象的引用；<br>这种引用会阻止两个对象的计数器达到 0，所以两个对象永远不会删除，即使应用程序本身不再需要窗口。</p>
@@ -431,6 +659,212 @@
       </tags>
   </entry>
   <entry>
+    <title>【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</title>
+    <url>/2023/08/2d466e9f916b.html</url>
+    <content><![CDATA[<ul>
+<li><ol>
+<li>垃圾回收的基本假设</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>垃圾回收算法</li>
+</ol>
+<ul>
+<li>2.1 初始化堆与第0代对象</li>
+<li>2.2 从第0代对象到第1代对象</li>
+<li>2.3 从第1代对象到第2代对象</li>
+</ul>
+</li>
+<li><ol start="3">
+<li>垃圾回收触发条件</li>
+</ol>
+<ul>
+<li>3.1 监视垃圾回收内存使用</li>
+</ul>
+</li>
+<li><ol start="4">
+<li>大对象</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>垃圾回收模式</li>
+</ol>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="1-垃圾回收的基本假设"><a href="#1-垃圾回收的基本假设" class="headerlink" title="1 垃圾回收的基本假设"></a>1 垃圾回收的基本假设</h1><p>由于CLR的GC是基于代的垃圾回收器算法，因此其对代码做出了以下几点假设：</p>
+<ul>
+<li><ol>
+<li>对象越新，生存期越短；</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>对象越老，生存期越长；</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>回收堆的一部分，速度快于回收整个堆；<br>以上假设对于大部分的现代应用程序都成立，其影响了下面GC算法的实现。</li>
+</ol>
+</li>
+</ul>
+<h1 id="2-垃圾回收算法"><a href="#2-垃圾回收算法" class="headerlink" title="2 垃圾回收算法"></a>2 垃圾回收算法</h1><h2 id="2-1-初始化堆与第0代对象"><a href="#2-1-初始化堆与第0代对象" class="headerlink" title="2.1 初始化堆与第0代对象"></a>2.1 初始化堆与第0代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>预算容量<ul>
+<li>CLR初始化时，为第0代对象选择一个预算容量。</li>
+</ul>
+</li>
+<li>启动垃圾回收<ul>
+<li>如果分配一个新对象造成第0代超过预算，就必须立马就启动一次垃圾回收。</li>
+<li>假设此时初始化时分配的对象刚好用完第0代的空间，那么分配下一个对象就必须启动垃圾回收。</li>
+</ul>
+</li>
+<li>压缩对象<ul>
+<li>垃圾回收器判断对象C和E是垃圾，所以会压缩对象D，使之与对象B相邻。</li>
+</ul>
+</li>
+<li>进入第1代<ul>
+<li>在垃圾回收中存活的对象A，B和D现在成为第1代对象。第1代对象已经经历了垃圾回收器的一次检查；</li>
+<li>此时第0代不包含任何对象，当下一次再分配内存时，新对象会被继续分配到第0代之中；</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>初始化堆：<br><img src="/../../image/Pasted%20image%2020230829101037.png"></p>
+<p>启动垃圾回收+压缩对象+进入第1代：<br><img src="/../../image/Pasted%20image%2020230829101102.png"></p>
+<h2 id="2-2-从第0代对象到第1代对象"><a href="#2-2-从第0代对象到第1代对象" class="headerlink" title="2.2 从第0代对象到第1代对象"></a>2.2 从第0代对象到第1代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>继续分配<ul>
+<li>新分配的对象继续进入第0代；</li>
+<li>部分对象（包含第1代与第0代）在程序运行时，逐渐变得不可达；</li>
+</ul>
+</li>
+<li>启动垃圾回收<ul>
+<li>新对象造成第0代超出预算；</li>
+</ul>
+</li>
+<li>决定GC检查代<ul>
+<li>垃圾回收器必须决定检查哪些代。开始一次垃圾回收时，垃圾回收器除了检查第0代时，还会检查第1代占用了多少内存。</li>
+<li>在下图中，由于第1代占用的内存远少于预算，所以垃圾回收器只检查第0代中的对象；</li>
+</ul>
+</li>
+</ul>
+<p><strong>基本假设与基于代的GC</strong></p>
+<ul>
+<li>假设一：对象越新，生存期越短<ul>
+<li>因为新的对象在第0代中，并且第0代包含更多垃圾的可能性很大，在GC时能回收更多的内存；</li>
+<li>即<strong>对象越新，生存期越短</strong></li>
+<li>并且由于忽略了第1代中的对象，所以加快了垃圾回收速度</li>
+</ul>
+</li>
+<li>假设三：回收堆的一部分，速度快于回收整个堆<ul>
+<li>忽略第1代中的对象能提升垃圾回收器的性能。对性能有更大提振作用的是：现在不必遍历托管堆中的每个对象；</li>
+<li>如果根或对象引用了老一代的某个对象，垃圾回收器就可以忽略老对象内部的所有引用，能在更短的时间内构造好可达对象图；</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>产生新对象，垃圾产生：<br><img src="/../../image/Pasted%20image%2020230829101709.png"></p>
+<p>垃圾回收，对象压缩：<br><img src="/../../image/Pasted%20image%2020230829101728.png"></p>
+<h2 id="2-3-从第1代对象到第2代对象"><a href="#2-3-从第1代对象到第2代对象" class="headerlink" title="2.3 从第1代对象到第2代对象"></a>2.3 从第1代对象到第2代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>全部预算已满<ul>
+<li>假定第1代的增长导致它的所有对象占用了全部预算。此时应用程序继续运行并分配对象，使第0代对象达到它的预算容量；</li>
+<li>此时由于第0代已满，必须进行垃圾回收；</li>
+<li>此次垃圾回收时发现第1代占用太多空间，导致全部预算用完（并且第1代当中已经有很多对象变得不可达）；</li>
+<li>此次垃圾回收需要堆第0代以及第1代对象进行回收；</li>
+</ul>
+</li>
+<li>产生第2代<ul>
+<li>经过垃圾回收，产生第2代对象；第0代继续空余出来；</li>
+<li><strong>只有在第1代超出预算时才会检查第1代中的对象</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>托管堆与代</strong></p>
+<ul>
+<li>3代托管堆<ul>
+<li>托管堆只支持三代：第0代、第1代和第2代，没有第3代。</li>
+</ul>
+</li>
+<li>代与预算<ul>
+<li>CLR初始化时，会为每一代选择预算；</li>
+</ul>
+</li>
+<li>CLR 的垃圾回收器是自调节的<ul>
+<li>垃圾回收器会在执行垃圾回收的过程中了解应用程序的行为；<ul>
+<li>假定应用程序构造了许多对象，但每个对象用的时间都很短。在这种情况下，对第0代的垃圾回收会回收大量内存；</li>
+<li>事实上，第0代的所有对象都可能被回收；</li>
+</ul>
+</li>
+<li><strong>当GC发现回收0代后存活下来的对象很少，就可能减少第0代的预算，反之增加预算</strong>。这种启发式的算法对第1代以及第2代通用适用；</li>
+<li>每当垃圾回收进行后，会检查存活下来的对象多少，进而增大或减小这些代的预算；</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-垃圾回收触发条件"><a href="#3-垃圾回收触发条件" class="headerlink" title="3 垃圾回收触发条件"></a>3 垃圾回收触发条件</h1><p><strong>垃圾回收可以有以下几种触发条件</strong></p>
+<ol>
+<li>CLR检测垃圾回收超出代的预算；</li>
+<li>代码显示调用System.GC的静态方法Collect；</li>
+<li>Windows报告低内存情况；</li>
+<li>CLR卸载AppDomain；</li>
+<li>CLR关闭；</li>
+</ol>
+<p><strong>强制垃圾回收</strong><br>System.GC类型允许应用程序对垃圾回收器进行一些直接控制。可以用Collect进行强制垃圾回收，但大部分情况下不推荐。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Collect</span>(<span class="params">Int32 generation,GCCollectionMode mode,Boolean blocking</span>)</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>generation<ul>
+<li>表示回收第几代的垃圾</li>
+</ul>
+</li>
+<li>GCCollectionMode<ul>
+<li>Default：不传递任何符号名称；</li>
+<li>Forced：强制回收指定的代(以及低于它的所有代)；</li>
+<li>Optimized：只有在能释放大量内存或者能减少碎片化的前提下，才执行回收（强制执行Collect时，尽可能使用这种模式）；</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-1-监视垃圾回收内存使用"><a href="#3-1-监视垃圾回收内存使用" class="headerlink" title="3.1 监视垃圾回收内存使用"></a>3.1 监视垃圾回收内存使用</h2><p><strong>监视用方法</strong></p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function">Int32 <span class="title">CollectionCount</span>(<span class="params">Int32 generation</span>)</span>;</span><br><span class="line"><span class="function">Int64 <span class="title">GetTotalMemory</span>(<span class="params">Boolean forceFullCollection</span>)</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="4-大对象"><a href="#4-大对象" class="headerlink" title="4 大对象"></a>4 大对象</h1><p><strong>什么是大对象</strong><br>在CLR当中，将对象分为大对象和小对象，大于85000字节的对象是大对象；</p>
+<p><strong>大对象特点</strong></p>
+<ul>
+<li>大对象在进程地址空间其他地方分配；</li>
+<li>目前的GC不压缩大对象；</li>
+<li>大对象总是第2代的，不可能为第0、1代；</li>
+</ul>
+<h1 id="5-垃圾回收模式"><a href="#5-垃圾回收模式" class="headerlink" title="5 垃圾回收模式"></a>5 垃圾回收模式</h1><p><strong>两种基本的GC模式</strong></p>
+<ul>
+<li>工作站模式<ul>
+<li>该模式针对客户端应用程序优化GC；</li>
+<li><strong>CLR默认以工作站模式运行</strong></li>
+<li>GC造成的延时很低，应用程序的线程挂起时间短，并且GC假定机器上运行的其他应用程序都不会消耗太多的CPU资源；</li>
+</ul>
+</li>
+<li>服务器模式<ul>
+<li>该模式针对服务器端应用程序优化GC；</li>
+<li>被优化的主要是吞吐量和资源利用。GC假定机器上没有运行其他应用程序，并假定机器的所有CPU都可用来辅助完成GC；</li>
+<li>该模式造成托管堆被拆分成几个区域，每个CPU一个；</li>
+<li>开始垃圾回收时，垃圾回收器在每个CPU上都运行一个特殊线程，每个线程都和其他线程并发回收它自己的区域；</li>
+<li>这个功能要求应用程序在多CPU计算机上运行使线程能真正地同时工作，从而获得性能的提升。</li>
+</ul>
+</li>
+</ul>
+<p><strong>切换工作模式</strong><br>GCLatencyMode定义四种模式：</p>
+<ol>
+<li>Batch：服务器GC模式的默认值，关闭并发GC；</li>
+<li>Interactive：工作站GC模式的默认值，打开并发GC；</li>
+<li>LowLatency：此模式时，GC将全力避免第2代垃圾的回收。更容易抛出内存溢出异常；</li>
+<li>SustainedLowLatency；</li>
+</ol>
+]]></content>
+      <categories>
+        <category>CSharp</category>
+      </categories>
+      <tags>
+        <tag>CSharp</tag>
+        <tag>垃圾回收</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【CSharp系列】托管堆与垃圾回收（3）-- 特殊资源对象</title>
     <url>/2023/08/5f4541f148f0.html</url>
     <content><![CDATA[<p>内容大纲：</p>
@@ -452,7 +886,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="1-特殊资源对象"><a href="#1-特殊资源对象" class="headerlink" title="1.特殊资源对象"></a>1.特殊资源对象</h1><p><strong>什么是特殊资源对象</strong><br>对于C#中的大部分对象而言，只要有内存的分配既可以正常工作。但是还有一部分对象其使用了其他特殊的资源，比如IO设备、线程、锁、Socket等等。<br><em>例如，System.IO.FileStream类型需要打开一个文件(本机资源)并保存文件的指针。然后类型的Read和Write方法用此指针操作文件。类似地，System.Threading.Mutex类型要打开一个Windows互斥体内核对象(本机资源)并保存其对象的指针，并在调用Mutex的方法时使用该对象。</em></p>
+<h1 id="1-特殊资源对象"><a href="#1-特殊资源对象" class="headerlink" title="1 特殊资源对象"></a>1 特殊资源对象</h1><p><strong>什么是特殊资源对象</strong><br>对于C#中的大部分对象而言，只要有内存的分配既可以正常工作。但是还有一部分对象其使用了其他特殊的资源，比如IO设备、线程、锁、Socket等等。<br><em>例如，System.IO.FileStream类型需要打开一个文件(本机资源)并保存文件的指针。然后类型的Read和Write方法用此指针操作文件。类似地，System.Threading.Mutex类型要打开一个Windows互斥体内核对象(本机资源)并保存其对象的指针，并在调用Mutex的方法时使用该对象。</em></p>
 <p><strong>如何处理特殊资源对象：Finalize终结</strong><br>对于这些特殊资源对象，不可以直接对象内存进行回收，而是应该在回收之前先对其进行一些处理，保证其在回收之前执行一些代码。</p>
 <ul>
 <li>Finalize终结机制：<ul>
@@ -464,7 +898,7 @@
 <p><strong>Finalize方法</strong><br>在System.Object中定义了受保护的虚方法：Finalize<br>垃圾回收器判定对象是垃圾后，会调用对象的Finalize方法。C#要求在类名前面加上“～”符号来定义Finalize方法：</p>
 <figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SomeType</span></span><br><span class="line">&#123;</span><br><span class="line">	~SomeType()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//这里的代码会进入Finalize方法	</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="2-Finalize特点"><a href="#2-Finalize特点" class="headerlink" title="2.Finalize特点"></a>2.Finalize特点</h1><p><strong>特点一：执行终结导致对象存活变长</strong></p>
+<h1 id="2-Finalize-特点"><a href="#2-Finalize-特点" class="headerlink" title="2 Finalize 特点"></a>2 Finalize 特点</h1><p><strong>特点一：执行终结导致对象存活变长</strong></p>
 <ul>
 <li>被视为垃圾的对象在垃圾回收完毕之后才会调用 Finalize 方法，所以这些对象的内存不是马上被回收的；</li>
 <li>可终结对象在回收时必须存活，造成它会提升一代，使对象活得比正常时间长，增大了内存耗用；更糟的是，可终结对象被提升时，其字段引用的所有对象也会被提升，因为它们也必须继续存活。</li>
@@ -493,7 +927,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="3-SafeHandle类"><a href="#3-SafeHandle类" class="headerlink" title="3.SafeHandle类"></a>3.SafeHandle类</h1><h2 id="3-1-SafeHandle类基本概念"><a href="#3-1-SafeHandle类基本概念" class="headerlink" title="3.1 SafeHandle类基本概念"></a>3.1 SafeHandle类基本概念</h2><p><strong>SafeHandle类的定义</strong><br>SafeHandle类是一个抽象基类，位于System.Runtime.InteropServices命名空间中；<br>它用于提供一个安全的封装器，用于管理本机资源的句柄（例如文件句柄、内核对象句柄等）；<br>SafeHandle类通过派生具体的子类，提供了一种可靠的方式来管理和释放这些句柄。</p>
+<h1 id="3-SafeHandle-类"><a href="#3-SafeHandle-类" class="headerlink" title="3 SafeHandle 类"></a>3 SafeHandle 类</h1><h2 id="3-1-SafeHandle类基本概念"><a href="#3-1-SafeHandle类基本概念" class="headerlink" title="3.1 SafeHandle类基本概念"></a>3.1 SafeHandle类基本概念</h2><p><strong>SafeHandle类的定义</strong><br>SafeHandle类是一个抽象基类，位于System.Runtime.InteropServices命名空间中；<br>它用于提供一个安全的封装器，用于管理本机资源的句柄（例如文件句柄、内核对象句柄等）；<br>SafeHandle类通过派生具体的子类，提供了一种可靠的方式来管理和释放这些句柄。</p>
 <p><strong>SafeHandle类解决的问题</strong><br>SafeHandle类解决了在C#中使用本机资源句柄时的一些常见问题，例如：</p>
 <ul>
 <li>1.内存泄漏：在编写使用本机资源的代码时，如果不正确地释放句柄，可能会导致内存泄漏；</li>
@@ -633,6 +1067,293 @@
 </ul>
 </li>
 </ul>
+<p>当然可以！以下是每个表的详细概念设计描述：</p>
+<ol>
+<li><p>表1：菜品表（dishes）</p>
+<ul>
+<li><code>dish_id</code>：菜品ID，作为主键，用于唯一标识菜品。</li>
+<li><code>dish_name</code>：菜品名称，用于记录菜品的名字。</li>
+<li><code>price</code>：价格，记录菜品的价格，使用DECIMAL数据类型来存储价格信息。</li>
+<li><code>description</code>：描述，用于记录菜品的描述、备注等详细信息。</li>
+<li><code>created_at</code>：创建时间，记录菜品记录的创建时间。</li>
+<li><code>updated_at</code>：更新时间，记录菜品记录的最后更新时间。</li>
+</ul>
+</li>
+<li><p>表2：顾客表（customers）</p>
+<ul>
+<li><code>customer_id</code>：顾客ID，作为主键，用于唯一标识顾客。</li>
+<li><code>first_name</code>：名字，记录顾客的名字。</li>
+<li><code>last_name</code>：姓氏，记录顾客的姓氏。</li>
+<li><code>email</code>：邮箱，记录顾客的电子邮件地址。</li>
+<li><code>phone_number</code>：联系电话，记录顾客的联系电话号码。</li>
+<li><code>created_at</code>：创建时间，记录顾客记录的创建时间。</li>
+<li><code>updated_at</code>：更新时间，记录顾客记录的最后更新时间。</li>
+</ul>
+</li>
+<li><p>表3：系统管理员表（system_admins）</p>
+<ul>
+<li><code>admin_id</code>：管理员ID，作为主键，用于唯一标识管理员。</li>
+<li><code>username</code>：用户名，记录管理员的用户名。</li>
+<li><code>password</code>：密码，记录管理员的密码。</li>
+<li><code>created_at</code>：创建时间，记录管理员记录的创建时间。</li>
+<li><code>updated_at</code>：更新时间，记录管理员记录的最后更新时间。</li>
+</ul>
+</li>
+</ol>
+<p>以下是示例表 4 和示例表 5 的描述，包括字段名称、数据类型（SQL 变量）和描述：</p>
+<p>以下是每个表的描述，包括字段名称、数据类型（SQL 变量）和描述：<br>菜品表（dishes）：</p>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dishid</td>
+<td>INT</td>
+<td>菜品 ID</td>
+</tr>
+<tr>
+<td>dishname</td>
+<td>VARCHAR (50)</td>
+<td>菜品名称</td>
+</tr>
+<tr>
+<td>price</td>
+<td>DECIMAL  (8,2)</td>
+<td>价格</td>
+</tr>
+<tr>
+<td>description</td>
+<td>VARCHAR  (100)</td>
+<td>菜品描述</td>
+</tr>
+<tr>
+<td>createdat</td>
+<td>DATETIME</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updatedat</td>
+<td>DATETIME</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>顾客表（customers）：</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>customerid</td>
+<td>INT</td>
+<td>顾客 ID</td>
+</tr>
+<tr>
+<td>firstname</td>
+<td>VARCHAR (50)</td>
+<td>名字</td>
+</tr>
+<tr>
+<td>lastname</td>
+<td>VARCHAR  (50)</td>
+<td>姓氏</td>
+</tr>
+<tr>
+<td>email</td>
+<td>VARCHAR  (100)</td>
+<td>邮箱</td>
+</tr>
+<tr>
+<td>phonenumber</td>
+<td>VARCHAR (20)</td>
+<td>联系电话</td>
+</tr>
+<tr>
+<td>createdat</td>
+<td>DATETIME</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updatedat</td>
+<td>DATETIME</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>系统管理员表（system_admins）：</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>adminid</td>
+<td>INT</td>
+<td>管理员 ID</td>
+</tr>
+<tr>
+<td>username</td>
+<td>VARCHAR (50)</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td>password</td>
+<td>VARCHAR  (50)</td>
+<td>密码</td>
+</tr>
+<tr>
+<td>createdat</td>
+<td>DATETIME</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>DATETIME</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>以上是每个表的字段名称、数据类型和描述的 Markdown 格式表格。请注意，其中的数据类型（SQL 变量）仅作为示例，具体的数据类型可能根据系统需求而有所不同。如果还有其他问题，请随时提问！</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>示例表 4：订单表（orders）：</p>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>orderid</td>
+<td>INT</td>
+<td>订单 ID</td>
+</tr>
+<tr>
+<td>customerid</td>
+<td>INT</td>
+<td>顾客 ID</td>
+</tr>
+<tr>
+<td>dishid</td>
+<td>INT</td>
+<td>菜品 ID</td>
+</tr>
+<tr>
+<td>orderdate</td>
+<td>DATE</td>
+<td>订单日期</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>INT</td>
+<td>数量</td>
+</tr>
+<tr>
+<td>totalamount</td>
+<td>DECIMAL (8, 2)</td>
+<td>总金额</td>
+</tr>
+<tr>
+<td>createdat</td>
+<td>TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMP</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>示例表 5：支付日志表（payment_logs）：</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>paymentid</td>
+<td>INT</td>
+<td>支付 ID</td>
+</tr>
+<tr>
+<td>orderid</td>
+<td>INT</td>
+<td>订单 ID</td>
+</tr>
+<tr>
+<td>paymentdate</td>
+<td>DATE</td>
+<td>支付日期</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>DECIMAL (8, 2)</td>
+<td>金额</td>
+</tr>
+<tr>
+<td>createdat</td>
+<td>TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMP</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>以上是示例表 4 和示例表 5 的字段名称、数据类型和描述的 Markdown 格式表格。如果还有其他问题，请随时提问！</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>订单表（orders）的概念设计：</p>
+<ul>
+<li>order_id：订单ID，作为主键，用于唯一标识每个订单。</li>
+<li>customer_id：顾客ID，用于关联订单与顾客，与顾客表（customers）的customer_id列相关联，建立外键关系。</li>
+<li>dish_id：菜品ID，用于关联订单中的菜品，与菜品表（dishes）的dish_id列相关联，建立外键关系。</li>
+<li>order_date：订单日期，表示订单创建的日期。</li>
+<li>quantity：菜品数量，表示订单中每个菜品的数量。</li>
+<li>total_amount：订单总金额，表示订单中所有菜品的总价。</li>
+<li>created_at：创建时间，表示订单的创建时间。</li>
+<li>updated_at：更新时间，表示订单的最近更新时间。</li>
+</ul>
+<p>支付日志表（payment_logs）的概念设计：</p>
+<ul>
+<li>payment_id：支付日志ID，作为主键，用于唯一标识每个支付日志。</li>
+<li>order_id：订单ID，用于关联支付日志与订单，与订单表（orders）的order_id列相关联，建立外键关系。</li>
+<li>payment_date：支付日期，表示支付的日期。</li>
+<li>amount：支付金额，表示实际支付的金额。</li>
+<li>created_at：创建时间，表示支付日志的创建时间。</li>
+<li>updated_at：更新时间，表示支付日志的最近更新时间。</li>
+</ul>
+<p>概念设计描述了表的基本结构、列的含义和它们之间的关系。根据您的需求，这些表的概念设计可以作为起点，您可以根据具体的业务需求在此基础上进行进一步的设计和调整。</p>
 ]]></content>
       <categories>
         <category>CSharp</category>
@@ -642,481 +1363,6 @@
         <tag>垃圾回收</tag>
         <tag>线程</tag>
         <tag>文件系统</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</title>
-    <url>/2023/08/2d466e9f916b.html</url>
-    <content><![CDATA[<ul>
-<li><ol>
-<li>垃圾回收的基本假设</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>垃圾回收算法</li>
-</ol>
-<ul>
-<li>2.1 初始化堆与第0代对象</li>
-<li>2.2 从第0代对象到第1代对象</li>
-<li>2.3 从第1代对象到第2代对象</li>
-</ul>
-</li>
-<li><ol start="3">
-<li>垃圾回收触发条件</li>
-</ol>
-<ul>
-<li>3.1 监视垃圾回收内存使用</li>
-</ul>
-</li>
-<li><ol start="4">
-<li>大对象</li>
-</ol>
-</li>
-<li><ol start="5">
-<li>垃圾回收模式</li>
-</ol>
-</li>
-</ul>
-<span id="more"></span>
-<h1 id="1-垃圾回收的基本假设"><a href="#1-垃圾回收的基本假设" class="headerlink" title="1.垃圾回收的基本假设"></a>1.垃圾回收的基本假设</h1><p>由于CLR的GC是基于代的垃圾回收器算法，因此其对代码做出了以下几点假设：</p>
-<ul>
-<li><ol>
-<li>对象越新，生存期越短；</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>对象越老，生存期越长；</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>回收堆的一部分，速度快于回收整个堆；<br>以上假设对于大部分的现代应用程序都成立，其影响了下面GC算法的实现。</li>
-</ol>
-</li>
-</ul>
-<h1 id="2-垃圾回收算法"><a href="#2-垃圾回收算法" class="headerlink" title="2.垃圾回收算法"></a>2.垃圾回收算法</h1><h2 id="2-1-初始化堆与第0代对象"><a href="#2-1-初始化堆与第0代对象" class="headerlink" title="2.1 初始化堆与第0代对象"></a>2.1 初始化堆与第0代对象</h2><p><strong>实现过程</strong></p>
-<ul>
-<li>预算容量<ul>
-<li>CLR初始化时，为第0代对象选择一个预算容量。</li>
-</ul>
-</li>
-<li>启动垃圾回收<ul>
-<li>如果分配一个新对象造成第0代超过预算，就必须立马就启动一次垃圾回收。</li>
-<li>假设此时初始化时分配的对象刚好用完第0代的空间，那么分配下一个对象就必须启动垃圾回收。</li>
-</ul>
-</li>
-<li>压缩对象<ul>
-<li>垃圾回收器判断对象C和E是垃圾，所以会压缩对象D，使之与对象B相邻。</li>
-</ul>
-</li>
-<li>进入第1代<ul>
-<li>在垃圾回收中存活的对象A，B和D现在成为第1代对象。第1代对象已经经历了垃圾回收器的一次检查；</li>
-<li>此时第0代不包含任何对象，当下一次再分配内存时，新对象会被继续分配到第0代之中；</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>初始化堆：<br><img src="/../../image/Pasted%20image%2020230829101037.png"></p>
-<p>启动垃圾回收+压缩对象+进入第1代：<br><img src="/../../image/Pasted%20image%2020230829101102.png"></p>
-<h2 id="2-2-从第0代对象到第1代对象"><a href="#2-2-从第0代对象到第1代对象" class="headerlink" title="2.2 从第0代对象到第1代对象"></a>2.2 从第0代对象到第1代对象</h2><p><strong>实现过程</strong></p>
-<ul>
-<li>继续分配<ul>
-<li>新分配的对象继续进入第0代；</li>
-<li>部分对象（包含第1代与第0代）在程序运行时，逐渐变得不可达；</li>
-</ul>
-</li>
-<li>启动垃圾回收<ul>
-<li>新对象造成第0代超出预算；</li>
-</ul>
-</li>
-<li>决定GC检查代<ul>
-<li>垃圾回收器必须决定检查哪些代。开始一次垃圾回收时，垃圾回收器除了检查第0代时，还会检查第1代占用了多少内存。</li>
-<li>在下图中，由于第1代占用的内存远少于预算，所以垃圾回收器只检查第0代中的对象；</li>
-</ul>
-</li>
-</ul>
-<p><strong>基本假设与基于代的GC</strong></p>
-<ul>
-<li>假设一：对象越新，生存期越短<ul>
-<li>因为新的对象在第0代中，并且第0代包含更多垃圾的可能性很大，在GC时能回收更多的内存；</li>
-<li>即<strong>对象越新，生存期越短</strong></li>
-<li>并且由于忽略了第1代中的对象，所以加快了垃圾回收速度</li>
-</ul>
-</li>
-<li>假设三：回收堆的一部分，速度快于回收整个堆<ul>
-<li>忽略第1代中的对象能提升垃圾回收器的性能。对性能有更大提振作用的是：现在不必遍历托管堆中的每个对象；</li>
-<li>如果根或对象引用了老一代的某个对象，垃圾回收器就可以忽略老对象内部的所有引用，能在更短的时间内构造好可达对象图；</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>产生新对象，垃圾产生：<br><img src="/../../image/Pasted%20image%2020230829101709.png"></p>
-<p>垃圾回收，对象压缩：<br><img src="/../../image/Pasted%20image%2020230829101728.png"></p>
-<h2 id="2-3-从第1代对象到第2代对象"><a href="#2-3-从第1代对象到第2代对象" class="headerlink" title="2.3 从第1代对象到第2代对象"></a>2.3 从第1代对象到第2代对象</h2><p><strong>实现过程</strong></p>
-<ul>
-<li>全部预算已满<ul>
-<li>假定第1代的增长导致它的所有对象占用了全部预算。此时应用程序继续运行并分配对象，使第0代对象达到它的预算容量；</li>
-<li>此时由于第0代已满，必须进行垃圾回收；</li>
-<li>此次垃圾回收时发现第1代占用太多空间，导致全部预算用完（并且第1代当中已经有很多对象变得不可达）；</li>
-<li>此次垃圾回收需要堆第0代以及第1代对象进行回收；</li>
-</ul>
-</li>
-<li>产生第2代<ul>
-<li>经过垃圾回收，产生第2代对象；第0代继续空余出来；</li>
-<li><strong>只有在第1代超出预算时才会检查第1代中的对象</strong></li>
-</ul>
-</li>
-</ul>
-<p><strong>托管堆与代</strong></p>
-<ul>
-<li>3代托管堆<ul>
-<li>托管堆只支持三代：第0代、第1代和第2代，没有第3代。</li>
-</ul>
-</li>
-<li>代与预算<ul>
-<li>CLR初始化时，会为每一代选择预算；</li>
-</ul>
-</li>
-<li>CLR 的垃圾回收器是自调节的<ul>
-<li>垃圾回收器会在执行垃圾回收的过程中了解应用程序的行为；<ul>
-<li>假定应用程序构造了许多对象，但每个对象用的时间都很短。在这种情况下，对第0代的垃圾回收会回收大量内存；</li>
-<li>事实上，第0代的所有对象都可能被回收；</li>
-</ul>
-</li>
-<li><strong>当GC发现回收0代后存活下来的对象很少，就可能减少第0代的预算，反之增加预算</strong>。这种启发式的算法对第1代以及第2代通用适用；</li>
-<li>每当垃圾回收进行后，会检查存活下来的对象多少，进而增大或减小这些代的预算；</li>
-</ul>
-</li>
-</ul>
-<h1 id="3-垃圾回收触发条件"><a href="#3-垃圾回收触发条件" class="headerlink" title="3.垃圾回收触发条件"></a>3.垃圾回收触发条件</h1><p><strong>垃圾回收可以有以下几种触发条件</strong></p>
-<ol>
-<li>CLR检测垃圾回收超出代的预算；</li>
-<li>代码显示调用System.GC的静态方法Collect；</li>
-<li>Windows报告低内存情况；</li>
-<li>CLR卸载AppDomain；</li>
-<li>CLR关闭；</li>
-</ol>
-<p><strong>强制垃圾回收</strong><br>System.GC类型允许应用程序对垃圾回收器进行一些直接控制。可以用Collect进行强制垃圾回收，但大部分情况下不推荐。</p>
-<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Collect</span>(<span class="params">Int32 generation,GCCollectionMode mode,Boolean blocking</span>)</span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>generation<ul>
-<li>表示回收第几代的垃圾</li>
-</ul>
-</li>
-<li>GCCollectionMode<ul>
-<li>Default：不传递任何符号名称；</li>
-<li>Forced：强制回收指定的代(以及低于它的所有代)；</li>
-<li>Optimized：只有在能释放大量内存或者能减少碎片化的前提下，才执行回收（强制执行Collect时，尽可能使用这种模式）；</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-1-监视垃圾回收内存使用"><a href="#3-1-监视垃圾回收内存使用" class="headerlink" title="3.1 监视垃圾回收内存使用"></a>3.1 监视垃圾回收内存使用</h2><p><strong>监视用方法</strong></p>
-<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function">Int32 <span class="title">CollectionCount</span>(<span class="params">Int32 generation</span>)</span>;</span><br><span class="line"><span class="function">Int64 <span class="title">GetTotalMemory</span>(<span class="params">Boolean forceFullCollection</span>)</span>;</span><br></pre></td></tr></table></figure>
-<h1 id="4-大对象"><a href="#4-大对象" class="headerlink" title="4.大对象"></a>4.大对象</h1><p><strong>什么是大对象</strong><br>在CLR当中，将对象分为大对象和小对象，大于85000字节的对象是大对象；</p>
-<p><strong>大对象特点</strong></p>
-<ul>
-<li>大对象在进程地址空间其他地方分配；</li>
-<li>目前的GC不压缩大对象；</li>
-<li>大对象总是第2代的，不可能为第0、1代；</li>
-</ul>
-<h1 id="5-垃圾回收模式"><a href="#5-垃圾回收模式" class="headerlink" title="5.垃圾回收模式"></a>5.垃圾回收模式</h1><p><strong>两种基本的GC模式</strong></p>
-<ul>
-<li>工作站模式<ul>
-<li>该模式针对客户端应用程序优化GC；</li>
-<li><strong>CLR默认以工作站模式运行</strong></li>
-<li>GC造成的延时很低，应用程序的线程挂起时间短，并且GC假定机器上运行的其他应用程序都不会消耗太多的CPU资源；</li>
-</ul>
-</li>
-<li>服务器模式<ul>
-<li>该模式针对服务器端应用程序优化GC；</li>
-<li>被优化的主要是吞吐量和资源利用。GC假定机器上没有运行其他应用程序，并假定机器的所有CPU都可用来辅助完成GC；</li>
-<li>该模式造成托管堆被拆分成几个区域，每个CPU一个；</li>
-<li>开始垃圾回收时，垃圾回收器在每个CPU上都运行一个特殊线程，每个线程都和其他线程并发回收它自己的区域；</li>
-<li>这个功能要求应用程序在多CPU计算机上运行使线程能真正地同时工作，从而获得性能的提升。</li>
-</ul>
-</li>
-</ul>
-<p><strong>切换工作模式</strong><br>GCLatencyMode定义四种模式：</p>
-<ol>
-<li>Batch：服务器GC模式的默认值，关闭并发GC；</li>
-<li>Interactive：工作站GC模式的默认值，打开并发GC；</li>
-<li>LowLatency：此模式时，GC将全力避免第2代垃圾的回收。更容易抛出内存溢出异常；</li>
-<li>SustainedLowLatency；</li>
-</ol>
-]]></content>
-      <categories>
-        <category>CSharp</category>
-      </categories>
-      <tags>
-        <tag>CSharp</tag>
-        <tag>垃圾回收</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Prompt编写指南</title>
-    <url>/2023/08/081ae7892f5f.html</url>
-    <content><![CDATA[<p>内容大纲：</p>
-<ul>
-<li><ol>
-<li>基础知识</li>
-</ol>
-<ul>
-<li>1.1 两种LLM</li>
-<li>1.2 提问原则</li>
-</ul>
-</li>
-</ul>
-<span id="more"></span>
-<h1 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1.基础知识"></a>1.基础知识</h1><h2 id="1-1-两种LLM"><a href="#1-1-两种LLM" class="headerlink" title="1.1 两种LLM"></a>1.1 两种LLM</h2><p><strong>Base LLM</strong><br>基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。</p>
-<p><strong>Instruction Tuned LLM</strong><br>这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。<br>对于大部分情况下，都为使用ITLLM进行学习以及开发。</p>
-<ul>
-<li>因为ITLLM是基于指令（关键词）进行的矫正、输出，因此当结果不合适时，应对重写选择合适的指令；</li>
-</ul>
-<h2 id="1-2-提问原则"><a href="#1-2-提问原则" class="headerlink" title="1.2 提问原则"></a>1.2 提问原则</h2><h3 id="1-2-1-原则一：编写明确、具体的指令"><a href="#1-2-1-原则一：编写明确、具体的指令" class="headerlink" title="1.2.1 原则一：编写明确、具体的指令"></a>1.2.1 原则一：编写明确、具体的指令</h3><p>明确 不等于 简短，为了明确的指令，可以提供更多的描述，来保证上下文信息的重组；</p>
-<p><strong>具体方法1：使用分隔符清楚的指示输入的不同部分</strong></p>
-<ul>
-<li>分隔符可以是任何清晰的符号：引号、分割号、三引号、XML标记等</li>
-<li>让模型知道：这是一个单独的部分</li>
-</ul>
-<p><strong>具体方法2：要求结构化的输出</strong><br>可以要求HTML、JSON、XML、MD等具体格式的输出；</p>
-<p><strong>具体方法3：要求模型检查条件是否被满足</strong><br>当问题是基于某些假设时，可以先让模型检查这些假设；如果不满足条件，则指示停止尝试完全完成这些任务。</p>
-<p><strong>具体方法4：少量训练提示</strong><br>在前面有成功回答的问题时，可以要求模型，它的任务是以一致的风格回答问题；</p>
-<h3 id="1-2-2-原则二：给模型时间去思考"><a href="#1-2-2-原则二：给模型时间去思考" class="headerlink" title="1.2.2 原则二：给模型时间去思考"></a>1.2.2 原则二：给模型时间去思考</h3><p>模型无法处理过于复杂的问题。因此需要给模型“时间”去思考；</p>
-<p><strong>具体方法1：指定完成任务所需的步骤</strong><br>具体指明回答时的步骤，比如：<br><em>第一步：总结要点<br>第二步：将要点翻译成英文<br>第三步：列出每一个要点的名称以及总结<br>第四步：输出JSON格式的内容</em></p>
-<p><strong>具体方法2：指示模型在做出结论之前，先思考解决方案</strong><br>在模型给出具体的答案之前，先给时间去进行问题的实际思考；<br>比如让模型先用自己的计算方法进行计算，然后再和给出的答案进行比较；<br><em>1、先给出你自己的解决方案</em><br><em>2、再该处你自己的解决方案之前，不要决定解决方案是否正确</em></p>
-<p><strong>具体方法3：面对幻觉时，要求模型先给出引用，再基于引用给出答案</strong><br>由于模型并不知道自己知识的边界，因此可能会编造出看起来十分正确的回答；<br>为了解决这种问题，可以要求：</p>
-<ol>
-<li>模型先给出针对问题的答案的引用；</li>
-<li>要求模型基于这些引用，回答相关问题；</li>
-</ol>
-]]></content>
-      <categories>
-        <category>人工智能</category>
-      </categories>
-      <tags>
-        <tag>AI</tag>
-        <tag>ChatGPT</tag>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>AI时代个人生存指南</title>
-    <url>/2023/08/62011fb26306.html</url>
-    <content><![CDATA[<p>内容大纲：</p>
-<ul>
-<li><ol>
-<li>ChatGPT使用基础</li>
-</ol>
-<ul>
-<li>1.1 ChatGPT的使用之道</li>
-<li>1.2 ChatGPT的使用之术</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>Midjourney使用基础</li>
-</ol>
-<ul>
-<li>2.1 Midjourney的使用之道</li>
-<li>2.2 Midjourney的使用之术<span id="more"></span></li>
-</ul>
-</li>
-</ul>
-<h1 id="1-Chat-GPT使用基础"><a href="#1-Chat-GPT使用基础" class="headerlink" title="1.Chat GPT使用基础"></a>1.Chat GPT使用基础</h1><p><strong>核心思想：拥抱AI，理解AI，成为AI</strong></p>
-<ul>
-<li>拥抱AI<ul>
-<li>率先掌握AI技能，掌握竞争优势；</li>
-</ul>
-</li>
-<li>理解AI<ul>
-<li>知道AI的能力，知道AI能做什么；</li>
-<li>同时反推自己的发展方向：AI不能做什么，就是人未来能做的事情；</li>
-</ul>
-</li>
-<li>成为AI<ul>
-<li>率先向AI学习，让自己的思维和AI同步；</li>
-<li>谁和AI最像，谁就获得了第一批AI带来的绝对优势；</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-1-ChatGPT的使用之道"><a href="#1-1-ChatGPT的使用之道" class="headerlink" title="1.1 ChatGPT的使用之道"></a>1.1 ChatGPT的使用之道</h2><p><strong>前言：关于prompt</strong><br>虽然目前依然需要使用prompt来辅助AI，但未来的AI发展是其越来越理解人类想要什么，而不需要使用prompt来提示；</p>
-<blockquote>
-<p><em>prompt教程推荐：吴恩达的prompt视频（适合程序员）：<br><a href="https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&vd_source=3f70c2a1700b0323e22826080d18a119">https://www.bilibili.com/video/BV1Z14y1Z7LJ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f70c2a1700b0323e22826080d18a119</a></em></p>
-</blockquote>
-<p><strong>概念：ChatGPT能做什么</strong><br>首先思考AI能做什么，在了解AI能做的事情的情况下，再思考应该让它如何做这件事情；<br>AI的画像：<strong>一个学习过网上所有知识，保守而道德的名校大学生。理性思考5秒钟，回答10句话。</strong></p>
-<ul>
-<li>知识：只存留在2021年；</li>
-<li>保守：没有独特思想；</li>
-<li>道德：有人类设定的道德包袱；</li>
-<li>名校本科生水平：不接受过于复杂的问题，可以回答大部分知识问题；</li>
-<li>理性思考5秒钟：不能接受过度复杂问题；</li>
-</ul>
-<p><strong>道一：Chat GPT的道德</strong><br>AI的回答是很道德的回答。当和价值立场或者观点相关的问题时，只会给出不同的立场，而不表达观点；</p>
-<ul>
-<li>甚至会出现<strong>道德在事实之上</strong>；</li>
-<li>为了保证道德的限制，甚至让道德在事实之上；<br><em>或许道德极大的限制了LLM的能力。</em></li>
-</ul>
-<p><strong>道二：Chat GPT的知识</strong><br>一般本科大学生的知识它都会；并且理解能力强。</p>
-<p><strong>道三：Chat GPT的提问</strong><br>对于提问，遵循两个原则：<strong>拆分、直接</strong>；</p>
-<ul>
-<li>直接：<ul>
-<li>提问不能太复杂，但是可以很困难；</li>
-</ul>
-</li>
-<li>拆分：<ul>
-<li>回答内容不能太长，所以一开始就设计多个问题，对各个部分拆分提问；</li>
-<li>对很长内容的提问：先提问大纲内容，再对每个大纲的细分内容进行提问；</li>
-</ul>
-</li>
-</ul>
-<p><strong>道四：面对AI的幻觉</strong><br>AI是语言生成模型，即按照上一句话生成下一句话；</p>
-<ul>
-<li>AI会出现强行回答，AI自己也无法分辨真假；</li>
-<li>如何面对AI回答的幻觉：<ul>
-<li>逻辑推演；</li>
-<li>拥有常识；</li>
-<li>自行验证；</li>
-</ul>
-</li>
-</ul>
-<p><strong>道五：把寻找和使用AI工具，纳入接受新工作的思考流程</strong><br>在接受一份新工作的时候，首先就可以想一想：当中有哪些工作是AI可以做的；并且把它纳入到生成流程当中。</p>
-<p><strong>补充：AI大模型的数据截止到2021年</strong><br>在2021年之前的数据，在LLM当中都有；但2021年之后的数据，AI自己也需要去查（通过OpenAI的服务器去访问这些网站）；</p>
-<p><strong>应用场合</strong></p>
-<ul>
-<li>文字工作<ul>
-<li>套路文章创作，润色，翻译，取标题，举例子</li>
-</ul>
-</li>
-<li>生活助手<ul>
-<li>普通问题咨询</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-ChatGPT的使用之术"><a href="#1-2-ChatGPT的使用之术" class="headerlink" title="1.2 ChatGPT的使用之术"></a>1.2 ChatGPT的使用之术</h2><p><strong>术一：描述好背景信息</strong><br>在向AI咨询一个问题前，一定要先描述好问题的背景信息；<br>如果不清楚描述什么背景，可以<strong>向AI提问，这个问题需要了解什么背景信息</strong>；</p>
-<p><strong>术二：提问计算方法，再得到结果</strong><br>如果直接问AI一个问题的答案，AI可能难以回答。但是如果提问AI一个问题的计算方法，AI的回答正确率更高；</p>
-<ul>
-<li>AI知道计算的方法，但不擅长计算</li>
-<li>对AI进行复杂计算的提问：可以<strong>先问过程，再顺着过程问答案</strong>；</li>
-</ul>
-<p><strong>术三：让他扮演一个角色</strong><br>让他扮演一个角色，作为一个角色来回答你的问题；<br><em>你现是一个作家、你现在是一个软件公司的文案总监、你现在是一个法律顾问</em></p>
-<h1 id="2-Midjourney使用基础"><a href="#2-Midjourney使用基础" class="headerlink" title="2.Midjourney使用基础"></a>2.Midjourney使用基础</h1><h2 id="2-1-Midjourney使用之道"><a href="#2-1-Midjourney使用之道" class="headerlink" title="2.1 Midjourney使用之道"></a>2.1 Midjourney使用之道</h2><p><strong>道一：创作具有艺术感的图像</strong><br>AI绘画可以模仿多种艺术风格，创造性的运用绘画技巧，并进行独特的构图和色彩搭配；</p>
-<p><strong>道二：难以处理复杂边缘、空间关系的物体</strong><br>这与扩散模型的原理有关。现阶段，扩散模型可学习的样本图片的清晰度普遍较低，导致模型在处理某些细节时需要进行“猜测”。因此，我们常常发现AI绘制的手指存在错误，其他具有复杂边缘的物体也存在同样的问题。另外，扩散模型并非从空间角度理解图像，因此在处理物体间复杂的空间关系时，AI可能会遇到困难</p>
-<p><strong>道三：难以同时绘制多个对象，并且每个对象有不同的属性</strong><br>AI可能无法准确理解多个对象和这些对象之间的属性关系，或者可能会忽略掉一些关键属性。 </p>
-<h2 id="2-2-Midjourney使用之术"><a href="#2-2-Midjourney使用之术" class="headerlink" title="2.2 Midjourney使用之术"></a>2.2 Midjourney使用之术</h2><p><strong>术一：Prompt能力</strong><br>使用明确且具体的语言，来描述任务；</p>
-<p><strong>术二：用尽可能清晰的语言</strong><br>Midjourney的语言文字理解能力不如Chat GPT；</p>
-<p><strong>术三：工具本身的熟练程度</strong></p>
-<ul>
-<li>设置宽高比；</li>
-<li>混乱程度；</li>
-<li>使用种子；</li>
-</ul>
-]]></content>
-      <categories>
-        <category>人工智能</category>
-      </categories>
-      <tags>
-        <tag>AI</tag>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【商业系列】商业计划书大纲与内容</title>
-    <url>/2023/08/efa8d1f054ea.html</url>
-    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
-<ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析</li>
-<li>5、 商业模式</li>
-<li>6、 战略规划<span id="more"></span></li>
-</ul>
-<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容<ul>
-<li>1、项目介绍</li>
-<li>2、核心优势</li>
-</ul>
-</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析<ul>
-<li>1、 市场分析</li>
-<li>2、 竞品分析</li>
-</ul>
-</li>
-<li>5、 商业模式<ul>
-<li>1、 商业模式介绍</li>
-<li>2、 相关数据</li>
-</ul>
-</li>
-<li>6、 战略规划<ul>
-<li>1、 战略目标</li>
-<li>2、 实现路径</li>
-</ul>
-</li>
-</ul>
-<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
-<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
-<ol>
-<li>核心业务内容</li>
-<li>核心优势</li>
-</ol>
-<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
-<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
-<ul>
-<li>分析方法<ul>
-<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
-<li><ol>
-<li>增长型项目（还没开始或刚开始）</li>
-</ol>
-<ul>
-<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>运营型项目（已经开始）</li>
-</ol>
-<ul>
-<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
-<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
-<ul>
-<li>流量矩阵：<ul>
-<li>自媒体流量（自带宣传流量）</li>
-<li>开发团队（丰富开发经验）</li>
-<li>项目案例（Unity3D）</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
-<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
-<ul>
-<li>真实的数据，但是是部分的真实</li>
-</ul>
-<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
-<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
-<ol>
-<li>项目如何盈利？</li>
-<li>项目的流量模式？</li>
-<li>获客转化的路径？</li>
-<li>是否具有可持续性？</li>
-<li>增长的空间以及可能？</li>
-</ol>
-<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
-<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
-<ol>
-<li>确定战略目标，展现当前项目的发展前景</li>
-<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
-</ol>
-]]></content>
-      <categories>
-        <category>商业</category>
-      </categories>
-      <tags>
-        <tag>商业</tag>
-        <tag>创业</tag>
       </tags>
   </entry>
   <entry>
@@ -1226,71 +1472,106 @@
       </tags>
   </entry>
   <entry>
-    <title>Lecture 12：进程的地址空间</title>
-    <url>/2023/08/d03400aa93d7.html</url>
-    <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
-<span id="more"></span>
-<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
-<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
-
-<p>查看某一个进程地址空间代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
-<p>当中的37491为进程的id。</p>
-<p><strong>查看结果：</strong><br><img src="/../../image/Pasted%20image%2020230829191538.png"></p>
-<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong></p>
+    <title>【商业系列】商业计划书大纲与内容</title>
+    <url>/2023/08/efa8d1f054ea.html</url>
+    <content><![CDATA[<p><strong>商业计划书大纲</strong></p>
 <ul>
-<li>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。</li>
-<li>proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</li>
+<li>1、 团队简介</li>
+<li>2、 项目内容</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析</li>
+<li>5、 商业模式</li>
+<li>6、 战略规划<span id="more"></span></li>
 </ul>
-<p>**相关手册：<code>mam 5 proc</code></p>
-<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
-
-<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br><img src="/../../image/Pasted%20image%2020230829191738.png"><br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
-<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
-<hr>
-<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
-<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
-<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
-<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
-<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
-<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
-<p><strong>定义：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
-<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
-<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br><img src="/../../image/Pasted%20image%2020230829191917.png"></p>
-<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
-<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
-<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
+<h1 id="1-内容大纲"><a href="#1-内容大纲" class="headerlink" title="1.内容大纲"></a>1.内容大纲</h1><ul>
+<li>1、 团队简介</li>
+<li>2、 项目内容<ul>
+<li>1、项目介绍</li>
+<li>2、核心优势</li>
+</ul>
+</li>
+<li>3、 团队组成</li>
+<li>4、 市场规模与分析<ul>
+<li>1、 市场分析</li>
+<li>2、 竞品分析</li>
+</ul>
+</li>
+<li>5、 商业模式<ul>
+<li>1、 商业模式介绍</li>
+<li>2、 相关数据</li>
+</ul>
+</li>
+<li>6、 战略规划<ul>
+<li>1、 战略目标</li>
+<li>2、 实现路径</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-各部分编写思路"><a href="#2-各部分编写思路" class="headerlink" title="2.各部分编写思路"></a>2.各部分编写思路</h1><h2 id="2-1-团队简介"><a href="#2-1-团队简介" class="headerlink" title="2.1 团队简介"></a>2.1 团队简介</h2><p><strong>内容构成</strong>：一句话介绍 + 50~100字团队简介</p>
+<p><strong>一句话介绍</strong><br>内容尽可能简短、清晰，直接了当的了解当前团队的：</p>
+<ol>
+<li>核心业务内容</li>
+<li>核心优势</li>
+</ol>
+<p><strong>团队简介</strong><br>简要介绍团队业务以及数据规模等内容；</p>
+<h2 id="2-2-项目内容"><a href="#2-2-项目内容" class="headerlink" title="2.2 项目内容"></a>2.2 项目内容</h2><h3 id="2-2-1-项目介绍"><a href="#2-2-1-项目介绍" class="headerlink" title="2.2.1 项目介绍"></a>2.2.1 项目介绍</h3><p><strong>编写内容核心</strong><br>把此业务最吸引人、最有发展潜力的部分展现出来；</p>
 <ul>
-<li>第一步：获得游戏进程的PID（进程号）</li>
-<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
-<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
-<li>第四步：遍历此段内存，找到关键词数据</li>
-<li>第五步：修改被关键字标记的内存</li>
+<li>分析方法<ul>
+<li>简介：先确定此项目属于哪一种类型，然后再根据此类型的核心点，编写文字内容</li>
+<li><ol>
+<li>增长型项目（还没开始或刚开始）</li>
+</ol>
+<ul>
+<li>侧重增长，大量数据放在此项目板块的<strong>发展潜力以及我们的优势</strong>上面</li>
 </ul>
-<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
-<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
-<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
-<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
-<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
+</li>
+<li><ol start="2">
+<li>运营型项目（已经开始）</li>
+</ol>
+<ul>
+<li>侧重盈利，大量文字放在介绍当前流量的<strong>转化率以及盈利能力</strong>上</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>技术型项目给出吸引人的文字图片内容，吸引浏览者观看；</p>
+<h3 id="2-2-2-核心优势"><a href="#2-2-2-核心优势" class="headerlink" title="2.2.2 核心优势"></a>2.2.2 核心优势</h3><p><strong>分析方法</strong><br>分析目前团队的开发能力当中，和竞品相比最具有优势的部分；</p>
+<ul>
+<li>流量矩阵：<ul>
+<li>自媒体流量（自带宣传流量）</li>
+<li>开发团队（丰富开发经验）</li>
+<li>项目案例（Unity3D）</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-团队组成"><a href="#2-3-团队组成" class="headerlink" title="2.3 团队组成"></a>2.3 团队组成</h2><p><strong>分析方法</strong><br>根据核心优势部分分析的结果，部分的去过滤团队介绍部分所需要呈现的内容；<br>只呈现优势的一面，劣势或不加分的一面要慎重描写</p>
+<h2 id="2-4-市场规模与分析"><a href="#2-4-市场规模与分析" class="headerlink" title="2.4 市场规模与分析"></a>2.4 市场规模与分析</h2><h3 id="2-4-1-市场分析"><a href="#2-4-1-市场分析" class="headerlink" title="2.4.1 市场分析"></a>2.4.1 市场分析</h3><p><strong>数据采集</strong><br>要有明确、清晰的数据来源<br>在此数据来源之上，筛选出对项目有利的信息</p>
+<ul>
+<li>真实的数据，但是是部分的真实</li>
+</ul>
+<h3 id="2-4-2-竞品分析"><a href="#2-4-2-竞品分析" class="headerlink" title="2.4.2 竞品分析"></a>2.4.2 竞品分析</h3><p><strong>竞品确定</strong><br>竞品不一定得是完全相同的行业，重点是商业的逻辑；<br>确定一个牛逼的竞品，即展示当前项目天花板很高，然后再分析当前项目所处市场以及再哪些地方超越了竞品。</p>
+<h2 id="2-5-商业模式"><a href="#2-5-商业模式" class="headerlink" title="2.5 商业模式"></a>2.5 商业模式</h2><p><strong>什么是商业模式</strong></p>
+<ol>
+<li>项目如何盈利？</li>
+<li>项目的流量模式？</li>
+<li>获客转化的路径？</li>
+<li>是否具有可持续性？</li>
+<li>增长的空间以及可能？</li>
+</ol>
+<p><strong>内容编写</strong><br>基于业务本身的内容，对模式进行介绍；</p>
+<h2 id="2-6-战略规划"><a href="#2-6-战略规划" class="headerlink" title="2.6 战略规划"></a>2.6 战略规划</h2><p><strong>内容</strong></p>
+<ol>
+<li>确定战略目标，展现当前项目的发展前景</li>
+<li>确定项目发展的实现路径，并且确定不同情况下的风险预案</li>
+</ol>
 ]]></content>
       <categories>
-        <category>操作系统</category>
+        <category>商业</category>
       </categories>
       <tags>
-        <tag>进程</tag>
-        <tag>操作系统</tag>
-        <tag>Fork</tag>
-        <tag>Mmap</tag>
+        <tag>商业</tag>
+        <tag>创业</tag>
       </tags>
   </entry>
   <entry>
@@ -1417,6 +1698,74 @@
       </tags>
   </entry>
   <entry>
+    <title>Lecture 12：进程的地址空间</title>
+    <url>/2023/08/d03400aa93d7.html</url>
+    <content><![CDATA[<p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
+<span id="more"></span>
+<h2 id="12-1-动-静态链接程序地址空间"><a href="#12-1-动-静态链接程序地址空间" class="headerlink" title="12.1 动&#x2F;静态链接程序地址空间"></a>12.1 动&#x2F;静态链接程序地址空间</h2><p>当指针指向一个不合法的位置时会直接得到一个错误，如果往一个合法的地址无权限的写入，也会获得一个访问错误。但就指针本身而言，其可以指向任何地方。如果想要真正知道哪些地方是可读的，即当前程序的地址空间，如何实现?</p>
+<h3 id="12-1-1-最小C程序的地址空间"><a href="#12-1-1-最小C程序的地址空间" class="headerlink" title="12.1.1 最小C程序的地址空间"></a>12.1.1 最小C程序的地址空间</h3><p>在gdb下获得进程的进程号：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors</span><br></pre></td></tr></table></figure>
+
+<p>查看某一个进程地址空间代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pmap 37491</span><br></pre></td></tr></table></figure>
+<p>当中的37491为进程的id。</p>
+<p><strong>查看结果：</strong><br><img src="/../../image/Pasted%20image%2020230829191538.png"></p>
+<p><strong>可以使用strace指令来获取pmap指令的系统调用：</strong></p>
+<ul>
+<li>除了可以用pmap之外，还可以直接在文件系统的proc中查看进程内存映射的关键信息。</li>
+<li>proc当中有进程的编号，命令行从属的父子关系，还有当前进程内存映射的关键信息</li>
+</ul>
+<p>**相关手册：<code>mam 5 proc</code></p>
+<h4 id="12-1-1-1-将strace信息以Vim打开"><a href="#12-1-1-1-将strace信息以Vim打开" class="headerlink" title="12.1.1.1 将strace信息以Vim打开"></a>12.1.1.1 将strace信息以Vim打开</h4><p>代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -A</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-1-2-静态链接程序的地址空间"><a href="#12-1-2-静态链接程序的地址空间" class="headerlink" title="12.1.2 静态链接程序的地址空间"></a>12.1.2 静态链接程序的地址空间</h3><p>以下是在proc当中读取的地址空间信息：<br><img src="/../../image/Pasted%20image%2020230829191738.png"><br>信息相比于前面最小的C程序要更多；<br>第一行：ELF文件头<br>第二行：因为有x表示可执行，所以为可执行代码<br>第三行：因为为只可读的数据，所以应该为字符串常量<br>第五行：可读可写，堆区</p>
+<h3 id="12-1-3-动态链接程序的地址空间"><a href="#12-1-3-动态链接程序的地址空间" class="headerlink" title="12.1.3 动态链接程序的地址空间"></a>12.1.3 动态链接程序的地址空间</h3><p><strong>变化：</strong><br>相比于静态链接，动态链接程序的地址空间明显变得更复杂。并且其进程空间开始的地址相比于之前发生了较大的变化，因为OS进程地址随机化的机制，每一次动态链接程序的执行，其首地址空间位置都可能发生变化。<br>除此之外，还多了更多的映射区域。<br>以及一些没有文件的（但是可读可写）内存？是不是未初始化数据？如果在C程序当中分配一大段数组内存，此段空间将会承载此内容。<br><strong>通过改变程序的行为，观察程序的地址空间并且验证自己的假设。</strong></p>
+<hr>
+<h2 id="12-2-进程的地址空间管理"><a href="#12-2-进程的地址空间管理" class="headerlink" title="12.2 进程的地址空间管理"></a>12.2 进程的地址空间管理</h2><h3 id="12-2-1-VDSO、系统调用与非陷入式调用"><a href="#12-2-1-VDSO、系统调用与非陷入式调用" class="headerlink" title="12.2.1 VDSO、系统调用与非陷入式调用"></a>12.2.1 VDSO、系统调用与非陷入式调用</h3><p>操作系统上的程序是状态机，在程序当中有一类特殊的程序为SYSCALL系统调用，此指令会进入到操作系统内核执行，此时SYSCALL会因为转台的切换，带来更大的开销。<br>如何实现不进入OS内核的系统调用？</p>
+<p>进程与时钟：<br>OS当中的进程是不知道时钟的，时钟本身是由OS维护的，这个时间原则上只有OS知道</p>
+<p>程序中的time函数：<br>time函数没有进入libc，而是停在了vdso，把当前的地址相减寻址，得到一个不可访问的其他进程的地址。在执行了time函数之后，获得了一个极大的数值。<br>time函数可以在不进入操作系统内核的前提下，完成一个系统调用。因为在一片地址空间中，OS单独设置一块vvar，使得不进入OS的系统调用可以实现。因为这部分已经由OS提供了。</p>
+<h3 id="12-2-2-系统调用的实现"><a href="#12-2-2-系统调用的实现" class="headerlink" title="12.2.2 系统调用的实现"></a>12.2.2 系统调用的实现</h3><p>一般教科书任何，需要通过中断来实现系统调用。但SYSCALL不需要int指令，就可以实现地址调用，甚至有更多</p>
+<h3 id="12-2-3-mmap"><a href="#12-2-3-mmap" class="headerlink" title="12.2.3 mmap()"></a>12.2.3 mmap()</h3><p>操作系统需要提供一个机制来帮助我们管理地址空间;<br>OS需要提供相关指令，使得在程序执行的时候，在当前OS当中已有的内存当中找到一片新的内存，为其改变程序的地址空间，分配一片新的空间;<br>这个指令就是mmap；</p>
+<p><strong>概念：</strong><br>mmap可以帮助程序在其状态当中，映射新的地址空间或者把已有的地址空间分配出去。在一个地址（addr）上面，映射一片长度为length的空间，向其传递访问的权限（prot），地址映射的方式（flags）。</p>
+<p><strong>定义：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr,<span class="type">size_t</span> length,<span class="type">int</span> prot,<span class="type">int</span> flags,<span class="type">int</span> fd,<span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>mmap与程序加载器</strong><br>由于在Linux的设计哲学当中，一切都是文件，因此mmap当中有一个fd，有一个offset，就可以直接把一个非常大的文件直接映射到地址空间当中，然后再后背访问多少再进行加载多少。</p>
+<h3 id="12-2-4-程序基于mmap的加载行为"><a href="#12-2-4-程序基于mmap的加载行为" class="headerlink" title="12.2.4 程序基于mmap的加载行为"></a>12.2.4 程序基于mmap的加载行为</h3><p>当程序想要加载某些文件，比如libc库时，此时只需要读取程序的ELF头文件（当中包含了这些文件的地址，要加载到什么位置），得到需要映射的文件信息，然后使用mmap将这些信息映射到当前程序的地址空间，即可完成加载。</p>
+<h3 id="12-2-5-应用：使用mmap申请大内存"><a href="#12-2-5-应用：使用mmap申请大内存" class="headerlink" title="12.2.5 应用：使用mmap申请大内存"></a>12.2.5 应用：使用mmap申请大内存</h3><p>在申请太多内存的时候，OS会直接拒绝此行为。<br>代码：<br><img src="/../../image/Pasted%20image%2020230829191917.png"></p>
+<p><strong>代码解析：</strong><br>申请了3GB大小的内存，fd描述为1，读写它，一瞬间就完成。<br>使用strace观察行为可以知道，其只是使用mmap标记上了这段内存，在实际使用到的时候再进行加载。</p>
+<h2 id="12-3-地址空间的隔离"><a href="#12-3-地址空间的隔离" class="headerlink" title="12.3 地址空间的隔离"></a>12.3 地址空间的隔离</h2><p>每一个指针只能访问当前进程的地址空间，mmap就是在当前程序的地址空间扩充一块，即mmap帮助了地址空间隔离的机制。</p>
+<h3 id="12-3-1-老游戏修改器实现"><a href="#12-3-1-老游戏修改器实现" class="headerlink" title="12.3.1 老游戏修改器实现"></a>12.3.1 老游戏修改器实现</h3><p>命令与政府修改器实现的大致逻辑：</p>
+<ul>
+<li>第一步：获得游戏进程的PID（进程号）</li>
+<li>第二步：由于Linux下的proc机制，其将程序的整个地址空间作为文件全部暴露出来了。可以将其作为文件使用<code>popen()</code>打开再扫过每一段内存。</li>
+<li>第三步：使用解析代码<code>fscanf()</code>，找到每一段可读的内存</li>
+<li>第四步：遍历此段内存，找到关键词数据</li>
+<li>第五步：修改被关键字标记的内存</li>
+</ul>
+<h3 id="12-3-2-按键精灵-变速齿轮"><a href="#12-3-2-按键精灵-变速齿轮" class="headerlink" title="12.3.2 按键精灵&amp;变速齿轮"></a>12.3.2 按键精灵&amp;变速齿轮</h3><p>制作假的驱动，利用操作系统API模拟按下。<br>把游戏放在虚拟机上执行，可以任意调整时钟周期。</p>
+<h3 id="12-3-3-代码注入"><a href="#12-3-3-代码注入" class="headerlink" title="12.3.3 代码注入"></a>12.3.3 代码注入</h3><p>在OS下，既可以改内存，也可以改代码。</p>
+<h4 id="12-3-3-1-代码热更新原理"><a href="#12-3-3-1-代码热更新原理" class="headerlink" title="12.3.3.1 代码热更新原理"></a>12.3.3.1 代码热更新原理</h4><p>当程序当中有以下代码的时候，两次函数会输出一样的结果。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is old function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">foo_new</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;This is new function&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	foo();</span><br><span class="line">	foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果代码执行热更新后，可以在运行时动态更改当前函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">DSU</span><span class="params">(<span class="type">void</span>* old , <span class="type">void</span>* new)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> ROUNDDOWN(ptr) ((void*)(((uintptr_t)ptr) &amp;~0xfff))</span></span><br><span class="line">	<span class="type">size_t</span> pg_size = ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>![[Pasted image 20230227204316.png]]<br>在原本的代码区中，将部分需要更新的代码更改为其他代码。<br>获得原本的代码地址，使用mprotect()函数将这片地址只读属性改成读写属性，然后再把新的地址（新函数的地址）给填写进去。</p>
+<h4 id="12-3-3-2-基于人工智能的游戏外挂"><a href="#12-3-3-2-基于人工智能的游戏外挂" class="headerlink" title="12.3.3.2 基于人工智能的游戏外挂"></a>12.3.3.2 基于人工智能的游戏外挂</h4><p>使用深度学习算法，分析画面当中出现的特征画面，然后再抓取游戏引擎向底层OpenGL发出的渲染指令，分析其指令和画面的特征关系，从而抓取到其对应的代码，然后对其进行代码注入。</p>
+<h3 id="12-3-4-地址空间Hack的攻与防"><a href="#12-3-4-地址空间Hack的攻与防" class="headerlink" title="12.3.4 地址空间Hack的攻与防"></a>12.3.4 地址空间Hack的攻与防</h3><p>概念一：保证控制&#x2F;数据 流的完整性；对独立的进程以及驱动进行完整性检验，保证部分区域的数据无法被读取，当用户尝试读取这部分数据时直接将其拉人黑名单。<br>概念二：AI监控；使用深度学习对用户数据信息进行建模，当发现某些玩家的数据分布和其他玩家的数据分配产生较大不同时，再来逐帧分析其运行<br>概念三：沙盒渲染；在计算机当中创建一片无法被读取的沙盒，将部分关键的运算放入沙盒当中进行计算，只有在计算结束之后才会返回数据；“计算不再信任操作系统”</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>进程</tag>
+        <tag>操作系统</tag>
+        <tag>Fork</tag>
+        <tag>Mmap</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Lecture 13：系统调用与Shell</title>
     <url>/2023/08/3dbfbd52ee49.html</url>
     <content><![CDATA[<h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br><span id="more"></span><br>&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？</h2><h2 id="13-1-Shell简介"><a href="#13-1-Shell简介" class="headerlink" title="13.1 Shell简介"></a>13.1 Shell简介</h2><h3 id="13-1-1-用户角度的Shell"><a href="#13-1-1-用户角度的Shell" class="headerlink" title="13.1.1 用户角度的Shell"></a>13.1.1 用户角度的Shell</h3><p>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell</p>
@@ -1489,167 +1838,6 @@
       <tags>
         <tag>操作系统</tag>
         <tag>Shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 15：Fork的应用</title>
-    <url>/2023/08/3d8a9bfbeeea.html</url>
-    <content><![CDATA[<p>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象</p>
-<span id="more"></span>
-<blockquote>
-<p>前言：从这节课开始，会逐渐进入到如何实现OS相关的内容，即往OS的内核来走</p>
-</blockquote>
-<h2 id="15-1-fork-行为的补充解释"><a href="#15-1-fork-行为的补充解释" class="headerlink" title="15.1 fork()行为的补充解释"></a>15.1 fork()行为的补充解释</h2><h3 id="15-1-1-操作系统的状态机"><a href="#15-1-1-操作系统的状态机" class="headerlink" title="15.1.1  操作系统的状态机"></a>15.1.1  操作系统的状态机</h3><p><strong>概念复习</strong><br>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象（行为类似于指针共享）<br>Execve：进程执行了Execve，状态机就会被重置，但是在重置之后，OS当中的对象还在，因此即使状态被重置，这个指向依然存在，比如其打开的文件描述符依然存在。</p>
-<h3 id="15-1-2-文件描述符"><a href="#15-1-2-文件描述符" class="headerlink" title="15.1.2 文件描述符"></a>15.1.2 文件描述符</h3><p><strong>概念</strong><br><strong>文件描述符就是一个指向操作系统内对象的指针</strong>，只能通过OS运行的方式去访问这些对象。但是对于一个文本对象，write一个对象的时候，应该是具有一个文件内的偏移量，进而可以使得两个write写入的内容不是被覆盖，而是都可以被写入。</p>
-<p>文件描述符可以通过Open来得到，比如：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">open(<span class="string">&quot;a.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
-<p>此时会获得一个文件描述符，并且指向这个 a.txt 对象<br>在使用Open打开文件描述符时，可以使用一个O_APPEND的方式写入。不管文件的数量多少，都会以file offset的方式在文件的末尾进行追加。</p>
-<p><strong>文件描述符的复制</strong><br>代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;a.txt&quot;</span>,O_WROLY | O_CREAT);<span class="comment">//用creat打开，如果不存在就被创造</span></span><br><span class="line">assert(fd &gt; <span class="number">0</span>);</span><br><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line">assert(pid&gt;<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(pid == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;World&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>问题一：文件偏移量的管理<br>以上代码的结果，是Hello被World覆盖掉，还是两者都被输出？即当两个相同状态的进程进行write时，其两者用于相同的文件描述符的前提下，两者是共享偏移量还是其他行为？ </p>
-</li>
-<li><p>问题二：dup复制文件描述符<br><strong>什么是dup</strong><br>假设原本存在一个fd为3的文件描述符，指向了OS中的一个对象。当使用了dup之后，此时会再出现一个文件描述符，其fd为4，同样也指向了此OS中的一个对象。<br>但是如果带有文件偏移量，那此时究竟应该是共享offset，还是独立offset？</p>
-</li>
-</ul>
-<h2 id="15-2-fork的实现"><a href="#15-2-fork的实现" class="headerlink" title="15.2 fork的实现"></a>15.2 fork的实现</h2><h3 id="15-2-1-fork设计的问题"><a href="#15-2-1-fork设计的问题" class="headerlink" title="15.2.1 fork设计的问题"></a>15.2.1 fork设计的问题</h3><p>创建副本这件事情的代价很大，进程可能有很大的地址空间，如果此时对一个非常大的地址空间fork一份，并且在这之后立马就execve，此时就会产生十分大的性能浪费，此时OS会怎么应对这种状况？</p>
-<p><strong>OS中的进程地址空间设计</strong><br>每一个进程会有一个地址空间，并且在地址空间当中会进行分页（MMU），而进程其本身拥有的只是一个映射表。映射表提供了相关的信息，表示不同的内容会映射到分页之后的哪个页面，所以概念上进程拥有这些页面，其实实际上依然是由OS控制着所有这些内容。</p>
-<h3 id="15-2-2-共享只读设计"><a href="#15-2-2-共享只读设计" class="headerlink" title="15.2.2 共享只读设计"></a>15.2.2 共享只读设计</h3><p>当一个进程拥有两个页面时，内容如下：<br><img src="/../../image/Pasted%20image%2020230829192242.png"><br>当指向了一个fork之后，其状态如下;<br><img src="/../../image/Pasted%20image%2020230829192306.png"><br>此时这两个进程都同时指向了一个可写的页面，因此Old进程可以写，New进程也可以写。但是此时OS会偷偷的抹掉这个可写的权限，进而可能发生缺页中断（段错误）。但如果OS发现，这个缺页中断只是被偷偷抹掉的，此时OS会将此页引用计数减1，然后将其拷贝一份到另外的可写权限的空间，从而把读写的权限重新还给NEW进程。<br><img src="/../../image/Pasted%20image%2020230829192322.png"><br><strong>优点：</strong><br>这种设计Copy on Write的设计，当遇到非常大的地址空间中需要映射的内容时，有时可以不需要为其创建新的内容，只有在使用时才产生这种Copy On Write。<br><strong>例子：libc</strong><br>整个OS里面，只有一份libc的副本，OS当中有很多的进程，此时这些不同的进程都是指向同一个libc。</p>
-<p><strong>代码证明Copy On Write</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NPROC 1000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MB 128</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SIZE (MB * (1 &lt;&lt; 20))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> xstr(s) str(s)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> str(s) #s</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">char</span> *data = <span class="built_in">malloc</span>(SIZE); <span class="comment">// 128MB shared memory</span></span><br><span class="line">  <span class="built_in">memset</span>(data, <span class="string">&#x27;_&#x27;</span>, SIZE);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; NPROC - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// NPROC processes go here</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">asm</span> <span class="title function_">volatile</span><span class="params">(<span class="string">&quot;.fill 1048576 * &quot;</span> xstr(MB) <span class="string">&quot;, 1, 0x90&quot;</span>)</span>; <span class="comment">// 128MB shared code</span></span><br><span class="line"></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> idx = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span> fd = open(<span class="string">&quot;/dev/urandom&quot;</span>, O_RDONLY); assert(fd &gt; <span class="number">0</span>);</span><br><span class="line">  read(fd, &amp;idx, <span class="keyword">sizeof</span>(idx));</span><br><span class="line">  close(fd);</span><br><span class="line">  idx %= <span class="number">1048576</span> * MB;</span><br><span class="line"></span><br><span class="line">  data[idx] = <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;pid = %d, write data[%u]\n&quot;</span>, getpid(), idx);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    sleep(<span class="number">1</span>); <span class="comment">// not terminate</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行了这个代码之后，在OS当中有1000个进程在进行，并且上述代码在SO中，每个都要求分配了128MB的内存。但是OS并没有Crash掉，实际只是用了1GB左右的内存。这就是Copy On Write的实现。</p>
-<p><strong>关于进程内存占有量</strong><br>由此推导出一个结论：证明一个进程用的多少的内存就是一个伪命题。如果简单的将一个进程映射的内存之和相加作为其内存大小，mmap可以映射一大片的内存（比如20T内存），但是这些内存是按需使用的，其只是做了一个映射，然后使用时只会用多少分配多少，并且还有很多内存是共享的（Libc）。</p>
-<h2 id="15-3-状态机的复制"><a href="#15-3-状态机的复制" class="headerlink" title="15.3 状态机的复制"></a>15.3 状态机的复制</h2><h3 id="15-3-1-状态机视角"><a href="#15-3-1-状态机视角" class="headerlink" title="15.3.1 状态机视角"></a>15.3.1 状态机视角</h3><p><strong>概念：平行宇宙与fork</strong><br>物理世界上不同的粒子状态，可以定义出不同时间下的状态。如果此时要进行时间穿越，此时行为就是将未来的部分状态带到过去，并且从此状态开始进行分叉，而这个分叉就是fork()。<br>OS运行开发者使用fork()实现平行宇宙。</p>
-<h3 id="15-3-2-fork与并行化"><a href="#15-3-2-fork与并行化" class="headerlink" title="15.3.2 fork与并行化"></a>15.3.2 fork与并行化</h3><p><strong>例子1：码交换搜索问题</strong><br>和不同的部分进行交换，就会进入不同的状态。可以使用状态机的视角，将所有的状态进行探索。<br>![[Lecture 15：Fork的应用 2023-03-16 16.57.00.excalidraw]]</p>
-<p><strong>例子2：基于fork的dfs</strong><br>原本的dfs会使用深度遍历进行探索，然后使用回溯法回到原本的状态，回溯的过程十分耗时。而如果基于fork，使用状态机的视角来进行迁移，则可以只会跳回到初始状态（通过使用exit()来实现）。<br>其启示是：可以使用fork实现dfs；使用fork来进入不同的状态，并且联合OS来帮助进行管理，此时进入新的状态后原本的平行宇宙也可以被消除掉，每探索完一个平行宇宙都将其删除掉。<br>并且，还可以创造多个平行宇宙，并行的得到所有状态，然后程序结束。</p>
-<h3 id="15-3-3-fork与跳过初始化"><a href="#15-3-3-fork与跳过初始化" class="headerlink" title="15.3.3 fork与跳过初始化"></a>15.3.3 fork与跳过初始化</h3><p><strong>问题</strong><br>假设你的NEMU需要启动很多份elf头文件，而如果NEMU进行初始化要花很多的时间（比如花费大量时间来初始化一片128MB的内存），此时如果为每个elf来进行启动就会产生大量消耗，此时可以按照以下行为分析：<br>![[Lecture 15：Fork的应用 2023-03-16 17.29.53.excalidraw]]<br><strong>处理方法</strong><br>此时可以只执行一次nemu_init()的内容，之后只需要每进来一个需要启动的内容，就fork一份，然后找到没有处理的文件，将其进行处理，就可以完成操作。并且因为只进行一次init，因此可以加速程序执行第一个文件的速度。</p>
-<p><strong>跳过初始化的实际应用</strong><br>应用：安卓应用的秒启动</p>
-<ul>
-<li>简介：每一个安卓的程序都会通过以上的跳过初始化的方式进行启动。</li>
-<li>原理：安卓应用是一个Java程序，而Java是运行在JVM虚拟机上面，对于安卓而言是一个Android Runtime（自己实现的虚拟机）。而安卓和Java都会有一个十分大的标准库，如果每一个程序是采取冷启动，即从0开始执行整个Java程序，不可能几秒内完成加载，此时就是使用了跳过初始化的思想，所有的Java程序只进行初始化一次。</li>
-<li>Zygote Process：会有一个所有Android程序的父进程，名称为Zygote Process。其会完成所有必要的安卓程序的必要的类的加载，此时如果开始了一个新的程序，只要在init之后的状态基础之上fork一份即可完成创建。</li>
-<li>一次加载，全员使用<br>应用：Chrome浏览器</li>
-<li>简介：Chrome可以成功的原因之一，就是其速度非常的快。</li>
-<li>原理：Chrome当中，每一个网页就是一个进程，使用跳过初始化的思想来进行网页的快速加载</li>
-</ul>
-<p><strong>核心：只要是从一个状态出发，需要很多个副本的，都可以使用fork。</strong></p>
-<h3 id="15-3-4-fork与备份"><a href="#15-3-4-fork与备份" class="headerlink" title="15.3.4 fork与备份"></a>15.3.4 fork与备份</h3><p><strong>简介：</strong><br>要是我们可以对有Bug的程序总是能在任何状态“试一试”，然后试错了还能回到过去，就好了。<br><strong>概念：</strong><br>当过去某个节点发生了一个Bug，我们能否回到过去，在产生一次这个Bug?特别是出现并发Bug，此类Bug或许十分难以重现，拥有此存档机制就可以去复现过去状态下的Bug。<br>在任何状态下，可以使用fork()开启另一条平行宇宙，然后在此基础上进行存档。然后如果顺着正常的路径进行执行，但是之后在这主分支之上发生了Crash，此时就可以拿回之前的存档，从之前的存档开始。<br><img src="/../../image/Pasted%20image%2020230829192347.png"><br>然后拿回了之前的存档后，从此存档开始执行，并且需要更改一些环境。很多Bug都是由于环境导致的（比如许多的并发Bug）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.27.15.excalidraw]]<br>这就是可以进行容错的机制。如果有轻量级的快照，就可以使用平行宇宙来复查一些Bug。甚至如果是想要还原并发这种Bug，甚至不需要复杂的Fork的快照，只需要有一个Setjmp寄存器的快照。</p>
-<h2 id="15-4-对于Fork的讨论"><a href="#15-4-对于Fork的讨论" class="headerlink" title="15.4 对于Fork的讨论"></a>15.4 对于Fork的讨论</h2><h3 id="15-4-1-A-Fork-in-the-road"><a href="#15-4-1-A-Fork-in-the-road" class="headerlink" title="15.4.1 A Fork() in the road"></a>15.4.1 A Fork() in the road</h3><p><strong>简介：</strong><br>对于Unix Fork的批评。<br><strong>概述：</strong><br>fork使用的最舒服的时候，就是在一个简单的管道模型当中。但是随着OS发展，进程不止是有地址空间和文件描述符，但是之后进程会有信号（fork之后，发信号是两个都发，还是只发一个？），线程，进程间通信对象，ptrace等等。<br>fork的开发者对于这些问题进行了修复，但是结果就是导致现在的fork十分的复杂。比如出现线程之后。</p>
-<p><strong>这些都是由进程拥有了一些更加复杂的对象所引发出的问题。</strong></p>
-<h3 id="15-4-2-线程对于Fork的影响"><a href="#15-4-2-线程对于Fork的影响" class="headerlink" title="15.4.2 线程对于Fork的影响"></a>15.4.2 线程对于Fork的影响</h3><p><strong>线程概述</strong><br>在一个进程当中，会有一片地址空间，两个不同的线程共享这些地址空间，所有的页面都是共享的（因为页面是由OS持有的）。<br><img src="/../../image/Pasted%20image%2020230829192415.png"><br><strong>问题</strong><br>此时如果fork了一份这个进程，这当中的这些线程会怎么样？</p>
-<p><strong>分析</strong><br>首先，肯定是进程当中的某一个线程执行了fork，在执行了fork之后，是对应进程复制，另一个进程消失，还是两者都被复制？<br>正确答案是 只复制执行了fork的进程。<br><img src="/../../image/Pasted%20image%2020230829192444.png"></p>
-<h3 id="15-4-3-更安全的创建一个进程"><a href="#15-4-3-更安全的创建一个进程" class="headerlink" title="15.4.3 更安全的创建一个进程"></a>15.4.3 更安全的创建一个进程</h3><p><strong>创建进程：POSIX Spawn</strong><br>代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">posix_spawn</span></span><br><span class="line"><span class="params">(</span></span><br><span class="line"><span class="params"><span class="type">pid_t</span> *pid,</span></span><br><span class="line"><span class="params"><span class="type">char</span> *path,</span></span><br><span class="line"><span class="params"><span class="type">posix_spawnattr_t</span> *attrp,</span></span><br><span class="line"><span class="params"><span class="type">char</span>* argv[],</span></span><br><span class="line"><span class="params"><span class="type">char</span>* envp[]</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
-<p>其是一个在fork发明出来之后的API，比fork更加的简单。</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>Fork</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lecture 17：动态链接与加载</title>
-    <url>/2023/08/7c3f50531736.html</url>
-    <content><![CDATA[<blockquote>
-<p>前言：可执行文件就是一个描述状态机初始状态的数据结构；<br>问题：<br>    1、可执行文件如何被OS加载？<br>    2、什么是动态链接&#x2F;动态加载？</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="17-1-静态ELF文件加载器"><a href="#17-1-静态ELF文件加载器" class="headerlink" title="17.1 静态ELF文件加载器"></a>17.1 静态ELF文件加载器</h2><h3 id="17-1-1-ELF文件"><a href="#17-1-1-ELF文件" class="headerlink" title="17.1.1 ELF文件"></a>17.1.1 ELF文件</h3><p><strong>ELF文件定义</strong><br>在OS下面的“&#x2F;usr&#x2F;include&#x2F;elf.h”文件中，可以看到ELF文件定义描述；<br><img src="/../../image/Pasted%20image%2020230829193028.png"><br><strong>获得程序的ELF</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">readelf a.out</span><br></pre></td></tr></table></figure>
-<p>使用此指令来获得可执行文件的elf文件信息，并将其翻译出来；<br>ELF文件描述了一个数据结构，这个数据结构描述了进程在execve之后被Loader使用时如何加载；</p>
-<h3 id="17-1-2-ELF加载器"><a href="#17-1-2-ELF加载器" class="headerlink" title="17.1.2 ELF加载器"></a>17.1.2 ELF加载器</h3><p>Loader所作行为：解析数据结构 + 复制信息到内存 + 跳转<br><strong>Loader需加载内容</strong></p>
-<ul>
-<li>1、ELF文件里面的信息</li>
-<li>2、设置一些运行时状态<ul>
-<li>argv</li>
-<li>envp<br>以上两部分内容共同构成进程的初始状态；</li>
-</ul>
-</li>
-</ul>
-<p><strong>Loader实现了解</strong><br>Loader只是个程序，其通过动态链接的方式编译；<br>在编译之后，可以往Loader传入一个参数：比如某个程序，此时Loader会开始将ELF文件搬到指定的位置上，并且可以是使用此Loader加载其他程序。<br>在Loader当中，使用mmap + ELF信息映射到内存当中； Loader解析ELF数据结构，然后把对应内容放到内存；<br>当所有的内容都使用mmap搬进内存之后，可以使用pmap观看其地址空间：<br>可以看到其地址空间当中有两份程序，一份是loader的内存，一份是minimal的内容；即当前ELF所有具体的内容都被加载；</p>
-<h3 id="17-1-3-进程初始状态设置"><a href="#17-1-3-进程初始状态设置" class="headerlink" title="17.1.3 进程初始状态设置"></a>17.1.3 进程初始状态设置</h3><p>完成对于进程的栈以及其他空间的初始化设置；<br>实例化进程Stack：<br><img src="/../../image/Pasted%20image%2020230829193055.png"><br>比如：当中指明了rsp寄存器指向Argument Count，并且8 + rsp执行后续的参数；<br>有了这个手册之后，之后的行为就是把这些内容实现成代码。</p>
-<p><strong>初始化代码实现</strong></p>
-<ol>
-<li>先静态分配一片空间，将此空间设置为栈空间；<ol>
-<li>![[Pasted image 20230329190038.png]]</li>
-</ol>
-</li>
-<li>定义对应的push指令，可以将内容push到栈中；</li>
-<li>对照着实例化进程文档，将内容push到栈上；<ol>
-<li>![[Pasted image 20230329190137.png]]</li>
-<li>argc、argv以及环境变量等，依次压入栈中；</li>
-</ol>
-</li>
-<li>最后执行跳转<ol>
-<li>![[Pasted image 20230329190308.png]]</li>
-<li>将程序的入口地址给到指针，将rdx和rsp清零；</li>
-</ol>
-</li>
-</ol>
-<p><strong>OS、Loader与execve之间关系</strong><br>以上实现的第一个Loader是在OS上实现的，基于操作系统中的open、mmap、close，使用这些系统调用实现了一个execve，因此execve在某种程度上不是必须的，Linux可以基于ld静态链接，加上mmap、open等系统调用，就完成程序的加载。<br>由此可知：相当一部分系统调用可以实现成用户态的；</p>
-<h3 id="17-1-4-Boot-Block-Loader"><a href="#17-1-4-Boot-Block-Loader" class="headerlink" title="17.1.4 Boot Block Loader"></a>17.1.4 Boot Block Loader</h3><p><strong>什么是Boot Block Loader</strong><br>由固件实现的Boot Block Loader，将OS通过固件，一点一点加载到磁盘上、内存里。并且除了这512字节的最开始的block，在这之后还有1024字节的main args，在这之后是OS的Kernel内核文件。</p>
-<p><strong>加载OS内核</strong><br>哪怕ELF文件只有512字节的二进制文件，也可以为其写一个Loader；</p>
-<ul>
-<li>![[Pasted image 20230329191754.png]]<br>把Main函数的参数加载进来，并在之后把elf32复制，创建状态机的状态；<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">load_kernel</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  Elf32_Ehdr *elf32 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  Elf64_Ehdr *elf64 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  <span class="type">int</span> is_ap = boot_record()-&gt;is_ap;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!is_ap) &#123;</span><br><span class="line">    <span class="comment">// load argument (string) to memory</span></span><br><span class="line">    copy_from_disk((<span class="type">void</span> *)MAINARG_ADDR, <span class="number">1024</span>, <span class="number">-1024</span>);</span><br><span class="line">    <span class="comment">// load elf header to memory</span></span><br><span class="line">    copy_from_disk(elf32, <span class="number">4096</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) &#123;</span><br><span class="line">      load_elf64(elf64);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      load_elf32(elf32);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// everything should be loaded</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf64-&gt;e_entry)();<span class="comment">//设置程序进入点</span></span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf32-&gt;e_entry)();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="17-2-Linux内核加载器"><a href="#17-2-Linux内核加载器" class="headerlink" title="17.2 Linux内核加载器"></a>17.2 Linux内核加载器</h2><p>使用make进行编译，然后即可以对其进行调试；之后可以使用GDB，和调试其他的可执行程序一样来调试这个Linux代码，只要将BreakPoint放在代码的EntryPoint上即可。<br>之后如果想进行进一步的调试，就得开始使用一些更加现代的工具以及IDE，比如VSCode来把Linux内核放入到VSCode当中；<br>可以将Linux生成的哪些链接信息给到VSCode，这样就可以在编辑界面当中来动态的获得一个内容的链接内容；</p>
-<h2 id="17-3-动态链接与加载"><a href="#17-3-动态链接与加载" class="headerlink" title="17.3 动态链接与加载"></a>17.3 动态链接与加载</h2><h3 id="17-3-1-为什么需要动态链接"><a href="#17-3-1-为什么需要动态链接" class="headerlink" title="17.3.1 为什么需要动态链接"></a>17.3.1 为什么需要动态链接</h3><p><strong>静态链接问题</strong></p>
-<ul>
-<li>随着项目越来越大，库函数越来越大，文件系统会越来越膨胀，需要占有大量的磁盘空间；即不希望每个库函数都在可执行文件里面进行库函数的拷贝；</li>
-<li>同时，大型项目有把应用程序拆开的需求；</li>
-</ul>
-<p><strong>动态链接</strong><br>只要库函数遵循一定的标准，那么就可以把这个库在运行动态的链接；编译一部分，不用重新链接；</p>
-<p><strong>工业界实际的ELF问题</strong><br>ELF是一个数据结构，这个数据结构当中有专门的符号表，将一些概念上紧密相关的东西在数据结构中通过符号表（为了提升性能）强行拆散；</p>
-<h3 id="17-3-2-自顶向下设计的动态链接实现"><a href="#17-3-2-自顶向下设计的动态链接实现" class="headerlink" title="17.3.2 自顶向下设计的动态链接实现"></a>17.3.2 自顶向下设计的动态链接实现</h3><p><strong>基本假设</strong><br>假设所有的加载器、编译器、链接器都完全收你控制，此时生成一个最小的用于动态链接的数据结构，然后再在此基础上针对ELF进行优化；</p>
-<p><strong>最小的ELF</strong><br>当想要实现自己的库函数，当中有一个putchar的符号需要被动态加载，如何进行设计？<br>简化之后，动态链接最基本的行为：</p>
-<ul>
-<li>LOAD（“libc.dl”）&#x2F;&#x2F;加载动态库</li>
-<li>IMPORT（putchar）&#x2F;&#x2F;加载外部符号</li>
-<li>EXPORT（hello）&#x2F;&#x2F;为动态库导出符号</li>
-<li>在代码中引用一个外部库的符号</li>
-</ul>
-<h4 id="17-3-2-1-最小加载器实现"><a href="#17-3-2-1-最小加载器实现" class="headerlink" title="17.3.2.1 最小加载器实现"></a>17.3.2.1 最小加载器实现</h4><p>JYY实现的最小动态链接加载器；<br>![[Pasted image 20230330174916.png]]<br>自己实现的最简单的二进制文件格式：<br>![[Pasted image 20230330175114.png]]</p>
-<h4 id="17-3-3-2-动态链接Header定义"><a href="#17-3-3-2-动态链接Header定义" class="headerlink" title="17.3.3.2 动态链接Header定义"></a>17.3.3.2 动态链接Header定义</h4><p>使用此Header定义此二进制可执行文件的格式；<br>最简单的二进制动态链接文件：就是由一个头文件和一个符号表构成的；</p>
-<p><strong>dl_Header代码：</strong><br>![[Pasted image 20230414182843.png]]<br><strong>dl_Header图示：</strong><br>![[Lecture 17：动态链接与加载 2023-04-14 18.22.19.excalidraw]]</p>
-<p><strong>定义的四个宏</strong><br>![[Pasted image 20230414182950.png]]<br>第一个：IMPORT</p>
-<ol>
-<li>在Imoort当中使用DSYM函数</li>
-<li>在DSYM函数中当中传入sym（比如说是putchar，目标链接函数名称）</li>
-<li>当前sym当中传入间接寻址的地址rip，然后putchar指向symbol当中的offset。<br>第二个：EXPORT<br>向当中传入一个外部符号的调用，为了导出这个符号，在offset当中保存这个符号的相对于符号头部的偏移量；</li>
-</ol>
-<p><strong>程序预编译之后</strong><br>![[Pasted image 20230414184042.png]]<br>每一个symbol都被对齐到32字节，offset开始时为0，此时加载器发现了这个符号的offset的值为零，此时就会开始间接调转，查询符号表，将地址填入到这当中。</p>
-<p>符号链接：当你想要跳转到一个你所不知道的地址上时，就现找一块数据（offset）填上零，然后做一个间接跳转，在加载器进行加载的时候，查符号表，将地址填进去；</p>
-<p><strong>二进制视角文件</strong><br>![[Pasted image 20230414185023.png]]<br>第20行，前面八位的全零部分标志，以及libc.dl表示的需要链接的程序；<br>包括90，a0部分的全零内容，对应的多个struct symbol之后的全零字段；<br>然后c0,d0之后就是代码的部分；</p>
-<h3 id="17-3-3-对动态链接定义的加载"><a href="#17-3-3-对动态链接定义的加载" class="headerlink" title="17.3.3 对动态链接定义的加载"></a>17.3.3 对动态链接定义的加载</h3><p><strong>对dl的加载代码：</strong><br>![[Pasted image 20230414185311.png]]<br>就是扫描符号表，将dl二进制文件中对应的符号找到其需要的地址；碰到LOAD就打印其名称，碰到EXTERN就打印其对应内容；</p>
-<p><strong>objump实现</strong><br>![[Pasted image 20230414185450.png]]<br>两个For循环内的内容：</p>
-<ul>
-<li>第一层for循环：遍历符号表</li>
-<li>第二层：遍历代码的每一个字节<ul>
-<li>当代码的某一个字节刚好对应某一个符号的时候，执行一个反汇编，使用ndisasm反汇编器将代码输出出来；</li>
-</ul>
-</li>
-</ul>
-<p><strong>加载器主要部分：dlopen</strong><br>![[Pasted image 20230414190056.png]]<br>首先获得dl的hdr头文件，然后把path文件打开，解析文件头；<br>通过解析文件头知道了文件有多大后，使用mmap将其需要的内容直接映射到内存当中；<br>如果内存映射成功，在for循环内遍历符号表，如果符号表当中是+号则进行递归加载，如果是问号，则直接赋值offset内容；</p>
-<h3 id="17-3-4-自己设计DL文件中的缺陷"><a href="#17-3-4-自己设计DL文件中的缺陷" class="headerlink" title="17.3.4 自己设计DL文件中的缺陷"></a>17.3.4 自己设计DL文件中的缺陷</h3><p><strong>代码分段</strong><br>自己编写的代码只能可读可写可执行，想要不同部分不同类型，就需要进行分段；<br><strong>指定加载器</strong><br>需要指定一个加载器</p>
-<p>写一个编译器的时候，在编译器的视角里面，C代码当中出现的函数，不知道其是静态链接的还是动态链接；不知道是用call还是call DASM，而且不知道外部符号在哪里；并且call是不需要间接跳转的；<br>当链接时发现是一个动态链接符号的话，就需要靠plt去找内容，因此就发明了GOT和PLT；</p>
-<p>全局偏移表：<br>![[Pasted image 20230414191207.png]]<br>在ELF文件之下：<br>![[Pasted image 20230414191222.png]]<br>所有的间接跳转，全部都在PLT里面；</p>
-<p><strong>GOT</strong><br>我们的符号表就是GOT（Global Offset Table）</p>
-<p><strong>对于静态、动态链接的统一</strong><br>无论静态动态，都统一使静态链接先；<br>然后增加一层间接层：Procedure Linkage Table（PLT），将所有未被解析的符号都统一翻译成call。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">putchar</span> PLT:</span><br><span class="line">	call DSYM（<span class="built_in">putchar</span>）</span><br><span class="line">main:</span><br><span class="line">	call <span class="built_in">putchar</span> PLT</span><br></pre></td></tr></table></figure>
-
-<p>作业：读实例代码；</p>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>链接</tag>
-        <tag>ELF</tag>
       </tags>
   </entry>
   <entry>
@@ -1753,6 +1941,265 @@
       <tags>
         <tag>操作系统</tag>
         <tag>C语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 15：Fork的应用</title>
+    <url>/2023/08/3d8a9bfbeeea.html</url>
+    <content><![CDATA[<p>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象</p>
+<span id="more"></span>
+<blockquote>
+<p>前言：从这节课开始，会逐渐进入到如何实现OS相关的内容，即往OS的内核来走</p>
+</blockquote>
+<h2 id="15-1-fork-行为的补充解释"><a href="#15-1-fork-行为的补充解释" class="headerlink" title="15.1 fork()行为的补充解释"></a>15.1 fork()行为的补充解释</h2><h3 id="15-1-1-操作系统的状态机"><a href="#15-1-1-操作系统的状态机" class="headerlink" title="15.1.1  操作系统的状态机"></a>15.1.1  操作系统的状态机</h3><p><strong>概念复习</strong><br>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象（行为类似于指针共享）<br>Execve：进程执行了Execve，状态机就会被重置，但是在重置之后，OS当中的对象还在，因此即使状态被重置，这个指向依然存在，比如其打开的文件描述符依然存在。</p>
+<h3 id="15-1-2-文件描述符"><a href="#15-1-2-文件描述符" class="headerlink" title="15.1.2 文件描述符"></a>15.1.2 文件描述符</h3><p><strong>概念</strong><br><strong>文件描述符就是一个指向操作系统内对象的指针</strong>，只能通过OS运行的方式去访问这些对象。但是对于一个文本对象，write一个对象的时候，应该是具有一个文件内的偏移量，进而可以使得两个write写入的内容不是被覆盖，而是都可以被写入。</p>
+<p>文件描述符可以通过Open来得到，比如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">open(<span class="string">&quot;a.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>此时会获得一个文件描述符，并且指向这个 a.txt 对象<br>在使用Open打开文件描述符时，可以使用一个O_APPEND的方式写入。不管文件的数量多少，都会以file offset的方式在文件的末尾进行追加。</p>
+<p><strong>文件描述符的复制</strong><br>代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;a.txt&quot;</span>,O_WROLY | O_CREAT);<span class="comment">//用creat打开，如果不存在就被创造</span></span><br><span class="line">assert(fd &gt; <span class="number">0</span>);</span><br><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line">assert(pid&gt;<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(pid == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	write(fd,<span class="string">&quot;World&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>问题一：文件偏移量的管理<br>以上代码的结果，是Hello被World覆盖掉，还是两者都被输出？即当两个相同状态的进程进行write时，其两者用于相同的文件描述符的前提下，两者是共享偏移量还是其他行为？ </p>
+</li>
+<li><p>问题二：dup复制文件描述符<br><strong>什么是dup</strong><br>假设原本存在一个fd为3的文件描述符，指向了OS中的一个对象。当使用了dup之后，此时会再出现一个文件描述符，其fd为4，同样也指向了此OS中的一个对象。<br>但是如果带有文件偏移量，那此时究竟应该是共享offset，还是独立offset？</p>
+</li>
+</ul>
+<h2 id="15-2-fork的实现"><a href="#15-2-fork的实现" class="headerlink" title="15.2 fork的实现"></a>15.2 fork的实现</h2><h3 id="15-2-1-fork设计的问题"><a href="#15-2-1-fork设计的问题" class="headerlink" title="15.2.1 fork设计的问题"></a>15.2.1 fork设计的问题</h3><p>创建副本这件事情的代价很大，进程可能有很大的地址空间，如果此时对一个非常大的地址空间fork一份，并且在这之后立马就execve，此时就会产生十分大的性能浪费，此时OS会怎么应对这种状况？</p>
+<p><strong>OS中的进程地址空间设计</strong><br>每一个进程会有一个地址空间，并且在地址空间当中会进行分页（MMU），而进程其本身拥有的只是一个映射表。映射表提供了相关的信息，表示不同的内容会映射到分页之后的哪个页面，所以概念上进程拥有这些页面，其实实际上依然是由OS控制着所有这些内容。</p>
+<h3 id="15-2-2-共享只读设计"><a href="#15-2-2-共享只读设计" class="headerlink" title="15.2.2 共享只读设计"></a>15.2.2 共享只读设计</h3><p>当一个进程拥有两个页面时，内容如下：<br><img src="/../../image/Pasted%20image%2020230829192242.png"><br>当指向了一个fork之后，其状态如下;<br><img src="/../../image/Pasted%20image%2020230829192306.png"><br>此时这两个进程都同时指向了一个可写的页面，因此Old进程可以写，New进程也可以写。但是此时OS会偷偷的抹掉这个可写的权限，进而可能发生缺页中断（段错误）。但如果OS发现，这个缺页中断只是被偷偷抹掉的，此时OS会将此页引用计数减1，然后将其拷贝一份到另外的可写权限的空间，从而把读写的权限重新还给NEW进程。<br><img src="/../../image/Pasted%20image%2020230829192322.png"><br><strong>优点：</strong><br>这种设计Copy on Write的设计，当遇到非常大的地址空间中需要映射的内容时，有时可以不需要为其创建新的内容，只有在使用时才产生这种Copy On Write。<br><strong>例子：libc</strong><br>整个OS里面，只有一份libc的副本，OS当中有很多的进程，此时这些不同的进程都是指向同一个libc。</p>
+<p><strong>代码证明Copy On Write</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NPROC 1000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MB 128</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SIZE (MB * (1 &lt;&lt; 20))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> xstr(s) str(s)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> str(s) #s</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">char</span> *data = <span class="built_in">malloc</span>(SIZE); <span class="comment">// 128MB shared memory</span></span><br><span class="line">  <span class="built_in">memset</span>(data, <span class="string">&#x27;_&#x27;</span>, SIZE);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; NPROC - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// NPROC processes go here</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">asm</span> <span class="title function_">volatile</span><span class="params">(<span class="string">&quot;.fill 1048576 * &quot;</span> xstr(MB) <span class="string">&quot;, 1, 0x90&quot;</span>)</span>; <span class="comment">// 128MB shared code</span></span><br><span class="line"></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> idx = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span> fd = open(<span class="string">&quot;/dev/urandom&quot;</span>, O_RDONLY); assert(fd &gt; <span class="number">0</span>);</span><br><span class="line">  read(fd, &amp;idx, <span class="keyword">sizeof</span>(idx));</span><br><span class="line">  close(fd);</span><br><span class="line">  idx %= <span class="number">1048576</span> * MB;</span><br><span class="line"></span><br><span class="line">  data[idx] = <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;pid = %d, write data[%u]\n&quot;</span>, getpid(), idx);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    sleep(<span class="number">1</span>); <span class="comment">// not terminate</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行了这个代码之后，在OS当中有1000个进程在进行，并且上述代码在SO中，每个都要求分配了128MB的内存。但是OS并没有Crash掉，实际只是用了1GB左右的内存。这就是Copy On Write的实现。</p>
+<p><strong>关于进程内存占有量</strong><br>由此推导出一个结论：证明一个进程用的多少的内存就是一个伪命题。如果简单的将一个进程映射的内存之和相加作为其内存大小，mmap可以映射一大片的内存（比如20T内存），但是这些内存是按需使用的，其只是做了一个映射，然后使用时只会用多少分配多少，并且还有很多内存是共享的（Libc）。</p>
+<h2 id="15-3-状态机的复制"><a href="#15-3-状态机的复制" class="headerlink" title="15.3 状态机的复制"></a>15.3 状态机的复制</h2><h3 id="15-3-1-状态机视角"><a href="#15-3-1-状态机视角" class="headerlink" title="15.3.1 状态机视角"></a>15.3.1 状态机视角</h3><p><strong>概念：平行宇宙与fork</strong><br>物理世界上不同的粒子状态，可以定义出不同时间下的状态。如果此时要进行时间穿越，此时行为就是将未来的部分状态带到过去，并且从此状态开始进行分叉，而这个分叉就是fork()。<br>OS运行开发者使用fork()实现平行宇宙。</p>
+<h3 id="15-3-2-fork与并行化"><a href="#15-3-2-fork与并行化" class="headerlink" title="15.3.2 fork与并行化"></a>15.3.2 fork与并行化</h3><p><strong>例子1：码交换搜索问题</strong><br>和不同的部分进行交换，就会进入不同的状态。可以使用状态机的视角，将所有的状态进行探索。<br>![[Lecture 15：Fork的应用 2023-03-16 16.57.00.excalidraw]]</p>
+<p><strong>例子2：基于fork的dfs</strong><br>原本的dfs会使用深度遍历进行探索，然后使用回溯法回到原本的状态，回溯的过程十分耗时。而如果基于fork，使用状态机的视角来进行迁移，则可以只会跳回到初始状态（通过使用exit()来实现）。<br>其启示是：可以使用fork实现dfs；使用fork来进入不同的状态，并且联合OS来帮助进行管理，此时进入新的状态后原本的平行宇宙也可以被消除掉，每探索完一个平行宇宙都将其删除掉。<br>并且，还可以创造多个平行宇宙，并行的得到所有状态，然后程序结束。</p>
+<h3 id="15-3-3-fork与跳过初始化"><a href="#15-3-3-fork与跳过初始化" class="headerlink" title="15.3.3 fork与跳过初始化"></a>15.3.3 fork与跳过初始化</h3><p><strong>问题</strong><br>假设你的NEMU需要启动很多份elf头文件，而如果NEMU进行初始化要花很多的时间（比如花费大量时间来初始化一片128MB的内存），此时如果为每个elf来进行启动就会产生大量消耗，此时可以按照以下行为分析：<br>![[Lecture 15：Fork的应用 2023-03-16 17.29.53.excalidraw]]<br><strong>处理方法</strong><br>此时可以只执行一次nemu_init()的内容，之后只需要每进来一个需要启动的内容，就fork一份，然后找到没有处理的文件，将其进行处理，就可以完成操作。并且因为只进行一次init，因此可以加速程序执行第一个文件的速度。</p>
+<p><strong>跳过初始化的实际应用</strong><br>应用：安卓应用的秒启动</p>
+<ul>
+<li>简介：每一个安卓的程序都会通过以上的跳过初始化的方式进行启动。</li>
+<li>原理：安卓应用是一个Java程序，而Java是运行在JVM虚拟机上面，对于安卓而言是一个Android Runtime（自己实现的虚拟机）。而安卓和Java都会有一个十分大的标准库，如果每一个程序是采取冷启动，即从0开始执行整个Java程序，不可能几秒内完成加载，此时就是使用了跳过初始化的思想，所有的Java程序只进行初始化一次。</li>
+<li>Zygote Process：会有一个所有Android程序的父进程，名称为Zygote Process。其会完成所有必要的安卓程序的必要的类的加载，此时如果开始了一个新的程序，只要在init之后的状态基础之上fork一份即可完成创建。</li>
+<li>一次加载，全员使用<br>应用：Chrome浏览器</li>
+<li>简介：Chrome可以成功的原因之一，就是其速度非常的快。</li>
+<li>原理：Chrome当中，每一个网页就是一个进程，使用跳过初始化的思想来进行网页的快速加载</li>
+</ul>
+<p><strong>核心：只要是从一个状态出发，需要很多个副本的，都可以使用fork。</strong></p>
+<h3 id="15-3-4-fork与备份"><a href="#15-3-4-fork与备份" class="headerlink" title="15.3.4 fork与备份"></a>15.3.4 fork与备份</h3><p><strong>简介：</strong><br>要是我们可以对有Bug的程序总是能在任何状态“试一试”，然后试错了还能回到过去，就好了。<br><strong>概念：</strong><br>当过去某个节点发生了一个Bug，我们能否回到过去，在产生一次这个Bug?特别是出现并发Bug，此类Bug或许十分难以重现，拥有此存档机制就可以去复现过去状态下的Bug。<br>在任何状态下，可以使用fork()开启另一条平行宇宙，然后在此基础上进行存档。然后如果顺着正常的路径进行执行，但是之后在这主分支之上发生了Crash，此时就可以拿回之前的存档，从之前的存档开始。<br><img src="/../../image/Pasted%20image%2020230829192347.png"><br>然后拿回了之前的存档后，从此存档开始执行，并且需要更改一些环境。很多Bug都是由于环境导致的（比如许多的并发Bug）。<br>![[Lecture 15：Fork的应用 2023-03-17 21.27.15.excalidraw]]<br>这就是可以进行容错的机制。如果有轻量级的快照，就可以使用平行宇宙来复查一些Bug。甚至如果是想要还原并发这种Bug，甚至不需要复杂的Fork的快照，只需要有一个Setjmp寄存器的快照。</p>
+<h2 id="15-4-对于Fork的讨论"><a href="#15-4-对于Fork的讨论" class="headerlink" title="15.4 对于Fork的讨论"></a>15.4 对于Fork的讨论</h2><h3 id="15-4-1-A-Fork-in-the-road"><a href="#15-4-1-A-Fork-in-the-road" class="headerlink" title="15.4.1 A Fork() in the road"></a>15.4.1 A Fork() in the road</h3><p><strong>简介：</strong><br>对于Unix Fork的批评。<br><strong>概述：</strong><br>fork使用的最舒服的时候，就是在一个简单的管道模型当中。但是随着OS发展，进程不止是有地址空间和文件描述符，但是之后进程会有信号（fork之后，发信号是两个都发，还是只发一个？），线程，进程间通信对象，ptrace等等。<br>fork的开发者对于这些问题进行了修复，但是结果就是导致现在的fork十分的复杂。比如出现线程之后。</p>
+<p><strong>这些都是由进程拥有了一些更加复杂的对象所引发出的问题。</strong></p>
+<h3 id="15-4-2-线程对于Fork的影响"><a href="#15-4-2-线程对于Fork的影响" class="headerlink" title="15.4.2 线程对于Fork的影响"></a>15.4.2 线程对于Fork的影响</h3><p><strong>线程概述</strong><br>在一个进程当中，会有一片地址空间，两个不同的线程共享这些地址空间，所有的页面都是共享的（因为页面是由OS持有的）。<br><img src="/../../image/Pasted%20image%2020230829192415.png"><br><strong>问题</strong><br>此时如果fork了一份这个进程，这当中的这些线程会怎么样？</p>
+<p><strong>分析</strong><br>首先，肯定是进程当中的某一个线程执行了fork，在执行了fork之后，是对应进程复制，另一个进程消失，还是两者都被复制？<br>正确答案是 只复制执行了fork的进程。<br><img src="/../../image/Pasted%20image%2020230829192444.png"></p>
+<h3 id="15-4-3-更安全的创建一个进程"><a href="#15-4-3-更安全的创建一个进程" class="headerlink" title="15.4.3 更安全的创建一个进程"></a>15.4.3 更安全的创建一个进程</h3><p><strong>创建进程：POSIX Spawn</strong><br>代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">posix_spawn</span></span><br><span class="line"><span class="params">(</span></span><br><span class="line"><span class="params"><span class="type">pid_t</span> *pid,</span></span><br><span class="line"><span class="params"><span class="type">char</span> *path,</span></span><br><span class="line"><span class="params"><span class="type">posix_spawnattr_t</span> *attrp,</span></span><br><span class="line"><span class="params"><span class="type">char</span>* argv[],</span></span><br><span class="line"><span class="params"><span class="type">char</span>* envp[]</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+<p>其是一个在fork发明出来之后的API，比fork更加的简单。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>Fork</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 16：什么是可执行文件</title>
+    <url>/2023/08/92c8110645cf.html</url>
+    <content><![CDATA[<p>目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。</p>
+<ul>
+<li>重新回到可执行文件：可执行文件是什么，其如何在OS上运行；<span id="more"></span></li>
+</ul>
+<h2 id="16-1-可执行文件"><a href="#16-1-可执行文件" class="headerlink" title="16.1 可执行文件"></a>16.1 可执行文件</h2><h3 id="16-1-1-手册的逻辑"><a href="#16-1-1-手册的逻辑" class="headerlink" title="16.1.1 手册的逻辑"></a>16.1.1 手册的逻辑</h3><p><strong>链接</strong><br>关于可执行文件的手册地址：<a href="http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf">http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf</a></p>
+<p><strong>读手册的逻辑</strong><br>如果想要了解某部分知识，需要去观看包含其的对应的手册。但是很多手册（Friendly Manual）都有大量的依赖知识，只有拥有了这些依赖知识才能读懂这个手册。因此不能直接读手册，而是先学习简单的模型，回到7、80年代的概念，然后在学习手册当中最核心的部分，随着积累越来越多在逐渐往外扩展。</p>
+<h3 id="16-1-2-可执行文件：状态机的描述"><a href="#16-1-2-可执行文件：状态机的描述" class="headerlink" title="16.1.2 可执行文件：状态机的描述"></a>16.1.2 可执行文件：状态机的描述</h3><p><strong>简介</strong><br>可执行文件在OS当中是被execve调用的，而execve是把当前进程的状态机进行重置。所以由此可以进行一个推论：<br><strong>可执行文件，是一个状态机的初始状态的描述</strong>（或者说时描述一个状态机被重置之后的状态），并且还描述了状态机之后的数据迁移。<br>[[Lecture 11：操作系统上的进程#11.3 进程与execve()]]</p>
+<p><strong>问题：如果自己要实现一个可执行文件，应该涵盖什么</strong><br>因为可执行文件就是用于描述状态机重置之后的初始状态，那状态机的状态无非就是：</p>
+<ol>
+<li><p>寄存器<br>查看方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info registers</span><br></pre></td></tr></table></figure>
+<p><img src="/../../image/Pasted%20image%2020230829192659.png"><br>这当中有些值是由在状态机的初始状态下直接将其赋为0，比如r8~r15寄存器，其不需要在二进制数据中进行指定；有些是需要指定的，比如rip寄存器的值；还有些是由OS来为其分配的，比如rsp寄存器；</p>
+</li>
+<li><p>内存（地址空间）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors //获得进程号</span><br><span class="line">pmap 390489    //打印地址空间</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>所有这些地址空间中的数据，比如592k的可读可执行，首先会有两个问题：1、其地址在哪里；2、其初始值为多少；这些就是其初始值信息。<br>[[Lecture 12：进程的地址空间]]</p>
+<p><strong>可执行文件的本质</strong><br>可执行文件就是一个数据结构，描述了状态机的 初始状态 + 迁移，然后再思考将什么信息放入到二进制文件里。</p>
+<h3 id="16-1-3-操纵系统上的可执行文件"><a href="#16-1-3-操纵系统上的可执行文件" class="headerlink" title="16.1.3 操纵系统上的可执行文件"></a>16.1.3 操纵系统上的可执行文件</h3><p><strong>文件的可执行权限</strong><br>更改文件权限指令：<br>以下是添加一个可执行权限</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x a.out</span><br></pre></td></tr></table></figure>
+<p>如果将一个可执行文件的可执行权限抹除掉，此时再对其进行执行将产生报错；而如果将一个源代码文件的可执行权限打开，强行将一个源代码文件改为可执行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x a.c</span><br></pre></td></tr></table></figure>
+<p>此时将产生一个Permission denied的报错。</p>
+<p><strong>是谁决定了一个文件能不能执行？</strong><br>执行一个程序时会使用execve系统调用，在使用execve读取可执行文件时，OS才会去检查其可执行权限；<br>![[Pasted image 20230322163623.png]]<br>但是如果将a.out文件的可执行权限抹除掉，此时再使用strace观察进程的系统调用会变成如下情况：<br>![[Pasted image 20230322163934.png]]<br>此时操作系统返回了EACCES，给了一个错误信息；<br>但如果将一个a.c文件，将其权限改为可执行文件，此时再去观测去strace其报错会变成：Exec format error信息，表示OS无法识别此可执行文件。 </p>
+<h3 id="16-1-4-常见的可执行文件"><a href="#16-1-4-常见的可执行文件" class="headerlink" title="16.1.4 常见的可执行文件"></a>16.1.4 常见的可执行文件</h3><p>核心：<strong>可执行文件就是一个操作系统内的普通对象；</strong></p>
+<p><strong>She-bang</strong><br>可以在一个c语言的文件中写入以下内容：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">#感叹号/usr/bin/python3</span><br><span class="line"></span><br><span class="line"><span class="title function_">print</span><span class="params">(<span class="string">&quot;Hello&quot;</span>)</span></span><br></pre></td></tr></table></figure>
+<p>此时这个a.c文件就变得可执行了，并且输出了Hello。</p>
+<p>She-bang机制：可以在代码当中跟一个可执行文件，然后程序会去执行它。<br>当操作系统发现了一个“#！”后，execve会把#！后背的内容填写到execve的第一个参数，把file文件填写到第二个参数；<br>所以She-bang就是一个偷梁换柱的execve。</p>
+<h2 id="16-2-解析可执行文件"><a href="#16-2-解析可执行文件" class="headerlink" title="16.2 解析可执行文件"></a>16.2 解析可执行文件</h2><h3 id="16-2-1-GNU-binutils-工具"><a href="#16-2-1-GNU-binutils-工具" class="headerlink" title="16.2.1 GNU binutils 工具"></a>16.2.1 GNU binutils 工具</h3><p>部分工具：<br>![[Pasted image 20230322190921.png]]<br>这些工具可以用在可执行文件上：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">readelf -h a.out</span><br></pre></td></tr></table></figure>
+
+<p>可执行文件就是描述状态机初始状态的数据结构，而binutils就是解析这个数据结构的工具；比如objdump就是把代码的汇编语言解析出来，其就是对于数据结构的查看、生成、修改的工具。</p>
+<h3 id="16-2-2-可执行文件的运行时状态"><a href="#16-2-2-可执行文件的运行时状态" class="headerlink" title="16.2.2 可执行文件的运行时状态"></a>16.2.2 可执行文件的运行时状态</h3><p>还可以使用调试器来获得可执行文件的运行时状态，info可以帮助debugger获得运行时状态。<br>GDB获得调用栈信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(gdb)bt</span><br></pre></td></tr></table></figure>
+<p>为什么GDB可以打印程序的back trace?GDB如何通过内存里面的信息打印出以上的信息？<br>因为二进制文件当中有一些额外信息，这些额外信息可以帮助你实现<code>addr2line</code>命令；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">addr2line 0x401cfb a.out</span><br></pre></td></tr></table></figure>
+<p>然后会打印目标位置对应的行号：</p>
+<h3 id="16-2-3-调试信息"><a href="#16-2-3-调试信息" class="headerlink" title="16.2.3 调试信息"></a>16.2.3 调试信息</h3><p>在进行GCC编译的时候，如果加上了-S 选项，会加上一些额外的调试信息；</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -static source.c -g -S</span><br></pre></td></tr></table></figure>
+<p>使用-g表示生成汇编代码，在这其中生成了很多更多的调试信息；</p>
+<p><strong>DWARF通用调试信息</strong><br>编译器在编译时会生成很多额外的信息（DWARF调试信息），这些调试信息十分通用；其允许你对于任何一段内存定义一个函数f()，然后如果你的程序指针pc指向这里，每一段内存都有一个f()函数，调用这个f()就可以把这些内存当中存储的信息获得出来。</p>
+<p><strong>优化后的调试信息问题</strong><br>但是因为编译器的优化，导致在进行分析调试信息的时候，经常会产生一些错误，即把二进制的状态转换成汇编层面的语义十分具有挑战性。</p>
+<p><strong>程序BackTrace与GCC优化Bug</strong><br>在获得程序的backtrace时，需要获得每个被调用函数的地址。此时如果将函数在栈上通过寄存器的数值保存的rbp的数值来生成一个链表，可以通过访问此链表的方式来获得当前函数的每个地址信息。但是如果使用了gcc的-O2优化，则很多个函数会在优化后被合成一个函数，此时就无法获得其在C语言语言层面上的调用栈信息，进而无法获得其函数调用的backtrace。</p>
+<p><strong>逆向工程</strong><br>如果想获得一个商业软件的可执行文件里面，恢复其尽可能多的信息，就需要进行你想工程。<br>工具：ida<br>书籍：《IDApro权威指南》</p>
+<h2 id="16-3-链接与重定位"><a href="#16-3-链接与重定位" class="headerlink" title="16.3 链接与重定位"></a>16.3 链接与重定位</h2><h3 id="16-3-1-从C代码到二进制文件"><a href="#16-3-1-从C代码到二进制文件" class="headerlink" title="16.3.1 从C代码到二进制文件"></a>16.3.1 从C代码到二进制文件</h3><p>在使用gcc编译链接之后，一个代码当中对于未定义函数的使用，是如何通过链接，访问到其他代码当中的函数的？</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	f();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是main函数，f()未定义</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//这里是f()的实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在使用gcc将main()函数对应的代码变成汇编代码之后，程序的大部分内容都已经被确定，但是还剩下部分callq指令（函数调用）未被确定：<br>![[Pasted image 20230328192912.png]]<br>此时其还不知道此函数的地址，其会生成00来填充；</p>
+<p><strong>汇编且还未链接的程序的设计语义</strong>：main.o就是一个数据结构，在这个数据结构当中包含了所有重要的代码，并且还包含了其<strong>未来需要满足的内容的约束</strong>。而在函数调用时，其就是相对偏移量的约束，S(目标函数位置) + A(-4) - P(P &#x3D; main + 0xb)。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">assert(</span><br><span class="line">	(<span class="type">char</span> *)hello == </span><br><span class="line">	(<span class="type">char</span> *)main + </span><br><span class="line">	<span class="number">0xf</span> +</span><br><span class="line">	*(<span class="type">int32_t</span> *)((<span class="type">uintptr_t</span>)main + <span class="number">0xb</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="16-3-2-重新理解编译、链接过程"><a href="#16-3-2-重新理解编译、链接过程" class="headerlink" title="16.3.2 重新理解编译、链接过程"></a>16.3.2 重新理解编译、链接过程</h3><p><strong>编译器（gcc）</strong></p>
+<ul>
+<li>High-level semantics (C 状态机) → low-level semantics (汇编)</li>
+</ul>
+<p><strong>汇编器 (as)</strong></p>
+<ul>
+<li>Low-level semantics → Binary semantics (状态机容器)<ul>
+<li>“一一对应” 地翻译成二进制代码<ul>
+<li>sections, symbols, debug info</li>
+</ul>
+</li>
+<li>不能决定的要留下 “之后怎么办” 的信息<ul>
+<li>relocations</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>链接器 (ld)</strong></p>
+<ul>
+<li>合并所有容器，得到 “一个完整的状态机”<ul>
+<li>ldscript (<code>-Wl,--verbose</code>); 和 C Runtime Objects (CRT) 链接</li>
+<li>missing&#x2F;duplicate symbol 会出错</li>
+</ul>
+</li>
+</ul>
+<p><strong>图示：</strong><br><img src="/../../image/Pasted%20image%2020230829192839.png"></p>
+<p>而在这些过程当中，ELF只不过是一个描述以上过程的一个“容器数据结构”，包含了完成以上过程所需的必要信息：<br><img src="/../../image/Pasted%20image%2020230829192904.png"><br>正确的理解ELF的方式是：当你自己想要实现一个ELF时，有哪些部分是必不可少的？</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">executable</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> entry; <span class="comment">//代码的进入点地址：代码、数据</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">segment</span> *<span class="title">segments</span>;</span> <span class="comment">//不同的段</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> *<span class="title">relocs</span>;</span><span class="comment">//重定位</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> *<span class="title">symbols</span>;</span> </span><br><span class="line">&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">segment</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> flags, size; <span class="comment">//每个段是可执行可读？还是可执行？可写？</span></span><br><span class="line">	<span class="type">char</span> data[<span class="number">0</span>]; </span><br><span class="line">&#125; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> S, A, P;<span class="comment">//用于计算重定位后的地址</span></span><br><span class="line">	<span class="type">char</span> name[<span class="number">32</span>]; <span class="comment">//重定位地址的名字</span></span><br><span class="line">	&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> &#123;</span> <span class="type">uint32_t</span> off; <span class="type">char</span> name[<span class="number">32</span>]; &#125;;</span><br></pre></td></tr></table></figure>
+<p>然后在这么一个最简单的数据结构当中，会有很多缺陷，围绕这这些缺陷进行更多的设计，最终就形成了现在所看到的繁杂的ELF文件。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>可执行文件</tag>
+        <tag>链接</tag>
+        <tag>汇编</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 17：动态链接与加载</title>
+    <url>/2023/08/7c3f50531736.html</url>
+    <content><![CDATA[<blockquote>
+<p>前言：可执行文件就是一个描述状态机初始状态的数据结构；<br>问题：<br>    1、可执行文件如何被OS加载？<br>    2、什么是动态链接&#x2F;动态加载？</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="17-1-静态ELF文件加载器"><a href="#17-1-静态ELF文件加载器" class="headerlink" title="17.1 静态ELF文件加载器"></a>17.1 静态ELF文件加载器</h2><h3 id="17-1-1-ELF文件"><a href="#17-1-1-ELF文件" class="headerlink" title="17.1.1 ELF文件"></a>17.1.1 ELF文件</h3><p><strong>ELF文件定义</strong><br>在OS下面的“&#x2F;usr&#x2F;include&#x2F;elf.h”文件中，可以看到ELF文件定义描述；<br><img src="/../../image/Pasted%20image%2020230829193028.png"><br><strong>获得程序的ELF</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">readelf a.out</span><br></pre></td></tr></table></figure>
+<p>使用此指令来获得可执行文件的elf文件信息，并将其翻译出来；<br>ELF文件描述了一个数据结构，这个数据结构描述了进程在execve之后被Loader使用时如何加载；</p>
+<h3 id="17-1-2-ELF加载器"><a href="#17-1-2-ELF加载器" class="headerlink" title="17.1.2 ELF加载器"></a>17.1.2 ELF加载器</h3><p>Loader所作行为：解析数据结构 + 复制信息到内存 + 跳转<br><strong>Loader需加载内容</strong></p>
+<ul>
+<li>1、ELF文件里面的信息</li>
+<li>2、设置一些运行时状态<ul>
+<li>argv</li>
+<li>envp<br>以上两部分内容共同构成进程的初始状态；</li>
+</ul>
+</li>
+</ul>
+<p><strong>Loader实现了解</strong><br>Loader只是个程序，其通过动态链接的方式编译；<br>在编译之后，可以往Loader传入一个参数：比如某个程序，此时Loader会开始将ELF文件搬到指定的位置上，并且可以是使用此Loader加载其他程序。<br>在Loader当中，使用mmap + ELF信息映射到内存当中； Loader解析ELF数据结构，然后把对应内容放到内存；<br>当所有的内容都使用mmap搬进内存之后，可以使用pmap观看其地址空间：<br>可以看到其地址空间当中有两份程序，一份是loader的内存，一份是minimal的内容；即当前ELF所有具体的内容都被加载；</p>
+<h3 id="17-1-3-进程初始状态设置"><a href="#17-1-3-进程初始状态设置" class="headerlink" title="17.1.3 进程初始状态设置"></a>17.1.3 进程初始状态设置</h3><p>完成对于进程的栈以及其他空间的初始化设置；<br>实例化进程Stack：<br><img src="/../../image/Pasted%20image%2020230829193055.png"><br>比如：当中指明了rsp寄存器指向Argument Count，并且8 + rsp执行后续的参数；<br>有了这个手册之后，之后的行为就是把这些内容实现成代码。</p>
+<p><strong>初始化代码实现</strong></p>
+<ol>
+<li>先静态分配一片空间，将此空间设置为栈空间；<ol>
+<li>![[Pasted image 20230329190038.png]]</li>
+</ol>
+</li>
+<li>定义对应的push指令，可以将内容push到栈中；</li>
+<li>对照着实例化进程文档，将内容push到栈上；<ol>
+<li>![[Pasted image 20230329190137.png]]</li>
+<li>argc、argv以及环境变量等，依次压入栈中；</li>
+</ol>
+</li>
+<li>最后执行跳转<ol>
+<li>![[Pasted image 20230329190308.png]]</li>
+<li>将程序的入口地址给到指针，将rdx和rsp清零；</li>
+</ol>
+</li>
+</ol>
+<p><strong>OS、Loader与execve之间关系</strong><br>以上实现的第一个Loader是在OS上实现的，基于操作系统中的open、mmap、close，使用这些系统调用实现了一个execve，因此execve在某种程度上不是必须的，Linux可以基于ld静态链接，加上mmap、open等系统调用，就完成程序的加载。<br>由此可知：相当一部分系统调用可以实现成用户态的；</p>
+<h3 id="17-1-4-Boot-Block-Loader"><a href="#17-1-4-Boot-Block-Loader" class="headerlink" title="17.1.4 Boot Block Loader"></a>17.1.4 Boot Block Loader</h3><p><strong>什么是Boot Block Loader</strong><br>由固件实现的Boot Block Loader，将OS通过固件，一点一点加载到磁盘上、内存里。并且除了这512字节的最开始的block，在这之后还有1024字节的main args，在这之后是OS的Kernel内核文件。</p>
+<p><strong>加载OS内核</strong><br>哪怕ELF文件只有512字节的二进制文件，也可以为其写一个Loader；</p>
+<ul>
+<li>![[Pasted image 20230329191754.png]]<br>把Main函数的参数加载进来，并在之后把elf32复制，创建状态机的状态；<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">load_kernel</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  Elf32_Ehdr *elf32 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  Elf64_Ehdr *elf64 = (<span class="type">void</span> *)<span class="number">0x8000</span>;</span><br><span class="line">  <span class="type">int</span> is_ap = boot_record()-&gt;is_ap;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!is_ap) &#123;</span><br><span class="line">    <span class="comment">// load argument (string) to memory</span></span><br><span class="line">    copy_from_disk((<span class="type">void</span> *)MAINARG_ADDR, <span class="number">1024</span>, <span class="number">-1024</span>);</span><br><span class="line">    <span class="comment">// load elf header to memory</span></span><br><span class="line">    copy_from_disk(elf32, <span class="number">4096</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) &#123;</span><br><span class="line">      load_elf64(elf64);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      load_elf32(elf32);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// everything should be loaded</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (elf32-&gt;e_machine == EM_X86_64) </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf64-&gt;e_entry)();<span class="comment">//设置程序进入点</span></span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="type">void</span>(*)())(<span class="type">uint32_t</span>)elf32-&gt;e_entry)();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="17-2-Linux内核加载器"><a href="#17-2-Linux内核加载器" class="headerlink" title="17.2 Linux内核加载器"></a>17.2 Linux内核加载器</h2><p>使用make进行编译，然后即可以对其进行调试；之后可以使用GDB，和调试其他的可执行程序一样来调试这个Linux代码，只要将BreakPoint放在代码的EntryPoint上即可。<br>之后如果想进行进一步的调试，就得开始使用一些更加现代的工具以及IDE，比如VSCode来把Linux内核放入到VSCode当中；<br>可以将Linux生成的哪些链接信息给到VSCode，这样就可以在编辑界面当中来动态的获得一个内容的链接内容；</p>
+<h2 id="17-3-动态链接与加载"><a href="#17-3-动态链接与加载" class="headerlink" title="17.3 动态链接与加载"></a>17.3 动态链接与加载</h2><h3 id="17-3-1-为什么需要动态链接"><a href="#17-3-1-为什么需要动态链接" class="headerlink" title="17.3.1 为什么需要动态链接"></a>17.3.1 为什么需要动态链接</h3><p><strong>静态链接问题</strong></p>
+<ul>
+<li>随着项目越来越大，库函数越来越大，文件系统会越来越膨胀，需要占有大量的磁盘空间；即不希望每个库函数都在可执行文件里面进行库函数的拷贝；</li>
+<li>同时，大型项目有把应用程序拆开的需求；</li>
+</ul>
+<p><strong>动态链接</strong><br>只要库函数遵循一定的标准，那么就可以把这个库在运行动态的链接；编译一部分，不用重新链接；</p>
+<p><strong>工业界实际的ELF问题</strong><br>ELF是一个数据结构，这个数据结构当中有专门的符号表，将一些概念上紧密相关的东西在数据结构中通过符号表（为了提升性能）强行拆散；</p>
+<h3 id="17-3-2-自顶向下设计的动态链接实现"><a href="#17-3-2-自顶向下设计的动态链接实现" class="headerlink" title="17.3.2 自顶向下设计的动态链接实现"></a>17.3.2 自顶向下设计的动态链接实现</h3><p><strong>基本假设</strong><br>假设所有的加载器、编译器、链接器都完全收你控制，此时生成一个最小的用于动态链接的数据结构，然后再在此基础上针对ELF进行优化；</p>
+<p><strong>最小的ELF</strong><br>当想要实现自己的库函数，当中有一个putchar的符号需要被动态加载，如何进行设计？<br>简化之后，动态链接最基本的行为：</p>
+<ul>
+<li>LOAD（“libc.dl”）&#x2F;&#x2F;加载动态库</li>
+<li>IMPORT（putchar）&#x2F;&#x2F;加载外部符号</li>
+<li>EXPORT（hello）&#x2F;&#x2F;为动态库导出符号</li>
+<li>在代码中引用一个外部库的符号</li>
+</ul>
+<h4 id="17-3-2-1-最小加载器实现"><a href="#17-3-2-1-最小加载器实现" class="headerlink" title="17.3.2.1 最小加载器实现"></a>17.3.2.1 最小加载器实现</h4><p>JYY实现的最小动态链接加载器；<br>![[Pasted image 20230330174916.png]]<br>自己实现的最简单的二进制文件格式：<br>![[Pasted image 20230330175114.png]]</p>
+<h4 id="17-3-3-2-动态链接Header定义"><a href="#17-3-3-2-动态链接Header定义" class="headerlink" title="17.3.3.2 动态链接Header定义"></a>17.3.3.2 动态链接Header定义</h4><p>使用此Header定义此二进制可执行文件的格式；<br>最简单的二进制动态链接文件：就是由一个头文件和一个符号表构成的；</p>
+<p><strong>dl_Header代码：</strong><br>![[Pasted image 20230414182843.png]]<br><strong>dl_Header图示：</strong><br>![[Lecture 17：动态链接与加载 2023-04-14 18.22.19.excalidraw]]</p>
+<p><strong>定义的四个宏</strong><br>![[Pasted image 20230414182950.png]]<br>第一个：IMPORT</p>
+<ol>
+<li>在Imoort当中使用DSYM函数</li>
+<li>在DSYM函数中当中传入sym（比如说是putchar，目标链接函数名称）</li>
+<li>当前sym当中传入间接寻址的地址rip，然后putchar指向symbol当中的offset。<br>第二个：EXPORT<br>向当中传入一个外部符号的调用，为了导出这个符号，在offset当中保存这个符号的相对于符号头部的偏移量；</li>
+</ol>
+<p><strong>程序预编译之后</strong><br>![[Pasted image 20230414184042.png]]<br>每一个symbol都被对齐到32字节，offset开始时为0，此时加载器发现了这个符号的offset的值为零，此时就会开始间接调转，查询符号表，将地址填入到这当中。</p>
+<p>符号链接：当你想要跳转到一个你所不知道的地址上时，就现找一块数据（offset）填上零，然后做一个间接跳转，在加载器进行加载的时候，查符号表，将地址填进去；</p>
+<p><strong>二进制视角文件</strong><br>![[Pasted image 20230414185023.png]]<br>第20行，前面八位的全零部分标志，以及libc.dl表示的需要链接的程序；<br>包括90，a0部分的全零内容，对应的多个struct symbol之后的全零字段；<br>然后c0,d0之后就是代码的部分；</p>
+<h3 id="17-3-3-对动态链接定义的加载"><a href="#17-3-3-对动态链接定义的加载" class="headerlink" title="17.3.3 对动态链接定义的加载"></a>17.3.3 对动态链接定义的加载</h3><p><strong>对dl的加载代码：</strong><br>![[Pasted image 20230414185311.png]]<br>就是扫描符号表，将dl二进制文件中对应的符号找到其需要的地址；碰到LOAD就打印其名称，碰到EXTERN就打印其对应内容；</p>
+<p><strong>objump实现</strong><br>![[Pasted image 20230414185450.png]]<br>两个For循环内的内容：</p>
+<ul>
+<li>第一层for循环：遍历符号表</li>
+<li>第二层：遍历代码的每一个字节<ul>
+<li>当代码的某一个字节刚好对应某一个符号的时候，执行一个反汇编，使用ndisasm反汇编器将代码输出出来；</li>
+</ul>
+</li>
+</ul>
+<p><strong>加载器主要部分：dlopen</strong><br>![[Pasted image 20230414190056.png]]<br>首先获得dl的hdr头文件，然后把path文件打开，解析文件头；<br>通过解析文件头知道了文件有多大后，使用mmap将其需要的内容直接映射到内存当中；<br>如果内存映射成功，在for循环内遍历符号表，如果符号表当中是+号则进行递归加载，如果是问号，则直接赋值offset内容；</p>
+<h3 id="17-3-4-自己设计DL文件中的缺陷"><a href="#17-3-4-自己设计DL文件中的缺陷" class="headerlink" title="17.3.4 自己设计DL文件中的缺陷"></a>17.3.4 自己设计DL文件中的缺陷</h3><p><strong>代码分段</strong><br>自己编写的代码只能可读可写可执行，想要不同部分不同类型，就需要进行分段；<br><strong>指定加载器</strong><br>需要指定一个加载器</p>
+<p>写一个编译器的时候，在编译器的视角里面，C代码当中出现的函数，不知道其是静态链接的还是动态链接；不知道是用call还是call DASM，而且不知道外部符号在哪里；并且call是不需要间接跳转的；<br>当链接时发现是一个动态链接符号的话，就需要靠plt去找内容，因此就发明了GOT和PLT；</p>
+<p>全局偏移表：<br>![[Pasted image 20230414191207.png]]<br>在ELF文件之下：<br>![[Pasted image 20230414191222.png]]<br>所有的间接跳转，全部都在PLT里面；</p>
+<p><strong>GOT</strong><br>我们的符号表就是GOT（Global Offset Table）</p>
+<p><strong>对于静态、动态链接的统一</strong><br>无论静态动态，都统一使静态链接先；<br>然后增加一层间接层：Procedure Linkage Table（PLT），将所有未被解析的符号都统一翻译成call。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">putchar</span> PLT:</span><br><span class="line">	call DSYM（<span class="built_in">putchar</span>）</span><br><span class="line">main:</span><br><span class="line">	call <span class="built_in">putchar</span> PLT</span><br></pre></td></tr></table></figure>
+
+<p>作业：读实例代码；</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>链接</tag>
+        <tag>ELF</tag>
       </tags>
   </entry>
   <entry>
@@ -1916,101 +2363,289 @@
       </tags>
   </entry>
   <entry>
-    <title>Lecture 16：什么是可执行文件</title>
-    <url>/2023/08/92c8110645cf.html</url>
-    <content><![CDATA[<p>目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。</p>
+    <title>Lecture 30：现代存储系统</title>
+    <url>/2023/09/2e32d53e0557.html</url>
+    <content><![CDATA[<p>现代应用程序如何使用文件系统？</p>
 <ul>
-<li>重新回到可执行文件：可执行文件是什么，其如何在OS上运行；<span id="more"></span></li>
+<li>如果是一个电商网站，它们背后是不是一个操作系统？互联网上的 APP 背后的文件；</li>
+<li>现代的应用程序，如何利用文件系统；<span id="more"></span></li>
 </ul>
-<h2 id="16-1-可执行文件"><a href="#16-1-可执行文件" class="headerlink" title="16.1 可执行文件"></a>16.1 可执行文件</h2><h3 id="16-1-1-手册的逻辑"><a href="#16-1-1-手册的逻辑" class="headerlink" title="16.1.1 手册的逻辑"></a>16.1.1 手册的逻辑</h3><p><strong>链接</strong><br>关于可执行文件的手册地址：<a href="http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf">http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf</a></p>
-<p><strong>读手册的逻辑</strong><br>如果想要了解某部分知识，需要去观看包含其的对应的手册。但是很多手册（Friendly Manual）都有大量的依赖知识，只有拥有了这些依赖知识才能读懂这个手册。因此不能直接读手册，而是先学习简单的模型，回到7、80年代的概念，然后在学习手册当中最核心的部分，随着积累越来越多在逐渐往外扩展。</p>
-<h3 id="16-1-2-可执行文件：状态机的描述"><a href="#16-1-2-可执行文件：状态机的描述" class="headerlink" title="16.1.2 可执行文件：状态机的描述"></a>16.1.2 可执行文件：状态机的描述</h3><p><strong>简介</strong><br>可执行文件在OS当中是被execve调用的，而execve是把当前进程的状态机进行重置。所以由此可以进行一个推论：<br><strong>可执行文件，是一个状态机的初始状态的描述</strong>（或者说时描述一个状态机被重置之后的状态），并且还描述了状态机之后的数据迁移。<br>[[Lecture 11：操作系统上的进程#11.3 进程与execve()]]</p>
-<p><strong>问题：如果自己要实现一个可执行文件，应该涵盖什么</strong><br>因为可执行文件就是用于描述状态机重置之后的初始状态，那状态机的状态无非就是：</p>
+<h2 id="30-1-文件系统的能力与局限性"><a href="#30-1-文件系统的能力与局限性" class="headerlink" title="30.1 文件系统的能力与局限性"></a>30.1 文件系统的能力与局限性</h2><h3 id="30-1-1-例：文件系统实现-Online-Judge"><a href="#30-1-1-例：文件系统实现-Online-Judge" class="headerlink" title="30.1.1 例：文件系统实现 Online Judge"></a>30.1.1 例：文件系统实现 Online Judge</h3><p>文件以目录的形式进行存储，直接存储在文件目录系统之下；</p>
+<p><strong>例子：文件系统实现网站博客</strong><br>比如实现一个课程的主页，在课程主页上面会有大量的文章；这样的一个 Online Judge System，该如何实现？</p>
+<ul>
+<li>所有的 Online Judge 的数据，都是以文件系统的形式存储的；</li>
+<li>对于 filerecv 文件当中，有些维护 Online Judge 的脚本；</li>
+<li>所有的数据会存储到一下文件当中：<ul>
+<li>filerecv &#x2F; os 2022 &#x2F; students. Csv 文件中，存储学生的 Online Judge 回传的数据；</li>
+<li>使用单机进行评测所有信息；</li>
+</ul>
+</li>
+</ul>
+<p><strong>相关的处理代码</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> wiki.UPLOAD_PATH.glob(</span><br><span class="line">    <span class="string">f&#x27;<span class="subst">&#123;course&#125;</span>/<span class="subst">&#123;module&#125;</span>/<span class="subst">&#123;stuid&#125;</span>/<span class="subst">&#123;file_pattern&#125;</span>&#x27;</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> f.name.endswith(<span class="string">&#x27;.result&#x27;</span>):</span><br><span class="line">        <span class="comment"># f 是一个提交</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="30-1-2-文件系统的优缺点"><a href="#30-1-2-文件系统的优缺点" class="headerlink" title="30.1.2 文件系统的优缺点"></a>30.1.2 文件系统的优缺点</h3><p><strong>优点</strong><br>其就是最直观的存储文件的地方，并且这些文件有大量的 UNIX 工具可以用于处理这些数据；</p>
+<ul>
+<li>需要 rejudge 所有的提交时，不需要提交所有的 result ，可以轻松的使用一行代码看到所有的 result；<ul>
+<li><code>find OS2022/L1 -name &quot;*.result&quot; | xargs rm</code></li>
+</ul>
+</li>
+<li>容易查看、调试、hacking；</li>
+</ul>
+<p><strong>缺点</strong><br>文件系统的缺点：</p>
+<ul>
+<li>低伸缩性<ul>
+<li>上万个文件时，都还可以忍受其性能；</li>
+<li>但是当几十万、几百万的提交时，此时对于任何一个文件的遍历都需要很久；</li>
+</ul>
+</li>
+<li>低可靠性<ul>
+<li>当网络突然断开时，可能会有 server error 出现；</li>
+<li>如果文件少时，可以手动重开；但是对于一个互联网提供商而言，其系统的要求是要求更高的可靠性；并且甚至希望其可以自动重启；</li>
+</ul>
+</li>
+</ul>
+<h2 id="30-2-关系数据库"><a href="#30-2-关系数据库" class="headerlink" title="30.2 关系数据库"></a>30.2 关系数据库</h2><h3 id="30-2-1-数据库的产生"><a href="#30-2-1-数据库的产生" class="headerlink" title="30.2.1 数据库的产生"></a>30.2.1 数据库的产生</h3><p><strong>需求的共性与关系数据库</strong><br>所有这些电商网站、用户数据等等，都是人的信息对象在互联网中的投影；<br>因此可以使用一个行和表，来通过一个个的行列来表达数据。数据库发现可以不使用树状结构，所有的东西都可以是表；</p>
+<ul>
+<li>数据库系统实现了一种查询语言，可以对表中的属性进行查询；<br>以下代码具有等价性<br>Python 代码：<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> stu <span class="keyword">in</span> students:</span><br><span class="line">    <span class="keyword">for</span> sub <span class="keyword">in</span> submissions:</span><br><span class="line">        <span class="keyword">if</span> (stu.sid, sub.course, sub.module) ==</span><br><span class="line">           (sub.sid, <span class="string">&#x27;OS2022&#x27;</span>, <span class="string">&#x27;M1&#x27;</span>):</span><br><span class="line">            <span class="keyword">yield</span> stu, sub</span><br></pre></td></tr></table></figure>
+SQL 代码：<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> students, submissions</span><br><span class="line"><span class="keyword">WHERE</span> submission.sid <span class="operator">=</span> students.sid <span class="keyword">AND</span></span><br><span class="line">      submissions.course <span class="operator">=</span> <span class="string">&#x27;OS2022&#x27;</span> <span class="keyword">AND</span></span><br><span class="line">      submissions.module <span class="operator">=</span> <span class="string">&#x27;M1&#x27;</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>特点：把对于数据的管理，从应用程序当中抽离出来</strong><br>好处：</p>
 <ol>
-<li><p>寄存器<br>查看方式：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info registers</span><br></pre></td></tr></table></figure>
-<p><img src="/../../image/Pasted%20image%2020230829192659.png"><br>这当中有些值是由在状态机的初始状态下直接将其赋为0，比如r8~r15寄存器，其不需要在二进制数据中进行指定；有些是需要指定的，比如rip寄存器的值；还有些是由OS来为其分配的，比如rsp寄存器；</p>
-</li>
-<li><p>内存（地址空间）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">info inferiors //获得进程号</span><br><span class="line">pmap 390489    //打印地址空间</span><br></pre></td></tr></table></figure></li>
+<li>可以提供高性能的检索；（可以建立索引、使用多个 CPU 进行检索）</li>
+<li>可以实现非常复杂的算法，实现算法的优化；</li>
 </ol>
-<p>所有这些地址空间中的数据，比如592k的可读可执行，首先会有两个问题：1、其地址在哪里；2、其初始值为多少；这些就是其初始值信息。<br>[[Lecture 12：进程的地址空间]]</p>
-<p><strong>可执行文件的本质</strong><br>可执行文件就是一个数据结构，描述了状态机的 初始状态 + 迁移，然后再思考将什么信息放入到二进制文件里。</p>
-<h3 id="16-1-3-操纵系统上的可执行文件"><a href="#16-1-3-操纵系统上的可执行文件" class="headerlink" title="16.1.3 操纵系统上的可执行文件"></a>16.1.3 操纵系统上的可执行文件</h3><p><strong>文件的可执行权限</strong><br>更改文件权限指令：<br>以下是添加一个可执行权限</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x a.out</span><br></pre></td></tr></table></figure>
-<p>如果将一个可执行文件的可执行权限抹除掉，此时再对其进行执行将产生报错；而如果将一个源代码文件的可执行权限打开，强行将一个源代码文件改为可执行：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x a.c</span><br></pre></td></tr></table></figure>
-<p>此时将产生一个Permission denied的报错。</p>
-<p><strong>是谁决定了一个文件能不能执行？</strong><br>执行一个程序时会使用execve系统调用，在使用execve读取可执行文件时，OS才会去检查其可执行权限；<br>![[Pasted image 20230322163623.png]]<br>但是如果将a.out文件的可执行权限抹除掉，此时再使用strace观察进程的系统调用会变成如下情况：<br>![[Pasted image 20230322163934.png]]<br>此时操作系统返回了EACCES，给了一个错误信息；<br>但如果将一个a.c文件，将其权限改为可执行文件，此时再去观测去strace其报错会变成：Exec format error信息，表示OS无法识别此可执行文件。 </p>
-<h3 id="16-1-4-常见的可执行文件"><a href="#16-1-4-常见的可执行文件" class="headerlink" title="16.1.4 常见的可执行文件"></a>16.1.4 常见的可执行文件</h3><p>核心：<strong>可执行文件就是一个操作系统内的普通对象；</strong></p>
-<p><strong>She-bang</strong><br>可以在一个c语言的文件中写入以下内容：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">#感叹号/usr/bin/python3</span><br><span class="line"></span><br><span class="line"><span class="title function_">print</span><span class="params">(<span class="string">&quot;Hello&quot;</span>)</span></span><br></pre></td></tr></table></figure>
-<p>此时这个a.c文件就变得可执行了，并且输出了Hello。</p>
-<p>She-bang机制：可以在代码当中跟一个可执行文件，然后程序会去执行它。<br>当操作系统发现了一个“#！”后，execve会把#！后背的内容填写到execve的第一个参数，把file文件填写到第二个参数；<br>所以She-bang就是一个偷梁换柱的execve。</p>
-<h2 id="16-2-解析可执行文件"><a href="#16-2-解析可执行文件" class="headerlink" title="16.2 解析可执行文件"></a>16.2 解析可执行文件</h2><h3 id="16-2-1-GNU-binutils-工具"><a href="#16-2-1-GNU-binutils-工具" class="headerlink" title="16.2.1 GNU binutils 工具"></a>16.2.1 GNU binutils 工具</h3><p>部分工具：<br>![[Pasted image 20230322190921.png]]<br>这些工具可以用在可执行文件上：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">readelf -h a.out</span><br></pre></td></tr></table></figure>
-
-<p>可执行文件就是描述状态机初始状态的数据结构，而binutils就是解析这个数据结构的工具；比如objdump就是把代码的汇编语言解析出来，其就是对于数据结构的查看、生成、修改的工具。</p>
-<h3 id="16-2-2-可执行文件的运行时状态"><a href="#16-2-2-可执行文件的运行时状态" class="headerlink" title="16.2.2 可执行文件的运行时状态"></a>16.2.2 可执行文件的运行时状态</h3><p>还可以使用调试器来获得可执行文件的运行时状态，info可以帮助debugger获得运行时状态。<br>GDB获得调用栈信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(gdb)bt</span><br></pre></td></tr></table></figure>
-<p>为什么GDB可以打印程序的back trace?GDB如何通过内存里面的信息打印出以上的信息？<br>因为二进制文件当中有一些额外信息，这些额外信息可以帮助你实现<code>addr2line</code>命令；</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">addr2line 0x401cfb a.out</span><br></pre></td></tr></table></figure>
-<p>然后会打印目标位置对应的行号：</p>
-<h3 id="16-2-3-调试信息"><a href="#16-2-3-调试信息" class="headerlink" title="16.2.3 调试信息"></a>16.2.3 调试信息</h3><p>在进行GCC编译的时候，如果加上了-S 选项，会加上一些额外的调试信息；</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -static source.c -g -S</span><br></pre></td></tr></table></figure>
-<p>使用-g表示生成汇编代码，在这其中生成了很多更多的调试信息；</p>
-<p><strong>DWARF通用调试信息</strong><br>编译器在编译时会生成很多额外的信息（DWARF调试信息），这些调试信息十分通用；其允许你对于任何一段内存定义一个函数f()，然后如果你的程序指针pc指向这里，每一段内存都有一个f()函数，调用这个f()就可以把这些内存当中存储的信息获得出来。</p>
-<p><strong>优化后的调试信息问题</strong><br>但是因为编译器的优化，导致在进行分析调试信息的时候，经常会产生一些错误，即把二进制的状态转换成汇编层面的语义十分具有挑战性。</p>
-<p><strong>程序BackTrace与GCC优化Bug</strong><br>在获得程序的backtrace时，需要获得每个被调用函数的地址。此时如果将函数在栈上通过寄存器的数值保存的rbp的数值来生成一个链表，可以通过访问此链表的方式来获得当前函数的每个地址信息。但是如果使用了gcc的-O2优化，则很多个函数会在优化后被合成一个函数，此时就无法获得其在C语言语言层面上的调用栈信息，进而无法获得其函数调用的backtrace。</p>
-<p><strong>逆向工程</strong><br>如果想获得一个商业软件的可执行文件里面，恢复其尽可能多的信息，就需要进行你想工程。<br>工具：ida<br>书籍：《IDApro权威指南》</p>
-<h2 id="16-3-链接与重定位"><a href="#16-3-链接与重定位" class="headerlink" title="16.3 链接与重定位"></a>16.3 链接与重定位</h2><h3 id="16-3-1-从C代码到二进制文件"><a href="#16-3-1-从C代码到二进制文件" class="headerlink" title="16.3.1 从C代码到二进制文件"></a>16.3.1 从C代码到二进制文件</h3><p>在使用gcc编译链接之后，一个代码当中对于未定义函数的使用，是如何通过链接，访问到其他代码当中的函数的？</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	f();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面是main函数，f()未定义</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//这里是f()的实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在使用gcc将main()函数对应的代码变成汇编代码之后，程序的大部分内容都已经被确定，但是还剩下部分callq指令（函数调用）未被确定：<br>![[Pasted image 20230328192912.png]]<br>此时其还不知道此函数的地址，其会生成00来填充；</p>
-<p><strong>汇编且还未链接的程序的设计语义</strong>：main.o就是一个数据结构，在这个数据结构当中包含了所有重要的代码，并且还包含了其<strong>未来需要满足的内容的约束</strong>。而在函数调用时，其就是相对偏移量的约束，S(目标函数位置) + A(-4) - P(P &#x3D; main + 0xb)。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">assert(</span><br><span class="line">	(<span class="type">char</span> *)hello == </span><br><span class="line">	(<span class="type">char</span> *)main + </span><br><span class="line">	<span class="number">0xf</span> +</span><br><span class="line">	*(<span class="type">int32_t</span> *)((<span class="type">uintptr_t</span>)main + <span class="number">0xb</span>));</span><br></pre></td></tr></table></figure>
-
-<h3 id="16-3-2-重新理解编译、链接过程"><a href="#16-3-2-重新理解编译、链接过程" class="headerlink" title="16.3.2 重新理解编译、链接过程"></a>16.3.2 重新理解编译、链接过程</h3><p><strong>编译器（gcc）</strong></p>
+<p><strong>数据库事务</strong><br>因为把数据和具体的应用程序代码进行了分离，因此可以带来一个好处：<strong>原子性</strong>；<br>操作系统文件目录系统的代码是没有原子性的，但 SQL 语句可以带来原子性。它还可以把好几个查询合在一起，实现一个混合的写入、查询；</p>
+<p><strong>SQL 与优化</strong><br>SQL 描述出你想要做什么，数据库引擎帮你想办法执行；</p>
 <ul>
-<li>High-level semantics (C 状态机) → low-level semantics (汇编)</li>
+<li>优化：靠索引和查询优化；<ul>
+<li>把 SQL 换成等价但是性能更优的形式；</li>
 </ul>
-<p><strong>汇编器 (as)</strong></p>
+</li>
+</ul>
+<h3 id="30-2-2-如何制作一个数据库"><a href="#30-2-2-如何制作一个数据库" class="headerlink" title="30.2.2 如何制作一个数据库"></a>30.2.2 如何制作一个数据库</h3><p><strong>基本概念</strong><br>制作一个数据库，某种意义上和实现一个文件系统很类似；</p>
 <ul>
-<li>Low-level semantics → Binary semantics (状态机容器)<ul>
-<li>“一一对应” 地翻译成二进制代码<ul>
-<li>sections, symbols, debug info</li>
+<li>数据库就是虚拟磁盘上的数据结构</li>
+<li>把 SQL 查询翻译成 read，write，lseek，fsync 等调用；</li>
 </ul>
-</li>
-<li>不能决定的要留下 “之后怎么办” 的信息<ul>
-<li>relocations</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>链接器 (ld)</strong></p>
+<p>概念模型：<br><img src="/../../image/Pasted%20image%2020230908184422.png"></p>
+<p><strong>实现路径</strong></p>
 <ul>
-<li>合并所有容器，得到 “一个完整的状态机”<ul>
-<li>ldscript (<code>-Wl,--verbose</code>); 和 C Runtime Objects (CRT) 链接</li>
-<li>missing&#x2F;duplicate symbol 会出错</li>
+<li><a href="https://github.com/cmu-db/bustub">Bustub</a> from <a href="https://15445.courses.cs.cmu.edu/fall2021/assignments.html">CMU 15-445</a><ul>
+<li>L0 - C++ Primer</li>
+<li>L1 - Buffer Pool Manager</li>
+<li>L2 - Hash Index</li>
+<li>L3 - Query Execution</li>
+<li>L 4 - Concurrency Control</li>
 </ul>
 </li>
 </ul>
-<p><strong>图示：</strong><br><img src="/../../image/Pasted%20image%2020230829192839.png"></p>
-<p>而在这些过程当中，ELF只不过是一个描述以上过程的一个“容器数据结构”，包含了完成以上过程所需的必要信息：<br><img src="/../../image/Pasted%20image%2020230829192904.png"><br>正确的理解ELF的方式是：当你自己想要实现一个ELF时，有哪些部分是必不可少的？</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">executable</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> entry; <span class="comment">//代码的进入点地址：代码、数据</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">segment</span> *<span class="title">segments</span>;</span> <span class="comment">//不同的段</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> *<span class="title">relocs</span>;</span><span class="comment">//重定位</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> *<span class="title">symbols</span>;</span> </span><br><span class="line">&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">segment</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> flags, size; <span class="comment">//每个段是可执行可读？还是可执行？可写？</span></span><br><span class="line">	<span class="type">char</span> data[<span class="number">0</span>]; </span><br><span class="line">&#125; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> S, A, P;<span class="comment">//用于计算重定位后的地址</span></span><br><span class="line">	<span class="type">char</span> name[<span class="number">32</span>]; <span class="comment">//重定位地址的名字</span></span><br><span class="line">	&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> &#123;</span> <span class="type">uint32_t</span> off; <span class="type">char</span> name[<span class="number">32</span>]; &#125;;</span><br></pre></td></tr></table></figure>
-<p>然后在这么一个最简单的数据结构当中，会有很多缺陷，围绕这这些缺陷进行更多的设计，最终就形成了现在所看到的繁杂的ELF文件。</p>
+<p><strong>实现一个最简单的 DB</strong></p>
+<ul>
+<li>第一部分：在文件 file 的基础上，实现一个 std:: map 的数据结构；<ul>
+<li>支持两种操作</li>
+<li>put (k, v)</li>
+<li>get (k)</li>
+</ul>
+</li>
+<li>第二部分：日志系统（一种实现方式）<ul>
+<li>所有的 put 和 get 都给写进到日志的 Log 当中；</li>
+<li>把 read 的 buffer 实现在一个 log 写入当中；</li>
+<li>读取如何？<ul>
+<li>结果影响</li>
+<li><ol>
+<li>读放大；</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>写放大；</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>存储放大；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>解决读放大<ul>
+<li>不管三七二十一，先在内存中维护 log 的实时数据结构 (memtable)<ul>
+<li>Get 可以先在内存</li>
+</ul>
+</li>
+<li>Level 0: 直接把 memtable dump 到磁盘<ul>
+<li>按照 key 排序，写到不同的文件里；</li>
+<li>查找失败时，会到下一层继续查找；</li>
+</ul>
+</li>
+<li>Level 1: 在 Level 0 满 (4 MB) 时，排序所有 key，与 Level 1 合并<ul>
+<li>下一层大小是上一层 10 倍；</li>
+</ul>
+</li>
+<li>Level 2: 在 Level 1 满时，把操作应用到 Level 2, …</li>
+</ul>
+</li>
+</ul>
+<h2 id="30-3-走向新时代"><a href="#30-3-走向新时代" class="headerlink" title="30.3 走向新时代"></a>30.3 走向新时代</h2><p><strong>存储系统如何应对海量、实时的数据</strong><br>从 1990 -&gt; 2015 ，以 Lod 级别的增长增加存储大小；<br>总有一天，会有一个数据中心可以存储下整个互联网的数据：数据磁盘的大小 ✖ 带宽大小的增长速录 &gt; 互联网需求增长速率；<br>1990s: 高速网络 + 数据中心将可以存储整个互联网 → Google Search<br><img src="/../../image/Pasted%20image%2020230908184700.png"></p>
+<p><strong>社交网络的增长</strong><br>随着社交网络的增长，世界上没有任何一个服务器可以抗下社交网络的所有的数据；</p>
+<ul>
+<li>问题：<em>如果要为 QQ 建立数据库，要如何设计？</em></li>
+<li>对于社交网络而言，一般的数据库很快就无法应对了；<ul>
+<li>可能会有一个帖子，突然会有上千万的人进行关注；<br><img src="/../../image/Pasted%20image%2020230908185127.png"><br>如何再在一个数据库的抽象之上，建立一个可以满足所有需求的 big storage？</li>
+</ul>
+</li>
+</ul>
+<p><strong>遇到的问题：CAP Theorem</strong><br>以行星规模的、应对数据的抽象；</p>
+<ul>
+<li><p>解决：<strong>数据中心当中的、超大规模的分布式的存储</strong></p>
+</li>
+<li><p>问题：延迟和数据一致性是不可兼得的；</p>
+</li>
+<li><p>数据库提供</p>
+<ul>
+<li>这当中最难的是：一致性和速度的关系；</li>
+<li><ol>
+<li>原子性</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>一致性</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>持久性</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>隔离性（Isolation）<br><img src="/../../image/Pasted%20image%2020230908185615.png"></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>传统的数据库：</p>
+<ul>
+<li>任何的请求都必须同时发到两个数据库上；查就给你；</li>
+<li>拥有可用性和一致性；</li>
+<li>但很难解决跨地理中心的延迟；</li>
+</ul>
+</li>
+</ul>
+<h3 id="30-3-1-分布式系统的核心"><a href="#30-3-1-分布式系统的核心" class="headerlink" title="30.3.1 分布式系统的核心"></a>30.3.1 分布式系统的核心</h3><p><strong>分布式系统与锁</strong><br>如果要管理海量的数据时，此时就<strong>不能上锁</strong>；</p>
+<ul>
+<li>分布式系统的基本假设：任何一个设备都有可能出错、消失；<ul>
+<li>刚给一个设备上锁，就消失了?</li>
+</ul>
+</li>
+<li>如果要给分布在世界各地的 DC 上锁；</li>
+</ul>
+<p><strong>如何在分布式系统当中保持一致性</strong><br>每个设备都是状态机，用 msg 的方式同步不同的状态机；<br>并且当中可能节点也会出现消失；</p>
+<ul>
+<li><a href="https://raft.github.io/">In search of an understandable consensus algorithm</a> (USENIX ATC’14, Best Paper Award 🏅)<ul>
+<li>“Replicated State Machines”<ul>
+<li>又是状态机！</li>
+</ul>
+</li>
+<li><a href="https://raft.github.io/raftscope/index.html">RaftScope</a> Visualization Tool<ul>
+<li>再次感受被并发编程支配的恐惧</li>
+<li>不仅并发，而且线程可能随时消失！</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>操作系统</category>
       </categories>
       <tags>
+        <tag>文件系统</tag>
         <tag>操作系统</tag>
-        <tag>链接</tag>
-        <tag>可执行文件</tag>
-        <tag>汇编</tag>
+        <tag>xv6</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lecture 29：Xv6文件系统实现</title>
+    <url>/2023/09/a4bbdf6f0414.html</url>
+    <content><![CDATA[<p><strong>什么是文件系统</strong><br>图书馆支持的所有操作，就是文件系统需要的所有操作；</p>
+<ul>
+<li>新建一个书架-&gt;新建文件夹</li>
+<li>在书架的基础上：加上一本书</li>
+<li>书签：文件描述符</li>
+</ul>
+<p><strong>FAT文件系统实现</strong><br>使用链表将一个个的文件Cluster连起来；在目录的最前面使用metadata来描述一些元信息：文件大小、目录结构等等；<br>这些链表如果是顺序存储情况下，在内存里面也将是连续的。但如果出现不是线性的存储，则其链表以及Cluster可能会分布在内存的各地；<br><img src="/../../image/Pasted%20image%2020230904200953.png"></p>
+<ul>
+<li>UNIX文件系统实现<ul>
+<li>UNIX的文件系统，把以上的FAT当中用于连接cluster的链表全部存储在了内存当中的一个固定的地方，此时可以通过读取此固定的地方来知道如何对文件进行操作；<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="29-1-mkfs：创建文件系统"><a href="#29-1-mkfs：创建文件系统" class="headerlink" title="29.1 mkfs：创建文件系统"></a>29.1 mkfs：创建文件系统</h2><p><strong>实现：只管分配，不管回收</strong><br>这个mkfs就是只管分配，不管回收的代码；</p>
+<ul>
+<li>rsect&#x2F;wsect (bread&#x2F;bwrite)</li>
+<li>balloc&#x2F;bzero</li>
+<li>ialloc</li>
+<li>iappend</li>
+<li>rinode&#x2F;winode<br>不管是FAT还是UNIX，最基础的内容都是rsect和wsect函数（由OS提供）；</li>
+</ul>
+<p><strong>如何阅读xv6的文件系统部分代码</strong><br>无论代码多么复杂，最后都会变成rsect和wsect这两个接口的调用；<br>因此只要可以把这两个接口的调用全部找出来，就可以更轻松的阅读这部分代码；</p>
+<ul>
+<li>用Python写的控制gdb的脚本<ul>
+<li>trace(gdb.Breakpoint)：打一个break点；<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TRACED = <span class="string">&#x27;bwrite balloc ialloc iappend rinode winode rsect wsect&#x27;</span>.split()</span><br><span class="line">IGNORE = <span class="string">&#x27;ip xp buf&#x27;</span>.split()</span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">trace</span>(gdb.Breakpoint):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">stop</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        f, bt = gdb.selected_frame(), []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> f <span class="keyword">and</span> f.is_valid():</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (name := f.name()) <span class="keyword">in</span> TRACED:</span><br><span class="line"></span><br><span class="line">                lvars = [<span class="string">f&#x27;<span class="subst">&#123;sym.name&#125;</span>=<span class="subst">&#123;sym.value(f)&#125;</span>&#x27;</span></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> sym <span class="keyword">in</span> f.block()</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> sym.is_argument <span class="keyword">and</span> sym.name <span class="keyword">not</span> <span class="keyword">in</span> IGNORE]</span><br><span class="line"></span><br><span class="line">                bt.append(<span class="string">f&#x27;\033[32m<span class="subst">&#123;name&#125;</span>\033[0m(<span class="subst">&#123;<span class="string">&quot;, &quot;</span>.join(lvars)&#125;</span>)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            f = f.older()</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;    &#x27;</span> * (<span class="built_in">len</span>(bt) - <span class="number">1</span>) + bt[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span> <span class="comment"># won&#x27;t stop at this breakpoint</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">gdb.execute(<span class="string">&#x27;set prompt off&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;set pagination off&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> fn <span class="keyword">in</span> TRACED:</span><br><span class="line">    trace(fn)</span><br><span class="line">gdb.execute(<span class="string">&#x27;run fs.img README user/_ls&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;quit&#x27;</span>)</span><br></pre></td></tr></table></figure>
+使用此指令来执行以上代码：<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gdb -ex &#x27;source mkfs/trace.py&#x27; mkfs/mkfs</span><br></pre></td></tr></table></figure>
+mkfs 就是在磁盘上创建了一个数据结构，这个数据结构就是往一个文件的后背写入一些数据，不用管怎么删除。将代码最终变成 bread 和 bwrite；</li>
+</ul>
+</li>
+</ul>
+<h3 id="29-1-1-mkfs-问题"><a href="#29-1-1-mkfs-问题" class="headerlink" title="29.1.1 mkfs 问题"></a>29.1.1 mkfs 问题</h3><p><strong>mkfs 问题</strong><br>使用 mkfs 的时候，其会使用大量的 bread 和 bwrite ，并且一个简单的目录创建也会使用大量的代码。为了优化性能，另一种设计是使用 buffer cache 的技术。</p>
+<h2 id="29-2-buffer-cache"><a href="#29-2-buffer-cache" class="headerlink" title="29.2 buffer cache"></a>29.2 buffer cache</h2><h3 id="29-2-1-buffer-cache-基础概念"><a href="#29-2-1-buffer-cache-基础概念" class="headerlink" title="29.2.1 buffer cache 基础概念"></a>29.2.1 buffer cache 基础概念</h3><p><strong>什么是 buffer cache</strong><br>在计算机操作系统中，Buffer Cache（缓冲区高速缓存）是一种机制，用于加速对磁盘和其他块设备的访问。它通过在内存中维护一个缓冲区来实现。</p>
+<p><strong>作用：</strong><br>Buffer Cache 在操作系统中扮演着重要的角色，具体包括以下作用：</p>
+<ol>
+<li><strong>加速磁盘访问</strong>：通过存储最近读取的数据块，Buffer Cache 减少了直接从磁盘读取数据的次数，提高了读取操作的速度。  </li>
+<li><strong>减少磁盘访问次数</strong>：当应用程序读取磁盘数据时，操作系统首先检查缓冲区是否存在所需的数据块，如果缓冲区中已有数据，直接从内存获取避免了频繁的磁盘访问。 </li>
+<li><strong>优化写入操作</strong>：Buffer Cache 也用于写入操作。当应用程序要写入数据到磁盘时，操作系统首先将数据写入缓冲区，并记录更新信息。通过延迟将数据刷新到磁盘，系统可以在内存中进行高效的数据操作。</li>
+</ol>
+<p><strong>如何优化 buffer cache ?</strong><br>使用一定的算法，预测哪一些部分的数据更经常的被使用，然后提前将其读入到 buffer cache 当中；</p>
+<h3 id="29-2-2-调试系统调用"><a href="#29-2-2-调试系统调用" class="headerlink" title="29.2.2 调试系统调用"></a>29.2.2 调试系统调用</h3><p><strong>写操作实现</strong><br>一个写的操作，会被分成很多个更小的写的操作；</p>
+<ul>
+<li>1 GB 文件的写入<ul>
+<li>拆分成若干个 4 kb 的文件；</li>
+<li>每一个小的 4 kb 文件可能可以执行 all or nothing 操作；</li>
+</ul>
+</li>
+<li>写入指令<ul>
+<li>应用程序实际上使用的不是 bwrite ，应用程序使用的是 logwrite 方法；</li>
+<li>因为 bwrite 指令在进行存储的时候不具有原子性；<ul>
+<li>一个写操作会对 block 的多个数据记录项进行修改；</li>
+<li>bitmap</li>
+<li>block </li>
+<li>superdata</li>
+<li>这些操作必须全部都进行，不然就会出现数据不一致；</li>
+</ul>
+</li>
+<li><strong>所有对于磁盘的写都会变成对于日志的写</strong>；</li>
+<li>然后再进行整块的写入；</li>
+</ul>
+</li>
+<li>写入的时机<ul>
+<li>执行 <code>end_op</code> 的时候；</li>
+<li>执行一个 <code>commit()</code> 方法；</li>
+<li>核心：<strong>由 log 系统调用 bread 和 bwrite 方法</strong>；</li>
+</ul>
+</li>
+</ul>
+<h2 id="29-3-崩溃恢复"><a href="#29-3-崩溃恢复" class="headerlink" title="29.3 崩溃恢复"></a>29.3 崩溃恢复</h2><p><strong>问题：是否可以恢复已经崩溃的代码？</strong><br>Xv 6 是否真的在崩溃发生后，可以把内容恢复回来；</p>
+<p><strong>故障注入</strong><br>Crash &#x3D; 断电；</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">crash</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> count = <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">if</span> (--count &lt; <span class="number">0</span>) </span><br><span class="line">	&#123;</span><br><span class="line">	  <span class="built_in">printf</span>(<span class="string">&quot;crash\n&quot;</span>);</span><br><span class="line">	  *((<span class="type">int</span> *)<span class="number">0x100000</span>) = <span class="number">0x5555</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以设置一个计数器为 count，每一次执行 bread 的时候此 count 都会减一；<br>当其小于零时，会执行 <code>*((int *)0x100000) = 0x5555;</code> 代码，然后虚拟机就可以关闭；</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>文件系统</tag>
+        <tag>操作系统</tag>
+        <tag>xv6</tag>
       </tags>
   </entry>
   <entry>
@@ -2096,79 +2731,115 @@
       </tags>
   </entry>
   <entry>
-    <title>Lecture 29：Xv6文件系统实现</title>
-    <url>/2023/09/a4bbdf6f0414.html</url>
-    <content><![CDATA[<p><strong>什么是文件系统</strong><br>图书馆支持的所有操作，就是文件系统需要的所有操作；</p>
+    <title>Lecture 31：Android系统</title>
+    <url>/2023/09/4e1472042b67.html</url>
+    <content><![CDATA[<p>虽然现在学习 OS 的是主要是面对的命令行，但 OS 可以被推广出来，主要还是因为图形界面；</p>
 <ul>
-<li>新建一个书架-&gt;新建文件夹</li>
-<li>在书架的基础上：加上一本书</li>
-<li>书签：文件描述符</li>
+<li>有没有准备好，自己设计实现一个 OS ，并且用于图形界面？<br>内容大纲：</li>
 </ul>
-<p><strong>FAT文件系统实现</strong><br>使用链表将一个个的文件Cluster连起来；在目录的最前面使用metadata来描述一些元信息：文件大小、目录结构等等；<br>这些链表如果是顺序存储情况下，在内存里面也将是连续的。但如果出现不是线性的存储，则其链表以及Cluster可能会分布在内存的各地；<br><img src="/../../image/Pasted%20image%2020230904200953.png"></p>
+<span id="more"></span>
+<h2 id="31-1-走向移动互联网时代"><a href="#31-1-走向移动互联网时代" class="headerlink" title="31.1 走向移动互联网时代"></a>31.1 走向移动互联网时代</h2><p><strong>移动设备的变迁</strong><br>从 8 bit 的声音，到现在的现代声音：体现了其计算性能的变化；</p>
 <ul>
-<li>UNIX文件系统实现<ul>
-<li>UNIX的文件系统，把以上的FAT当中用于连接cluster的链表全部存储在了内存当中的一个固定的地方，此时可以通过读取此固定的地方来知道如何对文件进行操作；<span id="more"></span></li>
+<li>计算力在变化；</li>
+<li>屏幕的素质大幅度进步；</li>
+<li>移动支付：使用绿码、蓝码进行移动支付；<br><img src="/../../image/Pasted%20image%2020230910172238.png"></li>
 </ul>
-</li>
-</ul>
-<h2 id="1-mkfs：创建文件系统"><a href="#1-mkfs：创建文件系统" class="headerlink" title="1.mkfs：创建文件系统"></a>1.mkfs：创建文件系统</h2><p><strong>实现：只管分配，不管回收</strong><br>这个mkfs就是只管分配，不管回收的代码；</p>
+<h2 id="31-2-Android-简介"><a href="#31-2-Android-简介" class="headerlink" title="31.2 Android 简介"></a>31.2 Android 简介</h2><h3 id="31-2-1-Android-基本情况"><a href="#31-2-1-Android-基本情况" class="headerlink" title="31.2.1 Android 基本情况"></a>31.2.1 Android 基本情况</h3><p><strong>Android</strong><br>安卓官方主页：<a href="https://developer.android.google.cn/">Android 官方主页</a></p>
 <ul>
-<li>rsect&#x2F;wsect (bread&#x2F;bwrite)</li>
-<li>balloc&#x2F;bzero</li>
-<li>ialloc</li>
-<li>iappend</li>
-<li>rinode&#x2F;winode<br>不管是FAT还是UNIX，最基础的内容都是rsect和wsect函数（由OS提供）；</li>
+<li>安卓的成功，和其编程模型有关；<ul>
+<li>新的平台要能够成功，首先就需要：保证有大量的开发者；</li>
 </ul>
-<p><strong>如何阅读xv6的文件系统部分代码</strong><br>无论代码多么复杂，最后都会变成rsect和wsect这两个接口的调用；<br>因此只要可以把这两个接口的调用全部找出来，就可以更轻松的阅读这部分代码；</p>
+</li>
+<li>软件架构：Linux + Framework + JVM<ul>
+<li>JVM：有其自己的指令集，一个虚拟机上小的指令集；<ul>
+<li>所有的东西的存在栈上，不需要寄存器；</li>
+<li>Java Virtual Machine：其 Java 很早期的版本就是一个解释器，解释器在执行这个代码；</li>
+<li>因此其执行应用很卡；</li>
+</ul>
+</li>
+<li>但宁可牺牲性能，也要把 Java 给推出来；<ul>
+<li>Java 简单、程序员多，容易写对；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>支持 Java 是一个非常高瞻远瞩的决定<ul>
+<li>Qualcomm MSM7201<ul>
+<li>ARMv6 指令集</li>
+<li>528 MHz x 1CPU, 顺序八级流水线</li>
+<li>TSMC 90 nm</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>现在主要支持 Kotlin 语言；</li>
+</ul>
+<h3 id="31-2-2-Android-架构"><a href="#31-2-2-Android-架构" class="headerlink" title="31.2.2 Android 架构"></a>31.2.2 Android 架构</h3><p><strong>Android Apps</strong><br>一个运行在 Java 虚拟机 (<a href="http://aospxref.com/android-12.0.0_r3/xref/art/">Android Runtime</a>) 上的应用程序；</p>
 <ul>
-<li>用Python写的控制gdb的脚本<ul>
-<li>trace(gdb.Breakpoint)：打一个break点；<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TRACED = <span class="string">&#x27;bwrite balloc ialloc iappend rinode winode rsect wsect&#x27;</span>.split()</span><br><span class="line">IGNORE = <span class="string">&#x27;ip xp buf&#x27;</span>.split()</span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">trace</span>(gdb.Breakpoint):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">stop</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        f, bt = gdb.selected_frame(), []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> f <span class="keyword">and</span> f.is_valid():</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (name := f.name()) <span class="keyword">in</span> TRACED:</span><br><span class="line"></span><br><span class="line">                lvars = [<span class="string">f&#x27;<span class="subst">&#123;sym.name&#125;</span>=<span class="subst">&#123;sym.value(f)&#125;</span>&#x27;</span></span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> sym <span class="keyword">in</span> f.block()</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> sym.is_argument <span class="keyword">and</span> sym.name <span class="keyword">not</span> <span class="keyword">in</span> IGNORE]</span><br><span class="line"></span><br><span class="line">                bt.append(<span class="string">f&#x27;\033[32m<span class="subst">&#123;name&#125;</span>\033[0m(<span class="subst">&#123;<span class="string">&quot;, &quot;</span>.join(lvars)&#125;</span>)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            f = f.older()</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;    &#x27;</span> * (<span class="built_in">len</span>(bt) - <span class="number">1</span>) + bt[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span> <span class="comment"># won&#x27;t stop at this breakpoint</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">gdb.execute(<span class="string">&#x27;set prompt off&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;set pagination off&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> fn <span class="keyword">in</span> TRACED:</span><br><span class="line">    trace(fn)</span><br><span class="line">gdb.execute(<span class="string">&#x27;run fs.img README user/_ls&#x27;</span>)</span><br><span class="line">gdb.execute(<span class="string">&#x27;quit&#x27;</span>)</span><br></pre></td></tr></table></figure>
-使用此指令来执行以上代码：<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gdb -ex &#x27;source mkfs/trace.py&#x27; mkfs/mkfs</span><br></pre></td></tr></table></figure>
-mkfs 就是在磁盘上创建了一个数据结构，这个数据结构就是往一个文件的后背写入一些数据，不用管怎么删除。将代码最终变成 bread 和 bwrite；</li>
+<li>安卓本身就是在 Linux 之上提供了一层定制：Apps；</li>
+<li>安卓是应用程序运行的平台；<ul>
+<li>开发手机应用，两个很重要的功能：</li>
+<li>网络</li>
+<li>人机交互</li>
 </ul>
 </li>
 </ul>
-<h3 id="1-1-mkfs-问题"><a href="#1-1-mkfs-问题" class="headerlink" title="1.1 mkfs 问题"></a>1.1 mkfs 问题</h3><p><strong>mkfs 问题</strong><br>使用 mkfs 的时候，其会使用大量的 bread 和 bwrite ，并且一个简单的目录创建也会使用大量的代码。为了优化性能，另一种设计是使用 buffer cache 的技术。</p>
-<h2 id="2-buffer-cache"><a href="#2-buffer-cache" class="headerlink" title="2.buffer cache"></a>2.buffer cache</h2><h3 id="2-1-buffer-cache-基础概念"><a href="#2-1-buffer-cache-基础概念" class="headerlink" title="2.1 buffer cache 基础概念"></a>2.1 buffer cache 基础概念</h3><p><strong>什么是 buffer cache</strong><br>在计算机操作系统中，Buffer Cache（缓冲区高速缓存）是一种机制，用于加速对磁盘和其他块设备的访问。它通过在内存中维护一个缓冲区来实现。</p>
-<p><strong>作用：</strong><br>Buffer Cache 在操作系统中扮演着重要的角色，具体包括以下作用：</p>
-<ol>
-<li><strong>加速磁盘访问</strong>：通过存储最近读取的数据块，Buffer Cache 减少了直接从磁盘读取数据的次数，提高了读取操作的速度。  </li>
-<li><strong>减少磁盘访问次数</strong>：当应用程序读取磁盘数据时，操作系统首先检查缓冲区是否存在所需的数据块，如果缓冲区中已有数据，直接从内存获取避免了频繁的磁盘访问。 </li>
-<li><strong>优化写入操作</strong>：Buffer Cache 也用于写入操作。当应用程序要写入数据到磁盘时，操作系统首先将数据写入缓冲区，并记录更新信息。通过延迟将数据刷新到磁盘，系统可以在内存中进行高效的数据操作。</li>
-</ol>
-<p><strong>如何优化 buffer cache ?</strong><br>使用一定的算法，预测哪一些部分的数据更经常的被使用，然后提前将其读入到 buffer cache 当中；</p>
-<h3 id="2-2-调试系统调用"><a href="#2-2-调试系统调用" class="headerlink" title="2.2 调试系统调用"></a>2.2 调试系统调用</h3><p><strong>写操作实现</strong><br>一个写的操作，会被分成很多个更小的写的操作；</p>
+<p><strong>Kotlin 语言</strong><br>其本质上还是 Java 语言，它的代码也是被编译成 JVM 的字节码，而且语法会更阿吉舒服；</p>
+<p><strong>架构关系</strong><br><img src="/../../image/Pasted%20image%2020230910173938.png"></p>
+<p><strong>架构</strong><br>现在使用的很多软件：支付宝、微信等等，其都是网页；</p>
 <ul>
-<li>1 GB 文件的写入<ul>
-<li>拆分成若干个 4 kb 的文件；</li>
-<li>每一个小的 4 kb 文件可能可以执行 all or nothing 操作；</li>
+<li>WebView Object allow you to display web content as part of your activity layout, but lack some of the feature of fully-devloped browsers;</li>
+<li>官方文档 (RTFM)</li>
 </ul>
-</li>
-<li>写入指令<ul>
-<li>应用程序实际上使用的不是 bwrite ，应用程序使用的是 logwrite 方法；</li>
-<li>因为 bwrite 指令在进行存储的时候不具有原子性；<ul>
-<li>一个写操作会对 block 的多个数据记录项进行修改；</li>
-<li>bitmap</li>
-<li>block </li>
-<li>superdata</li>
-<li>这些操作必须全部都进行，不然就会出现数据不一致；</li>
-</ul>
-</li>
-<li><strong>所有对于磁盘的写都会变成对于日志的写</strong>；</li>
-<li>然后再进行整块的写入；</li>
-</ul>
-</li>
-<li>写入的时机<ul>
-<li>执行 <code>end_op</code> 的时候；</li>
-<li>执行一个 <code>commit()</code> 方法；</li>
-<li>核心：<strong>由 log 系统调用 bread 和 bwrite 方法</strong>；</li>
+<ul>
+<li><a href="https://developer.android.google.cn/kotlin">Kotlin</a></li>
+<li><a href="https://developer.android.google.cn/reference/packages">Platform</a><ul>
+<li><a href="https://developer.android.google.cn/reference/android/view/View">android.view.View</a>: “the basic building block for user interface components”</li>
+<li><a href="https://developer.android.google.cn/reference/android/webkit/WebView">android.webkit.WebView</a> - 嵌入应用的网页</li>
+<li><a href="https://developer.android.google.cn/reference/android/hardware/camera2/package-summary">android.hardware.camera2</a> - 相机</li>
+<li><a href="https://developer.android.google.cn/reference/android/database/sqlite/package-summary">android.database.database</a> - 数据库<ul>
+<li>安卓应用的所有数据都会存储在数据库当中；</li>
 </ul>
 </li>
 </ul>
-<h2 id="3-崩溃恢复"><a href="#3-崩溃恢复" class="headerlink" title="3.崩溃恢复"></a>3.崩溃恢复</h2><p><strong>问题：是否可以恢复已经崩溃的代码？</strong><br>Xv 6 是否真的在崩溃发生后，可以把内容恢复回来；</p>
-<p><strong>故障注入</strong><br>Crash &#x3D; 断电；</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">crash</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> count = <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">if</span> (--count &lt; <span class="number">0</span>) </span><br><span class="line">	&#123;</span><br><span class="line">	  <span class="built_in">printf</span>(<span class="string">&quot;crash\n&quot;</span>);</span><br><span class="line">	  *((<span class="type">int</span> *)<span class="number">0x100000</span>) = <span class="number">0x5555</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以设置一个计数器为 count，每一次执行 bread 的时候此 count 都会减一；<br>当其小于零时，会执行 <code>*((int *)0x100000) = 0x5555;</code> 代码，然后虚拟机就可以关闭；</p>
+</li>
+</ul>
+<h2 id="31-3-Android-App"><a href="#31-3-Android-App" class="headerlink" title="31.3 Android App"></a>31.3 Android App</h2><h3 id="31-3-1-四大组件"><a href="#31-3-1-四大组件" class="headerlink" title="31.3.1 四大组件"></a>31.3.1 四大组件</h3><p><strong>首先第一个设想：在这之上进行编程的程序员可能不太靠谱</strong></p>
+<p><strong>Activity</strong></p>
+<ul>
+<li>应用程序的 UI 界面 (Event Driven)<ul>
+<li>应用是一个事件循环；</li>
+<li>只要去重写这些定义出来的事件，就可以自动被执行回调；</li>
+<li>整个是一个事件周期；</li>
+</ul>
+</li>
+<li>存在一个 Activity Stack (应用拉起)<br><img src="/../../image/Pasted%20image%2020230910174910.png"></li>
+</ul>
+<p><strong>Service</strong></p>
+<ul>
+<li>无界面的后台服务</li>
+<li>可以给其他的应用程序提供后台服务的支持；<ul>
+<li>比如在京东里面进行微信支付，就需要调用微信的 APP 的代码进行；</li>
+<li>在窗口栈上；</li>
+</ul>
+</li>
+</ul>
+<p><strong>Broadcast</strong></p>
+<ul>
+<li>接受系统消息，做出反应<ul>
+<li>例如 “插上电源”、“Wifi 断开”</li>
+</ul>
+</li>
+<li>安卓里面所有的应用权限都是被 OS 管理的<ul>
+<li>只有被授权之后，才可以获得这个权限；</li>
+<li>如何为所有的应用程序的需求服务好；</li>
+</ul>
+</li>
+</ul>
+<p><strong>ContentProvider</strong></p>
+<ul>
+<li>可以在应用间共享的数据存储 (insert, update, query, …)</li>
+</ul>
 ]]></content>
       <categories>
         <category>操作系统</category>
@@ -2176,7 +2847,26 @@ mkfs 就是在磁盘上创建了一个数据结构，这个数据结构就是往
       <tags>
         <tag>文件系统</tag>
         <tag>操作系统</tag>
-        <tag>xv6</tag>
+        <tag>Android</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Game Engine】P2：Precompiled Header</title>
+    <url>/2023/08/d5920372157c.html</url>
+    <content><![CDATA[<p>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。</p>
+<span id="more"></span>
+<h1 id="1-编写预编译头"><a href="#1-编写预编译头" class="headerlink" title="1.编写预编译头"></a>1.编写预编译头</h1><p><strong>C++中的PCH</strong><br>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。以下是负责的.h代码；</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_set&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HZ_PLATFORM_WINDOWS</span></span><br><span class="line">	<span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-将预编译头内容加入到premake"><a href="#2-将预编译头内容加入到premake" class="headerlink" title="2.将预编译头内容加入到premake"></a>2.将预编译头内容加入到premake</h1><p>加入到Premake中<br>需要把内容加入到premake当中：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">project <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    location <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    kind <span class="string">&quot;SharedLib&quot;</span></span><br><span class="line"></span><br><span class="line">    language <span class="string">&quot;C++&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">targetdir</span> (<span class="string">&quot;bin/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">objdir</span> (<span class="string">&quot;bin-int/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    pchheader <span class="string">&quot;skpch.h&quot;</span></span><br><span class="line"></span><br><span class="line">    pchsource <span class="string">&quot;Satsuki/src/skpch&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    files</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.h&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.cpp&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    includedirs</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>游戏引擎</category>
+      </categories>
+      <tags>
+        <tag>游戏引擎</tag>
+        <tag>C++</tag>
+        <tag>编译</tag>
       </tags>
   </entry>
   <entry>
@@ -2258,7 +2948,7 @@ mkfs 就是在磁盘上创建了一个数据结构，这个数据结构就是往
 <h3 id="3-2-1-补充：ASSERT-与-Log-h"><a href="#3-2-1-补充：ASSERT-与-Log-h" class="headerlink" title="3.2.1 补充：ASSERT 与 Log.h"></a>3.2.1 补充：ASSERT 与 Log.h</h3><p>新增加的输出代码：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifdef</span> SK_ENABLE_ASSERTS</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> SK_ASSERT(x, ...) &#123; <span class="keyword">if</span>(!(x)) &#123; SK_ERROR(<span class="string">&quot;Assertion Failed: &#123;0&#125;&quot;</span>, __VA_ARGS__); __debugbreak(); &#125; &#125;</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> SK_CORE_ASSERT(x, ...) &#123; <span class="keyword">if</span>(!(x)) &#123; SK_CORE_ERROR(<span class="string">&quot;Assertion Failed: &#123;0&#125;&quot;</span>, __VA_ARGS__); __debugbreak(); &#125; &#125;</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> SK_ASSERT(x, ...)</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> SK_CORE_ASSERT(x, ...)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
 
-<p><strong>内容</strong><br>判断 Assert 当中的 bool 数值是否为假，如果为假，则输出 Asseertion Failed 信息（参数中传入的信息），并且打一个断电（break）；</p>
+<p><strong>内容</strong><br>判断 Assert 当中的 bool 数值是否为假，如果为假，则输出 Asseertion Failed 信息（参数中传入的信息），并且打一个断点（breakpoint）；</p>
 <ul>
 <li>并且可以轻松的设置，通过 <code>ifdef</code> 代码，可以实现轻松在 Debug 模式和 Release 模式之间的切换，去掉所有的 Asseertion 语句；</li>
 </ul>
@@ -2271,25 +2961,6 @@ mkfs 就是在磁盘上创建了一个数据结构，这个数据结构就是往
         <tag>C++</tag>
         <tag>OpenGL</tag>
         <tag>GLFW</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Game Engine】P2：Precompiled Header</title>
-    <url>/2023/08/d5920372157c.html</url>
-    <content><![CDATA[<p>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。</p>
-<span id="more"></span>
-<h1 id="1-编写预编译头"><a href="#1-编写预编译头" class="headerlink" title="1.编写预编译头"></a>1.编写预编译头</h1><p><strong>C++中的PCH</strong><br>很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。以下是负责的.h代码；</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_set&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HZ_PLATFORM_WINDOWS</span></span><br><span class="line">	<span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<h1 id="2-将预编译头内容加入到premake"><a href="#2-将预编译头内容加入到premake" class="headerlink" title="2.将预编译头内容加入到premake"></a>2.将预编译头内容加入到premake</h1><p>加入到Premake中<br>需要把内容加入到premake当中：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">project <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    location <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    kind <span class="string">&quot;SharedLib&quot;</span></span><br><span class="line"></span><br><span class="line">    language <span class="string">&quot;C++&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">targetdir</span> (<span class="string">&quot;bin/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">objdir</span> (<span class="string">&quot;bin-int/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    pchheader <span class="string">&quot;skpch.h&quot;</span></span><br><span class="line"></span><br><span class="line">    pchsource <span class="string">&quot;Satsuki/src/skpch&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    files</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.h&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.cpp&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    includedirs</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>游戏引擎</category>
-      </categories>
-      <tags>
-        <tag>游戏引擎</tag>
-        <tag>C++</tag>
-        <tag>编译</tag>
       </tags>
   </entry>
   <entry>
