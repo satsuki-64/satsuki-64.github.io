@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2F4F4F" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="内容大纲：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lecture 32：从逻辑门到计算机系统">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/09/780f1bb42e82.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="内容大纲：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230912163948.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230912164129.png">
+<meta property="article:published_time" content="2023-09-12T03:18:36.000Z">
+<meta property="article:modified_time" content="2023-09-12T08:44:36.891Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230912163948.png">
+
+
+<link rel="canonical" href="https://satsuki-64.github.io/2023/09/780f1bb42e82.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/09/780f1bb42e82.html","path":"2023/09/780f1bb42e82.html","title":"Lecture 32：从逻辑门到计算机系统"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Lecture 32：从逻辑门到计算机系统 | Satsuki的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  <a target="_blank" rel="noopener" href="https://github.com/satsuki-64" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Satsuki的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#32-1-%E6%95%B0%E5%AD%97%E7%B3%BB%E7%BB%9F%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84-%E2%80%9C%E5%85%AC%E7%90%86%E7%B3%BB%E7%BB%9F%E2%80%9D"><span class="nav-text">32.1 数字系统：计算机系统的 “公理系统”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#32-2-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%AE%97%E6%B3%95"><span class="nav-text">32.2 编程语言与算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#32-3-%E4%BB%8E%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%88%B0%E6%95%B0%E5%AD%97%E7%B3%BB%E7%BB%9F"><span class="nav-text">32.3 从编程语言到数字系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#32-3-1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="nav-text">32.3.1 操作系统上的程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#32-4-%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-text">32.4 什么是操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#32-4-1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF-C-%E7%A8%8B%E5%BA%8F"><span class="nav-text">32.4.1 操作系统是 C 程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#32-5-%E8%B5%B0%E5%BE%97%E6%9B%B4%E8%BF%9C"><span class="nav-text">32.5 走得更远</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#32-5-1-%E6%96%B0%E5%AD%A6%E4%B9%A0%E6%96%B9%E5%90%91%E2%80%93%E5%B9%B6%E5%8F%91%EF%BC%9A%E8%B5%B0%E5%90%91%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="nav-text">32.5.1 新学习方向–并发：走向分布式系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#32-5-2-%E6%96%B0%E5%AD%A6%E4%B9%A0%E6%96%B9%E5%90%91%E2%80%93%E8%99%9A%E6%8B%9F%E5%8C%96%EF%BC%9A%E9%87%8D%E6%96%B0%E7%90%86%E8%A7%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="nav-text">32.5.2 新学习方向–虚拟化：重新理解操作系统设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#32-5-3-%E6%96%B0%E5%AD%A6%E4%B9%A0%E6%96%B9%E5%90%91%E2%80%93%E6%8C%81%E4%B9%85%E5%8C%96%EF%BC%9A%E9%87%8D%E6%96%B0%E7%90%86%E8%A7%A3%E6%8C%81%E4%B9%85%E5%AD%98%E5%82%A8%E8%AE%BE%E8%AE%A1"><span class="nav-text">32.5.3 新学习方向–持久化：重新理解持久存储设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#32-5-4-%E5%92%8C%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%BB%E9%A2%98"><span class="nav-text">32.5.4 和操作系统相关的主题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Satsuki"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Satsuki</p>
+  <div class="site-description" itemprop="description">向着黄昏与自由迁徙</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/satsuki-64" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;satsuki-64" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/15079296601@163.com" title="E-Mail → 15079296601@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/1472895664" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;1472895664" rel="noopener me" target="_blank">Bilibili</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/09/780f1bb42e82.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Lecture 32：从逻辑门到计算机系统 | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lecture 32：从逻辑门到计算机系统
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-09-12 11:18:36 / 修改时间：16:44:36" itemprop="dateCreated datePublished" datetime="2023-09-12T11:18:36+08:00">2023-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>内容大纲：</p>
+<span id="more"></span>
+<h2 id="32-1-数字系统：计算机系统的-“公理系统”"><a href="#32-1-数字系统：计算机系统的-“公理系统”" class="headerlink" title="32.1 数字系统：计算机系统的 “公理系统”"></a>32.1 数字系统：计算机系统的 “公理系统”</h2><p><strong>数字逻辑电路</strong><br>所有的数字系统都是一个状态机；可以用很多个逻辑门来实现一个计算机硬件系统；<br>数字系统 &#x3D; 状态机</p>
+<ul>
+<li>状态：触发器</li>
+<li>迁移：组合逻辑<ul>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/logisim.c">logisim.c</a> 和 <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/seven-seg.py">seven-seg.py</a></li>
+<li>NEMU Full System Emulator</li>
+</ul>
+</li>
+</ul>
+<p><strong>数字逻辑电路与状态机</strong><br>本质都是对于状态机的描述，那么可以使用电路、框图，也可以使用一些描述性语言来进行；<br>数字系统的设计 &#x3D; 描述状态机</p>
+<ul>
+<li>HDL (Verilog)</li>
+<li>HCL (Chisel)<ul>
+<li>编译生成 Verilog</li>
+</ul>
+</li>
+<li>HLS (High Level Synthesis)<ul>
+<li>“从需求到代码”</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-2-编程语言与算法"><a href="#32-2-编程语言与算法" class="headerlink" title="32.2 编程语言与算法"></a>32.2 编程语言与算法</h2><p><strong>编程语言</strong><br>使用编程语言进行编程时，其就是描述一个状态机；<br>C&#x2F;Java&#x2F;Python 程序 &#x3D; 状态机</p>
+<ul>
+<li>状态：栈、堆、全局变量</li>
+<li>迁移：语句 (或语句一部分) 的执行<ul>
+<li>“程序设计语言的形式语义”</li>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/hanoi-nr.c">hanoi-nr.c</a><br>使用一些编程语言与算法，就可以解决一些问题；</li>
+</ul>
+</li>
+</ul>
+<p><strong>编程 &#x3D; 描述状态机</strong></p>
+<ul>
+<li>将人类世界的需求映射到计算机世界中的数据和计算<ul>
+<li>DFS 走迷宫 <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/dfs-fork.c">dfs-fork.c</a></li>
+<li>Dijkstra 算法求最短路径……</li>
+</ul>
+</li>
+<li>允许使用操作系统提供的 API<ul>
+<li>例子：<code>write(fd, buf, size)</code> 持久化数据</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-3-从编程语言到数字系统"><a href="#32-3-从编程语言到数字系统" class="headerlink" title="32.3 从编程语言到数字系统"></a>32.3 从编程语言到数字系统</h2><p><strong>如何使程序在数字系统上运行？</strong></p>
+<ul>
+<li>数字系统 &gt; 体系结构</li>
+<li>编译器 &gt; 编程语言</li>
+<li>数字系统 &gt; 体系结构 &gt; 操作系统 &gt; 编译器 &gt; 编程语言</li>
+</ul>
+<p><strong>如何从编程语言状态机的计算，到和物理设备的交互？</strong><br>和状态机之外的部分进行交互：操作系统；</p>
+<ul>
+<li>操作系统根本使命：管理很多资源、程序</li>
+</ul>
+<p>指令集体系结构</p>
+<ul>
+<li>在逻辑门之上建立的 “指令系统” (状态机)<ul>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/manuals/riscv-spec.pdf">The RISC-V Instruction Set Manual</a></li>
+<li>既容易用电路实现，又足够支撑程序执行</li>
+</ul>
+</li>
+</ul>
+<p>编译器 (也是个程序)</p>
+<ul>
+<li>将 “高级” 状态机 (程序) 翻译成的 “低级” 状态机 (指令序列)<ul>
+<li>翻译准则：external visible 的行为 (操作系统 API 调用) 等价</li>
+</ul>
+</li>
+</ul>
+<p>操作系统 (也是个程序)</p>
+<ul>
+<li>状态机 (运行中程序) 的管理者<ul>
+<li>使程序可以共享一个硬件系统上的资源 (例如 I&#x2F;O 设备)</li>
+</ul>
+</li>
+</ul>
+<h3 id="32-3-1-操作系统上的程序"><a href="#32-3-1-操作系统上的程序" class="headerlink" title="32.3.1 操作系统上的程序"></a>32.3.1 操作系统上的程序</h3><p>状态机 + 一条特殊的 “操作系统调用” 指令</p>
+<ul>
+<li>syscall (2)</li>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/minimal.S">minimal.S</a></li>
+</ul>
+<p>程序的编译、链接和加载</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/dl/dl.h">dl.h</a>, <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/dl/dlbox.c">dlbox.c</a></li>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/dl/libc.S">libc.S</a> - 提供 putchar 和 exit</li>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/dl/libhello.S">libhello.S</a> - 调用 putchar, 提供 hello</li>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/dl/main.S">main.S</a> - 调用 hello, 提供 main</li>
+</ul>
+<h2 id="32-4-什么是操作系统"><a href="#32-4-什么是操作系统" class="headerlink" title="32.4 什么是操作系统"></a>32.4 什么是操作系统</h2><p><strong>操作系统对象和 API</strong><br>三个主要部分：</p>
+<ul>
+<li>并发 Concurrency - <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/thread.h">thread.h</a> 和 <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/mem-ordering.c">mem-ordering.c</a> 打开潘多拉的盒子</li>
+<li>虚拟化 Virtualization - <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/sh-xv6.c">sh-xv6.c</a>; <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/fork-printf.c">fork-printf.c</a>; <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/dosbox-hack.c">dosbox-hack.c</a></li>
+<li>持久化 Persistence - <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/fatree.c">fatree.c</a>; <a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/fish-dir.sh">fish-dir.sh</a></li>
+</ul>
+<p><strong>在这组系统调用的基础上，就可以实现一切想实现的东西；</strong><br>M1 - pstree</p>
+<ul>
+<li>打印进程树 (文件系统 API; procfs)<br>M2 - libco</li>
+<li>进程内的状态机管理 (setjmp&#x2F;longjmp)<br>M3 - sperf</li>
+<li>strace (pipe; fork; execve)<br>M4 - crepl</li>
+<li>动态链接和加载 (fork; execve; dlopen)<br>M5 - freov</li>
+<li>文件系统解析 (mmap)</li>
+</ul>
+<p><strong>调试程序的能力：理解程序发生的一切</strong><br>“操作系统” 课给了你程序的 “最底层” 的状态机视角</p>
+<ul>
+<li>也给了很多之前很难回答问题的答案<ul>
+<li>如何创造一个 “最小” 的可执行文件？<ul>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/minimal.S">minimal.S</a></li>
+</ul>
+</li>
+<li><code>a.out</code> 是什么？</li>
+<li><code>a.out</code> 执行的第一条指令在哪里？</li>
+<li><code>printf</code> 是如何被调用的？</li>
+<li><code>a.out</code> 执行了哪些系统调用？</li>
+<li><code>a.out</code> 执行了多少条指令？<ul>
+<li><a target="_blank" rel="noopener" href="https://jyywiki.cn/pages/OS/2022/demos/inst-count.py">inst-count.py</a></li>
+<li><code>perf stat -e instructions:u</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="32-4-1-操作系统是-C-程序"><a href="#32-4-1-操作系统是-C-程序" class="headerlink" title="32.4.1 操作系统是 C 程序"></a>32.4.1 操作系统是 C 程序</h3><p><strong>操作系统本身也是一个 C 程序的状态机</strong><br>刷一下手机，你的计算机系统经历了非常复杂的过程</p>
+<ul>
+<li>应用程序 (app) → 库函数 (Android Framework) → 系统调用 → 操作系统中的对象 → 操作系统实现 (C 程序) → 设备驱动程序 → 硬件抽象层 → 指令集 → CPU, RAM, I&#x2F;O设备 → 门电路</li>
+</ul>
+<ul>
+<li>操作系统课给这个稍显复杂的过程一个清晰的轮廓<ul>
+<li>“这一切是可以掌控的”</li>
+<li>RTFM! RTFSC!</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-5-走得更远"><a href="#32-5-走得更远" class="headerlink" title="32.5 走得更远"></a>32.5 走得更远</h2><p><strong>你不再惧怕任何 system</strong></p>
+<ul>
+<li>嵌入式系统</li>
+<li>通用操作系统</li>
+<li>分布式系统</li>
+<li>……</li>
+</ul>
+<p><strong>不再惧怕任何 “需求” 的实现</strong></p>
+<ul>
+<li>找到合适的系统调用实现</li>
+<li>做不到？可以自己加个系统调用</li>
+<li>软件上实现不了？可以改 CPU 来支持！</li>
+</ul>
+<p><strong>新的理解</strong><br>“一切皆状态机”</p>
+<ul>
+<li>状态的副本 (fork) 可以用来做什么？<ul>
+<li>Model checking, failure recovery, …</li>
+</ul>
+</li>
+</ul>
+<p>“死锁检测: lockdep 在每次 lock&#x2F;unlock 的时候插入一条 printf”</p>
+<ul>
+<li>这就是 dynamic analysis 的本质<ul>
+<li>如何减少 printf 的数量、怎么巧妙地记录、怎样分析日志……</li>
+<li>如何调控程序的执行？找到 bug 还是绕开 bug？</li>
+</ul>
+</li>
+</ul>
+<p>“文件系统是磁盘上的一个数据结构”</p>
+<ul>
+<li>通过 append-only 实现 journaling</li>
+<li>LSM Tree 和分布式 key-value store<ul>
+<li>Block chain 也是一个数据结构！</li>
+</ul>
+</li>
+</ul>
+<h3 id="32-5-1-新学习方向–并发：走向分布式系统"><a href="#32-5-1-新学习方向–并发：走向分布式系统" class="headerlink" title="32.5.1 新学习方向–并发：走向分布式系统"></a>32.5.1 新学习方向–并发：走向分布式系统</h3><p><strong>分布式系统问题</strong></p>
+<ul>
+<li>没有共享的内存</li>
+<li>任何一台机器都有可能消失<br>如何在不可靠的系统上实现可靠的系统；<br><img src="/../../image/Pasted%20image%2020230912163948.png"></li>
+</ul>
+<p><strong>如何为网络上的多台计算机提供统一的应用程序接口</strong></p>
+<ul>
+<li>把多个分布的、随时可能离线的计算机组成一个存储系统</li>
+<li>在存储的基础上完成计算</li>
+</ul>
+<h3 id="32-5-2-新学习方向–虚拟化：重新理解操作系统设计"><a href="#32-5-2-新学习方向–虚拟化：重新理解操作系统设计" class="headerlink" title="32.5.2 新学习方向–虚拟化：重新理解操作系统设计"></a>32.5.2 新学习方向–虚拟化：重新理解操作系统设计</h3><p>没有人规定操作系统里一定要有 “文件”、“进程” 这些对象；<br><img src="/../../image/Pasted%20image%2020230912164129.png"></p>
+<ul>
+<li>可以在用户态实现文件习惯（微内核就这样做的）<ul>
+<li>把大部分代码隔离在用户态，隔离性更好；</li>
+<li>代码发生崩溃时，更难干扰到其他部分；</li>
+</ul>
+</li>
+</ul>
+<h3 id="32-5-3-新学习方向–持久化：重新理解持久存储设计"><a href="#32-5-3-新学习方向–持久化：重新理解持久存储设计" class="headerlink" title="32.5.3 新学习方向–持久化：重新理解持久存储设计"></a>32.5.3 新学习方向–持久化：重新理解持久存储设计</h3><p><strong>文件系统没能解决的需求</strong></p>
+<ul>
+<li>大量的数据 (订单、用户、网络……) + 非简单目录遍历性质的查询</li>
+</ul>
+<p><strong>“数据库”：虚拟磁盘上的数据结构</strong></p>
+<ul>
+<li>就像我们在内存 (random access memory) 上构建各种数据结构<ul>
+<li>Binary heap, binary search tree, hash table, …</li>
+</ul>
+</li>
+<li>典型的数据库<ul>
+<li>关系数据库 (二维表、关系代数)</li>
+<li>key-value store (持久化的 <code>std::map</code>)</li>
+<li>VCS (目录树的快照集合)</li>
+</ul>
+</li>
+<li>SSD 和 NVM 带来的新浪潮</li>
+</ul>
+<h3 id="32-5-4-和操作系统相关的主题"><a href="#32-5-4-和操作系统相关的主题" class="headerlink" title="32.5.4 和操作系统相关的主题"></a>32.5.4 和操作系统相关的主题</h3><ul>
+<li>Computer Architecture<ul>
+<li>计算机硬件的设计、实现与评估</li>
+</ul>
+</li>
+<li>Computer Systems<ul>
+<li>系统软件 (软件) 的设计、实现与评估</li>
+</ul>
+</li>
+<li>Network Systems<ul>
+<li>网络与分布式系统的设计、实现与评估</li>
+</ul>
+</li>
+<li>Programming Languages<ul>
+<li>状态机 (计算过程) 的描述方法、分析和运行时支持</li>
+</ul>
+</li>
+<li>Software Engineering<ul>
+<li>程序&#x2F;系统的构造、理解和经验</li>
+</ul>
+</li>
+<li>System&#x2F;Software Security<ul>
+<li>系统软件的安 (safety) 全 (integrity)</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/89642755ef29.html" rel="prev" title="【CSharp系列】程序集加载与反射（1） -- 程序集的加载">
+                  <i class="fa fa-angle-left"></i> 【CSharp系列】程序集加载与反射（1） -- 程序集的加载
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/a77c50857d72.html" rel="next" title="Lecture 1：课程导论">
+                  Lecture 1：课程导论 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Satsuki</span>
+  </div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共57.4k字</span>
+</div>
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

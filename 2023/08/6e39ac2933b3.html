@@ -23,7 +23,7 @@
     <meta name="description" content="传统渲染问题：在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【游戏引擎原理】P1：GPU驱动的几何管线">
-<meta property="og:url" content="https://satsuki-64.github.io/2023/08/fd049e549b6a.html">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/08/6e39ac2933b3.html">
 <meta property="og:site_name" content="Satsuki的博客">
 <meta property="og:description" content="传统渲染问题：在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。">
 <meta property="og:locale" content="zh_CN">
@@ -40,11 +40,11 @@
 <meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230827161631.png">
 
 
-<link rel="canonical" href="https://satsuki-64.github.io/2023/08/fd049e549b6a.html">
+<link rel="canonical" href="https://satsuki-64.github.io/2023/08/6e39ac2933b3.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/08/fd049e549b6a.html","path":"2023/08/fd049e549b6a.html","title":"【游戏引擎原理】P1：GPU驱动的几何管线"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/08/6e39ac2933b3.html","path":"2023/08/6e39ac2933b3.html","title":"【游戏引擎原理】P1：GPU驱动的几何管线"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>【游戏引擎原理】P1：GPU驱动的几何管线 | Satsuki的博客</title>
@@ -162,18 +162,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -211,7 +211,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/fd049e549b6a.html">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/6e39ac2933b3.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo.png">
@@ -397,7 +397,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共47.8k字</span>
+  <span class="post-count">博客全站共57.4k字</span>
 </div>
     </div>
   </footer>

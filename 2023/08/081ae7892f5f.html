@@ -27,13 +27,15 @@
 <meta property="og:site_name" content="Satsuki的博客">
 <meta property="og:description" content="内容大纲：   基础知识   1.1 两种LLM 1.2 提问原则">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230911014920.png">
 <meta property="article:published_time" content="2023-08-30T17:53:45.000Z">
-<meta property="article:modified_time" content="2023-09-05T08:13:34.870Z">
+<meta property="article:modified_time" content="2023-09-10T17:49:22.184Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="ChatGPT">
 <meta property="article:tag" content="深度学习">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230911014920.png">
 
 
 <link rel="canonical" href="https://satsuki-64.github.io/2023/08/081ae7892f5f.html">
@@ -143,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-text">1.基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E4%B8%A4%E7%A7%8DLLM"><span class="nav-text">1.1 两种LLM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E6%8F%90%E9%97%AE%E5%8E%9F%E5%88%99"><span class="nav-text">1.2 提问原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E5%8E%9F%E5%88%99%E4%B8%80%EF%BC%9A%E7%BC%96%E5%86%99%E6%98%8E%E7%A1%AE%E3%80%81%E5%85%B7%E4%BD%93%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="nav-text">1.2.1 原则一：编写明确、具体的指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-%E5%8E%9F%E5%88%99%E4%BA%8C%EF%BC%9A%E7%BB%99%E6%A8%A1%E5%9E%8B%E6%97%B6%E9%97%B4%E5%8E%BB%E6%80%9D%E8%80%83"><span class="nav-text">1.2.2 原则二：给模型时间去思考</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-text">1 基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E4%B8%A4%E7%A7%8DLLM"><span class="nav-text">1.1 两种LLM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E6%8F%90%E9%97%AE%E5%8E%9F%E5%88%99"><span class="nav-text">1.2 提问原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E5%8E%9F%E5%88%99%E4%B8%80%EF%BC%9A%E7%BC%96%E5%86%99%E6%98%8E%E7%A1%AE%E3%80%81%E5%85%B7%E4%BD%93%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="nav-text">1.2.1 原则一：编写明确、具体的指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-%E5%8E%9F%E5%88%99%E4%BA%8C%EF%BC%9A%E7%BB%99%E6%A8%A1%E5%9E%8B%E6%97%B6%E9%97%B4%E5%8E%BB%E6%80%9D%E8%80%83"><span class="nav-text">1.2.2 原则二：给模型时间去思考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3-%E5%8E%9F%E5%88%99%E4%B8%89%EF%BC%9A%E8%BF%AD%E4%BB%A3%E5%BE%97%E5%88%B0%E7%AD%94%E6%A1%88"><span class="nav-text">1.2.3 原则三：迭代得到答案</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -158,18 +160,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -243,7 +245,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-05 16:13:34" itemprop="dateModified" datetime="2023-09-05T16:13:34+08:00">2023-09-05</time>
+      <time title="修改时间：2023-09-11 01:49:22" itemprop="dateModified" datetime="2023-09-11T01:49:22+08:00">2023-09-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -276,7 +278,7 @@
 </li>
 </ul>
 <span id="more"></span>
-<h1 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1.基础知识"></a>1.基础知识</h1><h2 id="1-1-两种LLM"><a href="#1-1-两种LLM" class="headerlink" title="1.1 两种LLM"></a>1.1 两种LLM</h2><p><strong>Base LLM</strong><br>基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。</p>
+<h1 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1 基础知识"></a>1 基础知识</h1><h2 id="1-1-两种LLM"><a href="#1-1-两种LLM" class="headerlink" title="1.1 两种LLM"></a>1.1 两种LLM</h2><p><strong>Base LLM</strong><br>基于文字数据进行文字的接龙，基于互联网的数据进行文本内容的猜测。</p>
 <p><strong>Instruction Tuned LLM</strong><br>这种模型训练的方法：先训练出来Base LLM，然后再在Base LLM的基础之上，在大量的IO指令基础上进行微调，再通过RLHF技术进行进一步的优化。使得系统能够更好的接受输入以及输出。<br>对于大部分情况下，都为使用ITLLM进行学习以及开发。</p>
 <ul>
 <li>因为ITLLM是基于指令（关键词）进行的矫正、输出，因此当结果不合适时，应对重写选择合适的指令；</li>
@@ -298,6 +300,14 @@
 <li>模型先给出针对问题的答案的引用；</li>
 <li>要求模型基于这些引用，回答相关问题；</li>
 </ol>
+<h3 id="1-2-3-原则三：迭代得到答案"><a href="#1-2-3-原则三：迭代得到答案" class="headerlink" title="1.2.3 原则三：迭代得到答案"></a>1.2.3 原则三：迭代得到答案</h3><p>基于大模型给出的答案，很多时候第一次得到的都是错的。好的答案需要通过迭代来达成；</p>
+<ul>
+<li>输入 Idea</li>
+<li>进行训练</li>
+<li>得到数据</li>
+<li>分析数据</li>
+<li>再输入 Idea<br><img src="/../../image/Pasted%20image%2020230911014920.png"></li>
+</ul>
 
     </div>
 
@@ -356,7 +366,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共47.8k字</span>
+  <span class="post-count">博客全站共57.4k字</span>
 </div>
     </div>
   </footer>
