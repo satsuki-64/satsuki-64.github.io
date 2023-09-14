@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230901152011.png">
 <meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230901153633.png">
 <meta property="article:published_time" content="2023-08-31T04:28:17.000Z">
-<meta property="article:modified_time" content="2023-09-07T15:29:29.988Z">
+<meta property="article:modified_time" content="2023-09-13T06:41:01.443Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="CSharp">
 <meta property="article:tag" content="垃圾回收">
@@ -162,18 +162,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -247,7 +247,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-07 23:29:29" itemprop="dateModified" datetime="2023-09-07T23:29:29+08:00">2023-09-07</time>
+      <time title="修改时间：2023-09-13 14:41:01" itemprop="dateModified" datetime="2023-09-13T14:41:01+08:00">2023-09-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -468,293 +468,6 @@
 </ul>
 </li>
 </ul>
-<p>当然可以！以下是每个表的详细概念设计描述：</p>
-<ol>
-<li><p>表1：菜品表（dishes）</p>
-<ul>
-<li><code>dish_id</code>：菜品ID，作为主键，用于唯一标识菜品。</li>
-<li><code>dish_name</code>：菜品名称，用于记录菜品的名字。</li>
-<li><code>price</code>：价格，记录菜品的价格，使用DECIMAL数据类型来存储价格信息。</li>
-<li><code>description</code>：描述，用于记录菜品的描述、备注等详细信息。</li>
-<li><code>created_at</code>：创建时间，记录菜品记录的创建时间。</li>
-<li><code>updated_at</code>：更新时间，记录菜品记录的最后更新时间。</li>
-</ul>
-</li>
-<li><p>表2：顾客表（customers）</p>
-<ul>
-<li><code>customer_id</code>：顾客ID，作为主键，用于唯一标识顾客。</li>
-<li><code>first_name</code>：名字，记录顾客的名字。</li>
-<li><code>last_name</code>：姓氏，记录顾客的姓氏。</li>
-<li><code>email</code>：邮箱，记录顾客的电子邮件地址。</li>
-<li><code>phone_number</code>：联系电话，记录顾客的联系电话号码。</li>
-<li><code>created_at</code>：创建时间，记录顾客记录的创建时间。</li>
-<li><code>updated_at</code>：更新时间，记录顾客记录的最后更新时间。</li>
-</ul>
-</li>
-<li><p>表3：系统管理员表（system_admins）</p>
-<ul>
-<li><code>admin_id</code>：管理员ID，作为主键，用于唯一标识管理员。</li>
-<li><code>username</code>：用户名，记录管理员的用户名。</li>
-<li><code>password</code>：密码，记录管理员的密码。</li>
-<li><code>created_at</code>：创建时间，记录管理员记录的创建时间。</li>
-<li><code>updated_at</code>：更新时间，记录管理员记录的最后更新时间。</li>
-</ul>
-</li>
-</ol>
-<p>以下是示例表 4 和示例表 5 的描述，包括字段名称、数据类型（SQL 变量）和描述：</p>
-<p>以下是每个表的描述，包括字段名称、数据类型（SQL 变量）和描述：<br>菜品表（dishes）：</p>
-<table>
-<thead>
-<tr>
-<th>字段名称</th>
-<th>数据类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>dishid</td>
-<td>INT</td>
-<td>菜品 ID</td>
-</tr>
-<tr>
-<td>dishname</td>
-<td>VARCHAR (50)</td>
-<td>菜品名称</td>
-</tr>
-<tr>
-<td>price</td>
-<td>DECIMAL  (8,2)</td>
-<td>价格</td>
-</tr>
-<tr>
-<td>description</td>
-<td>VARCHAR  (100)</td>
-<td>菜品描述</td>
-</tr>
-<tr>
-<td>createdat</td>
-<td>DATETIME</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>updatedat</td>
-<td>DATETIME</td>
-<td>更新时间</td>
-</tr>
-<tr>
-<td>顾客表（customers）：</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>字段名称</th>
-<th>数据类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>customerid</td>
-<td>INT</td>
-<td>顾客 ID</td>
-</tr>
-<tr>
-<td>firstname</td>
-<td>VARCHAR (50)</td>
-<td>名字</td>
-</tr>
-<tr>
-<td>lastname</td>
-<td>VARCHAR  (50)</td>
-<td>姓氏</td>
-</tr>
-<tr>
-<td>email</td>
-<td>VARCHAR  (100)</td>
-<td>邮箱</td>
-</tr>
-<tr>
-<td>phonenumber</td>
-<td>VARCHAR (20)</td>
-<td>联系电话</td>
-</tr>
-<tr>
-<td>createdat</td>
-<td>DATETIME</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>updatedat</td>
-<td>DATETIME</td>
-<td>更新时间</td>
-</tr>
-<tr>
-<td>系统管理员表（system_admins）：</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>字段名称</th>
-<th>数据类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>adminid</td>
-<td>INT</td>
-<td>管理员 ID</td>
-</tr>
-<tr>
-<td>username</td>
-<td>VARCHAR (50)</td>
-<td>用户名</td>
-</tr>
-<tr>
-<td>password</td>
-<td>VARCHAR  (50)</td>
-<td>密码</td>
-</tr>
-<tr>
-<td>createdat</td>
-<td>DATETIME</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>updated_at</td>
-<td>DATETIME</td>
-<td>更新时间</td>
-</tr>
-<tr>
-<td>以上是每个表的字段名称、数据类型和描述的 Markdown 格式表格。请注意，其中的数据类型（SQL 变量）仅作为示例，具体的数据类型可能根据系统需求而有所不同。如果还有其他问题，请随时提问！</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>示例表 4：订单表（orders）：</p>
-<table>
-<thead>
-<tr>
-<th>字段名称</th>
-<th>数据类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>orderid</td>
-<td>INT</td>
-<td>订单 ID</td>
-</tr>
-<tr>
-<td>customerid</td>
-<td>INT</td>
-<td>顾客 ID</td>
-</tr>
-<tr>
-<td>dishid</td>
-<td>INT</td>
-<td>菜品 ID</td>
-</tr>
-<tr>
-<td>orderdate</td>
-<td>DATE</td>
-<td>订单日期</td>
-</tr>
-<tr>
-<td>quantity</td>
-<td>INT</td>
-<td>数量</td>
-</tr>
-<tr>
-<td>totalamount</td>
-<td>DECIMAL (8, 2)</td>
-<td>总金额</td>
-</tr>
-<tr>
-<td>createdat</td>
-<td>TIMESTAMP</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>updated_at</td>
-<td>TIMESTAMP</td>
-<td>更新时间</td>
-</tr>
-<tr>
-<td>示例表 5：支付日志表（payment_logs）：</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>字段名称</th>
-<th>数据类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>paymentid</td>
-<td>INT</td>
-<td>支付 ID</td>
-</tr>
-<tr>
-<td>orderid</td>
-<td>INT</td>
-<td>订单 ID</td>
-</tr>
-<tr>
-<td>paymentdate</td>
-<td>DATE</td>
-<td>支付日期</td>
-</tr>
-<tr>
-<td>amount</td>
-<td>DECIMAL (8, 2)</td>
-<td>金额</td>
-</tr>
-<tr>
-<td>createdat</td>
-<td>TIMESTAMP</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>updated_at</td>
-<td>TIMESTAMP</td>
-<td>更新时间</td>
-</tr>
-<tr>
-<td>以上是示例表 4 和示例表 5 的字段名称、数据类型和描述的 Markdown 格式表格。如果还有其他问题，请随时提问！</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>订单表（orders）的概念设计：</p>
-<ul>
-<li>order_id：订单ID，作为主键，用于唯一标识每个订单。</li>
-<li>customer_id：顾客ID，用于关联订单与顾客，与顾客表（customers）的customer_id列相关联，建立外键关系。</li>
-<li>dish_id：菜品ID，用于关联订单中的菜品，与菜品表（dishes）的dish_id列相关联，建立外键关系。</li>
-<li>order_date：订单日期，表示订单创建的日期。</li>
-<li>quantity：菜品数量，表示订单中每个菜品的数量。</li>
-<li>total_amount：订单总金额，表示订单中所有菜品的总价。</li>
-<li>created_at：创建时间，表示订单的创建时间。</li>
-<li>updated_at：更新时间，表示订单的最近更新时间。</li>
-</ul>
-<p>支付日志表（payment_logs）的概念设计：</p>
-<ul>
-<li>payment_id：支付日志ID，作为主键，用于唯一标识每个支付日志。</li>
-<li>order_id：订单ID，用于关联支付日志与订单，与订单表（orders）的order_id列相关联，建立外键关系。</li>
-<li>payment_date：支付日期，表示支付的日期。</li>
-<li>amount：支付金额，表示实际支付的金额。</li>
-<li>created_at：创建时间，表示支付日志的创建时间。</li>
-<li>updated_at：更新时间，表示支付日志的最近更新时间。</li>
-</ul>
-<p>概念设计描述了表的基本结构、列的含义和它们之间的关系。根据您的需求，这些表的概念设计可以作为起点，您可以根据具体的业务需求在此基础上进行进一步的设计和调整。</p>
 
     </div>
 
@@ -814,7 +527,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共57.4k字</span>
+  <span class="post-count">博客全站共63k字</span>
 </div>
     </div>
   </footer>

@@ -22,28 +22,36 @@
 
     <meta name="description" content="内容大纲：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Lecture 1：何为法律">
-<meta property="og:url" content="https://satsuki-64.github.io/2023/09/8c16db468331.html">
+<meta property="og:title" content="【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/09/c03dd0ca507b.html">
 <meta property="og:site_name" content="Satsuki的博客">
 <meta property="og:description" content="内容大纲：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-09-10T18:19:40.000Z">
-<meta property="article:modified_time" content="2023-09-11T18:37:14.544Z">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230914125545.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230914172748.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230914175225.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230914173316.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230914180011.png">
+<meta property="article:published_time" content="2023-09-14T04:50:08.000Z">
+<meta property="article:modified_time" content="2023-09-14T10:04:05.242Z">
 <meta property="article:author" content="Satsuki">
-<meta property="article:tag" content="法理学">
-<meta property="article:tag" content="法律">
-<meta property="article:tag" content="人文">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="CLR">
+<meta property="article:tag" content="AppDomain">
+<meta property="article:tag" content="程序集">
+<meta property="article:tag" content="反射">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230914125545.png">
 
 
-<link rel="canonical" href="https://satsuki-64.github.io/2023/09/8c16db468331.html">
+<link rel="canonical" href="https://satsuki-64.github.io/2023/09/c03dd0ca507b.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/09/8c16db468331.html","path":"2023/09/8c16db468331.html","title":"Lecture 1：何为法律"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/09/c03dd0ca507b.html","path":"2023/09/c03dd0ca507b.html","title":"【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Lecture 1：何为法律 | Satsuki的博客</title>
+<title>【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员 | Satsuki的博客</title>
   
 
 
@@ -143,7 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E6%B3%95%E5%BE%8B"><span class="nav-text">1 什么是法律</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E5%93%B2%E5%AD%A6%E4%B8%8A%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">1.1 哲学上的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E6%93%8D%E4%BD%9C%E4%B8%8A%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">1.2 操作上的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E6%B3%95%E5%BE%8B%E4%B8%8E%E4%B9%A0%E6%83%AF%E6%B3%95"><span class="nav-text">1.3 法律与习惯法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E8%87%AA%E7%84%B6%E6%B3%95"><span class="nav-text">1.4 自然法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-%E6%B3%95%E5%BE%8B%E4%B8%8E%E8%A3%81%E9%87%8F"><span class="nav-text">1.5 法律与裁量</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1%E6%94%AF%E6%8C%81%E5%8A%A0%E8%BD%BD%E9%A1%B9%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">1 设计支持加载项的应用程序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%9F%BA%E4%BA%8E%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%BE%97%E7%B1%BB%E5%9E%8B%E6%88%90%E5%91%98"><span class="nav-text">2 基于反射获得类型成员</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%8F%91%E7%8E%B0%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-text">2.1 发现类型的成员</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-MemberInfo-%E7%B1%BB%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1.1 MemberInfo 类介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E8%B0%83%E7%94%A8%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-text">2.2 调用类型的成员</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -158,18 +166,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -207,7 +215,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/09/8c16db468331.html">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/09/c03dd0ca507b.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo.png">
@@ -220,12 +228,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Lecture 1：何为法律 | Satsuki的博客">
+      <meta itemprop="name" content="【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员 | Satsuki的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Lecture 1：何为法律
+          【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员
         </h1>
 
         <div class="post-meta-container">
@@ -235,15 +243,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2023-09-11 02:19:40" itemprop="dateCreated datePublished" datetime="2023-09-11T02:19:40+08:00">2023-09-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-12 02:37:14" itemprop="dateModified" datetime="2023-09-12T02:37:14+08:00">2023-09-12</time>
+      <time title="创建时间：2023-09-14 12:50:08 / 修改时间：18:04:05" itemprop="dateCreated datePublished" datetime="2023-09-14T12:50:08+08:00">2023-09-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -251,7 +253,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E4%BA%BA%E6%96%87%E8%AF%BE%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">人文课程</span></a>
+          <a href="/categories/CSharp/" itemprop="url" rel="index"><span itemprop="name">CSharp</span></a>
         </span>
     </span>
 
@@ -266,143 +268,86 @@
     
     <div class="post-body" itemprop="articleBody"><p>内容大纲：</p>
 <span id="more"></span>
-<h1 id="1-什么是法律"><a href="#1-什么是法律" class="headerlink" title="1 什么是法律"></a>1 什么是法律</h1><h2 id="1-1-哲学上的定义"><a href="#1-1-哲学上的定义" class="headerlink" title="1.1 哲学上的定义"></a>1.1 哲学上的定义</h2><p><strong>什么是法律：哲学上的定义</strong><br>学术定义：以国家强制力保证的、上升为国家意志（统治阶级的意志体现）的法律；</p>
+<h2 id="1-设计支持加载项的应用程序"><a href="#1-设计支持加载项的应用程序" class="headerlink" title="1 设计支持加载项的应用程序"></a>1 设计支持加载项的应用程序</h2><p>当需要设计一个可以支持不同的加载项的应用程序时，需要知道以下三部分的关系：</p>
 <ul>
-<li>国家<ul>
-<li>表示的是统治阶级的意志；</li>
+<li>宿主 SDK 程序集；</li>
+<li>加载项程序集；</li>
+<li>宿主应用程序程序集<br>它们三者之间关系：<br><img src="/../../image/Pasted%20image%2020230914125545.png"><br><strong>宿主 SDK 程序集</strong><br>宿主 SDK(Host SDK)程序集它定义了一个接口，接口的方法作为宿主应用程序与加载项之间的通信机制使用；</li>
+<li>为接口方法定义参数和返回类型时，请尝试使用 MSCorLibdll 中定义的其他接口或类型；</li>
+<li>要传递并返回自己的数据类型，也在“宿主 SDK”程序集中定义。一旦搞定接口定义，就可为这个程序集赋予强名称，然后把它打包并部署到合作伙伴和用户那里；</li>
+<li>发布后要避免对该程序集中的类型做出任何重大的改变；<ul>
+<li>例如，不要以任何方式更改接口；</li>
+<li>但如果定义了任何数据类型，在类型中添加新成员是完全允许的；</li>
+<li>对程序集进行任何修改之后，可能需要使用一个发布者策略文件来部署它；</li>
 </ul>
 </li>
-<li>强制力<ul>
-<li>必须要依靠暴力来进行最后的支撑（最后）；</li>
-<li>虽然一直在宏观的文明、道德之上，分析法律，但法律到最后一步一定会以暴力作为支撑；</li>
 </ul>
-</li>
-</ul>
-<h2 id="1-2-操作上的定义"><a href="#1-2-操作上的定义" class="headerlink" title="1.2 操作上的定义"></a>1.2 操作上的定义</h2><p><strong>什么是法律：操作上的定义</strong><br>由国家的权力机关指定的、由法院适用的、执法机关实际执行的规则或者说社会规范。</p>
+<p><strong>加载项程序集</strong><br>加载项程序集当中也会有自己定义的类型，这些程序集将会引用宿主应用程序集中的类型；</p>
 <ul>
-<li>人大<ul>
-<li>人大不只是立法机关，也是最高权力机关；</li>
-<li>和国外不一样：美国国会是立法机关，但不是权力机关；</li>
+<li>加载项开发人员可以按照自己的需求逐步推出程序集新版本，宿主应用程序可以正常使用加载项当中的类型；</li>
 </ul>
-</li>
-<li>立法机关<ul>
-<li>全国人大制定的；各级人大、司法机构；</li>
-<li>按照立法机关，按照它的流程制定的、文字和其他符号形式的一般性的行为规则；</li>
-<li>规则的一般性：一般是不能针对某一个人来制定规则；但是也会收到一些经验上的挑战：汶川地震、奥运会、疫情，出台的专门的法律；</li>
-</ul>
-</li>
-<li>其他机关 <ul>
-<li>其他有权力的权力机关也可能会制定规则</li>
-<li>政府的行政命令；</li>
-<li>外交部的外交权力；</li>
-<li>地方规章</li>
-</ul>
-</li>
-<li>法官造法<ul>
-<li>在实践生活当中创建出法律；<ul>
-<li>很多英美的法律都是由法官创造出来的；</li>
-</ul>
-</li>
-<li>对案例、经验进行解释，扩大定义；<ul>
-<li>通过一次次的实践，把定义扩大或缩小；</li>
-</ul>
-</li>
-<li>英美法系很看重过去的法律判决；</li>
-<li><strong>遵循先例制度</strong>：可以根据以往的类似的案例来对现在自己的案例，进行重新判例；<ul>
-<li>判决书是一次使用的，但法律是多次适用的；</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-3-法律与习惯法"><a href="#1-3-法律与习惯法" class="headerlink" title="1.3 法律与习惯法"></a>1.3 法律与习惯法</h2><p><strong>什么是习惯法</strong><br>习惯就是条规则，你必须遵守。它曾经有道理，但被人遗忘；</p>
+<p><strong>宿主应用程序程序集</strong><br>在宿主应用程序程序集中，包含应用程序的类型；</p>
 <ul>
-<li>许多法律就是对习惯法的确定；</li>
-<li>很多现在法律的理解，其实是根据习惯法而来的； <ul>
-<li>法律当中的很多概念都是习惯而来的；</li>
-<li>习惯是由社会生活来界定的；</li>
+<li>这个程序集要引用宿主 SDK 程序集，并使用其中定义的类型；</li>
+<li>可自由修改“宿主应用程序”程序集的代码。由于加载项开发人员不会引用这个“宿主应用程序”程序集，所以随时都能推出“宿主应用程序”程序集的新版本，这不会对加载项开发人员产生任何影响。</li>
 </ul>
-</li>
-<li>中国的法官，面对广大的社会群众，必须了解其中的规则、习惯，而不只是法律；<ul>
-<li>界定法一定不能涵盖所有情况；</li>
-</ul>
-</li>
-</ul>
-<p><strong>情理与法理</strong><br>法理和情理是同一个事情；</p>
+<h1 id="2-基于反射获得类型成员"><a href="#2-基于反射获得类型成员" class="headerlink" title="2 基于反射获得类型成员"></a>2 基于反射获得类型成员</h1><h2 id="2-1-发现类型的成员"><a href="#2-1-发现类型的成员" class="headerlink" title="2.1 发现类型的成员"></a>2.1 发现类型的成员</h2><p><strong>可反射类型成员</strong><br>所有以下内容都可以定义成类型的成员，进而被反射调用；</p>
 <ul>
-<li>法理只不过是法学家把这件事情说清楚了而已；<ul>
-<li>把道理讲清楚才能是法理；</li>
+<li>字段</li>
+<li>构造函数</li>
+<li>方法</li>
+<li>属性</li>
+<li>事件</li>
+<li>嵌套类型</li>
 </ul>
-</li>
-<li>例子：彩礼钱能不能退<ul>
-<li>国家之前不支持：买卖婚姻</li>
-<li>但彩礼更像定金</li>
-<li>传统社会下的彩礼制度</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-4-自然法"><a href="#1-4-自然法" class="headerlink" title="1.4 自然法"></a>1.4 自然法</h2><p><strong>哲学上的定义：永恒不变的理性、世界永恒不变的规则，并且所有制定法律必须符合最基本的规则</strong></p>
-<p><strong>经验上的定义：广大的社会，长期稳定、主流的存在法</strong></p>
+<p><strong>获得类型成员的类：System. Reflection. MemberInfo</strong><br>在 FCL 当中的 MemberInfo 类，封装了所有类型成员都通用的一组属性，以下是具体的类继承图：<br><img src="/../../image/Pasted%20image%2020230914172748.png"><br>由以上图片可知：</p>
 <ul>
-<li>其实就是习惯法；</li>
-<li>在中国古代就是天理；自然法；<br>优点：</li>
-<li>对于自由、平等等等品质，保证；</li>
-<li>因为自然界不是如此；</li>
+<li>TypeInfo</li>
+<li>FieldInfo</li>
+<li>……</li>
+<li>等等这些具体用于访问类型成员的类，都是继承自 MemberInfo；</li>
 </ul>
-<p><strong>自然法在现代的主要继承人：人权</strong></p>
+<p><strong>反射系统结构关系</strong><br><img src="/../../image/Pasted%20image%2020230914175225.png"><br>基于 AppDomain 可以加载所有程序集，在程序集中可以发现构造的模块；<br>基于模块或者程序集，可以发现它当中所定义的所有类型；在类型中可以发现它的字段、属性、方法、事件等等；</p>
+<h3 id="2-1-1-MemberInfo-类介绍"><a href="#2-1-1-MemberInfo-类介绍" class="headerlink" title="2.1.1 MemberInfo 类介绍"></a>2.1.1 MemberInfo 类介绍</h3><p><strong>定义与介绍</strong><br><code>MemberInfo</code> 类是在 C# 中用于描述类成员（如字段、属性、方法等）的类。它是 .NET 反射（Reflection）机制中的一部分，用于提供关于类型成员的信息和元数据；<br><code>MemberInfo</code> 类是一个抽象基类，因此无法直接实例化。它定义了表示类成员的共同属性和方法，并提供了许多有用的功能来获取和操作类成员的信息。一些常见的 <code>MemberInfo</code> 子类包括 <code>FieldInfo</code>、<code>PropertyInfo</code>、<code>MethodInfo</code> 等，它们分别用于描述字段、属性和方法。</p>
+<p><strong>MemberInfo 类与反射的关系</strong></p>
 <ul>
-<li>言论自由</li>
-<li>宗教信仰自由</li>
+<li>反射是一种能够在运行时动态地检查和操作程序集、类型和成员的能力。通过使用反射，可以以编程方式获取和操纵应用程序集中的类型、成员和其他元素，而无需在编译时了解其具体结构；</li>
+<li><code>MemberInfo</code> 类作为反射中的一个重要组成部分，通过提供一组统一的方法和属性，使程序能够动态地获取和操作类型成员的信息。通过 <code>MemberInfo</code>，可以获取类成员的名称、数据类型、修饰符、特性等，从而实现动态操作和扩展。</li>
 </ul>
-<p><strong>对自然法的批判</strong></p>
+<p><strong>MemberInfo 所有派生类型通用的属性和方法</strong><br>以下是 MemberInfo 的通用属性与方法：<br><img src="/../../image/Pasted%20image%2020230914173316.png"></p>
 <ul>
-<li>最大的问题：自然被赋予了道德色彩；<ul>
-<li>但自然不是一个道德的自然；</li>
-<li>自然就是自然，但在现在却具有以下功能</li>
+<li>因为 TypeInfo 类从 MemberInfo 类继承，因此以上属性 TypeInfo 类当中也有；</li>
+<li>但 TypeInfo 还提供了更具体地返回字段、方法、属性、事件等的 Type 的方法；</li>
 </ul>
-</li>
-<li>道德的功能：<ul>
-<li>修辞功能</li>
-<li>压迫功能：自然法用来打击女性，少性族裔；</li>
-</ul>
-</li>
-<li>自然法并不是给你个用于正确的观念来确定的；<ul>
-<li>最开始的自然：上帝之爱</li>
-<li>达尔文主义的自然：弱肉强食</li>
-</ul>
-</li>
-<li>而且自然法能解决的领域有限<ul>
-<li>刑法、民法还可以使用</li>
-<li>商法、知识产权等等法律都无法使用自然法解决<ul>
-<li>很多都是一个技术问题，不是用道德的观点可以解决的；</li>
-</ul>
-</li>
-<li>自然法 <ul>
-<li>直接和人的感受有关联</li>
-<li>甚至很多不是和思维有关，而是和身体有关</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>生命政治：很多的真理其实是身体的产物<ul>
-<li>所有的真理其实是身体的产物，和其生命力的旺盛有很大的关系；</li>
-<li>身体 -&gt; 容器 -&gt; 感觉 -&gt; 思维 -&gt; 符号 -&gt; 主义</li>
-<li>在这当中，没有柏拉图式的、原子意义上的、精神上具有神性的、不可分的、小写的“人”；</li>
-</ul>
-</li>
-</ul>
-<p><strong>和职业性的法律关系不大</strong></p>
+<h2 id="2-2-调用类型的成员"><a href="#2-2-调用类型的成员" class="headerlink" title="2.2 调用类型的成员"></a>2.2 调用类型的成员</h2><p>在发现了的类型的定义之后，就可以来调用它们；</p>
 <ul>
-<li>可以帮助我们，用一个正常人的心态来思考某些问题；</li>
-<li>自然法反对法律的职业化，专业化；</li>
+<li>调用：<code>Invoke</code>；<ul>
+<li>当涉及到调用的时候，需要首先确定需要调用的类型；</li>
+<li>根据不同的类型，为其使用不同的方法；</li>
 </ul>
-<h2 id="1-5-法律与裁量"><a href="#1-5-法律与裁量" class="headerlink" title="1.5 法律与裁量"></a>1.5 法律与裁量</h2><p><strong>法律并不只是具体的、细则的规则，还可能是一定范围内的自由裁量</strong></p>
+</li>
+</ul>
+<p><strong>调用成员以及方法表</strong></p>
 <ul>
-<li>即使是非常细的规则，也可以有裁量权；</li>
-<li>裁量权不是和法律无关的事情。执法者、立法者都可能会有裁量；</li>
+<li>FieldInfo 类<ul>
+<li>通过 <code>GetValue</code> 和 <code>SetValue</code> 方法来获得并设置字段；</li>
 </ul>
-<p>重点不在于 ought to be，而在于 to be</p>
-<p><strong>为什么要争法律定义？</strong><br><strong>法律人是要爱自己的理想，还是爱这个国家上土地，以及土地上的人民</strong><br><strong>学术上的争辩是思维游戏，但是一旦思维走进现实，就会变成利益之争。定义之争就是利益之争</strong></p>
+</li>
+<li>PropertyInfo 类<ul>
+<li>PropertyInfo 类型代表与属性有关的元数据信息；</li>
+<li>PropertyInfo 提供了 CanRead、CanWrite 和 PropertyType 只读属性，它们指出属性是否可读和可写，以及属性的数据类型是什么；</li>
+<li>PropertyInfo 提供了只读 GetMethod 和 SetMethod 属性, 它们返回代表属性 get 和 set 访问器方法的 MethodInfo 对象；</li>
+<li>PropertyInfo 的 GetValue 和 SetValue 方法只是为了提供方便，直接获得值。在内部，它们会自己调用合适的 MethodInfo 对象来获得值；</li>
+</ul>
+</li>
+<li>EventInfo 类<ul>
+<li>EventInfo 类型代表与事件有关的元数据信息；</li>
+<li>EventInfo 类型提供了只读 EventHandlerType 属性，返回事件的基础委托的 Type；</li>
+<li>EventInfo 类型还提供了只读 AddMethod 和 RemoveMethod 属性，返回为事件增删委托的方法的 MethodInfo 对象；</li>
+<li>增删委托可调用这些 MethodInfo 对象，也可调用 EventInfo 类型提供的更好用的 AddEventHandler 和 RemoveEventHandler 方法；<br><img src="/../../image/Pasted%20image%2020230914180011.png"></li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -412,23 +357,22 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%B3%95%E7%90%86%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 法理学</a>
-              <a href="/tags/%E6%B3%95%E5%BE%8B/" rel="tag"><i class="fa fa-tag"></i> 法律</a>
-              <a href="/tags/%E4%BA%BA%E6%96%87/" rel="tag"><i class="fa fa-tag"></i> 人文</a>
+              <a href="/tags/CSharp/" rel="tag"><i class="fa fa-tag"></i> CSharp</a>
+              <a href="/tags/CLR/" rel="tag"><i class="fa fa-tag"></i> CLR</a>
+              <a href="/tags/AppDomain/" rel="tag"><i class="fa fa-tag"></i> AppDomain</a>
+              <a href="/tags/%E7%A8%8B%E5%BA%8F%E9%9B%86/" rel="tag"><i class="fa fa-tag"></i> 程序集</a>
+              <a href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag"><i class="fa fa-tag"></i> 反射</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/09/4e1472042b67.html" rel="prev" title="Lecture 31：Android系统">
-                  <i class="fa fa-angle-left"></i> Lecture 31：Android系统
+                <a href="/2023/09/cf6c1a0c27f0.html" rel="prev" title="【游戏引擎原理】现代图形绘制流水线（2） -- Vulkan开发基础">
+                  <i class="fa fa-angle-left"></i> 【游戏引擎原理】现代图形绘制流水线（2） -- Vulkan开发基础
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/09/9ca281de361c.html" rel="next" title="【CSharp系列】CLR寄宿与AppDomain（3）-- 异常通知、监视与高级宿主控制">
-                  【CSharp系列】CLR寄宿与AppDomain（3）-- 异常通知、监视与高级宿主控制 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -461,7 +405,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共57.4k字</span>
+  <span class="post-count">博客全站共63k字</span>
 </div>
     </div>
   </footer>

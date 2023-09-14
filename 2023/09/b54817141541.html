@@ -22,8 +22,8 @@
 
     <meta name="description" content="https:&#x2F;&#x2F;ranger-nju.gitbook.io&#x2F;static-program-analysis-book&#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Lecture 1：课程导论">
-<meta property="og:url" content="https://satsuki-64.github.io/2023/09/a77c50857d72.html">
+<meta property="og:title" content="【静态程序分析】Lecture 1：课程导论">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/09/b54817141541.html">
 <meta property="og:site_name" content="Satsuki的博客">
 <meta property="og:description" content="https:&#x2F;&#x2F;ranger-nju.gitbook.io&#x2F;static-program-analysis-book&#x2F;">
 <meta property="og:locale" content="zh_CN">
@@ -32,22 +32,27 @@
 <meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230912184810.png">
 <meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230912185222.png">
 <meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230912175706.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230913180105.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230913180301.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230913180602.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230913180829.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230913181137.png">
 <meta property="article:published_time" content="2023-09-12T09:34:36.000Z">
-<meta property="article:modified_time" content="2023-09-12T11:48:31.684Z">
+<meta property="article:modified_time" content="2023-09-13T10:23:46.140Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="静态程序分析">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230912174840.png">
 
 
-<link rel="canonical" href="https://satsuki-64.github.io/2023/09/a77c50857d72.html">
+<link rel="canonical" href="https://satsuki-64.github.io/2023/09/b54817141541.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/09/a77c50857d72.html","path":"2023/09/a77c50857d72.html","title":"Lecture 1：课程导论"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/09/b54817141541.html","path":"2023/09/b54817141541.html","title":"【静态程序分析】Lecture 1：课程导论"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Lecture 1：课程导论 | Satsuki的博客</title>
+<title>【静态程序分析】Lecture 1：课程导论 | Satsuki的博客</title>
   
 
 
@@ -147,7 +152,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90"><span class="nav-text">1 什么是静态程序分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Sound-%E4%B8%8E-Complete"><span class="nav-text">1.1 Sound 与 Complete</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Soundness-%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7"><span class="nav-text">1.2 Soundness 的必要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%8E%E6%A6%82%E5%BF%B5%E4%B8%8A%E7%90%86%E8%A7%A3%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-text">1.3 从概念上理解静态分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E4%BB%8E%E6%8A%80%E6%9C%AF%E4%B8%8A%E6%9D%A5%E7%90%86%E8%A7%A3%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-text">1.4 从技术上来理解静态分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-text">2 编程语言的分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text">3 静态程序分析的应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%9A%84%E5%B8%82%E5%9C%BA"><span class="nav-text">4 静态程序分析的市场</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E4%B8%8E%E7%B1%BB%E4%BC%BC%E6%8A%80%E6%9C%AF%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-text">5 静态程序分析与类似技术的对比</span></a></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90"><span class="nav-text">1 什么是静态程序分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Sound-%E4%B8%8E-Complete"><span class="nav-text">1.1 Sound 与 Complete</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Soundness-%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7"><span class="nav-text">1.2 Soundness 的必要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%8E%E6%A6%82%E5%BF%B5%E4%B8%8A%E7%90%86%E8%A7%A3%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-text">1.3 从概念上理解静态分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E7%9A%84%E5%BA%94%E7%94%A8%E4%B8%8E%E5%AF%B9%E6%AF%94"><span class="nav-text">2 静态分析的应用与对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-text">2.1 编程语言的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-text">2.2 静态程序分析的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%9A%84%E5%B8%82%E5%9C%BA"><span class="nav-text">2.3 静态程序分析的市场</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E4%B8%8E%E7%B1%BB%E4%BC%BC%E6%8A%80%E6%9C%AF%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-text">2.4 静态程序分析与类似技术的对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E4%B8%A4%E4%B8%AA%E8%AF%8D%E6%80%BB%E7%BB%93%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-text">3 两个词总结静态分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Over-approximate-%E5%9C%A8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%BD%93%E4%B8%AD"><span class="nav-text">3.1 Over-approximate 在控制流当中</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -162,18 +167,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -211,7 +216,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/09/a77c50857d72.html">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/09/b54817141541.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo.png">
@@ -224,12 +229,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Lecture 1：课程导论 | Satsuki的博客">
+      <meta itemprop="name" content="【静态程序分析】Lecture 1：课程导论 | Satsuki的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Lecture 1：课程导论
+          【静态程序分析】Lecture 1：课程导论
         </h1>
 
         <div class="post-meta-container">
@@ -239,9 +244,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-09-12 17:34:36 / 修改时间：19:48:31" itemprop="dateCreated datePublished" datetime="2023-09-12T17:34:36+08:00">2023-09-12</time>
+      <time title="创建时间：2023-09-12 17:34:36" itemprop="dateCreated datePublished" datetime="2023-09-12T17:34:36+08:00">2023-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-13 18:23:46" itemprop="dateModified" datetime="2023-09-13T18:23:46+08:00">2023-09-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -321,7 +332,7 @@
 <li>第二种：Sound、不精确、便宜</li>
 </ul>
 <p><strong>静态分析，需要在保证 soundness 的前提下，在精确和速度之间掌握平衡</strong></p>
-<h3 id="1-4-从技术上来理解静态分析"><a href="#1-4-从技术上来理解静态分析" class="headerlink" title="1.4 从技术上来理解静态分析"></a>1.4 从技术上来理解静态分析</h3><h1 id="2-编程语言的分类"><a href="#2-编程语言的分类" class="headerlink" title="2 编程语言的分类"></a>2 编程语言的分类</h1><p>当今的计算机世界，面对这样一条恶龙： 👇</p>
+<h1 id="2-静态分析的应用与对比"><a href="#2-静态分析的应用与对比" class="headerlink" title="2 静态分析的应用与对比"></a>2 静态分析的应用与对比</h1><h2 id="2-1-编程语言的分类"><a href="#2-1-编程语言的分类" class="headerlink" title="2.1 编程语言的分类"></a>2.1 编程语言的分类</h2><p>当今的计算机世界，面对这样一条恶龙： 👇</p>
 <blockquote>
 <p>数十年来语言的核心没有变化，但软件的规模和复杂性增长迅速，如何保证程序的可靠性？</p>
 </blockquote>
@@ -341,7 +352,7 @@
 <ul>
 <li>没有完美的静态分析方法；</li>
 </ul>
-<h1 id="3-静态程序分析的应用"><a href="#3-静态程序分析的应用" class="headerlink" title="3 静态程序分析的应用"></a>3 静态程序分析的应用</h1><p><strong>作用领域</strong></p>
+<h2 id="2-2-静态程序分析的应用"><a href="#2-2-静态程序分析的应用" class="headerlink" title="2.2 静态程序分析的应用"></a>2.2 静态程序分析的应用</h2><p><strong>作用领域</strong></p>
 <ul>
 <li><ol>
 <li>提高程序可靠性</li>
@@ -378,15 +389,62 @@
 </ul>
 </li>
 </ul>
-<h1 id="4-静态程序分析的市场"><a href="#4-静态程序分析的市场" class="headerlink" title="4 静态程序分析的市场"></a>4 静态程序分析的市场</h1><p><img src="/../../image/Pasted%20image%2020230912175706.png"></p>
+<h2 id="2-3-静态程序分析的市场"><a href="#2-3-静态程序分析的市场" class="headerlink" title="2.3 静态程序分析的市场"></a>2.3 静态程序分析的市场</h2><p><img src="/../../image/Pasted%20image%2020230912175706.png"></p>
 <ul>
 <li>在工业界，国外的 Google，IBM 等大企业已经初步建立了自己的静态程序分析团队；</li>
 <li>国内的华为和阿里等企业也正在积极寻找静态程序分析方面的人才；</li>
 </ul>
-<h1 id="5-静态程序分析与类似技术的对比"><a href="#5-静态程序分析与类似技术的对比" class="headerlink" title="5 静态程序分析与类似技术的对比"></a>5 静态程序分析与类似技术的对比</h1><blockquote>
+<h2 id="2-4-静态程序分析与类似技术的对比"><a href="#2-4-静态程序分析与类似技术的对比" class="headerlink" title="2.4 静态程序分析与类似技术的对比"></a>2.4 静态程序分析与类似技术的对比</h2><blockquote>
 <p>Testing shows the presence, not the absence of bugs. –Edsger W. Dijkstra</p>
 </blockquote>
 <p>动态的软件测试和形式化语义的验证的作用与静态程序分析类似，这一部分对这三个细分方向做简单的对比。</p>
+<h1 id="3-两个词总结静态分析"><a href="#3-两个词总结静态分析" class="headerlink" title="3 两个词总结静态分析"></a>3 两个词总结静态分析</h1><p>两个核心词总结静态分析：<strong>Abstraction + Over - Approximation</strong>；</p>
+<p><strong>一个简单的例子</strong><br>例子：检查程序中的变量是不是为 + 、- 、0 等符号；</p>
+<ul>
+<li><p>由此可以检查出 ： 是否有除零错误；</p>
+</li>
+<li><p>Abstraction </p>
+<ul>
+<li>具体的值与抽象的域<ul>
+<li><img src="/../../image/Pasted%20image%2020230913180105.png"></li>
+<li>对于 <code>v=e</code> 的抽象的值 -&gt; unknown</li>
+<li>对于 <code>v=w/0</code> 也要抽象出来；-&gt; unknown</li>
+</ul>
+</li>
+<li>将以上图中左边的具体的值，抽象成我们关注的右边的抽象的值<ul>
+<li><img src="/../../image/Pasted%20image%2020230913180301.png"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Over-approximate </p>
+<ul>
+<li>在静态分析中，transfer functions define how to evaluate different program statements on abstract values.</li>
+<li>针对程序当中的每一个语句，针对这些抽象值定义其转化规则<ul>
+<li>根据程序的语义，以及程序的分析得到规则；</li>
+</ul>
+</li>
+<li><img src="/../../image/Pasted%20image%2020230913180602.png" alt="转化规则"></li>
+</ul>
+</li>
+</ul>
+<p><strong>根据上述转化规则得到其值</strong><br><img src="/../../image/Pasted%20image%2020230913180829.png"><br>根据抽象规则，得到红框中每一行代码的抽象计算出结果；</p>
+<ul>
+<li>由静态分析得到 <ul>
+<li>1、可能发生除零错误；</li>
+<li>2、p 和 q 可能发生数组下标为 0；</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-1-Over-approximate-在控制流当中"><a href="#3-1-Over-approximate-在控制流当中" class="headerlink" title="3.1 Over-approximate 在控制流当中"></a>3.1 Over-approximate 在控制流当中</h2><p>要根据 if 语句的控制流，得到每一个分支的 over-approximate 结果；<br><img src="/../../image/Pasted%20image%2020230913181137.png"></p>
+<ul>
+<li>当涉及到控制流时，原本固定的值，会出现不同的分支不同的结果<ul>
+<li>y 在执行 <code>z = x + y</code> 时，既有可能是正，也有可能是负；</li>
+</ul>
+</li>
+<li>在控制流绘制的地方，都要对抽象进行合并（通过过近似）；</li>
+</ul>
+<p><strong>问题：真实程序中分支成千上万，在实践中要枚举所有路径得到所有的分支，通过过近似合并分支的抽象值</strong></p>
 
     </div>
 
@@ -408,6 +466,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2023/09/64997a4ce213.html" rel="next" title="【Game Engine】P4：Window Event">
+                  【Game Engine】P4：Window Event <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -440,7 +501,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共57.4k字</span>
+  <span class="post-count">博客全站共63k字</span>
 </div>
     </div>
   </footer>
