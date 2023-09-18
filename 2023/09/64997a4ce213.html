@@ -28,7 +28,7 @@
 <meta property="og:description" content="内容大纲：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-12T15:23:27.000Z">
-<meta property="article:modified_time" content="2023-09-12T15:26:03.249Z">
+<meta property="article:modified_time" content="2023-09-14T15:07:55.585Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="游戏引擎">
 <meta property="article:tag" content="Event">
@@ -142,7 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Window-Event"><span class="nav-text">1 什么是 Window Event</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Window-Event"><span class="nav-text">1 什么是 Window Event</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E8%A1%A5%E5%85%85%EF%BC%9ABind-%E4%B8%8E%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88"><span class="nav-text">1.1 补充：Bind 与函数指针</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%8F%91%E5%87%BA-Window-Event-%E5%9B%9E%E8%B0%83"><span class="nav-text">2 发出 Window Event 回调</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -157,18 +157,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -234,9 +234,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-09-12 23:23:27 / 修改时间：23:26:03" itemprop="dateCreated datePublished" datetime="2023-09-12T23:23:27+08:00">2023-09-12</time>
+      <time title="创建时间：2023-09-12 23:23:27" itemprop="dateCreated datePublished" datetime="2023-09-12T23:23:27+08:00">2023-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-14 23:07:55" itemprop="dateModified" datetime="2023-09-14T23:07:55+08:00">2023-09-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -263,6 +269,30 @@
 <ul>
 <li>能够将自己实现的 Event 系统，和 GLFW 的 Window 联系上，并完成对应的绘制；</li>
 </ul>
+<p><strong>使用 Event 回调</strong><br>SetEventCallBack 函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BIND_EVENT_FN(x) std::bind(&amp;x,this,std::placeholders::_1)</span></span><br><span class="line"></span><br><span class="line">Application::<span class="built_in">Application</span>() </span><br><span class="line">&#123;</span><br><span class="line">	m_Window = std::<span class="built_in">unique_ptr</span>&lt;Window&gt;(Window::<span class="built_in">Create</span>());</span><br><span class="line">	m_Window-&gt;<span class="built_in">SetEventCallback</span>(<span class="built_in">BIND_EVENT_FN</span>(Application::OnEvent));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="1-1-补充：Bind-与函数指针"><a href="#1-1-补充：Bind-与函数指针" class="headerlink" title="1.1 补充：Bind 与函数指针"></a>1.1 补充：Bind 与函数指针</h2><p><strong>1. <code>std::function</code></strong></p>
+<p><code>std::function</code>是一组函数对象包装类的模板，其实例可以对<code>普通函数</code>、<code>lambda表达式</code>、<code>函数指针</code>、<code>类的成员函数</code>及<code>其它函数对象</code>等进行存储、复制和调用操作，它实质上是实现了一个泛型的回调机制。</p>
+<p><code>std::function</code>不管其实例类型是什么样的，其调用形式是一样的，如下：</p>
+<p><strong><code>返回值类型（实参1，实参2，实参3...）</code></strong></p>
+<p>在使用<code>std::function</code>的过程中，要包含的头文件为：</p>
+<p><code>#include &lt;functional&gt;</code></p>
+<p><code>using namespace std;</code></p>
+<p><code>using namespace std::placeholders</code> &#x2F;&#x2F;bind的时候会用</p>
+<p><strong><code>std::bind</code></strong></p>
+<p><code>std::bind</code>一般接受一个函数，生成一个具有一个或多个参数的函数对象，例如如下形式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span>,<span class="type">char</span>,<span class="type">double</span>)</span></span>;</span><br><span class="line"><span class="keyword">auto</span> ff = std::<span class="built_in">bind</span>(f,_1,<span class="string">&#x27;c&#x27;</span>,<span class="number">2.2</span>);</span><br><span class="line"><span class="type">int</span> result = <span class="built_in">ff</span>(<span class="number">10</span>);     <span class="comment">//f(10,&#x27;c&#x27;,2.2)</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>_1</code>是一个占位符对象，用于表示当函数<code>f</code>通过函数<code>ff</code>进行调用时，函数<code>ff</code>的第一个参数在函数<code>f</code>参数列表中的位置。第二个参数为<code>_2</code>，第三个参数为<code>_3</code>，依次类推。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span>,<span class="type">char</span>,<span class="type">double</span>)</span></span>;</span><br><span class="line"><span class="keyword">auto</span> reflect = std::<span class="built_in">bind</span>(f,_3,_2,_1);     <span class="comment">//翻转参数顺序</span></span><br><span class="line"><span class="type">int</span> result = <span class="built_in">reflect</span>(<span class="number">2.2</span>,<span class="string">&#x27;c&#x27;</span>,<span class="number">10</span>);    <span class="comment">// f(10,&#x27;c&#x27;,2.2); </span></span><br></pre></td></tr></table></figure>
+
+<p><code>std::bind</code>无法绑定一个重载函数的参数，我们必须显式地绑定重载函数的版本：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有这样的重载函数</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">good</span><span class="params">(<span class="type">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">good</span><span class="params">(<span class="type">double</span>)</span></span>;</span><br><span class="line"><span class="keyword">auto</span> result = std::<span class="built_in">bind</span>(good,_1);      <span class="comment">//错误形式，不知道调用哪一个good函数</span></span><br><span class="line"><span class="comment">//正确的做法，但是比较复杂</span></span><br><span class="line"><span class="keyword">auto</span> result_1 = std::<span class="built_in">bind</span>(<span class="built_in">double</span>(*)(<span class="type">double</span>)good, _1); </span><br><span class="line"><span class="comment">//这是更好的方式</span></span><br><span class="line"><span class="keyword">auto</span> result_2 = std::<span class="built_in">bind</span>&lt;<span class="type">double</span>&gt;(good, _1);   <span class="comment">//指定函数的返回类型</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-发出-Window-Event-回调"><a href="#2-发出-Window-Event-回调" class="headerlink" title="2 发出 Window Event 回调"></a>2 发出 Window Event 回调</h1><p><strong>在 WindowsWindow 中发出回调</strong><br>resize 窗口界面的回调；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glfwSetWindowSizeCallback</span>(m_Window, [](GLFWwindow* window, <span class="type">int</span> width, <span class="type">int</span> height)</span><br><span class="line">&#123;</span><br><span class="line">	WindowData&amp; data = *(WindowData*)<span class="built_in">glfwGetWindowUserPointer</span>(window);</span><br><span class="line">	data.Width = width;</span><br><span class="line">	data.Height = height;</span><br><span class="line"></span><br><span class="line">	WindowResizeEvent <span class="built_in">event</span>(width, height);</span><br><span class="line">	data.<span class="built_in">EventCallback</span>(event);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>窗口关闭的回调；</p>
 
     </div>
 
@@ -320,7 +350,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共63k字</span>
+  <span class="post-count">博客全站共72.2k字</span>
 </div>
     </div>
   </footer>
