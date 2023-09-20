@@ -28,7 +28,7 @@
 <meta property="og:description" content="内容大纲：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-18T10:08:07.000Z">
-<meta property="article:modified_time" content="2023-09-18T11:00:21.736Z">
+<meta property="article:modified_time" content="2023-09-19T02:29:25.949Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="CSharp">
 <meta property="article:tag" content="CLR">
@@ -158,7 +158,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -169,7 +169,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -235,9 +235,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-09-18 18:08:07 / 修改时间：19:00:21" itemprop="dateCreated datePublished" datetime="2023-09-18T18:08:07+08:00">2023-09-18</time>
+      <time title="创建时间：2023-09-18 18:08:07" itemprop="dateCreated datePublished" datetime="2023-09-18T18:08:07+08:00">2023-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-19 10:29:25" itemprop="dateModified" datetime="2023-09-19T10:29:25+08:00">2023-09-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -367,7 +373,33 @@
 <ul>
 <li>反序列化对象时，格式化器首先获取程序集标识信息，并通过调用 <code>System.Reflection.Assembly</code> 的 Load 方法确保程序集已加载到正在执行的 AppDomain 中；</li>
 </ul>
-<h1 id="3-使类型可实例化"><a href="#3-使类型可实例化" class="headerlink" title="3 使类型可实例化"></a>3 使类型可实例化</h1>
+<h1 id="3-使类型可实例化"><a href="#3-使类型可实例化" class="headerlink" title="3 使类型可实例化"></a>3 使类型可实例化</h1><p><strong>Serializable 定制属性</strong><br>类型的实例默认是不可以实例化的，需要人为的为类型加上 <code>[Serializable]</code> 属性，才可以进行实例化；<br>此定制属性位于 <code>System</code> 命名空间下的 <code>System.SerializableAttribute</code> 中；</p>
+<ul>
+<li>格式化器会确认每个对象的类型都是可序列化的；</li>
+<li>任何对象不可序列化，格式化器的 <code>Serialize</code> 方法都会抛出 SerializationException 异常；</li>
+</ul>
+<p><strong>使用 MemoryStream 存储 Serializable 的结果</strong><br>在序列化对象的对象图时，可能会出现：当前要序列化的对象，其当中定义的引用类型成员，有的可以序列化，有的不可以；但在序列化方法执行前，并不会先对整个对象图进行判断，是否可以完成序列化；</p>
+<ul>
+<li>问题：可能会出现序列化到中途时，部分实例被序列化，然后部分实例无法实例化，产生报错；</li>
+<li>解决方法：使用 <code>MemoryStream</code> 来存储；</li>
+<li>原因：<ul>
+<li>使用 <code>MemoryStream</code> 能得体地从这种情况中恢复原本数据；</li>
+<li>可以使用 <code>MemoryStream </code> 先将对象序列化到一个内存流中。然后，如果所有对象都成功序列化，就可以将 MemoryStream 中的字节复制到你真正希望的目标流中；</li>
+</ul>
+</li>
+</ul>
+<p><strong>SerializableAttribute 使用范围</strong></p>
+<ol>
+<li>这个定制特性只能应用于引用类型 (class)、值类型 (struct)、枚举类型 (enum)和委托类型 (delegate)；</li>
+<li>枚举和委托类型总是可序列化的，不必显式应用 SerializableAttribute 特性； </li>
+<li>SerializableAttribute 特性不会被派生类型继承：<ol>
+<li>父类可以序列化时，子类如果不设置 <code>[Serializable]</code> 时，子类依然不可以实例化；</li>
+<li>父类不可以序列化时，子类无论如何都不可以实例化。如果基类型不允许它的实例序列化，它的字段就不能序列化，因为基对象实际是派生对象的一部分；</li>
+</ol>
+</li>
+<li>一般建议将定义的大部分类型都设置成可序列化，除了那些要包含敏感或安全数据的类型实例；</li>
+</ol>
+
     </div>
 
     
@@ -385,8 +417,8 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/09/084737ad057b.html" rel="prev" title="">
-                  <i class="fa fa-angle-left"></i> 
+                <a href="/2023/09/a2c89473cdff.html" rel="prev" title="【法理学】Lecture 4：法系">
+                  <i class="fa fa-angle-left"></i> 【法理学】Lecture 4：法系
                 </a>
             </div>
             <div class="post-nav-item">
@@ -425,7 +457,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共72.2k字</span>
+  <span class="post-count">博客全站共80.2k字</span>
 </div>
     </div>
   </footer>

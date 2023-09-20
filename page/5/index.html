@@ -152,7 +152,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -163,7 +163,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -191,6 +191,285 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/68a724658d83.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/68a724658d83.html" class="post-title-link" itemprop="url">Lecture 14：C标准库的实现</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-27 14:08:50" itemprop="dateCreated datePublished" datetime="2023-08-27T14:08:50+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-05 17:20:09" itemprop="dateModified" datetime="2023-09-05T17:20:09+08:00">2023-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>操作系统内核对外面提供的API就是Syscall，而当中和用户交互的就是Shell。而在Shell的外面，OS提供了一个框架性程序，帮助开发者实现应用程序（因为没有人愿意在没有库函数的情况下，直接使用汇编、系统调用来制作应用程序）</p>
+<blockquote>
+<p>· 在系统调用之上构建可以普遍使用的标准库：libc</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/68a724658d83.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/3dbfbd52ee49.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/3dbfbd52ee49.html" class="post-title-link" itemprop="url">Lecture 13：系统调用与Shell</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-27 14:05:35" itemprop="dateCreated datePublished" datetime="2023-08-27T14:05:35+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-29 19:20:46" itemprop="dateModified" datetime="2023-08-29T19:20:46+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"><a href="#我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell-前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？" class="headerlink" title="我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell&gt; 前言：作为操作系统的用户，“我们”到底是怎么使用操作系统的？"></a>我们需要一个用户能直接操作的程序，管理与你交互的设备，对应操作系统中的对象，而这就是Shell，第一个与人交互的程序就是Shell。<br>在操作系统的状态机当中，除了操作系统的内核之外，还会有一个程序负责输入和输出，负责包在Kernel之外的一层壳，帮助用户和OS交互：shell<br>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/3dbfbd52ee49.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/d03400aa93d7.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Satsuki">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Satsuki的博客">
+      <meta itemprop="description" content="向着黄昏与自由迁徙">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Satsuki的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/d03400aa93d7.html" class="post-title-link" itemprop="url">Lecture 12：进程的地址空间</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-27 14:04:16" itemprop="dateCreated datePublished" datetime="2023-08-27T14:04:16+08:00">2023-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-29 19:19:19" itemprop="dateModified" datetime="2023-08-29T19:19:19+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>程序就是状态机，C语言的状态机被转换成汇编语言的状态机，在汇编语言的状态机当中直接看到内存地址空间。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/d03400aa93d7.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -515,7 +794,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共72.2k字</span>
+  <span class="post-count">博客全站共80.2k字</span>
 </div>
     </div>
   </footer>
