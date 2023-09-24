@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/08/3dac16a26c48.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="引擎事件系统框架编写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Game Engine】P1：引擎事件系统">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/08/3dac16a26c48.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="引擎事件系统框架编写">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-28T13:16:20.000Z">
+<meta property="article:modified_time" content="2023-09-24T10:38:01.507Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="游戏引擎">
+<meta property="article:tag" content="事件">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: 游戏引擎 -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"static","image":{"light":"/images/MG_9623.webp","dark":"/images/MG_9623.webp"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.7rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【Game Engine】P1：引擎事件系统</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-08-28 21:16:20</span>
+        <span class="mobile">2023-08-28 21:16:20</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-09-24 18:38:01</span>
+            <span class="mobile">2023-09-24 18:38:01</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E5%8E%9F%E7%90%86/">游戏引擎原理</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E4%BA%8B%E4%BB%B6/">事件</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/C/">C++</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.7k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>8 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <p>引擎事件系统框架编写</p>
+<span id="more"></span>
+
+<h2 id="1-1-事件类型基础"><a href="#1-1-事件类型基础" class="headerlink" title="1.1 事件类型基础"></a>1.1 事件类型基础</h2><h3 id="1-1-1-事件类型枚举"><a href="#1-1-1-事件类型枚举" class="headerlink" title="1.1.1 事件类型枚举"></a>1.1.1 事件类型枚举</h3><p>描述事件系统的基础事件类型，用枚举表示。</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">EventType</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,</span><br><span class="line">	AppTick, AppUpdate, AppRender,</span><br><span class="line">	KeyPressed, KeyReleased,</span><br><span class="line">	MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-1-2-事件分类"><a href="#1-1-2-事件分类" class="headerlink" title="1.1.2 事件分类"></a>1.1.2 事件分类</h3><p>定义了事件分类，并且可以向0进行过滤、偏移；</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">EventCategory</span></span><br><span class="line">&#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	EventCategoryApplication = <span class="built_in">BIT</span>(<span class="number">0</span>),</span><br><span class="line">	EventCategoryInput = <span class="built_in">BIT</span>(<span class="number">1</span>),</span><br><span class="line">	EventCategoryKeyboard = <span class="built_in">BIT</span>(<span class="number">2</span>),</span><br><span class="line">	EventCategoryMouse = <span class="built_in">BIT</span>(<span class="number">3</span>),</span><br><span class="line">	EventCategoryMouseButton = <span class="built_in">BIT</span>(<span class="number">4</span>)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<p>BIT的定义如下：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BIT(x) (1 &lt;&lt; x)</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="1-2-Event-基类设计"><a href="#1-2-Event-基类设计" class="headerlink" title="1.2 Event 基类设计"></a>1.2 Event 基类设计</h2><ul>
+<li>内容：<ul>
+<li>m_Handled：用于表示此内容是否已经被处理过；</li>
+<li>IsInCategory：现在处理的事件，是否是属于类型的部分；使用此方法快速的进行过滤； </li>
+<li>GetName：仅用在Debug模式；</li>
+<li>ToString：默认输出名字，也可以继承后修改以及扩展此行为；<ul>
+<li>实现细节：stringstream的性能很差，但目前Debug模式可以先不考虑；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> Event</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">EventDispatcher</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> EventType <span class="title">GetEventType</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">const</span> <span class="type">char</span>* <span class="title">GetName</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">GetCategoryFlags</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> <span class="built_in">GetName</span>(); &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">IsInCategory</span><span class="params">(EventCategory category)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">GetCategoryFlags</span>() &amp; category;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="type">bool</span> m_Handled = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-2-1-抽象函数的实现宏"><a href="#1-2-1-抽象函数的实现宏" class="headerlink" title="1.2.1 抽象函数的实现宏"></a>1.2.1 抽象函数的实现宏</h3><p>因为在Event当中有抽象函数需要实现，每一个子类都需要手动进行实现的话会导致浪费。可以将其写成一个宏函数，在子类当中只需传入类型，既可以自动实现其子类的抽象函数的实现；</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> EVENT_CLASS_TYPE(type) static EventType GetStaticType() &#123; return EventType::##type; &#125;\</span></span><br><span class="line"><span class="meta">								virtual EventType GetEventType() const override &#123; return GetStaticType(); &#125;\</span></span><br><span class="line"><span class="meta">								virtual const char* GetName() const override &#123; return #type; &#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="1-3-KeyEvent-类设计"><a href="#1-3-KeyEvent-类设计" class="headerlink" title="1.3 KeyEvent 类设计"></a>1.3 KeyEvent 类设计</h2><p><strong>KeyEvent概念</strong><br>需要处理案件的事件。并且按键的事件至少具有以下三种状态：</p>
+<ol>
+<li>第一次按下</li>
+<li>按下中</li>
+<li>第一次抬起<br>KeyEvent需要能够处理并表达这三种状态。</li>
+</ol>
+<p><strong>继承</strong><br>KeyEvent是其他更多按键事件的父类，是Event类的子类；</p>
+<p><strong>KeyEvent代码</strong><br>此代码的内容类似于是抽象类，只是用于提供继承；不能实例化一个Key Event；</p>
+<ul>
+<li>内容：<ul>
+<li>构造函数：构造函数被设置为protected，表示此类作用为提供继承；</li>
+<li>Get Key Code：返回KeyCode数值；<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetKeyCode</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_KeyCode; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryKeyboard | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">KeyEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">m_KeyCode</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_KeyCode;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+</ul>
+<p><strong>EVENT_CLASS_CATEGORY内容</strong><br>因为KeyBoard键盘输入同时也是一般Input的一种，因此其进行分类时同属于这两种类型；</p>
+<h3 id="1-3-1-KeyPressedEvent-类设计"><a href="#1-3-1-KeyPressedEvent-类设计" class="headerlink" title="1.3.1 KeyPressedEvent 类设计"></a>1.3.1 KeyPressedEvent 类设计</h3><p>此类是一个可以被实际实例化的类；</p>
+<p><strong>构造函数</strong><br>此类的构造函数传入repeatCount，表示此按键的重复次数。当此数值不为0时，此内容表示当前Event在被重复按下；</p>
+<p><strong>ToString重写</strong><br>输出”KeyPressedEvent: “ 加上 KeyCode 的数值；</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyPressedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyPressedEvent</span>(<span class="type">int</span> keycode, <span class="type">int</span> repeatCount)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode), <span class="built_in">m_RepeatCount</span>(repeatCount) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetRepeatCount</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_RepeatCount; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyPressedEvent: &quot;</span> &lt;&lt; m_KeyCode &lt;&lt; <span class="string">&quot; (&quot;</span> &lt;&lt; m_RepeatCount &lt;&lt; <span class="string">&quot; repeats)&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyPressed)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">int</span> m_RepeatCount;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-3-2-KeyReleasedEvent-类设计"><a href="#1-3-2-KeyReleasedEvent-类设计" class="headerlink" title="1.3.2 KeyReleasedEvent 类设计"></a>1.3.2 KeyReleasedEvent 类设计</h3><p>和Pressed类基本一致，只不过没有repeatCount的计数内容；</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> KeyReleasedEvent : <span class="keyword">public</span> KeyEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">KeyReleasedEvent</span>(<span class="type">int</span> keycode)</span><br><span class="line">		: <span class="built_in">KeyEvent</span>(keycode) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;KeyReleasedEvent: &quot;</span> &lt;&lt; m_KeyCode;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(KeyReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+<h2 id="1-4-EventDispatcher"><a href="#1-4-EventDispatcher" class="headerlink" title="1.4 EventDispatcher"></a>1.4 EventDispatcher</h2><p><strong>作用</strong><br>让我们可以实际的去发布一个事件，基于需要发布事件的类型；<br>创建一个Dispatcher的实例，并且拥有一个Event的引用。在这个Dispatcher中拥有一个Dispatch()方法，可以接受一个EventFn函数。然后如果类型一致，可以实际的在Dispatch中运行这个EventFn的函数。</p>
+<p><strong>构造函数</strong><br>Event基类作为参数，接受各种事件类型，赋值在私有的Event变量上；</p>
+<p><strong>Dispatch()方法</strong><br>在此方法内需要使用上Event，进行判断泛型传入的类型T的事件类型，和当前Dispatch中存储的Event的类型是否一致（通过GetEventType()方法，调用GetStaticType()方法）；<br>一致时，会调用EventFn中存储的函数，并返回bool；</p>
+<p><strong>EventFn函数</strong><br>使用std的function，并且返回bool类型，接受T&amp;引用（可以为任何类型的Event）作为参数；</p>
+<ul>
+<li>补充：<strong>std::function()</strong><ul>
+<li>可以把std::function看做一个函数对象，用于表示并存储函数这个抽象概念。</li>
+<li>std::function的实例可以存储、复制和调用任何可调用对象（函数指针，类成员函数指针，bind表达式等等），存储的可调用对象称为std::function的目标，若std::function不含目标，则称它为空</li>
+</ul>
+</li>
+</ul>
+<p>代码：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">EventDispatcher</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">	<span class="keyword">using</span> EventFn = std::function&lt;<span class="built_in">bool</span>(T&amp;)&gt;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">EventDispatcher</span>(Event&amp; event)</span><br><span class="line">		: <span class="built_in">m_Event</span>(event)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">	<span class="type">bool</span> <span class="title">Dispatch</span><span class="params">(EventFn&lt;T&gt; func)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (m_Event.<span class="built_in">GetEventType</span>() == T::<span class="built_in">GetStaticType</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			m_Event.m_Handled = <span class="built_in">func</span>(*(T*)&amp;m_Event);</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Event&amp; m_Event;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="1-5-MouseEvent-设计"><a href="#1-5-MouseEvent-设计" class="headerlink" title="1.5 MouseEvent 设计"></a>1.5 MouseEvent 设计</h2><p><strong>MouseMovedEvent</strong><br>传入x、y表示两个坐标位置，用于存储鼠标移动事件所需要的信息；<br>同理MouseScrolledEvent。<br>下面内容基本类似，主要关注构造函数中传入的参数的差别，代表了此种类型事件所实际需要使用到的数据。</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseMovedEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseMovedEvent</span>(<span class="type">float</span> x, <span class="type">float</span> y)</span><br><span class="line">		: <span class="built_in">m_MouseX</span>(x), <span class="built_in">m_MouseY</span>(y) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetX</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseX; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetY</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_MouseY; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseMovedEvent: &quot;</span> &lt;&lt; m_MouseX &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_MouseY;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseMoved)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> m_MouseX, m_MouseY;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseScrolledEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseScrolledEvent</span>(<span class="type">float</span> xOffset, <span class="type">float</span> yOffset)</span><br><span class="line">		: <span class="built_in">m_XOffset</span>(xOffset), <span class="built_in">m_YOffset</span>(yOffset) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetXOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_XOffset; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">float</span> <span class="title">GetYOffset</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_YOffset; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseScrolledEvent: &quot;</span> &lt;&lt; <span class="built_in">GetXOffset</span>() &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; <span class="built_in">GetYOffset</span>();</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseScrolled)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> m_XOffset, m_YOffset;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">GetMouseButton</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Button; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryMouse | EventCategoryInput)</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">MouseButtonEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">m_Button</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> m_Button;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonPressedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseButtonPressedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseButtonPressedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonPressed)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> MouseButtonReleasedEvent : <span class="keyword">public</span> MouseButtonEvent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MouseButtonReleasedEvent</span>(<span class="type">int</span> button)</span><br><span class="line">		: <span class="built_in">MouseButtonEvent</span>(button) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;MouseButtonReleasedEvent: &quot;</span> &lt;&lt; m_Button;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(MouseButtonReleased)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="1-6-ApplicationEvent-设计"><a href="#1-6-ApplicationEvent-设计" class="headerlink" title="1.6 ApplicationEvent 设计"></a>1.6 ApplicationEvent 设计</h2><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowResizeEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowResizeEvent</span>(<span class="type">unsigned</span> <span class="type">int</span> width, <span class="type">unsigned</span> <span class="type">int</span> height)</span><br><span class="line">		: <span class="built_in">m_Width</span>(width), <span class="built_in">m_Height</span>(height) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetWidth</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Width; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetHeight</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_Height; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">ToString</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::stringstream ss;</span><br><span class="line">		ss &lt;&lt; <span class="string">&quot;WindowResizeEvent: &quot;</span> &lt;&lt; m_Width &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_Height;</span><br><span class="line">		<span class="keyword">return</span> ss.<span class="built_in">str</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowResize)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> m_Width, m_Height;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> WindowCloseEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">WindowCloseEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(WindowClose)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppTickEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppTickEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppTick)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppUpdateEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppUpdateEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppUpdate)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> AppRenderEvent : <span class="keyword">public</span> Event</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">AppRenderEvent</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">EVENT_CLASS_TYPE</span>(AppRender)</span><br><span class="line">		<span class="built_in">EVENT_CLASS_CATEGORY</span>(EventCategoryApplication)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【Game Engine】P1：引擎事件系统</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-08-28 21:16:20</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-09-24 18:38:01
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/08/3dac16a26c48.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">#游戏引擎</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E4%BA%8B%E4%BB%B6/">#事件</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/C/">#C++</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/08/2d466e9f916b.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/08/4b26dd1d757b.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【Game Engine】P1：引擎事件系统</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B%E5%9F%BA%E7%A1%80"><span class="nav-text">1.1 事件类型基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-1-%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B%E6%9E%9A%E4%B8%BE"><span class="nav-text">1.1.1 事件类型枚举</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-%E4%BA%8B%E4%BB%B6%E5%88%86%E7%B1%BB"><span class="nav-text">1.1.2 事件分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Event-%E5%9F%BA%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="nav-text">1.2 Event 基类设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E6%8A%BD%E8%B1%A1%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%AE%8F"><span class="nav-text">1.2.1 抽象函数的实现宏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-KeyEvent-%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="nav-text">1.3 KeyEvent 类设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-1-KeyPressedEvent-%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="nav-text">1.3.1 KeyPressedEvent 类设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-2-KeyReleasedEvent-%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="nav-text">1.3.2 KeyReleasedEvent 类设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-EventDispatcher"><span class="nav-text">1.4 EventDispatcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-MouseEvent-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1.5 MouseEvent 设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-ApplicationEvent-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1.6 ApplicationEvent 设计</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

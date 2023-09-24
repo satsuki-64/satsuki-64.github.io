@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#2F4F4F" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="内容大纲：">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/09/c03dd0ca507b.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="内容大纲：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员">
 <meta property="og:url" content="https://satsuki-64.github.io/2023/09/c03dd0ca507b.html">
@@ -35,250 +33,310 @@
 <meta property="article:published_time" content="2023-09-14T04:50:08.000Z">
 <meta property="article:modified_time" content="2023-09-15T03:03:58.309Z">
 <meta property="article:author" content="Satsuki">
-<meta property="article:tag" content="CLR">
 <meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="CLR">
 <meta property="article:tag" content="AppDomain">
 <meta property="article:tag" content="程序集">
 <meta property="article:tag" content="反射">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230914125545.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: CSharp -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
 
 
-<link rel="canonical" href="https://satsuki-64.github.io/2023/09/c03dd0ca507b.html">
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"static","image":{"light":"/images/MG_9623.webp","dark":"/images/MG_9623.webp"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.7rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 
+<body>
+<div class="progress-bar-container">
+    
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/09/c03dd0ca507b.html","path":"2023/09/c03dd0ca507b.html","title":"【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员 | Satsuki的博客</title>
-  
-
-
-
-
-
-
-
-
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-  <a target="_blank" rel="noopener" href="https://github.com/satsuki-64" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">Satsuki的博客</p>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="搜索" role="button">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
 </div>
 
 
+<main class="page-container" id="swup">
 
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
+    
+
+    <div class="main-content-container">
 
 
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
 
-  <div class="search-pop-overlay">
-    <div class="popup search-popup"><div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close" role="button">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div class="search-result-container no-result">
-  <div class="search-result-icon">
-    <i class="fa fa-spinner fa-pulse fa-5x"></i>
-  </div>
-</div>
-
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
 
 </header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员</h1>
+            
+            </div>
+            
+                    
         
-  
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1%E6%94%AF%E6%8C%81%E5%8A%A0%E8%BD%BD%E9%A1%B9%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">1 设计支持加载项的应用程序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%9F%BA%E4%BA%8E%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%BE%97%E7%B1%BB%E5%9E%8B%E6%88%90%E5%91%98"><span class="nav-text">2 基于反射获得类型成员</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%8F%91%E7%8E%B0%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-text">2.1 发现类型的成员</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-MemberInfo-%E7%B1%BB%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1.1 MemberInfo 类介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E8%B0%83%E7%94%A8%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-text">2.2 调用类型的成员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%8F%A5%E6%9F%84"><span class="nav-text">3 句柄</span></a></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Satsuki"
-      src="/images/logo.png">
-  <p class="site-author-name" itemprop="name">Satsuki</p>
-  <div class="site-description" itemprop="description">向着黄昏与自由迁徙</div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">50</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">10</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">60</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/satsuki-64" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;satsuki-64" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="/15079296601@163.com" title="E-Mail → 15079296601@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://space.bilibili.com/1472895664" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;1472895664" rel="noopener me" target="_blank">Bilibili</a>
-      </span>
-  </div>
-
-        </div>
-      </div>
-    </div>
-
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-09-14 12:50:08</span>
+        <span class="mobile">2023-09-14 12:50:08</span>
+        <span class="hover-info">创建</span>
+    </span>
     
-  </aside>
-
-
-    </div>
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/09/c03dd0ca507b.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员 | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-09-14 12:50:08" itemprop="dateCreated datePublished" datetime="2023-09-14T12:50:08+08:00">2023-09-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 11:03:58" itemprop="dateModified" datetime="2023-09-15T11:03:58+08:00">2023-09-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSharp/" itemprop="url" rel="index"><span itemprop="name">CSharp</span></a>
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-09-15 11:03:58</span>
+            <span class="mobile">2023-09-15 11:03:58</span>
+            <span class="hover-info">更新</span>
         </span>
-    </span>
+    
 
-  
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/CSharp/">CSharp</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/CLR/">CLR</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/AppDomain/">AppDomain</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E7%A8%8B%E5%BA%8F%E9%9B%86/">程序集</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%8F%8D%E5%B0%84/">反射</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.9k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
 
-        </div>
-      </header>
+                    </div>
+                </div>
+            </div>
+        
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody"><p>内容大纲：</p>
+        
+
+
+        <div class="article-content markdown-body">
+            <p>内容大纲：</p>
 <span id="more"></span>
 <h2 id="1-设计支持加载项的应用程序"><a href="#1-设计支持加载项的应用程序" class="headerlink" title="1 设计支持加载项的应用程序"></a>1 设计支持加载项的应用程序</h2><p>当需要设计一个可以支持不同的加载项的应用程序时，需要知道以下三部分的关系：</p>
 <ul>
 <li>宿主 SDK 程序集；</li>
 <li>加载项程序集；</li>
-<li>宿主应用程序程序集<br>它们三者之间关系：<br><img src="/../../image/Pasted%20image%2020230914125545.png"><br><strong>宿主 SDK 程序集</strong><br>宿主 SDK(Host SDK)程序集它定义了一个接口，接口的方法作为宿主应用程序与加载项之间的通信机制使用；</li>
+<li>宿主应用程序程序集<br>它们三者之间关系：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020230914125545.png"
+                     
+                ><br><strong>宿主 SDK 程序集</strong><br>宿主 SDK(Host SDK)程序集它定义了一个接口，接口的方法作为宿主应用程序与加载项之间的通信机制使用；</li>
 <li>为接口方法定义参数和返回类型时，请尝试使用 MSCorLibdll 中定义的其他接口或类型；</li>
 <li>要传递并返回自己的数据类型，也在“宿主 SDK”程序集中定义。一旦搞定接口定义，就可为这个程序集赋予强名称，然后把它打包并部署到合作伙伴和用户那里；</li>
 <li>发布后要避免对该程序集中的类型做出任何重大的改变；<ul>
@@ -306,21 +364,36 @@
 <li>事件</li>
 <li>嵌套类型</li>
 </ul>
-<p><strong>获得类型成员的类：System. Reflection. MemberInfo</strong><br>在 FCL 当中的 MemberInfo 类，封装了所有类型成员都通用的一组属性，以下是具体的类继承图：<br><img src="/../../image/Pasted%20image%2020230914172748.png"><br>由以上图片可知：</p>
+<p><strong>获得类型成员的类：System. Reflection. MemberInfo</strong><br>在 FCL 当中的 MemberInfo 类，封装了所有类型成员都通用的一组属性，以下是具体的类继承图：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020230914172748.png"
+                     
+                ><br>由以上图片可知：</p>
 <ul>
 <li>TypeInfo</li>
 <li>FieldInfo</li>
 <li>……</li>
 <li>等等这些具体用于访问类型成员的类，都是继承自 MemberInfo；</li>
 </ul>
-<p><strong>反射系统结构关系</strong><br><img src="/../../image/Pasted%20image%2020230914175225.png"><br>基于 AppDomain 可以加载所有程序集，在程序集中可以发现构造的模块；<br>基于模块或者程序集，可以发现它当中所定义的所有类型；在类型中可以发现它的字段、属性、方法、事件等等；</p>
+<p><strong>反射系统结构关系</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020230914175225.png"
+                     
+                ><br>基于 AppDomain 可以加载所有程序集，在程序集中可以发现构造的模块；<br>基于模块或者程序集，可以发现它当中所定义的所有类型；在类型中可以发现它的字段、属性、方法、事件等等；</p>
 <h3 id="2-1-1-MemberInfo-类介绍"><a href="#2-1-1-MemberInfo-类介绍" class="headerlink" title="2.1.1 MemberInfo 类介绍"></a>2.1.1 MemberInfo 类介绍</h3><p><strong>定义与介绍</strong><br><code>MemberInfo</code> 类是在 C# 中用于描述类成员（如字段、属性、方法等）的类。它是 .NET 反射（Reflection）机制中的一部分，用于提供关于类型成员的信息和元数据；<br><code>MemberInfo</code> 类是一个抽象基类，因此无法直接实例化。它定义了表示类成员的共同属性和方法，并提供了许多有用的功能来获取和操作类成员的信息。一些常见的 <code>MemberInfo</code> 子类包括 <code>FieldInfo</code>、<code>PropertyInfo</code>、<code>MethodInfo</code> 等，它们分别用于描述字段、属性和方法。</p>
 <p><strong>MemberInfo 类与反射的关系</strong></p>
 <ul>
 <li>反射是一种能够在运行时动态地检查和操作程序集、类型和成员的能力。通过使用反射，可以以编程方式获取和操纵应用程序集中的类型、成员和其他元素，而无需在编译时了解其具体结构；</li>
 <li><code>MemberInfo</code> 类作为反射中的一个重要组成部分，通过提供一组统一的方法和属性，使程序能够动态地获取和操作类型成员的信息。通过 <code>MemberInfo</code>，可以获取类成员的名称、数据类型、修饰符、特性等，从而实现动态操作和扩展。</li>
 </ul>
-<p><strong>MemberInfo 所有派生类型通用的属性和方法</strong><br>以下是 MemberInfo 的通用属性与方法：<br><img src="/../../image/Pasted%20image%2020230914173316.png"></p>
+<p><strong>MemberInfo 所有派生类型通用的属性和方法</strong><br>以下是 MemberInfo 的通用属性与方法：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020230914173316.png"
+                     
+                ></p>
 <ul>
 <li>因为 TypeInfo 类从 MemberInfo 类继承，因此以上属性 TypeInfo 类当中也有；</li>
 <li>但 TypeInfo 还提供了更具体地返回字段、方法、属性、事件等的 Type 的方法；</li>
@@ -350,7 +423,12 @@
 <li>EventInfo 类型代表与事件有关的元数据信息；</li>
 <li>EventInfo 类型提供了只读 EventHandlerType 属性，返回事件的基础委托的 Type；</li>
 <li>EventInfo 类型还提供了只读 AddMethod 和 RemoveMethod 属性，返回为事件增删委托的方法的 MethodInfo 对象；</li>
-<li>增删委托可调用这些 MethodInfo 对象，也可调用 EventInfo 类型提供的更好用的 AddEventHandler 和 RemoveEventHandler 方法；<br><img src="/../../image/Pasted%20image%2020230914180011.png"></li>
+<li>增删委托可调用这些 MethodInfo 对象，也可调用 EventInfo 类型提供的更好用的 AddEventHandler 和 RemoveEventHandler 方法；<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020230914180011.png"
+                     
+                ></li>
 </ul>
 </li>
 </ul>
@@ -425,87 +503,329 @@
 </li>
 </ul>
 
-    </div>
+        </div>
 
-    
-    
-    
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-09-14 12:50:08</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-09-15 11:03:58
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/09/c03dd0ca507b.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
 
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/CLR/" rel="tag"><i class="fa fa-tag"></i> CLR</a>
-              <a href="/tags/CSharp/" rel="tag"><i class="fa fa-tag"></i> CSharp</a>
-              <a href="/tags/AppDomain/" rel="tag"><i class="fa fa-tag"></i> AppDomain</a>
-              <a href="/tags/%E7%A8%8B%E5%BA%8F%E9%9B%86/" rel="tag"><i class="fa fa-tag"></i> 程序集</a>
-              <a href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag"><i class="fa fa-tag"></i> 反射</a>
-          </div>
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/CSharp/">#CSharp</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/CLR/">#CLR</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/AppDomain/">#AppDomain</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E7%A8%8B%E5%BA%8F%E9%9B%86/">#程序集</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E5%8F%8D%E5%B0%84/">#反射</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
 
         
 
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2023/09/cf6c1a0c27f0.html" rel="prev" title="【游戏引擎原理】现代图形绘制流水线（2） -- Vulkan开发基础">
-                  <i class="fa fa-angle-left"></i> 【游戏引擎原理】现代图形绘制流水线（2） -- Vulkan开发基础
-                </a>
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/09/13ccfbbad41b.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【静态程序分析】Lecture 2：Intermediate Representation</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/09/8da45f07ddbd.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【游戏引擎原理】现代图形绘制流水线（2） -- Vulkan开发基础</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
             </div>
-            <div class="post-nav-item">
-                <a href="/2023/09/13ccfbbad41b.html" rel="next" title="【静态程序分析】Lecture 2：Intermediate Representation">
-                  【静态程序分析】Lecture 2：Intermediate Representation <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
+        
 
 
-
-
-
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-  <div class="copyright">
-    &copy; 
-    <span itemprop="copyrightYear">2023</span>
-    <span class="with-love">
-      <i class="fa fa-heart"></i>
-    </span>
-    <span class="author" itemprop="copyrightHolder">Satsuki</span>
-  </div>
-
-<!--
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>-->
-
-<div class="theme-info">
-  <div class="powered-by"></div>
-  <span class="post-count">博客全站共86.6k字</span>
-</div>
+        
     </div>
-  </footer>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1%E6%94%AF%E6%8C%81%E5%8A%A0%E8%BD%BD%E9%A1%B9%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">1 设计支持加载项的应用程序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%9F%BA%E4%BA%8E%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%BE%97%E7%B1%BB%E5%9E%8B%E6%88%90%E5%91%98"><span class="nav-text">2 基于反射获得类型成员</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%8F%91%E7%8E%B0%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-text">2.1 发现类型的成员</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-MemberInfo-%E7%B1%BB%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1.1 MemberInfo 类介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E8%B0%83%E7%94%A8%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-text">2.2 调用类型的成员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%8F%A5%E6%9F%84"><span class="nav-text">3 句柄</span></a>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
 
   
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
+<script src="/js/libs/Typed.min.js"></script>
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/js/third-party/search/local-search.js"></script>
+<script src="/js/plugins/typed.js"></script>
 
 
 
@@ -513,10 +833,20 @@
 
 
 
-  
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
 
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
 
+<script src="/js/layouts/toc.js" type="module"></script>
 
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
 
 
 </body>

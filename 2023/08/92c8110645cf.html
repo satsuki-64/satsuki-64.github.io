@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#2F4F4F" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"satsuki-64.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","Pisces | Gemini":1200,"width":300,"display":"post","padding":18,"offset":20},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。  重新回到可执行文件：可执行文件是什么，其如何在OS上运行；">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/08/92c8110645cf.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。  重新回到可执行文件：可执行文件是什么，其如何在OS上运行；">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Lecture 16：什么是可执行文件">
 <meta property="og:url" content="https://satsuki-64.github.io/2023/08/92c8110645cf.html">
@@ -39,283 +37,345 @@
 <meta property="article:tag" content="汇编">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829192659.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: 操作系统 -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
 
 
-<link rel="canonical" href="https://satsuki-64.github.io/2023/08/92c8110645cf.html">
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"static","image":{"light":"/images/MG_9623.webp","dark":"/images/MG_9623.webp"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.7rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 
+<body>
+<div class="progress-bar-container">
+    
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://satsuki-64.github.io/2023/08/92c8110645cf.html","path":"2023/08/92c8110645cf.html","title":"Lecture 16：什么是可执行文件"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Lecture 16：什么是可执行文件 | Satsuki的博客</title>
-  
-
-
-
-
-
-
-
-
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-  <a target="_blank" rel="noopener" href="https://github.com/satsuki-64" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">Satsuki的博客</p>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="搜索" role="button">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
 </div>
 
 
+<main class="page-container" id="swup">
 
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
+    
+
+    <div class="main-content-container">
 
 
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
 
-  <div class="search-pop-overlay">
-    <div class="popup search-popup"><div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close" role="button">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div class="search-result-container no-result">
-  <div class="search-result-icon">
-    <i class="fa fa-spinner fa-pulse fa-5x"></i>
-  </div>
-</div>
-
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
 
 </header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">Lecture 16：什么是可执行文件</h1>
+            
+            </div>
+            
+                    
         
-  
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#16-1-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-text">16.1 可执行文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1-1-%E6%89%8B%E5%86%8C%E7%9A%84%E9%80%BB%E8%BE%91"><span class="nav-text">16.1.1 手册的逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1-2-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%EF%BC%9A%E7%8A%B6%E6%80%81%E6%9C%BA%E7%9A%84%E6%8F%8F%E8%BF%B0"><span class="nav-text">16.1.2 可执行文件：状态机的描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1-3-%E6%93%8D%E7%BA%B5%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%9A%84%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-text">16.1.3 操纵系统上的可执行文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1-4-%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-text">16.1.4 常见的可执行文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-2-%E8%A7%A3%E6%9E%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-text">16.2 解析可执行文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#16-2-1-GNU-binutils-%E5%B7%A5%E5%85%B7"><span class="nav-text">16.2.1 GNU binutils 工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-2-2-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81"><span class="nav-text">16.2.2 可执行文件的运行时状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-2-3-%E8%B0%83%E8%AF%95%E4%BF%A1%E6%81%AF"><span class="nav-text">16.2.3 调试信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-3-%E9%93%BE%E6%8E%A5%E4%B8%8E%E9%87%8D%E5%AE%9A%E4%BD%8D"><span class="nav-text">16.3 链接与重定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#16-3-1-%E4%BB%8EC%E4%BB%A3%E7%A0%81%E5%88%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6"><span class="nav-text">16.3.1 从C代码到二进制文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-3-2-%E9%87%8D%E6%96%B0%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E3%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B"><span class="nav-text">16.3.2 重新理解编译、链接过程</span></a></li></ol></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Satsuki"
-      src="/images/logo.png">
-  <p class="site-author-name" itemprop="name">Satsuki</p>
-  <div class="site-description" itemprop="description">向着黄昏与自由迁徙</div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">50</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">10</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">60</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/satsuki-64" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;satsuki-64" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="/15079296601@163.com" title="E-Mail → 15079296601@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://space.bilibili.com/1472895664" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;1472895664" rel="noopener me" target="_blank">Bilibili</a>
-      </span>
-  </div>
-
-        </div>
-      </div>
-    </div>
-
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-08-29 19:25:17</span>
+        <span class="mobile">2023-08-29 19:25:17</span>
+        <span class="hover-info">创建</span>
+    </span>
     
-  </aside>
-
-
-    </div>
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://satsuki-64.github.io/2023/08/92c8110645cf.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.png">
-      <meta itemprop="name" content="Satsuki">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Satsuki的博客">
-      <meta itemprop="description" content="向着黄昏与自由迁徙">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Lecture 16：什么是可执行文件 | Satsuki的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Lecture 16：什么是可执行文件
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-08-29 19:25:17 / 修改时间：22:20:34" itemprop="dateCreated datePublished" datetime="2023-08-29T19:25:17+08:00">2023-08-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-08-29 22:20:34</span>
+            <span class="mobile">2023-08-29 22:20:34</span>
+            <span class="hover-info">更新</span>
         </span>
-    </span>
+    
 
-  
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/">可执行文件</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E9%93%BE%E6%8E%A5/">链接</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E6%B1%87%E7%BC%96/">汇编</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.4k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>8 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
 
-        </div>
-      </header>
+                    </div>
+                </div>
+            </div>
+        
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody"><p>目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。</p>
+        
+
+
+        <div class="article-content markdown-body">
+            <p>目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。</p>
 <ul>
 <li>重新回到可执行文件：可执行文件是什么，其如何在OS上运行；<span id="more"></span></li>
 </ul>
-<h2 id="16-1-可执行文件"><a href="#16-1-可执行文件" class="headerlink" title="16.1 可执行文件"></a>16.1 可执行文件</h2><h3 id="16-1-1-手册的逻辑"><a href="#16-1-1-手册的逻辑" class="headerlink" title="16.1.1 手册的逻辑"></a>16.1.1 手册的逻辑</h3><p><strong>链接</strong><br>关于可执行文件的手册地址：<a target="_blank" rel="noopener" href="http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf">http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf</a></p>
+<h2 id="16-1-可执行文件"><a href="#16-1-可执行文件" class="headerlink" title="16.1 可执行文件"></a>16.1 可执行文件</h2><h3 id="16-1-1-手册的逻辑"><a href="#16-1-1-手册的逻辑" class="headerlink" title="16.1.1 手册的逻辑"></a>16.1.1 手册的逻辑</h3><p><strong>链接</strong><br>关于可执行文件的手册地址：<a class="link"   target="_blank" rel="noopener" href="http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf" >http://jyywiki.cn/pages/OS/manuals/sysv-abi.pdf <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><strong>读手册的逻辑</strong><br>如果想要了解某部分知识，需要去观看包含其的对应的手册。但是很多手册（Friendly Manual）都有大量的依赖知识，只有拥有了这些依赖知识才能读懂这个手册。因此不能直接读手册，而是先学习简单的模型，回到7、80年代的概念，然后在学习手册当中最核心的部分，随着积累越来越多在逐渐往外扩展。</p>
 <h3 id="16-1-2-可执行文件：状态机的描述"><a href="#16-1-2-可执行文件：状态机的描述" class="headerlink" title="16.1.2 可执行文件：状态机的描述"></a>16.1.2 可执行文件：状态机的描述</h3><p><strong>简介</strong><br>可执行文件在OS当中是被execve调用的，而execve是把当前进程的状态机进行重置。所以由此可以进行一个推论：<br><strong>可执行文件，是一个状态机的初始状态的描述</strong>（或者说时描述一个状态机被重置之后的状态），并且还描述了状态机之后的数据迁移。<br>[[Lecture 11：操作系统上的进程#11.3 进程与execve()]]</p>
 <p><strong>问题：如果自己要实现一个可执行文件，应该涵盖什么</strong><br>因为可执行文件就是用于描述状态机重置之后的初始状态，那状态机的状态无非就是：</p>
 <ol>
 <li><p>寄存器<br>查看方式：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">info registers</span><br></pre></td></tr></table></figure>
-<p><img src="/../../image/Pasted%20image%2020230829192659.png"><br>这当中有些值是由在状态机的初始状态下直接将其赋为0，比如r8~r15寄存器，其不需要在二进制数据中进行指定；有些是需要指定的，比如rip寄存器的值；还有些是由OS来为其分配的，比如rsp寄存器；</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">info registers</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020230829192659.png"
+                     
+                ><br>这当中有些值是由在状态机的初始状态下直接将其赋为0，比如r8~r15寄存器，其不需要在二进制数据中进行指定；有些是需要指定的，比如rip寄存器的值；还有些是由OS来为其分配的，比如rsp寄存器；</p>
 </li>
 <li><p>内存（地址空间）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">info inferiors //获得进程号</span><br><span class="line">pmap 390489    //打印地址空间</span><br></pre></td></tr></table></figure></li>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">info inferiors //获得进程号</span><br><span class="line">pmap 390489    //打印地址空间</span><br></pre></td></tr></table></figure></div></li>
 </ol>
 <p>所有这些地址空间中的数据，比如592k的可读可执行，首先会有两个问题：1、其地址在哪里；2、其初始值为多少；这些就是其初始值信息。<br>[[Lecture 12：进程的地址空间]]</p>
 <p><strong>可执行文件的本质</strong><br>可执行文件就是一个数据结构，描述了状态机的 初始状态 + 迁移，然后再思考将什么信息放入到二进制文件里。</p>
 <h3 id="16-1-3-操纵系统上的可执行文件"><a href="#16-1-3-操纵系统上的可执行文件" class="headerlink" title="16.1.3 操纵系统上的可执行文件"></a>16.1.3 操纵系统上的可执行文件</h3><p><strong>文件的可执行权限</strong><br>更改文件权限指令：<br>以下是添加一个可执行权限</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x a.out</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x a.out</span><br></pre></td></tr></table></figure></div>
 <p>如果将一个可执行文件的可执行权限抹除掉，此时再对其进行执行将产生报错；而如果将一个源代码文件的可执行权限打开，强行将一个源代码文件改为可执行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x a.c</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x a.c</span><br></pre></td></tr></table></figure></div>
 <p>此时将产生一个Permission denied的报错。</p>
 <p><strong>是谁决定了一个文件能不能执行？</strong><br>执行一个程序时会使用execve系统调用，在使用execve读取可执行文件时，OS才会去检查其可执行权限；<br>![[Pasted image 20230322163623.png]]<br>但是如果将a.out文件的可执行权限抹除掉，此时再使用strace观察进程的系统调用会变成如下情况：<br>![[Pasted image 20230322163934.png]]<br>此时操作系统返回了EACCES，给了一个错误信息；<br>但如果将一个a.c文件，将其权限改为可执行文件，此时再去观测去strace其报错会变成：Exec format error信息，表示OS无法识别此可执行文件。 </p>
 <h3 id="16-1-4-常见的可执行文件"><a href="#16-1-4-常见的可执行文件" class="headerlink" title="16.1.4 常见的可执行文件"></a>16.1.4 常见的可执行文件</h3><p>核心：<strong>可执行文件就是一个操作系统内的普通对象；</strong></p>
 <p><strong>She-bang</strong><br>可以在一个c语言的文件中写入以下内容：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#感叹号/usr/bin/python3</span><br><span class="line"></span><br><span class="line"><span class="title function_">print</span><span class="params">(<span class="string">&quot;Hello&quot;</span>)</span></span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#感叹号/usr/bin/python3</span><br><span class="line"></span><br><span class="line"><span class="title function_">print</span><span class="params">(<span class="string">&quot;Hello&quot;</span>)</span></span><br></pre></td></tr></table></figure></div>
 <p>此时这个a.c文件就变得可执行了，并且输出了Hello。</p>
 <p>She-bang机制：可以在代码当中跟一个可执行文件，然后程序会去执行它。<br>当操作系统发现了一个“#！”后，execve会把#！后背的内容填写到execve的第一个参数，把file文件填写到第二个参数；<br>所以She-bang就是一个偷梁换柱的execve。</p>
 <h2 id="16-2-解析可执行文件"><a href="#16-2-解析可执行文件" class="headerlink" title="16.2 解析可执行文件"></a>16.2 解析可执行文件</h2><h3 id="16-2-1-GNU-binutils-工具"><a href="#16-2-1-GNU-binutils-工具" class="headerlink" title="16.2.1 GNU binutils 工具"></a>16.2.1 GNU binutils 工具</h3><p>部分工具：<br>![[Pasted image 20230322190921.png]]<br>这些工具可以用在可执行文件上：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readelf -h a.out</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readelf -h a.out</span><br></pre></td></tr></table></figure></div>
 
 <p>可执行文件就是描述状态机初始状态的数据结构，而binutils就是解析这个数据结构的工具；比如objdump就是把代码的汇编语言解析出来，其就是对于数据结构的查看、生成、修改的工具。</p>
 <h3 id="16-2-2-可执行文件的运行时状态"><a href="#16-2-2-可执行文件的运行时状态" class="headerlink" title="16.2.2 可执行文件的运行时状态"></a>16.2.2 可执行文件的运行时状态</h3><p>还可以使用调试器来获得可执行文件的运行时状态，info可以帮助debugger获得运行时状态。<br>GDB获得调用栈信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb)bt</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb)bt</span><br></pre></td></tr></table></figure></div>
 <p>为什么GDB可以打印程序的back trace?GDB如何通过内存里面的信息打印出以上的信息？<br>因为二进制文件当中有一些额外信息，这些额外信息可以帮助你实现<code>addr2line</code>命令；</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addr2line 0x401cfb a.out</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addr2line 0x401cfb a.out</span><br></pre></td></tr></table></figure></div>
 <p>然后会打印目标位置对应的行号：</p>
 <h3 id="16-2-3-调试信息"><a href="#16-2-3-调试信息" class="headerlink" title="16.2.3 调试信息"></a>16.2.3 调试信息</h3><p>在进行GCC编译的时候，如果加上了-S 选项，会加上一些额外的调试信息；</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -static source.c -g -S</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -static source.c -g -S</span><br></pre></td></tr></table></figure></div>
 <p>使用-g表示生成汇编代码，在这其中生成了很多更多的调试信息；</p>
 <p><strong>DWARF通用调试信息</strong><br>编译器在编译时会生成很多额外的信息（DWARF调试信息），这些调试信息十分通用；其允许你对于任何一段内存定义一个函数f()，然后如果你的程序指针pc指向这里，每一段内存都有一个f()函数，调用这个f()就可以把这些内存当中存储的信息获得出来。</p>
 <p><strong>优化后的调试信息问题</strong><br>但是因为编译器的优化，导致在进行分析调试信息的时候，经常会产生一些错误，即把二进制的状态转换成汇编层面的语义十分具有挑战性。</p>
 <p><strong>程序BackTrace与GCC优化Bug</strong><br>在获得程序的backtrace时，需要获得每个被调用函数的地址。此时如果将函数在栈上通过寄存器的数值保存的rbp的数值来生成一个链表，可以通过访问此链表的方式来获得当前函数的每个地址信息。但是如果使用了gcc的-O2优化，则很多个函数会在优化后被合成一个函数，此时就无法获得其在C语言语言层面上的调用栈信息，进而无法获得其函数调用的backtrace。</p>
 <p><strong>逆向工程</strong><br>如果想获得一个商业软件的可执行文件里面，恢复其尽可能多的信息，就需要进行你想工程。<br>工具：ida<br>书籍：《IDApro权威指南》</p>
 <h2 id="16-3-链接与重定位"><a href="#16-3-链接与重定位" class="headerlink" title="16.3 链接与重定位"></a>16.3 链接与重定位</h2><h3 id="16-3-1-从C代码到二进制文件"><a href="#16-3-1-从C代码到二进制文件" class="headerlink" title="16.3.1 从C代码到二进制文件"></a>16.3.1 从C代码到二进制文件</h3><p>在使用gcc编译链接之后，一个代码当中对于未定义函数的使用，是如何通过链接，访问到其他代码当中的函数的？</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	f();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	f();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 <p>上面是main函数，f()未定义</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//这里是f()的实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//这里是f()的实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>在使用gcc将main()函数对应的代码变成汇编代码之后，程序的大部分内容都已经被确定，但是还剩下部分callq指令（函数调用）未被确定：<br>![[Pasted image 20230328192912.png]]<br>此时其还不知道此函数的地址，其会生成00来填充；</p>
 <p><strong>汇编且还未链接的程序的设计语义</strong>：main.o就是一个数据结构，在这个数据结构当中包含了所有重要的代码，并且还包含了其<strong>未来需要满足的内容的约束</strong>。而在函数调用时，其就是相对偏移量的约束，S(目标函数位置) + A(-4) - P(P &#x3D; main + 0xb)。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">assert(</span><br><span class="line">	(<span class="type">char</span> *)hello == </span><br><span class="line">	(<span class="type">char</span> *)main + </span><br><span class="line">	<span class="number">0xf</span> +</span><br><span class="line">	*(<span class="type">int32_t</span> *)((<span class="type">uintptr_t</span>)main + <span class="number">0xb</span>));</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">assert(</span><br><span class="line">	(<span class="type">char</span> *)hello == </span><br><span class="line">	(<span class="type">char</span> *)main + </span><br><span class="line">	<span class="number">0xf</span> +</span><br><span class="line">	*(<span class="type">int32_t</span> *)((<span class="type">uintptr_t</span>)main + <span class="number">0xb</span>));</span><br></pre></td></tr></table></figure></div>
 
 <h3 id="16-3-2-重新理解编译、链接过程"><a href="#16-3-2-重新理解编译、链接过程" class="headerlink" title="16.3.2 重新理解编译、链接过程"></a>16.3.2 重新理解编译、链接过程</h3><p><strong>编译器（gcc）</strong></p>
 <ul>
@@ -343,91 +403,340 @@
 </ul>
 </li>
 </ul>
-<p><strong>图示：</strong><br><img src="/../../image/Pasted%20image%2020230829192839.png"></p>
-<p>而在这些过程当中，ELF只不过是一个描述以上过程的一个“容器数据结构”，包含了完成以上过程所需的必要信息：<br><img src="/../../image/Pasted%20image%2020230829192904.png"><br>正确的理解ELF的方式是：当你自己想要实现一个ELF时，有哪些部分是必不可少的？</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">executable</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> entry; <span class="comment">//代码的进入点地址：代码、数据</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">segment</span> *<span class="title">segments</span>;</span> <span class="comment">//不同的段</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> *<span class="title">relocs</span>;</span><span class="comment">//重定位</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> *<span class="title">symbols</span>;</span> </span><br><span class="line">&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">segment</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> flags, size; <span class="comment">//每个段是可执行可读？还是可执行？可写？</span></span><br><span class="line">	<span class="type">char</span> data[<span class="number">0</span>]; </span><br><span class="line">&#125; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> S, A, P;<span class="comment">//用于计算重定位后的地址</span></span><br><span class="line">	<span class="type">char</span> name[<span class="number">32</span>]; <span class="comment">//重定位地址的名字</span></span><br><span class="line">	&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> &#123;</span> <span class="type">uint32_t</span> off; <span class="type">char</span> name[<span class="number">32</span>]; &#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>图示：</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020230829192839.png"
+                     
+                ></p>
+<p>而在这些过程当中，ELF只不过是一个描述以上过程的一个“容器数据结构”，包含了完成以上过程所需的必要信息：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020230829192904.png"
+                     
+                ><br>正确的理解ELF的方式是：当你自己想要实现一个ELF时，有哪些部分是必不可少的？</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">executable</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> entry; <span class="comment">//代码的进入点地址：代码、数据</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">segment</span> *<span class="title">segments</span>;</span> <span class="comment">//不同的段</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> *<span class="title">relocs</span>;</span><span class="comment">//重定位</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> *<span class="title">symbols</span>;</span> </span><br><span class="line">&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">segment</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> flags, size; <span class="comment">//每个段是可执行可读？还是可执行？可写？</span></span><br><span class="line">	<span class="type">char</span> data[<span class="number">0</span>]; </span><br><span class="line">&#125; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">reloc</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">	<span class="type">uint32_t</span> S, A, P;<span class="comment">//用于计算重定位后的地址</span></span><br><span class="line">	<span class="type">char</span> name[<span class="number">32</span>]; <span class="comment">//重定位地址的名字</span></span><br><span class="line">	&#125;; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">symbol</span> &#123;</span> <span class="type">uint32_t</span> off; <span class="type">char</span> name[<span class="number">32</span>]; &#125;;</span><br></pre></td></tr></table></figure></div>
 <p>然后在这么一个最简单的数据结构当中，会有很多缺陷，围绕这这些缺陷进行更多的设计，最终就形成了现在所看到的繁杂的ELF文件。</p>
 
-    </div>
+        </div>
 
-    
-    
-    
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> Lecture 16：什么是可执行文件</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-08-29 19:25:17</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-08-29 22:20:34
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/08/92c8110645cf.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
 
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
-              <a href="/tags/%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/" rel="tag"><i class="fa fa-tag"></i> 可执行文件</a>
-              <a href="/tags/%E9%93%BE%E6%8E%A5/" rel="tag"><i class="fa fa-tag"></i> 链接</a>
-              <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
-          </div>
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/">#可执行文件</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E9%93%BE%E6%8E%A5/">#链接</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E6%B1%87%E7%BC%96/">#汇编</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
 
         
 
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2023/08/62011fb26306.html" rel="prev" title="AI时代个人生存指南">
-                  <i class="fa fa-angle-left"></i> AI时代个人生存指南
-                </a>
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/08/7c3f50531736.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Lecture 17：动态链接与加载</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/08/62011fb26306.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">AI时代个人生存指南</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
             </div>
-            <div class="post-nav-item">
-                <a href="/2023/08/7c3f50531736.html" rel="next" title="Lecture 17：动态链接与加载">
-                  Lecture 17：动态链接与加载 <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
+        
 
 
-
-
-
-
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-  <div class="copyright">
-    &copy; 
-    <span itemprop="copyrightYear">2023</span>
-    <span class="with-love">
-      <i class="fa fa-heart"></i>
-    </span>
-    <span class="author" itemprop="copyrightHolder">Satsuki</span>
-  </div>
-
-<!--
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>-->
-
-<div class="theme-info">
-  <div class="powered-by"></div>
-  <span class="post-count">博客全站共86.6k字</span>
-</div>
+        
     </div>
-  </footer>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">Lecture 16：什么是可执行文件</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#16-1-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-text">16.1 可执行文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1-1-%E6%89%8B%E5%86%8C%E7%9A%84%E9%80%BB%E8%BE%91"><span class="nav-text">16.1.1 手册的逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1-2-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%EF%BC%9A%E7%8A%B6%E6%80%81%E6%9C%BA%E7%9A%84%E6%8F%8F%E8%BF%B0"><span class="nav-text">16.1.2 可执行文件：状态机的描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1-3-%E6%93%8D%E7%BA%B5%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%9A%84%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-text">16.1.3 操纵系统上的可执行文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1-4-%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-text">16.1.4 常见的可执行文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-2-%E8%A7%A3%E6%9E%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-text">16.2 解析可执行文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#16-2-1-GNU-binutils-%E5%B7%A5%E5%85%B7"><span class="nav-text">16.2.1 GNU binutils 工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-2-2-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81"><span class="nav-text">16.2.2 可执行文件的运行时状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-2-3-%E8%B0%83%E8%AF%95%E4%BF%A1%E6%81%AF"><span class="nav-text">16.2.3 调试信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-3-%E9%93%BE%E6%8E%A5%E4%B8%8E%E9%87%8D%E5%AE%9A%E4%BD%8D"><span class="nav-text">16.3 链接与重定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#16-3-1-%E4%BB%8EC%E4%BB%A3%E7%A0%81%E5%88%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6"><span class="nav-text">16.3.1 从C代码到二进制文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-3-2-%E9%87%8D%E6%96%B0%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E3%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B"><span class="nav-text">16.3.2 重新理解编译、链接过程</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
 
   
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
+<script src="/js/libs/Typed.min.js"></script>
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/js/third-party/search/local-search.js"></script>
+<script src="/js/plugins/typed.js"></script>
 
 
 
@@ -435,10 +744,20 @@
 
 
 
-  
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
 
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
 
+<script src="/js/layouts/toc.js" type="module"></script>
 
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
 
 
 </body>

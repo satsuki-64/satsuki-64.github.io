@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/09/be66b1e96b19.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="内容大纲：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Game Engine】P4：Window Event">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/09/be66b1e96b19.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="内容大纲：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-12T15:23:27.000Z">
+<meta property="article:modified_time" content="2023-09-24T10:38:01.507Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="游戏引擎">
+<meta property="article:tag" content="Event">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: 游戏引擎 -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"static","image":{"light":"/images/MG_9623.webp","dark":"/images/MG_9623.webp"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.7rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【Game Engine】P4：Window Event</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-09-12 23:23:27</span>
+        <span class="mobile">2023-09-12 23:23:27</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-09-24 18:38:01</span>
+            <span class="mobile">2023-09-24 18:38:01</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E5%8E%9F%E7%90%86/">游戏引擎原理</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Event/">Event</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>591 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>2 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <p>内容大纲：</p>
+<span id="more"></span>
+<h2 id="4-1-什么是-Window-Event"><a href="#4-1-什么是-Window-Event" class="headerlink" title="4.1 什么是 Window Event"></a>4.1 什么是 Window Event</h2><p>对 Window 做的所有操作，都会产生一个 Window Event；</p>
+<ul>
+<li>能够将自己实现的 Event 系统，和 GLFW 的 Window 联系上，并完成对应的绘制；</li>
+</ul>
+<p><strong>使用 Event 回调</strong><br>SetEventCallBack 函数</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BIND_EVENT_FN(x) std::bind(&amp;x,this,std::placeholders::_1)</span></span><br><span class="line"></span><br><span class="line">Application::<span class="built_in">Application</span>() </span><br><span class="line">&#123;</span><br><span class="line">	m_Window = std::<span class="built_in">unique_ptr</span>&lt;Window&gt;(Window::<span class="built_in">Create</span>());</span><br><span class="line">	m_Window-&gt;<span class="built_in">SetEventCallback</span>(<span class="built_in">BIND_EVENT_FN</span>(Application::OnEvent));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<h3 id="4-1-1-补充：Bind-与函数指针"><a href="#4-1-1-补充：Bind-与函数指针" class="headerlink" title="4.1.1 补充：Bind 与函数指针"></a>4.1.1 补充：Bind 与函数指针</h3><p><strong>1. <code>std::function</code></strong></p>
+<p><code>std::function</code>是一组函数对象包装类的模板，其实例可以对<code>普通函数</code>、<code>lambda表达式</code>、<code>函数指针</code>、<code>类的成员函数</code>及<code>其它函数对象</code>等进行存储、复制和调用操作，它实质上是实现了一个泛型的回调机制。</p>
+<p><code>std::function</code>不管其实例类型是什么样的，其调用形式是一样的，如下：</p>
+<p><strong><code>返回值类型（实参1，实参2，实参3...）</code></strong></p>
+<p>在使用<code>std::function</code>的过程中，要包含的头文件为：</p>
+<p><code>#include &lt;functional&gt;</code></p>
+<p><code>using namespace std;</code></p>
+<p><code>using namespace std::placeholders</code> &#x2F;&#x2F;bind的时候会用</p>
+<p><strong><code>std::bind</code></strong></p>
+<p><code>std::bind</code>一般接受一个函数，生成一个具有一个或多个参数的函数对象，例如如下形式：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span>,<span class="type">char</span>,<span class="type">double</span>)</span></span>;</span><br><span class="line"><span class="keyword">auto</span> ff = std::<span class="built_in">bind</span>(f,_1,<span class="string">&#x27;c&#x27;</span>,<span class="number">2.2</span>);</span><br><span class="line"><span class="type">int</span> result = <span class="built_in">ff</span>(<span class="number">10</span>);     <span class="comment">//f(10,&#x27;c&#x27;,2.2)</span></span><br></pre></td></tr></table></figure></div>
+
+<p>其中，<code>_1</code>是一个占位符对象，用于表示当函数<code>f</code>通过函数<code>ff</code>进行调用时，函数<code>ff</code>的第一个参数在函数<code>f</code>参数列表中的位置。第二个参数为<code>_2</code>，第三个参数为<code>_3</code>，依次类推。例如：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span>,<span class="type">char</span>,<span class="type">double</span>)</span></span>;</span><br><span class="line"><span class="keyword">auto</span> reflect = std::<span class="built_in">bind</span>(f,_3,_2,_1);     <span class="comment">//翻转参数顺序</span></span><br><span class="line"><span class="type">int</span> result = <span class="built_in">reflect</span>(<span class="number">2.2</span>,<span class="string">&#x27;c&#x27;</span>,<span class="number">10</span>);    <span class="comment">// f(10,&#x27;c&#x27;,2.2); </span></span><br></pre></td></tr></table></figure></div>
+
+<p><code>std::bind</code>无法绑定一个重载函数的参数，我们必须显式地绑定重载函数的版本：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有这样的重载函数</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">good</span><span class="params">(<span class="type">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">good</span><span class="params">(<span class="type">double</span>)</span></span>;</span><br><span class="line"><span class="keyword">auto</span> result = std::<span class="built_in">bind</span>(good,_1);      <span class="comment">//错误形式，不知道调用哪一个good函数</span></span><br><span class="line"><span class="comment">//正确的做法，但是比较复杂</span></span><br><span class="line"><span class="keyword">auto</span> result_1 = std::<span class="built_in">bind</span>(<span class="built_in">double</span>(*)(<span class="type">double</span>)good, _1); </span><br><span class="line"><span class="comment">//这是更好的方式</span></span><br><span class="line"><span class="keyword">auto</span> result_2 = std::<span class="built_in">bind</span>&lt;<span class="type">double</span>&gt;(good, _1);   <span class="comment">//指定函数的返回类型</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="4-2-发出-Window-Event-回调"><a href="#4-2-发出-Window-Event-回调" class="headerlink" title="4.2 发出 Window Event 回调"></a>4.2 发出 Window Event 回调</h2><p><strong>在 WindowsWindow 中发出回调</strong><br>resize 窗口界面的回调；</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">glfwSetWindowSizeCallback</span>(m_Window, [](GLFWwindow* window, <span class="type">int</span> width, <span class="type">int</span> height)</span><br><span class="line">&#123;</span><br><span class="line">	WindowData&amp; data = *(WindowData*)<span class="built_in">glfwGetWindowUserPointer</span>(window);</span><br><span class="line">	data.Width = width;</span><br><span class="line">	data.Height = height;</span><br><span class="line"></span><br><span class="line">	WindowResizeEvent <span class="built_in">event</span>(width, height);</span><br><span class="line">	data.<span class="built_in">EventCallback</span>(event);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></div>
+
+<p>窗口关闭的回调；</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【Game Engine】P4：Window Event</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-09-12 23:23:27</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-09-24 18:38:01
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/09/be66b1e96b19.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">#游戏引擎</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/Event/">#Event</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/09/31623ee61574.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【法理学】Lecture 2：法律的功能与特点</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/09/b54817141541.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【静态程序分析】Lecture 1：课程导论</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【Game Engine】P4：Window Event</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF-Window-Event"><span class="nav-text">4.1 什么是 Window Event</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-%E8%A1%A5%E5%85%85%EF%BC%9ABind-%E4%B8%8E%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88"><span class="nav-text">4.1.1 补充：Bind 与函数指针</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%8F%91%E5%87%BA-Window-Event-%E5%9B%9E%E8%B0%83"><span class="nav-text">4.2 发出 Window Event 回调</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

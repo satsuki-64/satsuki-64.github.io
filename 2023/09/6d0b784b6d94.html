@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/09/6d0b784b6d94.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="GLFW与premake文件 项目Premake代码修改 Window 代码设计与实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Game Engine】P3：Window抽象与GLFW">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/09/6d0b784b6d94.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="GLFW与premake文件 项目Premake代码修改 Window 代码设计与实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905010507.png">
+<meta property="article:published_time" content="2023-09-04T16:34:21.000Z">
+<meta property="article:modified_time" content="2023-09-24T10:38:01.507Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="游戏引擎">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="OpenGL">
+<meta property="article:tag" content="GLFW">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230905010507.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: 游戏引擎 -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"static","image":{"light":"/images/MG_9623.webp","dark":"/images/MG_9623.webp"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.7rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【Game Engine】P3：Window抽象与GLFW</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-09-05 00:34:21</span>
+        <span class="mobile">2023-09-05 00:34:21</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-09-24 18:38:01</span>
+            <span class="mobile">2023-09-24 18:38:01</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E5%8E%9F%E7%90%86/">游戏引擎原理</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/C/">C++</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/OpenGL/">OpenGL</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/GLFW/">GLFW</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.3k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <ol>
+<li>GLFW与premake文件</li>
+<li>项目Premake代码修改</li>
+<li>Window 代码设计与实现<span id="more"></span></li>
+</ol>
+<h2 id="3-1-GLFW-与-premake-文件"><a href="#3-1-GLFW-与-premake-文件" class="headerlink" title="3.1 GLFW 与 premake 文件"></a>3.1 GLFW 与 premake 文件</h2><p>文件包含代码：<br>引用了项目需要用到的和GLFW相关的代码文件（for windows）</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">files</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="string">&quot;include/GLFW/glfw3.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;include/GLFW/glfw3native.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/glfw_config.h&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/context.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/init.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/input.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/monitor.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/vulkan.c&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;src/window.c&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>以下是完整premake代码：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">project &quot;GLFW&quot;</span><br><span class="line">    kind &quot;StaticLib&quot;</span><br><span class="line">    language &quot;C&quot;</span><br><span class="line">    </span><br><span class="line">	targetdir (&quot;bin/&quot; .. outputdir .. &quot;/%&#123;prj.name&#125;&quot;)</span><br><span class="line">    objdir (&quot;bin-int/&quot; .. outputdir .. &quot;/%&#123;prj.name&#125;&quot;)</span><br><span class="line"></span><br><span class="line">	files</span><br><span class="line">	&#123;</span><br><span class="line">        &quot;include/GLFW/glfw3.h&quot;,</span><br><span class="line">        &quot;include/GLFW/glfw3native.h&quot;,</span><br><span class="line">        &quot;src/glfw_config.h&quot;,</span><br><span class="line">        &quot;src/context.c&quot;,</span><br><span class="line">        &quot;src/init.c&quot;,</span><br><span class="line">        &quot;src/input.c&quot;,</span><br><span class="line">        &quot;src/monitor.c&quot;,</span><br><span class="line">        &quot;src/vulkan.c&quot;,</span><br><span class="line">        &quot;src/window.c&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	filter &quot;system:windows&quot;</span><br><span class="line">        buildoptions &#123; &quot;-std=c11&quot;, &quot;-lgdi32&quot; &#125;</span><br><span class="line">        systemversion &quot;10.0.17134.0&quot;</span><br><span class="line">        staticruntime &quot;On&quot;</span><br><span class="line">        </span><br><span class="line">        files</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;src/win32_init.c&quot;,</span><br><span class="line">            &quot;src/win32_joystick.c&quot;,</span><br><span class="line">            &quot;src/win32_monitor.c&quot;,</span><br><span class="line">            &quot;src/win32_time.c&quot;,</span><br><span class="line">            &quot;src/win32_thread.c&quot;,</span><br><span class="line">            &quot;src/win32_window.c&quot;,</span><br><span class="line">            &quot;src/wgl_context.c&quot;,</span><br><span class="line">            &quot;src/egl_context.c&quot;,</span><br><span class="line">            &quot;src/osmesa_context.c&quot;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">		defines </span><br><span class="line">		&#123; </span><br><span class="line">            &quot;_GLFW_WIN32&quot;,</span><br><span class="line">            &quot;_CRT_SECURE_NO_WARNINGS&quot;</span><br><span class="line">		&#125;</span><br><span class="line">    filter &#123; &quot;system:windows&quot;, &quot;configurations:Release&quot; &#125;</span><br><span class="line">        buildoptions &quot;/MT&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>给项目添加GLFW代码</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020230905010507.png"
+                     
+                ></p>
+<h2 id="3-2-项目-premake-代码修改"><a href="#3-2-项目-premake-代码修改" class="headerlink" title="3.2 项目 premake 代码修改"></a>3.2 项目 premake 代码修改</h2><p><strong>增加代码，引用GLFW到Satsuki项目</strong></p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- Include directories relative to root folder (solution directory)</span><br><span class="line"></span><br><span class="line">IncludeDir = <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">IncludeDir<span class="punctuation">[</span><span class="string">&quot;GLFW&quot;</span><span class="punctuation">]</span> = <span class="string">&quot;Satsuki/vendor/GLFW/include&quot;</span></span><br><span class="line"></span><br><span class="line">include <span class="string">&quot;Satsuki/vendor/GLFW&quot;</span></span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>include “Satsuki&#x2F;vendor&#x2F;GLFW”<ul>
+<li>将GLFW中的premake代码直接粘贴到这个位置；</li>
+</ul>
+</li>
+<li>IncludeDir[“GLFW”] &#x3D; “Satsuki&#x2F;vendor&#x2F;GLFW&#x2F;include”<ul>
+<li>增加编译时引用的路径；</li>
+</ul>
+</li>
+</ul>
+<p><strong>link设置</strong><br>GLFW作为静态链接库，被项目引用；</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">includedirs</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line">	<span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;%&#123;IncludeDir.GLFW&#125;&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">links</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;GLFW&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="string">&quot;opengl32.lib&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="3-3-Window-代码设计与实现"><a href="#3-3-Window-代码设计与实现" class="headerlink" title="3.3 Window 代码设计与实现"></a>3.3 Window 代码设计与实现</h2><h3 id="3-3-1-抽象-Window-类实现"><a href="#3-3-1-抽象-Window-类实现" class="headerlink" title="3.3.1 抽象 Window 类实现"></a>3.3.1 抽象 Window 类实现</h3><p><strong>Windows 类解析</strong><br>此类的作用是用于被其他具体的平台实现，因此都是抽象函数或者函数指针，并不实际拥有数据；</p>
+<ul>
+<li>回调函数<ul>
+<li>在 Windows 类当中，有一个 EventCallbackFn 函数指针；</li>
+</ul>
+</li>
+<li>Create 函数<ul>
+<li>等待被实现，用于在不同的平台创建 Window ；</li>
+</ul>
+</li>
+<li>其余都是抽象接口，等待被实现</li>
+</ul>
+<p><strong>WindowProps 类</strong><br>用于存储和 Window 相关的属性数据；</p>
+<ul>
+<li>标题</li>
+<li>高度、宽度</li>
+<li>默认属性</li>
+</ul>
+<p>完整 Window.h 代码：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;skpch.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Satsuki/Core.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Events/Event.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Satsuki &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">struct</span> <span class="title class_">WindowProps</span></span><br><span class="line">	&#123;</span><br><span class="line">		std::string Title;</span><br><span class="line">		<span class="type">unsigned</span> <span class="type">int</span> Width;</span><br><span class="line">		<span class="type">unsigned</span> <span class="type">int</span> Height;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">WindowProps</span>(<span class="type">const</span> std::string&amp; title = <span class="string">&quot;Satsuki Engine&quot;</span>,</span><br><span class="line">			<span class="type">unsigned</span> <span class="type">int</span> width = <span class="number">1280</span>,</span><br><span class="line">			<span class="type">unsigned</span> <span class="type">int</span> height = <span class="number">720</span>)</span><br><span class="line">			: <span class="built_in">Title</span>(title), <span class="built_in">Width</span>(width), <span class="built_in">Height</span>(height)</span><br><span class="line">		&#123;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Interface representing a desktop system based Window</span></span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">SATSUKI_API</span> Window</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="keyword">using</span> EventCallbackFn = std::function&lt;<span class="built_in">void</span>(Event&amp;)&gt;;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">virtual</span> ~<span class="built_in">Window</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">OnUpdate</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetWidth</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetHeight</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Window attributes</span></span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">SetEventCallback</span><span class="params">(<span class="type">const</span> EventCallbackFn&amp; callback)</span> </span>= <span class="number">0</span>;</span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">SetVSync</span><span class="params">(<span class="type">bool</span> enabled)</span> </span>= <span class="number">0</span>;</span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">IsVSync</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="type">static</span> Window* <span class="title">Create</span><span class="params">(<span class="type">const</span> WindowProps&amp; props = WindowProps())</span></span>;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="3-3-2-Windows-Window-具体类实现"><a href="#3-3-2-Windows-Window-具体类实现" class="headerlink" title="3.3.2 Windows Window 具体类实现"></a>3.3.2 Windows Window 具体类实现</h3><p><strong>Window Data 结构体</strong><br>用于传输 Window 的数据，并且可以将其传入 GLFW 当中；</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">WindowData</span></span><br><span class="line">&#123;</span><br><span class="line">	std::string Title;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> Width, Height;</span><br><span class="line">	<span class="type">bool</span> VSync;</span><br><span class="line"></span><br><span class="line">	EventCallbackFn EventCallback;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>WindowsWindow 类（头文件）</strong></p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Satsuki/Window.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;GLFW/glfw3.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Satsuki &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">WindowsWindow</span> : <span class="keyword">public</span> Window</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="built_in">WindowsWindow</span>(<span class="type">const</span> WindowProps&amp; props);</span><br><span class="line">		<span class="keyword">virtual</span> ~<span class="built_in">WindowsWindow</span>();</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="type">void</span> <span class="title">OnUpdate</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetWidth</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> m_Data.Width; &#125;</span><br><span class="line">		<span class="function"><span class="keyword">inline</span> <span class="type">unsigned</span> <span class="type">int</span> <span class="title">GetHeight</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> m_Data.Height; &#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Window attributes</span></span><br><span class="line">		<span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">SetEventCallback</span><span class="params">(<span class="type">const</span> EventCallbackFn&amp; callback)</span> <span class="keyword">override</span> </span>&#123; m_Data.EventCallback = callback; &#125;</span><br><span class="line">		<span class="function"><span class="type">void</span> <span class="title">SetVSync</span><span class="params">(<span class="type">bool</span> enabled)</span> <span class="keyword">override</span></span>;</span><br><span class="line">		<span class="function"><span class="type">bool</span> <span class="title">IsVSync</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span>;</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">const</span> WindowProps&amp; props)</span></span>;</span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Shutdown</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">		GLFWwindow* m_Window;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">struct</span> <span class="title class_">WindowData</span></span><br><span class="line">		&#123;</span><br><span class="line">			std::string Title;</span><br><span class="line">			<span class="type">unsigned</span> <span class="type">int</span> Width, Height;</span><br><span class="line">			<span class="type">bool</span> VSync;</span><br><span class="line"></span><br><span class="line">			EventCallbackFn EventCallback;</span><br><span class="line">		&#125;;</span><br><span class="line"></span><br><span class="line">		WindowData m_Data;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>WindowsWindow 类实现（CPP 文件）</strong></p>
+<ul>
+<li>Create 函数实现<ul>
+<li>返回一个具体的 WindowsWindow 类的实例；</li>
+</ul>
+</li>
+<li>构造函数<ul>
+<li>实例化一个 WindowsWindow 的 Proc ；</li>
+</ul>
+</li>
+<li>Init 函数<ul>
+<li>设置基础的属性；</li>
+<li>虽然需要创建多个窗口，但需要保证 GLFW 只被实例化一次；<br>创建一个 Window 在 GLFW 中：<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">m_Window = <span class="built_in">glfwCreateWindow</span>((<span class="type">int</span>)props.Width, (<span class="type">int</span>)props.Height, m_Data.Title.<span class="built_in">c_str</span>(), <span class="literal">nullptr</span>, <span class="literal">nullptr</span>);</span><br><span class="line"><span class="built_in">glfwMakeContextCurrent</span>(m_Window);</span><br><span class="line"><span class="built_in">glfwSetWindowUserPointer</span>(m_Window, &amp;m_Data);</span><br><span class="line"><span class="built_in">SetVSync</span>(<span class="literal">true</span>);</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+</ul>
+<p>以下是完整代码：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;skpch.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;WindowsWindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Satsuki/Log.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Satsuki &#123;</span><br><span class="line"></span><br><span class="line">	<span class="type">static</span> <span class="type">bool</span> s_GLFWInitialized = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">Window* <span class="title">Window::Create</span><span class="params">(<span class="type">const</span> WindowProps&amp; props)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">WindowsWindow</span>(props);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	WindowsWindow::<span class="built_in">WindowsWindow</span>(<span class="type">const</span> WindowProps&amp; props)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">Init</span>(props);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	WindowsWindow::~<span class="built_in">WindowsWindow</span>()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">Shutdown</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">WindowsWindow::Init</span><span class="params">(<span class="type">const</span> WindowProps&amp; props)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		m_Data.Title = props.Title;</span><br><span class="line">		m_Data.Width = props.Width;</span><br><span class="line">		m_Data.Height = props.Height;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">SK_CORE_INFO</span>(<span class="string">&quot;Creating window &#123;0&#125; (&#123;1&#125;, &#123;2&#125;)&quot;</span>, props.Title, props.Width, props.Height);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (!s_GLFWInitialized)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// <span class="doctag">TODO:</span> glfwTerminate on system shutdown</span></span><br><span class="line">			<span class="type">int</span> success = <span class="built_in">glfwInit</span>();</span><br><span class="line">			<span class="built_in">SK_CORE_ASSERT</span>(success, <span class="string">&quot;Could not intialize GLFW!&quot;</span>);</span><br><span class="line"></span><br><span class="line">			s_GLFWInitialized = <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		m_Window = <span class="built_in">glfwCreateWindow</span>((<span class="type">int</span>)props.Width, (<span class="type">int</span>)props.Height, m_Data.Title.<span class="built_in">c_str</span>(), <span class="literal">nullptr</span>, <span class="literal">nullptr</span>);</span><br><span class="line">		<span class="built_in">glfwMakeContextCurrent</span>(m_Window);</span><br><span class="line">		<span class="built_in">glfwSetWindowUserPointer</span>(m_Window, &amp;m_Data);</span><br><span class="line">		<span class="built_in">SetVSync</span>(<span class="literal">true</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">WindowsWindow::Shutdown</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">glfwDestroyWindow</span>(m_Window);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">WindowsWindow::OnUpdate</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">glfwPollEvents</span>();</span><br><span class="line">		<span class="built_in">glfwSwapBuffers</span>(m_Window);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">WindowsWindow::SetVSync</span><span class="params">(<span class="type">bool</span> enabled)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (enabled)</span><br><span class="line">			<span class="built_in">glfwSwapInterval</span>(<span class="number">1</span>);</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">glfwSwapInterval</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">		m_Data.VSync = enabled;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">WindowsWindow::IsVSync</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> m_Data.VSync;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-3-2-1-补充：ASSERT-与-Log-h"><a href="#3-3-2-1-补充：ASSERT-与-Log-h" class="headerlink" title="3.3.2.1 补充：ASSERT 与 Log.h"></a>3.3.2.1 补充：ASSERT 与 Log.h</h4><p>新增加的输出代码：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifdef</span> SK_ENABLE_ASSERTS</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> SK_ASSERT(x, ...) &#123; <span class="keyword">if</span>(!(x)) &#123; SK_ERROR(<span class="string">&quot;Assertion Failed: &#123;0&#125;&quot;</span>, __VA_ARGS__); __debugbreak(); &#125; &#125;</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> SK_CORE_ASSERT(x, ...) &#123; <span class="keyword">if</span>(!(x)) &#123; SK_CORE_ERROR(<span class="string">&quot;Assertion Failed: &#123;0&#125;&quot;</span>, __VA_ARGS__); __debugbreak(); &#125; &#125;</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> SK_ASSERT(x, ...)</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> SK_CORE_ASSERT(x, ...)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>内容</strong><br>判断 Assert 当中的 bool 数值是否为假，如果为假，则输出 Asseertion Failed 信息（参数中传入的信息），并且打一个断点（breakpoint）；</p>
+<ul>
+<li>并且可以轻松的设置，通过 <code>ifdef</code> 代码，可以实现轻松在 Debug 模式和 Release 模式之间的切换，去掉所有的 Asseertion 语句；</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【Game Engine】P3：Window抽象与GLFW</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-09-05 00:34:21</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-09-24 18:38:01
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/09/6d0b784b6d94.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">#游戏引擎</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/C/">#C++</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/OpenGL/">#OpenGL</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/GLFW/">#GLFW</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/09/a1092601f220.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【CSharp系列】CLR寄宿与AppDomain（2）-- 跨越AppDomain边界访问对象</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/09/a4bbdf6f0414.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Lecture 29：Xv6文件系统实现</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【Game Engine】P3：Window抽象与GLFW</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-GLFW-%E4%B8%8E-premake-%E6%96%87%E4%BB%B6"><span class="nav-text">3.1 GLFW 与 premake 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E9%A1%B9%E7%9B%AE-premake-%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9"><span class="nav-text">3.2 项目 premake 代码修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Window-%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="nav-text">3.3 Window 代码设计与实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-1-%E6%8A%BD%E8%B1%A1-Window-%E7%B1%BB%E5%AE%9E%E7%8E%B0"><span class="nav-text">3.3.1 抽象 Window 类实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-2-Windows-Window-%E5%85%B7%E4%BD%93%E7%B1%BB%E5%AE%9E%E7%8E%B0"><span class="nav-text">3.3.2 Windows Window 具体类实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-1-%E8%A1%A5%E5%85%85%EF%BC%9AASSERT-%E4%B8%8E-Log-h"><span class="nav-text">3.3.2.1 补充：ASSERT 与 Log.h</span></a></li></ol></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>
