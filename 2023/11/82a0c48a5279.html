@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/11/82a0c48a5279.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="4.1 局部寄存器分配 4.1.1 局部寄存器分配总览  4.1.2 物理寄存器分配的函数实现   4.2 全局寄存器分配  4.2.1 局部寄存器分配问题  4.2.2 全局寄存器分配问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【编译器设计】Chapter 4：寄存器分配">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/11/82a0c48a5279.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="4.1 局部寄存器分配 4.1.1 局部寄存器分配总览  4.1.2 物理寄存器分配的函数实现   4.2 全局寄存器分配  4.2.1 局部寄存器分配问题  4.2.2 全局寄存器分配问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103202144.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103203154.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103204723.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103205740.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103210002.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103210225.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231105183344.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231105183745.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231105184505.png">
+<meta property="article:published_time" content="2023-11-02T11:50:11.000Z">
+<meta property="article:modified_time" content="2023-11-29T10:23:23.362Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="编译原理">
+<meta property="article:tag" content="编译器设计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103202144.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: 编译原理 -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":false,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/newImage.jpg","dark":"/images/newImage.jpg"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.9rem","subtitle_size":"2.0rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"path":"/tags/"}},"categories":{"Categories":{"path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【编译器设计】Chapter 4：寄存器分配</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-11-02 19:50:11</span>
+        <span class="mobile">2023-11-02 19:50:11</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-11-29 18:23:23</span>
+            <span class="mobile">2023-11-29 18:23:23</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%99%A8%E8%AE%BE%E8%AE%A1/">编译器设计</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8%E8%AE%BE%E8%AE%A1/">编译器设计</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.5k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>10 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <ul>
+<li>4.1 局部寄存器分配<ul>
+<li>4.1.1 局部寄存器分配总览 </li>
+<li>4.1.2 物理寄存器分配的函数实现</li>
+</ul>
+</li>
+<li>4.2 全局寄存器分配 <ul>
+<li>4.2.1 局部寄存器分配问题 </li>
+<li>4.2.2 全局寄存器分配问题<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="4-1-局部寄存器分配"><a href="#4-1-局部寄存器分配" class="headerlink" title="4.1 局部寄存器分配"></a>4.1 局部寄存器分配</h2><p><strong>Local Register Allocaton</strong></p>
+<p>基本前提：因为是局部寄存器分配，因此假设：<br><em>The Code has been broken into basic block</em><br>每个 BB 有其局部的 ILOC；</p>
+<p>选择一个 clear 寄存器 for Spilling，将会节省我们的存储（Store）操作；</p>
+<ul>
+<li>当一个寄存器在被分配到一个变量后，如果此变量会在后续代码被重复的使用，那最好就是让其一直持有此物理寄存器，减少 Store 的操作；</li>
+</ul>
+<h3 id="4-1-1-局部寄存器分配总览"><a href="#4-1-1-局部寄存器分配总览" class="headerlink" title="4.1.1 局部寄存器分配总览"></a>4.1.1 局部寄存器分配总览</h3><p><strong>什么是寄存器分配</strong><br>在经过了 Code 生成阶段后，程序已经生成了基于 CFG 得到的中间代码；</p>
+<ul>
+<li>此中间代码独立于具体的平台，和具体的寄存器数量无关。因此寄存器分配阶段，需要根据当前寄存器的数量限制，为这些中间代码分配具体的寄存器，并且将不再使用的变量存储到内存当中；</li>
+<li>Virtual Register -&gt; Local Register Allocation -&gt; Spilling <ul>
+<li>Local：基于 Basic Block 的寄存器的生命周期；</li>
+<li>Spilling：当当前寄存器数量不够时，从其他的已分配变量上拿寄存器；</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-2-物理寄存器分配的函数实现"><a href="#4-1-2-物理寄存器分配的函数实现" class="headerlink" title="4.1.2 物理寄存器分配的函数实现"></a>4.1.2 物理寄存器分配的函数实现</h3><p>当得到了虚拟寄存器后，需要将其分配物理寄存器。但物理寄存器数量有限，因此就需要对有限的物理寄存器进行算法设计，然后最高效的分配；</p>
+<p><strong>使用例子</strong></p>
+<ul>
+<li>假设 ASSUME：只有两个物理寄存器<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 因为有两个物理寄存器，所以v1和v2都直接持有两个物理寄存器</span></span><br><span class="line">Def v1 -&gt; p1</span><br><span class="line">Def v2 -&gt; p2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来要使用v3，因此需要把寄存器p2存储到内存当中</span></span><br><span class="line"><span class="comment"># 通过查表，得知v1寄存器比v2寄存器更早被重复使用，因此选择v2而非v1</span></span><br><span class="line">store p2 -&gt; @v2</span><br><span class="line">Def v3 -&gt; p2</span><br><span class="line"></span><br><span class="line">USE v1,v3 Def v4 <span class="comment"># v4被分配为P2</span></span><br><span class="line">Store p1 -&gt; @v1</span><br><span class="line"></span><br><span class="line"><span class="comment"># v2已经被加载到内存中，需要先被加载</span></span><br><span class="line">Load @v2 -&gt; p1</span><br><span class="line">USE v4,v2 Def v5</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p><strong>LocalRegAllc 函数</strong><br>为每个操作数的寄存器进行判断，执行物理寄存器函数分配；</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> each op i form <span class="number">1</span> to n</span><br><span class="line">	op rx,ry -&gt; rz</span><br><span class="line">	</span><br><span class="line">Px = Ensure(rx)</span><br><span class="line">Py = Ensure(ry)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> rx <span class="keyword">is</span> <span class="keyword">not</span> needed after i:</span><br><span class="line">	Free(px)</span><br><span class="line"><span class="keyword">if</span> ry <span class="keyword">is</span> <span class="keyword">not</span> needed after i:</span><br><span class="line">	Free(py)</span><br><span class="line"></span><br><span class="line">Pz = Alloc(rz) <span class="comment"># Pz 是这段代码的目的，为其进行分配</span></span><br><span class="line">	</span><br><span class="line">rewrite op <span class="keyword">as</span> op Px,Py -&gt; Pz</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> rx <span class="keyword">is</span> used after i:</span><br><span class="line">	update Px.<span class="built_in">next</span></span><br><span class="line"><span class="keyword">if</span> ry <span class="keyword">is</span> used after i:</span><br><span class="line">	update Py.<span class="built_in">next</span></span><br><span class="line">update Pz.<span class="built_in">next</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Ensure 函数</strong><br>确定每个虚拟寄存器当前是否有对应的物理寄存器，如果没有，就为其执行 Alloc 函数，确保被分配到物理寄存器；</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Ensure</span>(<span class="params">r</span>):</span><br><span class="line">	<span class="keyword">if</span> r.physReg != -<span class="number">1</span> :</span><br><span class="line">		p = r.physReg </span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		p = Alloc(r)</span><br><span class="line">		Emit Load form r.address -&gt; p <span class="comment"># 如果此寄存器曾经被加载，但是使用之后被加载到内存当中，此时需要把其重新加载回来</span></span><br><span class="line">		</span><br><span class="line"><span class="keyword">return</span> p</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Alloc 函数</strong><br>为虚拟寄存器分配物理寄存器；</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Alloc</span>(<span class="params">r</span>):</span><br><span class="line">	<span class="keyword">if</span> freelist <span class="keyword">is</span> <span class="keyword">not</span> empty:</span><br><span class="line">		p = freelist.ExtractTop()</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		p = i that maximizes physRegs[i].<span class="built_in">next</span></span><br><span class="line">		Emit store of p into p.vReg.address <span class="comment"># 确保被夺走寄存器的原变量，其数值在内存当中被存储</span></span><br><span class="line"></span><br><span class="line">	p.<span class="built_in">next</span> = -<span class="number">1</span></span><br><span class="line">	p.vReg = r</span><br><span class="line">	r.physReg = p <span class="comment"># 获得物理寄存器</span></span><br><span class="line">	<span class="keyword">return</span> p</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Free 函数</strong></p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Free</span>(<span class="params">p</span>):</span><br><span class="line">	p.vReg = -<span class="number">1</span> <span class="comment"># 表示不合法，Invalid = -1</span></span><br><span class="line">	p.<span class="built_in">next</span> = -<span class="number">1</span> <span class="comment"># 表示不合法</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>相关数据结构：虚拟寄存器 VirtualReg</strong></p>
+<ul>
+<li>physReg：表示物理寄存器</li>
+<li>list of uses</li>
+<li>address</li>
+</ul>
+<p><strong>相关数据结构：物理寄存器 PhysReg</strong></p>
+<ul>
+<li>vReg：对应的虚拟寄存器</li>
+<li>next</li>
+</ul>
+<hr>
+<h2 id="4-2-全局寄存器分配"><a href="#4-2-全局寄存器分配" class="headerlink" title="4.2 全局寄存器分配"></a>4.2 全局寄存器分配</h2><blockquote>
+<p>前言回顾：局部寄存器分配的问题 -&gt; 不允许你分配物理寄存器维持到 BB 之外；</p>
+</blockquote>
+<p>不同的 BB 之间，无法保持寄存器的内容在不同的 BB 之间保持；<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231103202144.png"
+                     
+                ></p>
+<ul>
+<li>局部寄存器分配的问题<ul>
+<li>需要更多的 Load 和 Store 来保证变量可以获得寄存器，尤其是跨 BB 之间</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-1-局部寄存器分配问题"><a href="#4-2-1-局部寄存器分配问题" class="headerlink" title="4.2.1 局部寄存器分配问题"></a>4.2.1 局部寄存器分配问题</h3><p><strong>BB 加载</strong></p>
+<ul>
+<li>当进行 Local 的分配时，需要：<ul>
+<li>存储 Store 所有的 liveout，在 def 的 BB 结束时；</li>
+<li>需要 Load 所有的 livein，在进入 use 的 BB 时；</li>
+</ul>
+</li>
+<li>需要大量的 Load 和 Store；</li>
+</ul>
+<p><strong>Livein</strong><br>在某个 BB 中的某些变量在另一个 BB 中被定义，然后再当前 BB 中被使用；</p>
+<ul>
+<li>变量的 def 在当前 BB 之前；</li>
+</ul>
+<p><strong>Liveout</strong><br>当前 BB 中的变量 def 后，还需要被其他 BB 使用；</p>
+<ul>
+<li>变量的 def 将会被在 BB 之后使用；</li>
+</ul>
+<p><strong>图示：BB 之间 Live 关系</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231103203154.png"
+                     
+                ></p>
+<h4 id="4-2-1-1-复杂案例分析"><a href="#4-2-1-1-复杂案例分析" class="headerlink" title="4.2.1.1 复杂案例分析"></a>4.2.1.1 复杂案例分析</h4><p><strong>BB 1 -&gt; BB 2 , BB 3</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def e</span><br><span class="line">def a</span><br><span class="line">use e</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>liveout &#x3D; {a}</li>
+<li>livein &#x3D; {}</li>
+</ul>
+<p><strong>BB 2 -&gt; BB 4</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def b</span><br><span class="line">def d</span><br><span class="line">use b</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>livein &#x3D; {a}</li>
+<li>liveout &#x3D; {a, d}</li>
+</ul>
+<p><strong>BB 3 -&gt; BB 4</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def c</span><br><span class="line">use a</span><br><span class="line">use c</span><br><span class="line">def d</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>livein &#x3D; {a}</li>
+<li>liveout &#x3D; {a, d}</li>
+</ul>
+<p><strong>BB 4</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use a</span><br><span class="line">use d</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>livein &#x3D; Union ( liveout 3, liveout 2) &#x3D;   {a, d}</li>
+</ul>
+<h4 id="4-2-1-2-Local-Live-Range-分析"><a href="#4-2-1-2-Local-Live-Range-分析" class="headerlink" title="4.2.1.2 Local Live Range 分析"></a>4.2.1.2 Local Live Range 分析</h4><p>在线性的 BB 代码内部当中，live range 是在其内部被定义的；<br>如果 live range 是覆盖了超过两个虚拟寄存器，你无法为其同时保持物理寄存器（假设只有两个物理寄存器）；</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1 def a</span><br><span class="line">2 use a</span><br><span class="line">3 def b </span><br><span class="line">4 use a</span><br><span class="line">5 use b</span><br><span class="line">6 def c</span><br><span class="line">7 use a</span><br><span class="line">8 use c</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>a: 1-7</li>
+<li>b: 3-5</li>
+<li>c: 6-8</li>
+</ul>
+<p><strong>冲突图 conflict graph</strong><br>这可以变成一个 graph coloring 问题；</p>
+<ul>
+<li>颜色是物理寄存器</li>
+<li>节点是虚拟寄存器<br>这个问题是 NP-Complete 的；</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231103204723.png"
+                     
+                ></p>
+<h3 id="4-2-2-全局寄存器分配问题"><a href="#4-2-2-全局寄存器分配问题" class="headerlink" title="4.2.2 全局寄存器分配问题"></a>4.2.2 全局寄存器分配问题</h3><h4 id="4-2-2-1-全局寄存器的-Live-Range-冲突分析"><a href="#4-2-2-1-全局寄存器的-Live-Range-冲突分析" class="headerlink" title="4.2.2.1 全局寄存器的 Live Range 冲突分析"></a>4.2.2.1 全局寄存器的 Live Range 冲突分析</h4><p><strong>BB 1 -&gt; BB 2 , BB 3</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def e</span><br><span class="line">def a</span><br><span class="line">use e</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>BB 2 -&gt; BB 4</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def b</span><br><span class="line">def d</span><br><span class="line">use b</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>BB 3 -&gt; BB 4</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def c</span><br><span class="line">use a</span><br><span class="line">use c</span><br><span class="line">def d</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>BB 4</strong><br>是一种Loop；</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use a</span><br><span class="line">use d</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>完整冲突图</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231103205740.png"
+                     
+                ><br>其中红色部分为最大子图：</p>
+<ul>
+<li>因为有三个节点构成了最大子图，它们互相连接，因此 -&gt; 最少需要三个颜色代表物理寄存器；<ul>
+<li>如果有三个物理寄存器，那就没有任何问题</li>
+<li>但如果我们只有两个寄存器，就不行了<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231103210002.png"
+                     
+                ></li>
+</ul>
+</li>
+</ul>
+<p><strong>三个物理寄存器下的冲突图</strong></p>
+<ul>
+<li>可以正常分配<ul>
+<li>如果是两个寄存器下，就需要决定哪个变量要被 spill 或者牺牲；<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231103210225.png"
+                     
+                ></li>
+</ul>
+</li>
+</ul>
+<h4 id="4-2-2-2-变量寄存器的-Spill-决策"><a href="#4-2-2-2-变量寄存器的-Spill-决策" class="headerlink" title="4.2.2.2 变量寄存器的 Spill 决策"></a>4.2.2.2 变量寄存器的 Spill 决策</h4><p><strong>什么是 Spill Cost</strong><br>Spill Cost 是变量 spill 它们的 live range 时，需要的花费；</p>
+<ul>
+<li>Spill a live range -&gt; 表示一个变量 X 的花费：插入一个 Store 在每个 Def 之后，以及 Load 在任何一个 Use 之前；</li>
+<li>假设 a 需要被 Spill<ul>
+<li>def a 之后，需要 store a；</li>
+<li>use  a 之前，需要进行 load a，每个 use 的地方之前都需要；</li>
+</ul>
+</li>
+</ul>
+<p><strong>决定一个变量是否被 Spill 的两个因素</strong></p>
+<ul>
+<li>因素一：def 和 use 的数量<ul>
+<li>如果一个变量 x 的 def 和 use 数量很多，那就会产生很多的 store 和 load，因此就不应该被 spill；</li>
+</ul>
+</li>
+<li>因素二：BB 是否在 Loop 中<ul>
+<li>尽管一个变量 x 可能只在一个地方被 use 或 def ，但如果这个地方在 loop 中，那也会被 store 或者 load 很多次；</li>
+<li>因此需要计算 Loop 与 spill 受影响的频率；<ul>
+<li>但编译器不知道编译时，这些 Loop 将会执行多少频率；</li>
+</ul>
+</li>
+<li>编译器的评估机制<ul>
+<li>不精确的评估；</li>
+<li>分析有哪些变量是在 Loop 之外，比如 b 是在 BB 4 之外；因此 b 是第一个被 Spill 的；</li>
+<li>如果还需要 Spill，那就 Spill d，因为 a 会在比 d 更多的地方被使用到；BB 1、2、3、4 都有它，所以 Spill 的成本更高；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Live Range 和变量 redef 重定义</strong><br><em>In for ming live range, we must have for every def , all the use that are reach by that def must be in the same range</em><br><em>And for every use ,all the defs that reach that use must be in the same range</em></p>
+<h4 id="4-2-2-3-两物理寄存器下的分析"><a href="#4-2-2-3-两物理寄存器下的分析" class="headerlink" title="4.2.2.3 两物理寄存器下的分析"></a>4.2.2.3 两物理寄存器下的分析</h4><p><strong>基本假设</strong></p>
+<ul>
+<li>load 的代价是 2</li>
+<li>store 的代价是 1</li>
+</ul>
+<p><strong>计算方法</strong></p>
+<ul>
+<li>def 的 cost 计算<ul>
+<li>def 就是 write，就是生产一个输出操作符；</li>
+<li>number ✖ ( defs ✖ cost of store ✖ 频率)</li>
+</ul>
+</li>
+<li>use 的 cost 计算<ul>
+<li>use 就是 read，就是生产一个输入操作符；</li>
+<li>number ✖ ( uses ✖ cost of load ✖ 频率)</li>
+</ul>
+</li>
+<li>def 和 use<ul>
+<li>当 def 和 use 需要被 sipll 的时候，def 和 use 就是各自创建了一个小的 live range；</li>
+<li>def -&gt; store；两行代码是一个 live range；</li>
+<li>load -&gt; use；两行代码是一个 live range；</li>
+<li>它们有可能会导致一个原本常的 live range 被迫被分为几个比较小的 live range；</li>
+</ul>
+</li>
+</ul>
+<p><strong>图示</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231105183344.png"
+                     
+                ></p>
+<p><strong>分析</strong></p>
+<ul>
+<li>Spill cost A<ul>
+<li><code>a = 1*1 + 1*2*0.5 + 1*2*10 = 22</code></li>
+<li>第一个 <code>1*1</code> 是 a 定义的代价；</li>
+<li>第二个 <code>1*2*0.5</code>，其中 2 是 load 的代价，0.5 是进入 BB 3，BB 3 权重带来的代价；</li>
+<li>第三个 <code>1*2*10</code>，2 是 load 的代价，10 是循环 10 次的代价；</li>
+</ul>
+</li>
+<li>Spill cost for B<ul>
+<li><code>b = 1*1*0.5 + 1*2*0.5 = 1.5</code></li>
+</ul>
+</li>
+<li>Spill cost for C<ul>
+<li><code>c = 1.5</code></li>
+</ul>
+</li>
+<li>Spill cost for D<ul>
+<li><code>d = 1*1*0.5 + 1*2*0.5 + 1*1*0.5 + 1*2*10 = 21</code></li>
+</ul>
+</li>
+<li>Spill cost for E<ul>
+<li><code>e = 1*1*1 + 1*2*1 = 3</code></li>
+</ul>
+</li>
+</ul>
+<p>冲突图与代价：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231105183745.png"
+                     
+                ></p>
+<ul>
+<li>节点当中的 c 和 e 的物理寄存器不需要考虑是否足够的问题，因为 a 和 c、e can be colored without a problem</li>
+</ul>
+<p><strong>BB 与 Spill 分析</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231105184505.png"
+                     
+                ><br>因为 b 和 d 的 cost 比 a 要更小，因此它们两个需要被 spill；因此被 load 和 store</p>
+<ul>
+<li>带来的影响<ul>
+<li>b 和 d 的 live range 变小；</li>
+<li>A load defines a rge</li>
+<li>A store uses a reg</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong></p>
+<ul>
+<li>在当前的路径中，变量在冲突图分析后得知：其所需的物理寄存器和当前所拥有的物理寄存器满足，则不需要 spill； </li>
+<li>当需要 Spill 时，选出当前 Spill 的 cost 中最低的变量，对其进行 Spill -&gt; 所有 def 之后 store，所有 use 之前 load；</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【编译器设计】Chapter 4：寄存器分配</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-11-02 19:50:11</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-11-29 18:23:23
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/11/82a0c48a5279.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">#编译原理</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8%E8%AE%BE%E8%AE%A1/">#编译器设计</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/11/8dab59849367.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item"></span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/11/9795d1af664a.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">WSL个人常用指令合集</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【编译器设计】Chapter 4：寄存器分配</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%B1%80%E9%83%A8%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%86%E9%85%8D"><span class="nav-text">4.1 局部寄存器分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-%E5%B1%80%E9%83%A8%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%86%E9%85%8D%E6%80%BB%E8%A7%88"><span class="nav-text">4.1.1 局部寄存器分配总览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2-%E7%89%A9%E7%90%86%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%86%E9%85%8D%E7%9A%84%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0"><span class="nav-text">4.1.2 物理寄存器分配的函数实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%85%A8%E5%B1%80%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%86%E9%85%8D"><span class="nav-text">4.2 全局寄存器分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-%E5%B1%80%E9%83%A8%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%86%E9%85%8D%E9%97%AE%E9%A2%98"><span class="nav-text">4.2.1 局部寄存器分配问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1-1-%E5%A4%8D%E6%9D%82%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90"><span class="nav-text">4.2.1.1 复杂案例分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1-2-Local-Live-Range-%E5%88%86%E6%9E%90"><span class="nav-text">4.2.1.2 Local Live Range 分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-%E5%85%A8%E5%B1%80%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%86%E9%85%8D%E9%97%AE%E9%A2%98"><span class="nav-text">4.2.2 全局寄存器分配问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2-1-%E5%85%A8%E5%B1%80%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84-Live-Range-%E5%86%B2%E7%AA%81%E5%88%86%E6%9E%90"><span class="nav-text">4.2.2.1 全局寄存器的 Live Range 冲突分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2-2-%E5%8F%98%E9%87%8F%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84-Spill-%E5%86%B3%E7%AD%96"><span class="nav-text">4.2.2.2 变量寄存器的 Spill 决策</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2-3-%E4%B8%A4%E7%89%A9%E7%90%86%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8B%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-text">4.2.2.3 两物理寄存器下的分析</span></a></li></ol></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

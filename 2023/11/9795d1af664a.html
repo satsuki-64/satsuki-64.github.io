@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/11/9795d1af664a.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Part 1：WSL 操作基础 Linux 中打开资源管理器 explorer.exe .   WSL 中打开 VSCode 在目标文件夹下执行命令 code .   WSL 下进入 Windows 文件夹 cd &#x2F;mnt&#x2F;c 进入 C 盘   打开 Google google-chrome     Part 2：Tmux简单流程：   新建会话 tmux new -s my_session。 在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WSL个人常用指令合集">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/11/9795d1af664a.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="Part 1：WSL 操作基础 Linux 中打开资源管理器 explorer.exe .   WSL 中打开 VSCode 在目标文件夹下执行命令 code .   WSL 下进入 Windows 文件夹 cd &#x2F;mnt&#x2F;c 进入 C 盘   打开 Google google-chrome     Part 2：Tmux简单流程：   新建会话 tmux new -s my_session。 在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103000752.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103001108.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103001141.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231114171430.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231114171514.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231114171616.png">
+<meta property="article:published_time" content="2023-11-02T06:53:07.000Z">
+<meta property="article:modified_time" content="2023-11-29T10:23:23.321Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="Ubuntu">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231103000752.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: 操作系统 -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":false,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/newImage.jpg","dark":"/images/newImage.jpg"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.9rem","subtitle_size":"2.0rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"path":"/tags/"}},"categories":{"Categories":{"path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">WSL个人常用指令合集</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-11-02 14:53:07</span>
+        <span class="mobile">2023-11-02 14:53:07</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-11-29 18:23:23</span>
+            <span class="mobile">2023-11-29 18:23:23</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Ubuntu/">Ubuntu</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Linux/">Linux</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.4k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>5 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <h2 id="Part-1：WSL-操作基础"><a href="#Part-1：WSL-操作基础" class="headerlink" title="Part 1：WSL 操作基础"></a>Part 1：WSL 操作基础</h2><ul>
+<li>Linux 中打开资源管理器<ul>
+<li><code>explorer.exe .</code></li>
+</ul>
+</li>
+<li>WSL 中打开 VSCode<ul>
+<li>在目标文件夹下执行命令</li>
+<li><code>code .</code></li>
+</ul>
+</li>
+<li>WSL 下进入 Windows 文件夹<ul>
+<li><code>cd /mnt/c</code></li>
+<li>进入 C 盘</li>
+</ul>
+</li>
+<li>打开 Google<ul>
+<li><code>google-chrome</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>Part 2：Tmux<br>简单流程： </p>
+<ol>
+<li>新建会话 <code>tmux new -s my_session</code>。</li>
+<li>在 Tmux 窗口运行所需的程序。</li>
+<li>按下快捷键 <code>Ctrl+b d</code> 将会话分离。</li>
+<li>下次使用时，重新连接到会话 <code>tmux attach-session -t my_session</code></li>
+</ol>
+<p>指令：</p>
+<ul>
+<li>退出 Tmux<ul>
+<li><code>exit</code></li>
+<li><code>Ctrl+D</code></li>
+</ul>
+</li>
+<li>前缀键<ul>
+<li><code>Ctrl+b</code></li>
+</ul>
+</li>
+<li>新建会话<ul>
+<li>创建制定名称的会话<ul>
+<li><code>tmux new -s &lt;session-name&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分离会话<ul>
+<li>快捷键<ul>
+<li>前缀键+d</li>
+</ul>
+</li>
+<li>命令<ul>
+<li><code>tmux detach</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>查看现有会话 <ul>
+<li><code>tmux ls</code></li>
+</ul>
+</li>
+<li>接入会话<ul>
+<li><code>tmux attach -t &lt;会话编号&gt;</code></li>
+<li><code>tmux attach -t &lt;会话名称&gt;</code></li>
+</ul>
+</li>
+<li>杀死会话<ul>
+<li><code>tmux kill-session -t &lt;会话名称|编号&gt;</code></li>
+</ul>
+</li>
+<li>切换会话<ul>
+<li><code>tmux switch -t &lt;会话名称|编号&gt;</code></li>
+</ul>
+</li>
+<li>窗口划分<ul>
+<li>划分上下两个<ul>
+<li><code>tmux split-window</code></li>
+</ul>
+</li>
+<li>划分左右两个<ul>
+<li><code>tmux split-window -h</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>移动光标<ul>
+<li><code>tmux select-pane -UDLR</code></li>
+<li>U：上方</li>
+<li>D：下方</li>
+<li>L：左方</li>
+<li>R：右方</li>
+<li>快捷键<ul>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020231103000752.png"
+                     
+                ></li>
+</ul>
+</li>
+<li>快捷键<ul>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020231103001108.png"
+                     
+                ></li>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020231103001141.png"
+                     
+                ></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Part-3：Linux-常用-API"><a href="#Part-3：Linux-常用-API" class="headerlink" title="Part 3：Linux 常用 API"></a>Part 3：Linux 常用 API</h2><ul>
+<li>文件系统：<ul>
+<li>普通 IO<ul>
+<li>Read</li>
+<li>Open</li>
+<li>Lseek</li>
+<li>Close</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>标准 IO<ul>
+<li>缓冲类型<ul>
+<li>全缓冲</li>
+<li>行缓冲</li>
+<li>不带缓冲</li>
+</ul>
+</li>
+<li>Fopen|fdopen|freopen</li>
+<li>Fclose</li>
+<li>Fread</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程控制开发<ul>
+<li>进程启动<ul>
+<li>调度启动</li>
+<li>手动启动<ul>
+<li>前台启动</li>
+<li>后台启动</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程控制基础<ul>
+<li>Fork ()</li>
+<li>Exec 系列<ul>
+<li>Exec+</li>
+<li>P：完整 path</li>
+<li>L：一行参数</li>
+<li>V：完整参数</li>
+<li>E：完整环境</li>
+</ul>
+</li>
+<li>终止<ul>
+<li>Exit</li>
+</ul>
+</li>
+<li>Wait<ul>
+<li>Waitpid 是非阻塞版本</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>守护进程<ul>
+<li>生存期较长的进程，通常独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。如果想让某个进程不因为用户、终端或者其他的变化而受到影响，那么就必须把这个进程变成一个守护进程。</li>
+</ul>
+</li>
+<li>守护进程创建<ul>
+<li>创建子进程，父进程推出</li>
+<li>在子进程中创建新的会话<ul>
+<li>Setsid：创建新会话</li>
+</ul>
+</li>
+<li>改变当前目录为根目录<ul>
+<li>Chdir：改变目录</li>
+</ul>
+</li>
+<li>重设文件权限掩码<ul>
+<li>Umask</li>
+</ul>
+</li>
+<li>关闭文件描述符<ul>
+<li>Close</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>出错处理<ul>
+<li>Syslog：系统日志</li>
+<li>Openlog</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程间通信<ul>
+<li>管道<ul>
+<li>描述<ul>
+<li>是基于文件描述符的通信方式，当一个管道建立时，它会创建两个文件描述符 fds[0]和 fds[1]，其中 fds[0]固定用于读管道，而 fd[1]固定用于写管道。</li>
+</ul>
+</li>
+<li>API<ul>
+<li>Pipe ()接受 fd</li>
+<li>Fd[2]：管道的两个文件描述符，之后就可以直接操作这两个文件描述符</li>
+</ul>
+</li>
+<li>标准流管道<ul>
+<li>只有一个 popen、pclose：表示标准 pipe</li>
+<li>创建一个管道。 </li>
+<li>Fork ()一个子进程。</li>
+<li>在父子进程中关闭不需要的文件描述符。</li>
+<li>执行 exec 函数族调用。</li>
+<li>执行函数中所指定的命令</li>
+</ul>
+</li>
+<li>FIFO：有名管道<ul>
+<li>概念<ul>
+<li>无名管道，它只能用于具有亲缘关系的进程之间。有名管道的出现突破了这种限制，它可以使互不相关的两个进程实现彼此通信。</li>
+<li>通过路径名来指出</li>
+</ul>
+</li>
+<li>API<ul>
+<li>创建：mkfifo（）<ul>
+<li>在创建管道成功之后，就可以使用 open ()、read ()和 write ()这些函数</li>
+</ul>
+</li>
+<li>O_RDONLY：读管道</li>
+<li>O_WRONLY：写管道</li>
+<li>O_RDWR：读写管道</li>
+<li>O_NONBLOCK：非阻塞_</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信号<ul>
+<li>各种信号类型</li>
+<li>发送捕捉<ul>
+<li>Fill</li>
+<li>Raise</li>
+<li>Alarm</li>
+<li>Pause</li>
+</ul>
+</li>
+<li>信号处理<ul>
+<li>Signal | sigaction</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信号集函数组<ul>
+<li>Sigemptyset ()：将信号集合初始化为空。 </li>
+<li>Sigfillset ()：将信号集合初始化为包含所有已定义的信号的集合。</li>
+<li>Sigaddset ()：将指定信号加入到信号集合中去。</li>
+<li>Sigdelset ()：将指定信号从信号集合中删除。</li>
+<li>Sigismember ()：查询指定信号是否在信号集合之中。</li>
+<li>定义信号集合</li>
+<li>设置信号屏蔽</li>
+<li>定义信号处理函数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Part-4：VSCode-使用"><a href="#Part-4：VSCode-使用" class="headerlink" title="Part 4：VSCode 使用"></a>Part 4：VSCode 使用</h2><ul>
+<li>打开 vscode <ul>
+<li><code>code .</code></li>
+</ul>
+</li>
+<li>基础操作<ul>
+<li>块注释：<code>ctrl + shift + A</code></li>
+<li>控制面板：<code>ctrl + shift + P</code></li>
+<li>查找：<code>ctrl + shift + F</code></li>
+</ul>
+</li>
+<li>VSCode 终端<ul>
+<li>VSCode 的终端和外部的命令行终端效果一样</li>
+<li><code>Terminal</code> 在上栏中可点</li>
+</ul>
+</li>
+<li>VSCode 基础编译<ul>
+<li><code>g++ src/main.cpp src/test.cpp -Iinclude -o mainTest</code></li>
+<li></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Part-5：CMake-使用"><a href="#Part-5：CMake-使用" class="headerlink" title="Part 5：CMake 使用"></a>Part 5：CMake 使用</h2><p><strong>基础语法特性</strong></p>
+<ul>
+<li>基础语法格式<ul>
+<li>指令格式<ul>
+<li><code>指令(参数1 参数2 ...)</code></li>
+<li>参数之间使用空格或分号隔开</li>
+</ul>
+</li>
+<li>变量<ul>
+<li>创建变量<ul>
+<li><code>set(变量名 变量值)</code></li>
+</ul>
+</li>
+<li>使用变量：使用 <code>$&#123;&#125;</code> 的方式从变量名取值，在 IF 控制语句中可以直接使用变量名；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>重要指令</strong></p>
+<ul>
+<li>指定 CMake 最小版本要求<ul>
+<li><code>cmake_minimum_required(VERSION versionNumber [FATAL_ERROR])</code></li>
+</ul>
+</li>
+<li>定义工程名称<ul>
+<li><code>project(projectname [CXX][C][Java])</code></li>
+<li>例：<code>project(HELLOWORLD)</code></li>
+</ul>
+</li>
+<li>定义变量<ul>
+<li>语法：<code>set(VAR [VALUE][CACHE TYPE DOCSTRING[FORCE]])</code></li>
+<li>例：<code>set(SRC test1.cpp test2.cpp)</code></li>
+</ul>
+</li>
+<li>目录定义变量<ul>
+<li>语法：<code>aux_source_directory(dir VARIABLE)</code></li>
+</ul>
+</li>
+<li>添加多个特定头文件搜索路径<ul>
+<li>语法：<code>include_directories([AFTER|BEFORE][SYSTEM] dir1 dir2 ...)</code></li>
+<li>例：<code>include_directories(/usr/include/myinlcudefloder ./include)</code></li>
+</ul>
+</li>
+<li>添加库文件搜索路径<ul>
+<li>语法：<code>link_directories(dir1 dir2 ...)</code></li>
+</ul>
+</li>
+<li>生成库文件<ul>
+<li>语法： <code>add_library(libname [SHARED|STATIC|MODULE][EXCLUDE_FROM_ALL] source1 source2 ...)</code></li>
+<li>例：<code>add_library(NewLib STATIC $&#123;SRC&#125;)</code></li>
+</ul>
+</li>
+<li>添加编译参数<ul>
+<li>语法：<code>add_complier_options(&lt;option&gt; ...)</code></li>
+<li>例：<code>add_complier_options(-Wall -O2)</code></li>
+</ul>
+</li>
+<li>生成可执行文件<ul>
+<li>语法：<code>add_executable(exename source1 source2 ...)</code></li>
+<li>例：<code>add_executable(main main.cpp)</code></li>
+</ul>
+</li>
+<li>为 target 添加需要链接的动态链接库<ul>
+<li>语法：<code>target_link_libraries(target library1 library2 ...)</code></li>
+</ul>
+</li>
+<li>向当前工程添加存放源文件的子目录，并可以制定二进制文件存放的位置<ul>
+<li>语法：<code>add_subdirectory(source_dir [binary_dir][EXCLUDE_FROM_ALL])</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>常用变量</strong></p>
+<ul>
+<li>设定编译类型<ul>
+<li>语法： <code>set(CMAKE_BUILD_TYPE Debug|Release)</code></li>
+</ul>
+</li>
+<li>可执行文件输出路径<ul>
+<li>变量：<code>EXECUTALBE_OUTPUT_PATH</code></li>
+</ul>
+</li>
+<li>库文件输出路径<ul>
+<li>变量：<code>LIBRARY_OUTPUT_PATH</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>CMake 工程设置</strong></p>
+<ul>
+<li>方法<ul>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020231114171430.png"
+                     
+                ></li>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020231114171514.png"
+                     
+                ></li>
+</ul>
+</li>
+<li>构建方式<ul>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../image/Pasted%20image%2020231114171616.png"
+                     
+                ></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Part-6：Git"><a href="#Part-6：Git" class="headerlink" title="Part 6：Git"></a>Part 6：Git</h2><h2 id="Part-n：一些待看的教程"><a href="#Part-n：一些待看的教程" class="headerlink" title="Part n：一些待看的教程"></a>Part n：一些待看的教程</h2>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> WSL个人常用指令合集</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-11-02 14:53:07</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-11-29 18:23:23
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/11/9795d1af664a.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/Ubuntu/">#Ubuntu</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/Linux/">#Linux</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/11/82a0c48a5279.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【编译器设计】Chapter 4：寄存器分配</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/11/7a441a4a96e3.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【法理学】Lecture 13：法律的人性基础</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">WSL个人常用指令合集</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-1%EF%BC%9AWSL-%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80"><span class="nav-text">Part 1：WSL 操作基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-3%EF%BC%9ALinux-%E5%B8%B8%E7%94%A8-API"><span class="nav-text">Part 3：Linux 常用 API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-4%EF%BC%9AVSCode-%E4%BD%BF%E7%94%A8"><span class="nav-text">Part 4：VSCode 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-5%EF%BC%9ACMake-%E4%BD%BF%E7%94%A8"><span class="nav-text">Part 5：CMake 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-6%EF%BC%9AGit"><span class="nav-text">Part 6：Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-n%EF%BC%9A%E4%B8%80%E4%BA%9B%E5%BE%85%E7%9C%8B%E7%9A%84%E6%95%99%E7%A8%8B"><span class="nav-text">Part n：一些待看的教程</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

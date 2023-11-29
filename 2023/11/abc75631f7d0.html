@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/11/abc75631f7d0.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="4.1 Task 基础概念 4.1.1 Task 内部机制  4.1.2 创建一个 Task   4.2 Task 基本操作 4.2.1 获得 Task 执行结果 4.2.2 取消任务  4.2.3 ContinueWith 与新任务 4.2.4 父、子任务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【CSharp系列】Lecture 4：计算限制的异步操作（2） -- Task 任务">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/11/abc75631f7d0.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="4.1 Task 基础概念 4.1.1 Task 内部机制  4.1.2 创建一个 Task   4.2 Task 基本操作 4.2.1 获得 Task 执行结果 4.2.2 取消任务  4.2.3 ContinueWith 与新任务 4.2.4 父、子任务">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231109200504.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231108004723.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231109194504.png">
+<meta property="article:published_time" content="2023-11-07T16:29:55.000Z">
+<meta property="article:modified_time" content="2023-11-29T10:23:23.349Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="CLR">
+<meta property="article:tag" content="线程">
+<meta property="article:tag" content="Task">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231109200504.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: CSharp -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":false,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/newImage.jpg","dark":"/images/newImage.jpg"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.9rem","subtitle_size":"2.0rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"path":"/tags/"}},"categories":{"Categories":{"path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【CSharp系列】Lecture 4：计算限制的异步操作（2） -- Task 任务</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-11-08 00:29:55</span>
+        <span class="mobile">2023-11-08 00:29:55</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-11-29 18:23:23</span>
+            <span class="mobile">2023-11-29 18:23:23</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/CSharp/%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/">线程处理</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/CSharp/">CSharp</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/CLR/">CLR</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E7%BA%BF%E7%A8%8B/">线程</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Task/">Task</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.3k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>9 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <ul>
+<li>4.1 Task 基础概念<ul>
+<li>4.1.1 Task 内部机制 </li>
+<li>4.1.2 创建一个 Task</li>
+</ul>
+</li>
+<li>4.2 Task 基本操作<ul>
+<li>4.2.1 获得 Task 执行结果</li>
+<li>4.2.2 取消任务 </li>
+<li>4.2.3 ContinueWith 与新任务</li>
+<li>4.2.4 父、子任务<span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="4-1-Task-基础概念"><a href="#4-1-Task-基础概念" class="headerlink" title="4.1 Task 基础概念"></a>4.1 Task 基础概念</h2><p><strong>为什么需要 Task</strong><br>在 CLR 当中，已经提供了线程池、QueueUserWorkItem 来发起异步的计算限制操作，为什么还需要 Task？</p>
+<ul>
+<li>原因一：更高程度的抽象<ul>
+<li><code>Task</code> 提供了更高级别的抽象，使并行编程更加易于理解和维护；</li>
+<li>它是对线程的抽象，允许以更声明性的方式描述并行操作。这使得编写并行代码更加清晰，减少了线程管理的复杂性；</li>
+</ul>
+</li>
+<li>原因二：可以进行任务组合、取消操作<ul>
+<li><code>Task</code> 支持任务的组合，可以轻松地创建任务依赖关系，例如顺序执行、并行执行、等待多个任务完成等；</li>
+<li><code>Task</code> 支持任务的取消操作。可以通过 <code>CancellationToken</code> 取消任务，而线程池不提供这种内置的取消机制；</li>
+</ul>
+</li>
+<li>原因三：异常处理<ul>
+<li><code>Task</code> 提供了异常处理的机制，允许捕获和处理任务中抛出的异常。这比在线程池中使用传统的 <code>try-catch</code> 块更加灵活和强大；</li>
+</ul>
+</li>
+<li>原因四：天生支持的协程及异步编程<ul>
+<li><code>Task</code> 是支持协程和异步编程的基础。它允许使用 <code>async/await</code> 关键字来编写更具表现力和可读性的异步代码，使异步操作更容易管理；</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-1-Task-内部机制"><a href="#4-1-1-Task-内部机制" class="headerlink" title="4.1.1 Task 内部机制"></a>4.1.1 Task 内部机制</h3><p><strong>Task 内部字段</strong></p>
+<ul>
+<li>每个 Task 对象都有一组字段，这些字段构成了任务的状态；</li>
+<li>其中包括<ul>
+<li><ol>
+<li>Int32 的 ID</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>代表 Task 执行状态的一个 Int32 ：Status</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>对父任务的引用</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>对 Task 创建时指定的 TaskScheduler 的引用</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>对回调方法的引用</li>
+</ol>
+</li>
+<li><ol start="6">
+<li>对要传给回调方法的对象的引用</li>
+</ol>
+</li>
+<li><ol start="7">
+<li>对 ExecutionContext 的引用</li>
+</ol>
+</li>
+<li><ol start="8">
+<li>对 ManualResetEventSlim 对象的引用</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Task 的唯一 ID</strong></p>
+<ul>
+<li>每个 Task 对象都包含代表 Task 唯一 ID 的 Int 32 字段，创建 Task 对象时该字段初始化为零；</li>
+<li>首次查询 Task 的只读 ID 属性时，属性将一个唯一的 Int 32 值分配给该字段，并返回该值；<ul>
+<li>任务 ID 从 1 开始，每分配一个 ID 都递增 1；</li>
+<li><em>注：在 Microsoft Visual Studio 调试器中查看 Task 对象，会造成调试器显示 Task 的 ID，从而造成为 Task 分配 ID。</em></li>
+</ul>
+</li>
+<li>使用此 ID 的意义，在于可以对每个 Task 进行唯一值标识；</li>
+</ul>
+<p><strong>Task 的只读 Status 属性</strong></p>
+<ul>
+<li>作用<ul>
+<li>可以通过查询 Task 的 Status 属性来了解当前 Task 处理生命周期的什么位置；</li>
+</ul>
+</li>
+<li>TaskStatus 值<ul>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231109200504.png"
+                     
+                ></li>
+</ul>
+</li>
+<li>TaskStatus 切换流程<ul>
+<li>状态 1：Created<ul>
+<li>首次构造 Task 后，将变为 Created 状态；</li>
+</ul>
+</li>
+<li>状态 2：WaitingToRun<ul>
+<li>任务启动后进入此状态</li>
+</ul>
+</li>
+<li>状态 3：Running<ul>
+<li>运行时的状态</li>
+</ul>
+</li>
+<li>状态 4：WaitingForChildrenToComplete<ul>
+<li>停止运行，并等待子任务</li>
+</ul>
+</li>
+<li>状态 5：RanToCompletion 运行完成 | Canceled 取消 | Faulted 出错</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-2-创建一个-Task"><a href="#4-1-2-创建一个-Task" class="headerlink" title="4.1.2 创建一个 Task"></a>4.1.2 创建一个 Task</h3><p><strong>创建一个新的 Task</strong></p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//写法1</span></span><br><span class="line">Task t1 = <span class="keyword">new</span> Task(ComputeBoundOp,<span class="number">5</span>);</span><br><span class="line">t1.Start();</span><br><span class="line"></span><br><span class="line"><span class="comment">//写法2</span></span><br><span class="line">Task.Run(()=&gt; ComputeBoundOp(<span class="number">5</span>) );</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Task 的构造函数</strong><br>创建一个 Task 需要调用构造器，并传递一个 Action 或 <code>Action&lt;Object&gt;</code> 委托；</p>
+<ul>
+<li>委托就是你想执行的操作；</li>
+<li>如果传递的是 Object 的方法，还必须向 Task 的构造器传递最终要传给操作的实参；<ul>
+<li>调用 Run 时可以传递一个 Action 或 <code>Func&lt;TResult&gt;</code> 委托来指定想要执行的操作；</li>
+</ul>
+</li>
+<li>无论调用构造器还是 Run，都可选择传递一个 <code>CancellationToken</code>，它使 Task 能在调度前取消；</li>
+</ul>
+<p><strong>控制 Task 执行方式</strong><br>还可选择向构造器传递一些 <code>TaskCreationOptions</code> 标志来控制 Task 的执行方式，其定义了一组可按位 OR 的标志；<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231108004723.png"
+                     
+                ></p>
+<h2 id="4-2-Task-基本操作"><a href="#4-2-Task-基本操作" class="headerlink" title="4.2 Task 基本操作"></a>4.2 Task 基本操作</h2><h3 id="4-2-1-获得-Task-执行结果"><a href="#4-2-1-获得-Task-执行结果" class="headerlink" title="4.2.1 获得 Task 执行结果"></a>4.2.1 获得 Task 执行结果</h3><p><strong>使用 <code>Task&lt;TResult&gt;</code> 对象获得结果</strong><br>当需要获得当前传入的方法在 Task 中的执行结果时，可以使用 Task 的泛型模式：<code>Task&lt;TResult&gt;</code></p>
+<ul>
+<li>参数<ul>
+<li>参数表示当前计算限制操作的返回类型；</li>
+</ul>
+</li>
+<li>方法<ul>
+<li><code>task.Wait()</code></li>
+<li>调用了 task 对象的 <code>Wait()</code> 方法后，将可以显式的等待任务完成；</li>
+</ul>
+</li>
+</ul>
+<p><strong>代码示例</strong></p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Task&lt;Int32&gt; t = <span class="keyword">new</span> Task&lt;Int32&gt;( n =&gt; Sum((Int32)n,<span class="number">1000000</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//也可以不显式Start，Wait执行后，若当前t1线程没有执行，Wait将会进行Start操作；</span></span><br><span class="line">t.Start();</span><br><span class="line"></span><br><span class="line"><span class="comment">//等待任务完成</span></span><br><span class="line"><span class="comment">//若Task正在执行，则将会阻塞当前t.Wait()的调用线程；</span></span><br><span class="line">t.Wait();</span><br></pre></td></tr></table></figure></div>
+<h3 id="4-2-2-取消任务"><a href="#4-2-2-取消任务" class="headerlink" title="4.2.2 取消任务"></a>4.2.2 取消任务</h3><blockquote>
+<p>当需要显式的控制一个任务的取消时，可以使用 <code>CancellationTokenSource</code> 来进行；</p>
+</blockquote>
+<p><strong>什么是 CancellationTokenSource</strong><br>CancellationToken 提供了用于控制和检查任务是否取消的操作。想要让一个 Task 接受 CancellationToken ，需要让任务接受的执行的函数当中用于 CancellationToken 作为参数；</p>
+<ul>
+<li>&#96;CancellationToken和</li>
+<li>ThrowIfCancellationRequested（）：此方法用于定时检查操作是否已取消；比如在以下的 Loop 被进行使用；</li>
+</ul>
+<p><strong>任务使用方法</strong></p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> int32 <span class="title">Sum</span>(<span class="params">CancellationToken ct,int32 n</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	Int32 sum = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(;n&gt;<span class="number">0</span>;n--)</span><br><span class="line">	&#123;</span><br><span class="line">		ct.IsCancellationRequested();<span class="comment">//</span></span><br><span class="line">		checked(sum+=n;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>创建 CancellationTokenSource 与 Task</strong></p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CancellationTokenSource cts = <span class="keyword">new</span> CancellationTokenSource ();</span><br><span class="line"></span><br><span class="line">Task&lt;Int32&gt; t = Task.Run()</span><br><span class="line"></span><br><span class="line">cts.Cancel();<span class="comment">//这行代码将会后续的某个时间被使用后，</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-2-3-ContinueWith-与新任务"><a href="#4-2-3-ContinueWith-与新任务" class="headerlink" title="4.2.3 ContinueWith 与新任务"></a>4.2.3 ContinueWith 与新任务</h3><p><strong>什么是自动启动新任务</strong><br>用于检测一个任务在什么时候结束运行，进而在此任务完成后启动以一个任务</p>
+<ul>
+<li>可以使用 <code>Task cwt = t.ContinueWith(//...);</code> 此方法</li>
+</ul>
+<p><strong>cwt 的作用</strong><br>cwt 获得的 task 的任务执行完成后将可以启动另一个任务，并且不会进入阻塞状态；<br>注意：如果线程本身是一个线程池线程，那么它可以返回池中以执行其他操作；</p>
+<p><strong>TaskContinuationOptions 枚举</strong></p>
+<ul>
+<li>可在调用 ContinueWith 时传递对一组 TaskContinuationOptions 枚举值，用于指定新任务的执行方式；<ul>
+<li>示例：<code>t.ContinueWith(task =&gt; Console.Write(&quot;Hello&quot;),TaskContinuationOptions.OnlyOnRanToCompletion)</code><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231109194504.png"
+                     
+                ></li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-4-父、子任务"><a href="#4-2-4-父、子任务" class="headerlink" title="4.2.4 父、子任务"></a>4.2.4 父、子任务</h3><p><strong>什么是子任务</strong><br>在使用 Task 时，一个 Task 可以作为父任务，为其创建多个 Task 作为子任务；</p>
+<p><strong>代码示例：为父任务创建三个子任务</strong></p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Task&lt;Int32[]&gt; parent = <span class="keyword">new</span> Task&lt;Int32[]&gt;(() =&gt; &#123;</span><br><span class="line">	<span class="keyword">var</span> results = <span class="keyword">new</span> Int32[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 在parent这个所属的Task中创建的三个任务其实默认不属于parent,而是顶级任务</span></span><br><span class="line">	<span class="comment">// 因为在创建Task时指定了TaskCreationOptions.AttachedToParent的标志，因此创建的所有子任务将和创建它的任务产生关联</span></span><br><span class="line">	<span class="keyword">new</span> Task(() =&gt; results[<span class="number">0</span>] = Sum(<span class="number">1000</span>),TaskCreationOptions.AttachedToParent).Start();</span><br><span class="line">	<span class="keyword">new</span> Task(() =&gt; results[<span class="number">0</span>] = Sum(<span class="number">2000</span>),TaskCreationOptions.AttachedToParent).Start();</span><br><span class="line">	<span class="keyword">new</span> Task(() =&gt; results[<span class="number">0</span>] = Sum(<span class="number">3000</span>),TaskCreationOptions.AttachedToParent).Start();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> results;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//用4.2.3的方法创建新任务,用于显示结果</span></span><br><span class="line"><span class="keyword">var</span> cwt = parent.ContinueWith(</span><br><span class="line">	parentTask =&gt; Array.ForEach(parentTask.Resule,Console.Write);</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">parent.Start();</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="4-3-任务工厂与调度器"><a href="#4-3-任务工厂与调度器" class="headerlink" title="4.3 任务工厂与调度器"></a>4.3 任务工厂与调度器</h2><h3 id="4-3-1-任务工厂"><a href="#4-3-1-任务工厂" class="headerlink" title="4.3.1 任务工厂"></a>4.3.1 任务工厂</h3><p><strong>为什么需要任务工厂</strong></p>
+<ul>
+<li>目的<ul>
+<li>有时需要创建一组共享相同配置的 Task 对象；</li>
+<li>为避免机械地将相同的参数传给每个 Task 的构造函数，可以创建一个任务工厂，来封装这些 Task 的通用的配置；</li>
+</ul>
+</li>
+</ul>
+<p><strong>什么是任务工厂</strong></p>
+<ul>
+<li>TaskFactory<ul>
+<li>在 <code>System. Threading. Tasks</code> 命名空间定义了一个 <code>TaskFactory</code> 类型和一个 <code>TaskFactory&lt;TResul&gt;</code> 类型；</li>
+<li>两个类型都直接继承自 <code>System. Object</code>；</li>
+</ul>
+</li>
+<li><code>TaskFactory</code> 类<ul>
+<li>用于构造一个返回 void 的任务工厂；</li>
+</ul>
+</li>
+<li><code>TaskFactory&lt;TResult&gt;</code> 类<ul>
+<li>用于构造一组特定返回值类型的任务工厂；</li>
+<li>通过 TResult 实参传递任务的返回类型；</li>
+</ul>
+</li>
+</ul>
+<p><strong>创建任务工厂</strong></p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cts = <span class="keyword">new</span> CancellationTokenSource();</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建一个任务工厂</span></span><br><span class="line"><span class="keyword">var</span> tf = <span class="keyword">new</span> TaskFactory&lt;Int32&gt;(</span><br><span class="line">	cts.Token,</span><br><span class="line">	TaskCreationOptions.AttachedToParent,</span><br><span class="line">	TaskContinuationOptions.ExecuteSynchronously,</span><br><span class="line">	TaskScheduler.Default</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">//任务工厂中的三个任务被加入到tf当中</span></span><br><span class="line"><span class="keyword">var</span> childTasks = <span class="keyword">new</span>[]</span><br><span class="line">(</span><br><span class="line">	tf.StartNew(() =&gt; Sum(cts.Token,<span class="number">10000</span>)),</span><br><span class="line">	tf.StartNew(() =&gt; Sum(cts.Token,<span class="number">20000</span>)),</span><br><span class="line">	tf.StartNew(() =&gt; Sum(cts.Token,<span class="number">30000</span>)),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>效果<ul>
+<li>每个 Task 对象都共享相同的 <code>CancellationTokenSource</code> 标记，任务都被视为其父任务的子任务；</li>
+<li>TaskFactory 创建的所有延续任务都以同步方式执行，而且 TaskFactory 创建的所有 Task 对象都使用默认 <code>TaskScheduler</code>；</li>
+<li>使用 StartNew 可以很方便的创建并启动新的子任务；</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-3-2-调度器"><a href="#4-3-2-调度器" class="headerlink" title="4.3.2 调度器"></a>4.3.2 调度器</h3><p><strong>什么是调度器</strong><br>TaskScheduler 对象负责执行被调度的任务，同时向 Visual Studio 调试器公开任务信息；</p>
+<ul>
+<li>FCL 提供了两个派生自 TaskScheduler 的类型<ul>
+<li>线程池任务调度器（thread pool task scheduler）<ul>
+<li>线程池任务调度器将任务调度给线程池的工作者线程；</li>
+</ul>
+</li>
+<li>同步上下文任务调度器（synchronizationcontext taskscheduler）<ul>
+<li>同步上下文任务调度器适合提供了图形用户界面的应用程序；</li>
+<li>将所有任务都调度给应用程序的 GUI 线程，使所有任务代码都能成功更新 UI 组件；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>默认情况下，所有应用程序使用的都是线程池任务调度器；</li>
+</ul>
+<p><strong>基础使用</strong><br>获得同步上下文任务调度器的引用：</p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TaskScheduler m_syncContextTaskScheduler;</span><br><span class="line">m_syncContextTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();</span><br></pre></td></tr></table></figure></div>
+
+<p>任务使用同步上下文任务调度器：</p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//t是一个任务</span></span><br><span class="line">t.ContinueWith</span><br><span class="line">(</span><br><span class="line">	task =&gt; Text = <span class="string">&quot;Operation Canceled&quot;</span>,</span><br><span class="line">	CancellationToken.None,</span><br><span class="line">	TaskContinuationOptions.OnlyOnCanceled,</span><br><span class="line">	m_syncContextTaskScheduler,</span><br><span class="line">);</span><br></pre></td></tr></table></figure></div>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【CSharp系列】Lecture 4：计算限制的异步操作（2） -- Task 任务</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-11-08 00:29:55</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-11-29 18:23:23
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/11/abc75631f7d0.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/CSharp/">#CSharp</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/CLR/">#CLR</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E7%BA%BF%E7%A8%8B/">#线程</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/Task/">#Task</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/11/6f090484e164.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【编译器设计】Chapter 6：中间代码优化</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/11/f8de20dc35f5.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【编译器设计】Chapter 5：指令调度</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【CSharp系列】Lecture 4：计算限制的异步操作（2） -- Task 任务</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Task-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">4.1 Task 基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-Task-%E5%86%85%E9%83%A8%E6%9C%BA%E5%88%B6"><span class="nav-text">4.1.1 Task 内部机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA-Task"><span class="nav-text">4.1.2 创建一个 Task</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Task-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">4.2 Task 基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-%E8%8E%B7%E5%BE%97-Task-%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="nav-text">4.2.1 获得 Task 执行结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-%E5%8F%96%E6%B6%88%E4%BB%BB%E5%8A%A1"><span class="nav-text">4.2.2 取消任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-3-ContinueWith-%E4%B8%8E%E6%96%B0%E4%BB%BB%E5%8A%A1"><span class="nav-text">4.2.3 ContinueWith 与新任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-4-%E7%88%B6%E3%80%81%E5%AD%90%E4%BB%BB%E5%8A%A1"><span class="nav-text">4.2.4 父、子任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E4%BB%BB%E5%8A%A1%E5%B7%A5%E5%8E%82%E4%B8%8E%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-text">4.3 任务工厂与调度器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E4%BB%BB%E5%8A%A1%E5%B7%A5%E5%8E%82"><span class="nav-text">4.3.1 任务工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-text">4.3.2 调度器</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/10/3d49ee681aab.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="注意：此文中的 OS，如无特殊说明，指的是 Window 操作系统；">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【CSharp系列】线程基础（1） -- 线程与进程基础概念">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/10/3d49ee681aab.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="注意：此文中的 OS，如无特殊说明，指的是 Window 操作系统；">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-11T05:43:16.000Z">
+<meta property="article:modified_time" content="2023-11-29T10:23:23.333Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="进程">
+<meta property="article:tag" content="线程">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: CSharp -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":false,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/newImage.jpg","dark":"/images/newImage.jpg"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.9rem","subtitle_size":"2.0rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"path":"/tags/"}},"categories":{"Categories":{"path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【CSharp系列】线程基础（1） -- 线程与进程基础概念</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-10-11 13:43:16</span>
+        <span class="mobile">2023-10-11 13:43:16</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-11-29 18:23:23</span>
+            <span class="mobile">2023-11-29 18:23:23</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/CSharp/%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/">线程处理</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/CSharp/">CSharp</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E8%BF%9B%E7%A8%8B/">进程</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E7%BA%BF%E7%A8%8B/">线程</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.1k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <p> 注意：此文中的 OS，如无特殊说明，指的是 Window 操作系统；</p>
+<span id="more"></span>
+<h2 id="1-1-线程与进程基础概念"><a href="#1-1-线程与进程基础概念" class="headerlink" title="1.1 线程与进程基础概念"></a>1.1 线程与进程基础概念</h2><p><strong>什么是进程</strong><br>在 Window 当中，一个进程中允许应用程序的每一个实例；</p>
+<ul>
+<li>进程基本特点<ul>
+<li>进程实际上是应用程序的实例要使用的资源的集合</li>
+<li>进程的隔离性<ul>
+<li>每个进程都被赋予了一个<strong>虚拟地址空间</strong>，确保在一个进程中使用的代码和数据无法由另一个进程访问；</li>
+<li>这确保了应用程序实例的健壮性因为一个进程无法破坏另一个进程使用的代码或数据</li>
+</ul>
+</li>
+<li>对于 OS 内核的隔离<ul>
+<li>进程访问不了 OS 的内核代码和数据</li>
+<li>因此应用程序代码破坏不了操作系统代码或数据，系统变得比以往更安全；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>什么是线程</strong><br>进程对于要使用的资源进行了虚拟化，通过隔离提供了虚拟地址空间；<br>线程对于 CPU 进行了虚拟化，对于代码的执行会以一个个的线程为单位来获得 CPU 时间片资源；</p>
+<ul>
+<li>线程的职责是对 CPU 进行虚拟化；<ul>
+<li><em>Windows 为每个进程都提供了该进程专用的线程，当应用程序的代码进入死循环，与那个代码关联的进程会“冻结”，但其他进程 (它们有自己的线程)不会冻结，它们会继续执行!</em></li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-线程的开销"><a href="#1-2-线程的开销" class="headerlink" title="1.2 线程的开销"></a>1.2 线程的开销</h2><p>线程所带来的开销主要分为两个方面：</p>
+<ol>
+<li>空间上带来的开销；比如为每个线程提供的栈、内核对象等；</li>
+<li>时间上带来的开销；比如线程进行上下文切换时会进入到 OS 内核代码，消耗 CPU 时间片；</li>
+</ol>
+<h3 id="1-2-1-线程的空间开销"><a href="#1-2-1-线程的空间开销" class="headerlink" title="1.2.1 线程的空间开销"></a>1.2.1 线程的空间开销</h3><p><strong>开销一：线程内核对象</strong><br>OS 为每个线程都分配并初始化这种数据结构之一；</p>
+<ul>
+<li>包含一组对线程进行描述的属性 ；</li>
+<li>包含线程上下文<ul>
+<li>上下文是包含 CPU 寄存器集合的内存块；</li>
+<li>对于 x 86，x 64 和 ARM 的 CPU 架构线程上下文分别使用约 700，1240 和 350 字节的内存；</li>
+</ul>
+</li>
+</ul>
+<p><strong>开销二：线程环境块</strong><br>线程环境块：TEB </p>
+<ul>
+<li>TEB 是在用户地址空间中分配和初始化的内存块；</li>
+<li>TEB 耗用 1 个内存页 (x 86 x 64 和 ARM 的 CPU 中是 4 KB)；</li>
+<li>主要构成	<ul>
+<li>异常处理<ul>
+<li>EB 包含线程的异常处理链首 (head)，线程进入的每个 try 块都在链首插入一个节点 (node)</li>
+<li>线程退出 try 块时从链中删除该节点</li>
+</ul>
+</li>
+<li>线程本地存储<ul>
+<li>OpenGL 图形，以及 GDI 图形接口；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>开销三：用户模式栈</strong><br>在用户地址空间下执行的程序代码需要使用用户模式栈，来传递程序的局部变量、参数等信息；</p>
+<ul>
+<li>用户模式栈存储传给方法的局部变量和实参；<ul>
+<li>它还包含一个地址，指出当前方法返回时线程应从什么地方接着执行；</li>
+<li>Windows 默认为每个线程的用户模式栈分配 1 MB 内存；</li>
+</ul>
+</li>
+</ul>
+<p><strong>开销四：内核模式栈</strong><br>应用程序代码向操作系统中的内核模式函数传递实参时，会使用内核模式栈；</p>
+<ul>
+<li>内核模式栈特点<ul>
+<li>栈数据复制<ul>
+<li>针对从用户模式的代码传给内核的任何实参，Windows 都会把它们从线程的用户模式栈复制到线程的内核模式栈；</li>
+<li>一经复制，内核就可验证实参的值</li>
+</ul>
+</li>
+<li>应用程序代码不能访问内核模式栈 <ul>
+<li>应用程序无法更改验证后的实参值</li>
+</ul>
+</li>
+<li>在 32 位 Windows 上运行，内核模式栈大小是 12 KB；64 位 Windows 是 24 KB；</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-2-线程的时间开销"><a href="#1-2-2-线程的时间开销" class="headerlink" title="1.2.2 线程的时间开销"></a>1.2.2 线程的时间开销</h3><p><strong>开销一：DLL 线程链接和分离的通知</strong><br>在 Windows 当中，当在进程中创建线程时，将会调用进程中加载的所有非托管 DLL 的 DIIMain 方法，并传递 DLL_THREAD_ATTACH 标志；<br>在 Windows 当中，当在进程中终止线程时，将会调用进程中加载的所有非托管 DLL 的 DIIMain 方法，并传递 DLL_THREAD_DEATTACH 标志；</p>
+<p><strong>开销二：上下文切换</strong><br>CPU 的数量经常会少于线程的数量，但 Windows 在任何时刻只会讲一个线程对应分配给一个 CPU，按照时间片为单位使用一段时间 CPU，然后切换给其他的线程继续执行；<br>所以，需要在一个线程执行完后进行上下文切换，使得 Windows 进入到另一个线程继续执行；</p>
+<ul>
+<li>上下文切换实现原理<ul>
+<li>第一步：<ul>
+<li>将 CPU 寄存器的值保存到当前正在运行的线程的内核对象内部的一个上下文结构中；</li>
+</ul>
+</li>
+<li>第二步：<ul>
+<li>从现有线程集合中选出一个线程供调度；</li>
+<li>如果该线程由另一个进程拥有，Windows 在开始执行任何代码或者接触任何数据之前，还必须切换 CPU 使其“看见”的虚拟地址空间；</li>
+</ul>
+</li>
+<li>第三步：<ul>
+<li>将所选上下文结构中的值加载到 CPU 的寄存器中；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>开销三：垃圾回收与线程开销</strong><br>执行垃圾回收时，CLR 必须挂起所有线程，遍历它们的栈来查找根，以便对堆中的对象进行标记；<br>再次遍历它们的栈后 (有的对象在压缩期间发生了移动，所以要更新它们的根)，再恢复所有线程；</p>
+<ul>
+<li>程越多，调试体验越差。<ul>
+<li>减少线程的数量也会显著提升垃圾回收器的性能；</li>
+<li>每次使用调试器并遇到断点，Windows 都会挂起正在调试的应用程序中的所有线程，并在单步执行或者运行应用程序时恢复所有线程；</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-3-线程其他基础概念"><a href="#1-3-线程其他基础概念" class="headerlink" title="1.3 线程其他基础概念"></a>1.3 线程其他基础概念</h2><h3 id="1-3-1-线程数与-CPU-数量"><a href="#1-3-1-线程数与-CPU-数量" class="headerlink" title="1.3.1 线程数与 CPU 数量"></a>1.3.1 线程数与 CPU 数量</h3><p><strong>理论上，任何机器最优的线程数就是机器的 CPU 数目</strong></p>
+<blockquote>
+<p>注意：这里是将 CPU 的每一个内核，都当作一个 CPU；</p>
+</blockquote>
+<p>当线程数超过了 CPU 数，就会发生上下文切换，进而产生更多的性能损失；<br>但 OS 的设计当中，需要权衡两个方面： </p>
+<ul>
+<li>方面一：可靠性与响应速度；</li>
+<li>方面二：执行速度与性能；<br>OS 的设计者需要权衡两者；</li>
+</ul>
+<p><strong>因为创建进程的代价昂贵，因此开发人员会选择创建大量的线程</strong></p>
+<ul>
+<li>在 Windows 中创建进程十分昂贵 <ul>
+<li>创建一个进程通常要花几秒钟的时间，必须分配大量内存；</li>
+<li>这些内存必须初始化，EXE 和 DLL 文件必须从磁盘上加载等等；</li>
+</ul>
+</li>
+<li>在 Windows 中创建线程十分廉价 </li>
+<li>开发人员决定停止创建进程，改为创建线程。但虽然线程比进程廉价，它们和其他系统资源相比仍然十分昂贵，所以还是应该省着用，而且要用得恰当；</li>
+</ul>
+<h3 id="1-3-2-CPU-发展趋势"><a href="#1-3-2-CPU-发展趋势" class="headerlink" title="1.3.2 CPU 发展趋势"></a>1.3.2 CPU 发展趋势</h3><p><strong>早期阶段：提升 CPU 速度</strong><br>通过提升单 CPU 速度，提供程序运行效率；</p>
+<ul>
+<li>问题：<ul>
+<li><ol>
+<li>高速运行的 CPU 产生热量大；</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>不能做到一直提升单 CPU 的速度；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>后背的发展：多 CPU 内核</strong><br>将晶体管做得更细，进而一个芯片容纳更多晶体管，同时容纳更多的 CPU 内核；</p>
+<p><strong>多 CPU 技术</strong></p>
+<ul>
+<li>多 CPU</li>
+<li>超线程芯片</li>
+<li>多核 CPU</li>
+</ul>
+<h3 id="1-3-3-线程的优势"><a href="#1-3-3-线程的优势" class="headerlink" title="1.3.3 线程的优势"></a>1.3.3 线程的优势</h3><p><strong>好处一：可响应性</strong></p>
+<ul>
+<li>Windows 为每个进程提供其自己的线程。对于一些 GUI 程序而言也是如此，可以将一些需要响应 IO 的工作交给一个专门的线程来进行反应，使得 GUI 线程可以灵敏的反应用户的输入。</li>
+<li>对应的缺点<ul>
+<li>可能会导致线程数爆炸，太多的线程占据内存；</li>
+</ul>
+</li>
+</ul>
+<p><strong>好处二：性能</strong></p>
+<ul>
+<li>在多核 CPU 下，更多的线程可以分配到不同的 CPU 上，并行进行计算，提高操作性能；</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【CSharp系列】线程基础（1） -- 线程与进程基础概念</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-10-11 13:43:16</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-11-29 18:23:23
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/10/3d49ee681aab.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/CSharp/">#CSharp</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E8%BF%9B%E7%A8%8B/">#进程</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E7%BA%BF%E7%A8%8B/">#线程</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/10/7387aa8c55c7.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【法理学】Lecture 12：法制与时间</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/10/27740407180c.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【Unity系列】游戏资源加载：Lecture 2 - PlayerPrefs</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【CSharp系列】线程基础（1） -- 线程与进程基础概念</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">1.1 线程与进程基础概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%BC%80%E9%94%80"><span class="nav-text">1.2 线程的开销</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%A9%BA%E9%97%B4%E5%BC%80%E9%94%80"><span class="nav-text">1.2.1 线程的空间开销</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%97%B6%E9%97%B4%E5%BC%80%E9%94%80"><span class="nav-text">1.2.2 线程的时间开销</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E7%BA%BF%E7%A8%8B%E5%85%B6%E4%BB%96%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">1.3 线程其他基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-1-%E7%BA%BF%E7%A8%8B%E6%95%B0%E4%B8%8E-CPU-%E6%95%B0%E9%87%8F"><span class="nav-text">1.3.1 线程数与 CPU 数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-2-CPU-%E5%8F%91%E5%B1%95%E8%B6%8B%E5%8A%BF"><span class="nav-text">1.3.2 CPU 发展趋势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-3-%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-text">1.3.3 线程的优势</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/09/62fe2bc0dbfe.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="内容大纲：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【CSharp系列】运行时序列化（1） -- 序列化入门">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/09/62fe2bc0dbfe.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="内容大纲：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-18T10:08:07.000Z">
+<meta property="article:modified_time" content="2023-11-29T10:23:23.349Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="CLR">
+<meta property="article:tag" content="序列化">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: CSharp -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":false,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/newImage.jpg","dark":"/images/newImage.jpg"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.9rem","subtitle_size":"2.0rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"path":"/tags/"}},"categories":{"Categories":{"path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【CSharp系列】运行时序列化（1） -- 序列化入门</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-09-18 18:08:07</span>
+        <span class="mobile">2023-09-18 18:08:07</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-11-29 18:23:23</span>
+            <span class="mobile">2023-11-29 18:23:23</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/CSharp/CSharp%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/">CSharp核心机制</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/CSharp/">CSharp</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/CLR/">CLR</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/">序列化</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <p>内容大纲：</p>
+<span id="more"></span>
+<h1 id="1-序列化基础概念"><a href="#1-序列化基础概念" class="headerlink" title="1 序列化基础概念"></a>1 序列化基础概念</h1><p><strong>序列化定义</strong></p>
+<ul>
+<li>序列化：序列化是将对象或对象图转换成字节流的过程；</li>
+<li>反序列化：反序列化是将字节流转换回对象图的过程；</li>
+</ul>
+<p><strong>为什么使用序列化</strong></p>
+<ul>
+<li>应用一：应用程序的状态可轻松保存到磁盘文件或数据库中，并在应用程序下次运行时恢复；<ul>
+<li>ASP .NET 就是利用序列化和反序列化来保存和还原会话状态的；</li>
+</ul>
+</li>
+<li>应用二：一组对象可轻松复制到系统的剪贴板，再粘贴回同一个或另一个应用程序<ul>
+<li>Windows 窗体和 WindowsPresentation Foundation (WPF)就利用了这个功能；</li>
+</ul>
+</li>
+<li>应用三：一组对象在进行序列化后，可轻松的通过网络发送给另一台机器上；<ul>
+<li>除了可以使用在网络上之外，还可以使用在跨 AppDomain 进行类型实例传输上；</li>
+</ul>
+</li>
+<li>应用四：对那些已经序列化成字节流的对象，可以更方便的使用一些处理方式进行加密和压缩；</li>
+</ul>
+<p><strong>.NET 提供了出色的序列化和反序列化支持，供开发者直接使用</strong></p>
+<h1 id="2-序列化使用入门"><a href="#2-序列化使用入门" class="headerlink" title="2 序列化使用入门"></a>2 序列化使用入门</h1><p><strong>序列化简单示例代码</strong></p>
+<div class="highlight-container" data-rel="Csharp"><figure class="iseeu highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> MemoryStream <span class="title">SerializeToMemory</span>(<span class="params"><span class="built_in">object</span> TargetSerializedObject</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	MemoryStream stream = <span class="keyword">new</span> MemoryStream();</span><br><span class="line">	BinaryFormatter formatter = <span class="keyword">new</span> BinaryFormatter();</span><br><span class="line">	formatter.Serialize(stream,TargetSerializedObject);</span><br><span class="line">	<span class="keyword">return</span> stream;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<h2 id="2-1-序列化基本使用"><a href="#2-1-序列化基本使用" class="headerlink" title="2.1 序列化基本使用"></a>2.1 序列化基本使用</h2><p><strong>序列化使用</strong></p>
+<ul>
+<li>第一步：创建存储流<ul>
+<li><code>MemoryStream stream = new MemoryStream();</code></li>
+</ul>
+</li>
+<li>第二步：创建格式化器<ul>
+<li><code>BinaryFormatter formatter = new BinaryFormatter();</code></li>
+</ul>
+</li>
+<li>第三步：调用 Serialize 方法<ul>
+<li>当需要序列化对象时，只需要调用格式化器的 <code>Serialize</code> 方法，并向其传递两个参数；</li>
+<li>参数一：对流对象的引用；<ul>
+<li>表示了序列化后的对象，应该存放在哪里；</li>
+<li>可以是所有从 <code>System.IO.Stream</code> 基础的任意类型的对象；</li>
+<li>即 <code>MemoryStream</code>、<code>FileStream</code>、<code>NetWorkStream</code> 等；</li>
+</ul>
+</li>
+<li>参数二：目标序列化对象的引用；<ul>
+<li>这个对象可以是任何东西，包括字典、int、异常等；</li>
+<li>传入的引用对象还可以引用其他对象，这些被引用的对象也会被序列化到流当中；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>序列化内部工作机制</strong></p>
+<ul>
+<li>以 <code>BinaryFormatter</code> 格式化参考器为例；</li>
+<li>步骤一：获得类型元数据<ul>
+<li>格式化器参考对每个对象的类型进行描述的元数据，从而了解如何序列化完整的对象图；</li>
+</ul>
+</li>
+<li>步骤二：使用反射了解引用对象<ul>
+<li>进行序列化的 Serialize 方法，<strong>利用反射来查看每个对象的类型中都有哪些实例字段</strong>；</li>
+<li>在这些字段中，任何一个引用了其他对象，格式化器的 Serialize 方法就知道那些对象也要进行序列化； </li>
+<li>格式化器确保对象图中的每个对象都只序列化一次，如果对象图中的两个对象相互引用，格式化器会检测到这一点，每个对象都只序列化一次；</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-反序列化基本使用"><a href="#2-2-反序列化基本使用" class="headerlink" title="2.2 反序列化基本使用"></a>2.2 反序列化基本使用</h2><p><strong>反序列化使用</strong><br>DeserializeFromStream 方法将流反序列化为对象图；</p>
+<ul>
+<li>该方法比用于序列化对象图的方法还要简单；</li>
+<li>在代码中构造了一个 BinaryFormatter，然后调用它的 Deserialize 方法；</li>
+<li>这个方法获取流作为参数，返回对反序列化好的对象图中的根对象的一个引用。</li>
+</ul>
+<p><strong>反序列化原理</strong><br>格式化器的 Deserialize 方法检查流的内容：</p>
+<ul>
+<li>第一步：确保程序集在 AppDomain 中<ul>
+<li>反序列化对象时，格式化器首先获取程序集标识信息；</li>
+<li>通过调用 <code>System.Reflection.Assembly</code> 的 Load 方法确保程序集已加载到正在执行的 AppDomain 中；</li>
+</ul>
+</li>
+<li>第二步：匹配程序集中类型<ul>
+<li>程序集加载好之后，格式化器在程序集中查找与要反序列化的对象匹配的类型；</li>
+<li>找不到匹配类型，就抛出异常，不再对更多的对象进行反序列化；</li>
+<li>找到匹配的类型，就创建类型的实例，并用流中包含的值对其字段进行初始化；</li>
+<li>如果类型中的字段与流中读取的字段名不完全匹配，就抛出 SerializationException 异常，不再对更多的对象进行反序列化；</li>
+</ul>
+</li>
+<li>第三步：构造实例，初始化状态<ul>
+<li>然后构造流中所有对象的实例；</li>
+<li>初始化所有这些对象中的字段，使它们具有与当初序列化时相同的值；</li>
+<li>要将 Deserialize 方法返回的对象引用转型为应用程序期待的类型；</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-使用注意事项"><a href="#2-3-使用注意事项" class="headerlink" title="2.3 使用注意事项"></a>2.3 使用注意事项</h2><p><strong>第一点：保证序列化与发序列化使用相同的格式化器</strong><br>由开发者来保证，代码为序列化和反序列化使用相同的格式化器；</p>
+<ul>
+<li>例如，不要写代码用 SoapFormatter 序列化一个对象图, 再用 BinaryFormatter 反序列化； </li>
+<li>Deserialize 如果解译不了流的内容，会抛出 <code>System.Runtime.Serialization.SerializationException</code> 异常；</li>
+</ul>
+<p><strong>第二点：可以将多个对象序列化到一个流中，但要注意序列化与反序列化的顺序</strong></p>
+<div class="highlight-container" data-rel="Csharp"><figure class="iseeu highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Serializable</span>]<span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">Customer</span></span><br><span class="line">&#123; <span class="comment">// ... &#125;</span></span><br><span class="line"></span><br><span class="line">[<span class="meta">Serializable</span>]<span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">Order</span></span><br><span class="line">&#123; <span class="comment">// ... &#125;</span></span><br></pre></td></tr></table></figure></div>
+<p>在此有多个对象：</p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> List&lt;Customer&gt; s_customers= <span class="keyword">new</span> List&lt;Customer&gt;();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> List&lt;Order&gt; s_pendingOrders= <span class="keyword">new</span> List&lt;Order&gt;();</span><br></pre></td></tr></table></figure></div>
+<p>序列化和反序列化时，都要按照顺序进行序列化：</p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">BinaryFormatter formatter = <span class="keyword">new</span> BinaryFormatter();</span><br><span class="line"></span><br><span class="line"><span class="comment">//序列化</span></span><br><span class="line">formatter.Serialize(stream,s_customers);</span><br><span class="line">formatter.Serialize(stream,s_pendingOrders);</span><br><span class="line"></span><br><span class="line"><span class="comment">//反序列化</span></span><br><span class="line">s_customers = (List&lt;Customer&gt;) formatter.Deserialize(stream);</span><br><span class="line">s_pendingOrders = (List&lt;Order&gt;) formatter.Deserialize(stream);</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>第三点：序列化对象时，类型的全名和类型定义程序集的全名会被写入流</strong><br>BinaryFormatter 默认输出程序集的完整标识，其中包括程序集的文件名、版本号、语言文化以及公钥信息；</p>
+<ul>
+<li>反序列化对象时，格式化器首先获取程序集标识信息，并通过调用 <code>System.Reflection.Assembly</code> 的 Load 方法确保程序集已加载到正在执行的 AppDomain 中；</li>
+</ul>
+<h1 id="3-使类型可实例化"><a href="#3-使类型可实例化" class="headerlink" title="3 使类型可实例化"></a>3 使类型可实例化</h1><p><strong>Serializable 定制属性</strong><br>类型的实例默认是不可以实例化的，需要人为的为类型加上 <code>[Serializable]</code> 属性，才可以进行实例化；<br>此定制属性位于 <code>System</code> 命名空间下的 <code>System.SerializableAttribute</code> 中；</p>
+<ul>
+<li>格式化器会确认每个对象的类型都是可序列化的；</li>
+<li>任何对象不可序列化，格式化器的 <code>Serialize</code> 方法都会抛出 SerializationException 异常；</li>
+</ul>
+<p><strong>使用 MemoryStream 存储 Serializable 的结果</strong><br>在序列化对象的对象图时，可能会出现：当前要序列化的对象，其当中定义的引用类型成员，有的可以序列化，有的不可以；但在序列化方法执行前，并不会先对整个对象图进行判断，是否可以完成序列化；</p>
+<ul>
+<li>问题：可能会出现序列化到中途时，部分实例被序列化，然后部分实例无法实例化，产生报错；</li>
+<li>解决方法：使用 <code>MemoryStream</code> 来存储；</li>
+<li>原因：<ul>
+<li>使用 <code>MemoryStream</code> 能得体地从这种情况中恢复原本数据；</li>
+<li>可以使用 <code>MemoryStream </code> 先将对象序列化到一个内存流中。然后，如果所有对象都成功序列化，就可以将 MemoryStream 中的字节复制到你真正希望的目标流中；</li>
+</ul>
+</li>
+</ul>
+<p><strong>SerializableAttribute 使用范围</strong></p>
+<ol>
+<li>这个定制特性只能应用于引用类型 (class)、值类型 (struct)、枚举类型 (enum)和委托类型 (delegate)；</li>
+<li>枚举和委托类型总是可序列化的，不必显式应用 SerializableAttribute 特性； </li>
+<li>SerializableAttribute 特性不会被派生类型继承：<ol>
+<li>父类可以序列化时，子类如果不设置 <code>[Serializable]</code> 时，子类依然不可以实例化；</li>
+<li>父类不可以序列化时，子类无论如何都不可以实例化。如果基类型不允许它的实例序列化，它的字段就不能序列化，因为基对象实际是派生对象的一部分；</li>
+</ol>
+</li>
+<li>一般建议将定义的大部分类型都设置成可序列化，除了那些要包含敏感或安全数据的类型实例；</li>
+</ol>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【CSharp系列】运行时序列化（1） -- 序列化入门</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-09-18 18:08:07</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-11-29 18:23:23
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/09/62fe2bc0dbfe.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/CSharp/">#CSharp</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/CLR/">#CLR</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/">#序列化</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/09/7d009c74b0db.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【静态程序分析】Lecture 3：Data Flow Analysis 1</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/09/a2c89473cdff.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【法理学】Lecture 4：法系</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【CSharp系列】运行时序列化（1） -- 序列化入门</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%BA%8F%E5%88%97%E5%8C%96%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">1 序列化基础概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%BA%8F%E5%88%97%E5%8C%96%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8"><span class="nav-text">2 序列化使用入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%BA%8F%E5%88%97%E5%8C%96%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-text">2.1 序列化基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-text">2.2 反序列化基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">2.3 使用注意事项</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E4%BD%BF%E7%B1%BB%E5%9E%8B%E5%8F%AF%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-text">3 使类型可实例化</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

@@ -241,15 +241,15 @@
                 </div>
                 <div class="statistics">
                     <a class="item" href="/tags">
-                        <div class="number">66</div>
+                        <div class="number">79</div>
                         <div class="label">标签</div>
                     </a>
                     <a class="item" href="/categories">
-                        <div class="number">14</div>
+                        <div class="number">22</div>
                         <div class="label">分类</div>
                     </a>
                     <a class="item" href="/archives">
-                        <div class="number">56</div>
+                        <div class="number">78</div>
                         <div class="label">文章</div>
                     </a>
                 </div>
@@ -318,32 +318,37 @@
                 
 
                 <h3 class="home-article-title">
-                    <a href="/2023/08/2a905fcc408b.html">
-                        Lecture 28：持久数据的可靠性
+                    <a href="/2023/09/48ed04caa6ee.html">
+                        【法理学】Lecture 3：复仇与法律起源
                     </a>
                 </h3>
 
                 <div class="home-article-content markdown-body">
                     
                         <ul>
-<li>前言：文件系统和OS的耦合度<ul>
-<li>相比于进程以及虚拟化部分，文件系统和OS的耦合程度相对较低；</li>
-<li>从 1-bit 数据 -&gt; 设备 -&gt; 驱动 -&gt; Block IO（Bread&#x2F;Bwrite） -&gt; Block Array 在块的数组上构建文件系统 -&gt; 目录结构</li>
-<li>这当中已经经过了很多层的抽象，对于底层的实现细节抽象程度高；</li>
+<li>法理学的核心问题</li>
+<li>法律的起源：<ul>
+<li>所有起源的出现，都是理论的构建，伪装成历史的理论；<ul>
+<li>基于理论构建，去历史当中找对应物；</li>
 </ul>
 </li>
-<li>文件系统算法与持久化<ul>
-<li>文件系统算法的基本假设是：内存可靠，以及接受断电数据丢失（这部分内容是文件系统的数据结构实现的假设）</li>
-<li>但：磁盘上的数据是不接受丢失的。如何保证持久数据的可靠性；
+<li>法律与复仇<ul>
+<li>整个现代的法律制度，尤其是刑法制度，还是建立在复仇的基础上；</li>
+<li><em>本能：法律的基础建构在复仇基础之上</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
                     
                 </div>
 
                 <div class="home-article-meta-info-container">
     <div class="home-article-meta-info">
         <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Aug 29 2023 20:30:08 GMT+0800">
+            <span class="home-article-date" data-date="Fri Sep 15 2023 01:15:26 GMT+0800">
                 
-                    2023-08-29
+                    2023-09-15
                 
             </span>
         </span>
@@ -356,7 +361,17 @@
                     
                         
                         <li>
-                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                            <a href="/categories/%E4%BA%BA%E6%96%87%E8%AF%BE%E7%A8%8B/">人文课程</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E4%BA%BA%E6%96%87%E8%AF%BE%E7%A8%8B/%E6%B3%95%E7%90%86%E5%AD%A6/">法理学</a>&nbsp;
                         </li>
                     
                     
@@ -371,22 +386,7 @@
                     
                         <li>
                             
-                            <a href="/tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/">日志系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/RAID/">RAID</a>&nbsp;
+                            <a href="/tags/%E6%B3%95%E7%90%86%E5%AD%A6/">法理学</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -394,7 +394,7 @@
         
     </div>
 
-    <a href="/2023/08/2a905fcc408b.html">阅读全文<span class="seo-reader-text">Lecture 28：持久数据的可靠性</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    <a href="/2023/09/48ed04caa6ee.html">阅读全文<span class="seo-reader-text">【法理学】Lecture 3：复仇与法律起源</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -408,103 +408,26 @@
                 
 
                 <h3 class="home-article-title">
-                    <a href="/2023/08/7c3f50531736.html">
-                        Lecture 17：动态链接与加载
+                    <a href="/2023/09/13ccfbbad41b.html">
+                        【静态程序分析】Lecture 2：Intermediate Representation
                     </a>
                 </h3>
 
                 <div class="home-article-content markdown-body">
                     
-                        <blockquote>
-<p>前言：可执行文件就是一个描述状态机初始状态的数据结构；<br>问题：<br>    1、可执行文件如何被OS加载？<br>    2、什么是动态链接&#x2F;动态加载？</p>
-</blockquote>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Aug 29 2023 19:29:28 GMT+0800">
-                
-                    2023-08-29
-                
-            </span>
-        </span>
-        
-            <span class="home-article-category">
-                <i class="fa-solid fa-folders"></i>&nbsp;
-            <ul>
-                
-                
-                    
-                        
-                        <li>
-                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
-                        </li>
-                    
-                    
-                
-            </ul>
-        </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fa-solid fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E9%93%BE%E6%8E%A5/">链接</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/ELF/">ELF</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2023/08/7c3f50531736.html">阅读全文<span class="seo-reader-text">Lecture 17：动态链接与加载</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/08/92c8110645cf.html">
-                        Lecture 16：什么是可执行文件
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>目前已经把操作系统表层上的内容都创建好了，这部分之后会再次回归到最开始的地方。</p>
+                        <p>编译器是如何理解程序的？需要将程序转化成一个用于编译器理解的格式；</p>
 <ul>
-<li>重新回到可执行文件：可执行文件是什么，其如何在OS上运行；
+<li>在这样的一种格式之上，便于编译器进行分析、研究；</li>
+<li>将源代码变成 IR 形式来进行研究；
                     
                 </div>
 
                 <div class="home-article-meta-info-container">
     <div class="home-article-meta-info">
         <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Aug 29 2023 19:25:17 GMT+0800">
+            <span class="home-article-date" data-date="Thu Sep 14 2023 18:09:28 GMT+0800">
                 
-                    2023-08-29
+                    2023-09-14
                 
             </span>
         </span>
@@ -517,7 +440,7 @@
                     
                         
                         <li>
-                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                            <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>&nbsp;
                         </li>
                     
                     
@@ -532,22 +455,17 @@
                     
                         <li>
                             
-                            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                            <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>&nbsp;
                         </li>
                     
                         <li>
                             | 
-                            <a href="/tags/%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/">可执行文件</a>&nbsp;
+                            <a href="/tags/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/">静态程序分析</a>&nbsp;
                         </li>
                     
                         <li>
                             | 
-                            <a href="/tags/%E9%93%BE%E6%8E%A5/">链接</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%B1%87%E7%BC%96/">汇编</a>&nbsp;
+                            <a href="/tags/IR/">IR</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -555,7 +473,7 @@
         
     </div>
 
-    <a href="/2023/08/92c8110645cf.html">阅读全文<span class="seo-reader-text">Lecture 16：什么是可执行文件</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    <a href="/2023/09/13ccfbbad41b.html">阅读全文<span class="seo-reader-text">【静态程序分析】Lecture 2：Intermediate Representation</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -569,138 +487,23 @@
                 
 
                 <h3 class="home-article-title">
-                    <a href="/2023/08/62011fb26306.html">
-                        AI时代个人生存指南
+                    <a href="/2023/09/542a54bb2e0a.html">
+                        【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员
                     </a>
                 </h3>
 
                 <div class="home-article-content markdown-body">
                     
                         <p>内容大纲：</p>
-<ul>
-<li><ol>
-<li>ChatGPT使用基础</li>
-</ol>
-<ul>
-<li>1.1 ChatGPT的使用之道</li>
-<li>1.2 ChatGPT的使用之术</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>Midjourney使用基础</li>
-</ol>
-<ul>
-<li>2.1 Midjourney的使用之道</li>
-<li>2.2 Midjourney的使用之术
                     
                 </div>
 
                 <div class="home-article-meta-info-container">
     <div class="home-article-meta-info">
         <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Aug 29 2023 12:49:30 GMT+0800">
+            <span class="home-article-date" data-date="Thu Sep 14 2023 12:50:08 GMT+0800">
                 
-                    2023-08-29
-                
-            </span>
-        </span>
-        
-            <span class="home-article-category">
-                <i class="fa-solid fa-folders"></i>&nbsp;
-            <ul>
-                
-                
-                    
-                        
-                        <li>
-                            <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>&nbsp;
-                        </li>
-                    
-                    
-                
-            </ul>
-        </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fa-solid fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/AI/">AI</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E5%B7%A5%E5%85%B7/">工具</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2023/08/62011fb26306.html">阅读全文<span class="seo-reader-text">AI时代个人生存指南</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/08/2d466e9f916b.html">
-                        【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <ul>
-<li><ol>
-<li>垃圾回收的基本假设</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>垃圾回收算法</li>
-</ol>
-<ul>
-<li>2.1 初始化堆与第0代对象</li>
-<li>2.2 从第0代对象到第1代对象</li>
-<li>2.3 从第1代对象到第2代对象</li>
-</ul>
-</li>
-<li><ol start="3">
-<li>垃圾回收触发条件</li>
-</ol>
-<ul>
-<li>3.1 监视垃圾回收内存使用</li>
-</ul>
-</li>
-<li><ol start="4">
-<li>大对象</li>
-</ol>
-</li>
-<li><ol start="5">
-<li>垃圾回收模式</li>
-</ol>
-</li>
-</ul>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Aug 29 2023 10:01:37 GMT+0800">
-                
-                    2023-08-29
+                    2023-09-14
                 
             </span>
         </span>
@@ -714,6 +517,16 @@
                         
                         <li>
                             <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/CSharp/CSharp%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/">CSharp核心机制</a>&nbsp;
                         </li>
                     
                     
@@ -733,12 +546,22 @@
                     
                         <li>
                             | 
-                            <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">垃圾回收</a>&nbsp;
+                            <a href="/tags/CLR/">CLR</a>&nbsp;
                         </li>
                     
                         <li>
                             | 
-                            <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
+                            <a href="/tags/AppDomain/">AppDomain</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E7%A8%8B%E5%BA%8F%E9%9B%86/">程序集</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E5%8F%8D%E5%B0%84/">反射</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -746,7 +569,7 @@
         
     </div>
 
-    <a href="/2023/08/2d466e9f916b.html">阅读全文<span class="seo-reader-text">【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    <a href="/2023/09/542a54bb2e0a.html">阅读全文<span class="seo-reader-text">【CSharp系列】程序集加载与反射（3） -- 反射加载类型成员</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -760,23 +583,291 @@
                 
 
                 <h3 class="home-article-title">
-                    <a href="/2023/08/3dac16a26c48.html">
-                        【Game Engine】P1：引擎事件系统
+                    <a href="/2023/09/8da45f07ddbd.html">
+                        【游戏引擎原理】现代图形绘制流水线（2） -- Vulkan开发基础
                     </a>
                 </h3>
 
                 <div class="home-article-content markdown-body">
                     
-                        <p>引擎事件系统框架编写</p>
+                        <p>内容大纲：</p>
                     
                 </div>
 
                 <div class="home-article-meta-info-container">
     <div class="home-article-meta-info">
         <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Mon Aug 28 2023 21:16:20 GMT+0800">
+            <span class="home-article-date" data-date="Wed Sep 13 2023 18:49:54 GMT+0800">
                 
-                    2023-08-28
+                    2023-09-13
+                
+            </span>
+        </span>
+        
+            <span class="home-article-category">
+                <i class="fa-solid fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E5%8E%9F%E7%90%86/">游戏引擎原理</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+        
+        
+            <span class="home-article-tag">
+                <i class="fa-solid fa-tags"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/">图形学</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/">渲染管线</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/Vulkan/">Vulkan</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            </span>
+        
+    </div>
+
+    <a href="/2023/09/8da45f07ddbd.html">阅读全文<span class="seo-reader-text">【游戏引擎原理】现代图形绘制流水线（2） -- Vulkan开发基础</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2023/09/127e5cd875c9.html">
+                        【CSharp系列】程序集加载与反射（2） -- 反射基础
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        <p>内容大纲：</p>
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Wed Sep 13 2023 13:06:59 GMT+0800">
+                
+                    2023-09-13
+                
+            </span>
+        </span>
+        
+            <span class="home-article-category">
+                <i class="fa-solid fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/CSharp/CSharp%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/">CSharp核心机制</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+        
+        
+            <span class="home-article-tag">
+                <i class="fa-solid fa-tags"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/tags/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/CLR/">CLR</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E7%A8%8B%E5%BA%8F%E9%9B%86/">程序集</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E5%8F%8D%E5%B0%84/">反射</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            </span>
+        
+    </div>
+
+    <a href="/2023/09/127e5cd875c9.html">阅读全文<span class="seo-reader-text">【CSharp系列】程序集加载与反射（2） -- 反射基础</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2023/09/31623ee61574.html">
+                        【法理学】Lecture 2：法律的功能与特点
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        <p>内容大纲：</p>
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Wed Sep 13 2023 01:00:57 GMT+0800">
+                
+                    2023-09-13
+                
+            </span>
+        </span>
+        
+            <span class="home-article-category">
+                <i class="fa-solid fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E4%BA%BA%E6%96%87%E8%AF%BE%E7%A8%8B/">人文课程</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E4%BA%BA%E6%96%87%E8%AF%BE%E7%A8%8B/%E6%B3%95%E7%90%86%E5%AD%A6/">法理学</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+        
+        
+            <span class="home-article-tag">
+                <i class="fa-solid fa-tags"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/tags/%E6%B3%95%E7%90%86%E5%AD%A6/">法理学</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E4%BA%BA%E6%96%87/">人文</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E5%90%8E%E6%9E%9C%E4%B8%BB%E4%B9%89/">后果主义</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            </span>
+        
+    </div>
+
+    <a href="/2023/09/31623ee61574.html">阅读全文<span class="seo-reader-text">【法理学】Lecture 2：法律的功能与特点</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2023/09/be66b1e96b19.html">
+                        【Game Engine】P4：Window Event
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        <p>内容大纲：</p>
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Tue Sep 12 2023 23:23:27 GMT+0800">
+                
+                    2023-09-12
                 
             </span>
         </span>
@@ -819,12 +910,7 @@
                     
                         <li>
                             | 
-                            <a href="/tags/C/">C++</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E4%BA%8B%E4%BB%B6/">事件</a>&nbsp;
+                            <a href="/tags/Event/">Event</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -832,7 +918,7 @@
         
     </div>
 
-    <a href="/2023/08/3dac16a26c48.html">阅读全文<span class="seo-reader-text">【Game Engine】P1：引擎事件系统</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    <a href="/2023/09/be66b1e96b19.html">阅读全文<span class="seo-reader-text">【Game Engine】P4：Window Event</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -846,41 +932,23 @@
                 
 
                 <h3 class="home-article-title">
-                    <a href="/2023/08/4b26dd1d757b.html">
-                        【CSharp系列】托管堆与垃圾回收（1）-- 托管堆
+                    <a href="/2023/09/b54817141541.html">
+                        【静态程序分析】Lecture 1：课程导论
                     </a>
                 </h3>
 
                 <div class="home-article-content markdown-body">
                     
-                        <ul>
-<li><ol>
-<li>为什么要有托管堆</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>什么是托管堆</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>垃圾回收算法</li>
-</ol>
-<ul>
-<li><ol>
-<li>引用计数算法</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>引用跟踪算法
+                        <p><a class="link"   target="_blank" rel="noopener" href="https://ranger-nju.gitbook.io/static-program-analysis-book/" >https://ranger-nju.gitbook.io/static-program-analysis-book/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
                     
                 </div>
 
                 <div class="home-article-meta-info-container">
     <div class="home-article-meta-info">
         <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Mon Aug 28 2023 10:02:21 GMT+0800">
+            <span class="home-article-date" data-date="Tue Sep 12 2023 17:34:36 GMT+0800">
                 
-                    2023-08-28
+                    2023-09-12
                 
             </span>
         </span>
@@ -893,7 +961,7 @@
                     
                         
                         <li>
-                            <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                            <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>&nbsp;
                         </li>
                     
                     
@@ -908,17 +976,7 @@
                     
                         <li>
                             
-                            <a href="/tags/CSharp/">CSharp</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">垃圾回收</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
+                            <a href="/tags/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/">静态程序分析</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -926,7 +984,7 @@
         
     </div>
 
-    <a href="/2023/08/4b26dd1d757b.html">阅读全文<span class="seo-reader-text">【CSharp系列】托管堆与垃圾回收（1）-- 托管堆</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    <a href="/2023/09/b54817141541.html">阅读全文<span class="seo-reader-text">【静态程序分析】Lecture 1：课程导论</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -940,182 +998,23 @@
                 
 
                 <h3 class="home-article-title">
-                    <a href="/2023/08/efa8d1f054ea.html">
-                        【商业系列】商业计划书大纲与内容
+                    <a href="/2023/09/780f1bb42e82.html">
+                        Lecture 32：从逻辑门到计算机系统
                     </a>
                 </h3>
 
                 <div class="home-article-content markdown-body">
                     
-                        <p><strong>商业计划书大纲</strong></p>
-<ul>
-<li>1、 团队简介</li>
-<li>2、 项目内容</li>
-<li>3、 团队组成</li>
-<li>4、 市场规模与分析</li>
-<li>5、 商业模式</li>
-<li>6、 战略规划
+                        <p>内容大纲：</p>
                     
                 </div>
 
                 <div class="home-article-meta-info-container">
     <div class="home-article-meta-info">
         <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Mon Aug 28 2023 01:16:31 GMT+0800">
+            <span class="home-article-date" data-date="Tue Sep 12 2023 11:18:36 GMT+0800">
                 
-                    2023-08-28
-                
-            </span>
-        </span>
-        
-            <span class="home-article-category">
-                <i class="fa-solid fa-folders"></i>&nbsp;
-            <ul>
-                
-                
-                    
-                        
-                        <li>
-                            <a href="/categories/%E5%95%86%E4%B8%9A/">商业</a>&nbsp;
-                        </li>
-                    
-                    
-                
-            </ul>
-        </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fa-solid fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/%E5%95%86%E4%B8%9A/">商业</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E5%88%9B%E4%B8%9A/">创业</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2023/08/efa8d1f054ea.html">阅读全文<span class="seo-reader-text">【商业系列】商业计划书大纲与内容</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/08/47c2a01c7a83.html">
-                        【游戏引擎原理】P1：GPU驱动的几何管线
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>传统渲染问题：<br>在CPU端发出一个Draw Call，在此过程中GPU可能会一直在等待Draw Call，因此浪费大量性能；<br>在GPU中设置好数据，还要在CPU中处理各种计算，而且GPU要花费大量的时间在等待CPU的时间中，因为就算是计算一个非常简单的index，也需要把整个Render跑一遍。</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Aug 27 2023 14:13:38 GMT+0800">
-                
-                    2023-08-27
-                
-            </span>
-        </span>
-        
-            <span class="home-article-category">
-                <i class="fa-solid fa-folders"></i>&nbsp;
-            <ul>
-                
-                
-                    
-                        
-                        <li>
-                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
-                        </li>
-                    
-                    
-                
-                    
-                        
-                            <li>></li>
-                        
-                        <li>
-                            <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E5%8E%9F%E7%90%86/">游戏引擎原理</a>&nbsp;
-                        </li>
-                    
-                    
-                
-            </ul>
-        </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fa-solid fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/">游戏引擎</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%8A%80%E6%9C%AF%E7%BE%8E%E6%9C%AF/">技术美术</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2023/08/47c2a01c7a83.html">阅读全文<span class="seo-reader-text">【游戏引擎原理】P1：GPU驱动的几何管线</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/08/3d8a9bfbeeea.html">
-                        Lecture 15：Fork的应用
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        <p>Fork：操作系统就是一个大的状态机，OS在一般的情况下，使用Syscall执行Fork时会复制一个新的状态。而此状态由于是对于原本被Fork对象的复制，因此会和原本状态完全一致，因此如果原线程上在本地打开了一个文件描述符，那新的线程也会打开它，即指向了同一个OS中的对象</p>
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Aug 27 2023 14:09:52 GMT+0800">
-                
-                    2023-08-27
+                    2023-09-12
                 
             </span>
         </span>
@@ -1146,9 +1045,102 @@
                             <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
                         </li>
                     
+                </ul>
+            </span>
+        
+    </div>
+
+    <a href="/2023/09/780f1bb42e82.html">阅读全文<span class="seo-reader-text">Lecture 32：从逻辑门到计算机系统</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2023/09/3e1f27f8e3f6.html">
+                        【CSharp系列】程序集加载与反射（1） -- 程序集的加载
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        <p>当在编译时、对一个类型一无所知的情况下，如何在运行时发现类型的信息，创建类型的实例？<br>创建动态可扩展的应用程序，宿主应用程序可以加载其他公司创建的加载项；</p>
+<ul>
+<li>宿主可以在一个 AppDomain 中运行加载项代码，这个 AppDomain 有其自己的安全性与配置设置。宿主可以通过卸载 AppDomain 来卸载加载项；
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Tue Sep 12 2023 10:08:45 GMT+0800">
+                
+                    2023-09-12
+                
+            </span>
+        </span>
+        
+            <span class="home-article-category">
+                <i class="fa-solid fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/CSharp/CSharp%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/">CSharp核心机制</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+        
+        
+            <span class="home-article-tag">
+                <i class="fa-solid fa-tags"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/tags/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
                         <li>
                             | 
-                            <a href="/tags/Fork/">Fork</a>&nbsp;
+                            <a href="/tags/CLR/">CLR</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/AppDomain/">AppDomain</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E7%A8%8B%E5%BA%8F%E9%9B%86/">程序集</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E5%8F%8D%E5%B0%84/">反射</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -1156,7 +1148,7 @@
         
     </div>
 
-    <a href="/2023/08/3d8a9bfbeeea.html">阅读全文<span class="seo-reader-text">Lecture 15：Fork的应用</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    <a href="/2023/09/3e1f27f8e3f6.html">阅读全文<span class="seo-reader-text">【CSharp系列】程序集加载与反射（1） -- 程序集的加载</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -1165,7 +1157,7 @@
 
     <div class="home-paginator">
         <div class="paginator">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa-regular fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa-regular fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa-regular fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/"><i class="fa-regular fa-angle-right"></i></a>
 </div>
 
     </div>

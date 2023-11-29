@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/08/4f75acad116f.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="垃圾回收的基本假设    垃圾回收算法   2.1 初始化堆与第0代对象 2.2 从第0代对象到第1代对象 2.3 从第1代对象到第2代对象    垃圾回收触发条件   3.1 监视垃圾回收内存使用    大对象    垃圾回收模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/08/4f75acad116f.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="垃圾回收的基本假设    垃圾回收算法   2.1 初始化堆与第0代对象 2.2 从第0代对象到第1代对象 2.3 从第1代对象到第2代对象    垃圾回收触发条件   3.1 监视垃圾回收内存使用    大对象    垃圾回收模式">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829101037.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829101102.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829101709.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829101728.png">
+<meta property="article:published_time" content="2023-08-29T02:01:37.000Z">
+<meta property="article:modified_time" content="2023-11-29T10:23:23.333Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="垃圾回收">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020230829101037.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: CSharp -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":false,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/newImage.jpg","dark":"/images/newImage.jpg"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.9rem","subtitle_size":"2.0rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"path":"/tags/"}},"categories":{"Categories":{"path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-08-29 10:01:37</span>
+        <span class="mobile">2023-08-29 10:01:37</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-11-29 18:23:23</span>
+            <span class="mobile">2023-11-29 18:23:23</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CSharp/">CSharp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/CSharp/CSharp%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/">CSharp核心机制</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/CSharp/">CSharp</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">垃圾回收</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <ul>
+<li><ol>
+<li>垃圾回收的基本假设</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>垃圾回收算法</li>
+</ol>
+<ul>
+<li>2.1 初始化堆与第0代对象</li>
+<li>2.2 从第0代对象到第1代对象</li>
+<li>2.3 从第1代对象到第2代对象</li>
+</ul>
+</li>
+<li><ol start="3">
+<li>垃圾回收触发条件</li>
+</ol>
+<ul>
+<li>3.1 监视垃圾回收内存使用</li>
+</ul>
+</li>
+<li><ol start="4">
+<li>大对象</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>垃圾回收模式</li>
+</ol>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="1-垃圾回收的基本假设"><a href="#1-垃圾回收的基本假设" class="headerlink" title="1 垃圾回收的基本假设"></a>1 垃圾回收的基本假设</h1><p>由于CLR的GC是基于代的垃圾回收器算法，因此其对代码做出了以下几点假设：</p>
+<ul>
+<li><ol>
+<li>对象越新，生存期越短；</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>对象越老，生存期越长；</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>回收堆的一部分，速度快于回收整个堆；<br>以上假设对于大部分的现代应用程序都成立，其影响了下面GC算法的实现。</li>
+</ol>
+</li>
+</ul>
+<h1 id="2-垃圾回收算法"><a href="#2-垃圾回收算法" class="headerlink" title="2 垃圾回收算法"></a>2 垃圾回收算法</h1><h2 id="2-1-初始化堆与第0代对象"><a href="#2-1-初始化堆与第0代对象" class="headerlink" title="2.1 初始化堆与第0代对象"></a>2.1 初始化堆与第0代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>预算容量<ul>
+<li>CLR初始化时，为第0代对象选择一个预算容量。</li>
+</ul>
+</li>
+<li>启动垃圾回收<ul>
+<li>如果分配一个新对象造成第0代超过预算，就必须立马就启动一次垃圾回收。</li>
+<li>假设此时初始化时分配的对象刚好用完第0代的空间，那么分配下一个对象就必须启动垃圾回收。</li>
+</ul>
+</li>
+<li>压缩对象<ul>
+<li>垃圾回收器判断对象C和E是垃圾，所以会压缩对象D，使之与对象B相邻。</li>
+</ul>
+</li>
+<li>进入第1代<ul>
+<li>在垃圾回收中存活的对象A，B和D现在成为第1代对象。第1代对象已经经历了垃圾回收器的一次检查；</li>
+<li>此时第0代不包含任何对象，当下一次再分配内存时，新对象会被继续分配到第0代之中；</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>初始化堆：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020230829101037.png"
+                     
+                ></p>
+<p>启动垃圾回收+压缩对象+进入第1代：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020230829101102.png"
+                     
+                ></p>
+<h2 id="2-2-从第0代对象到第1代对象"><a href="#2-2-从第0代对象到第1代对象" class="headerlink" title="2.2 从第0代对象到第1代对象"></a>2.2 从第0代对象到第1代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>继续分配<ul>
+<li>新分配的对象继续进入第0代；</li>
+<li>部分对象（包含第1代与第0代）在程序运行时，逐渐变得不可达；</li>
+</ul>
+</li>
+<li>启动垃圾回收<ul>
+<li>新对象造成第0代超出预算；</li>
+</ul>
+</li>
+<li>决定GC检查代<ul>
+<li>垃圾回收器必须决定检查哪些代。开始一次垃圾回收时，垃圾回收器除了检查第0代时，还会检查第1代占用了多少内存。</li>
+<li>在下图中，由于第1代占用的内存远少于预算，所以垃圾回收器只检查第0代中的对象；</li>
+</ul>
+</li>
+</ul>
+<p><strong>基本假设与基于代的GC</strong></p>
+<ul>
+<li>假设一：对象越新，生存期越短<ul>
+<li>因为新的对象在第0代中，并且第0代包含更多垃圾的可能性很大，在GC时能回收更多的内存；</li>
+<li>即<strong>对象越新，生存期越短</strong></li>
+<li>并且由于忽略了第1代中的对象，所以加快了垃圾回收速度</li>
+</ul>
+</li>
+<li>假设三：回收堆的一部分，速度快于回收整个堆<ul>
+<li>忽略第1代中的对象能提升垃圾回收器的性能。对性能有更大提振作用的是：现在不必遍历托管堆中的每个对象；</li>
+<li>如果根或对象引用了老一代的某个对象，垃圾回收器就可以忽略老对象内部的所有引用，能在更短的时间内构造好可达对象图；</li>
+</ul>
+</li>
+</ul>
+<p><strong>图片展示</strong><br>产生新对象，垃圾产生：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020230829101709.png"
+                     
+                ></p>
+<p>垃圾回收，对象压缩：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020230829101728.png"
+                     
+                ></p>
+<h2 id="2-3-从第1代对象到第2代对象"><a href="#2-3-从第1代对象到第2代对象" class="headerlink" title="2.3 从第1代对象到第2代对象"></a>2.3 从第1代对象到第2代对象</h2><p><strong>实现过程</strong></p>
+<ul>
+<li>全部预算已满<ul>
+<li>假定第1代的增长导致它的所有对象占用了全部预算。此时应用程序继续运行并分配对象，使第0代对象达到它的预算容量；</li>
+<li>此时由于第0代已满，必须进行垃圾回收；</li>
+<li>此次垃圾回收时发现第1代占用太多空间，导致全部预算用完（并且第1代当中已经有很多对象变得不可达）；</li>
+<li>此次垃圾回收需要堆第0代以及第1代对象进行回收；</li>
+</ul>
+</li>
+<li>产生第2代<ul>
+<li>经过垃圾回收，产生第2代对象；第0代继续空余出来；</li>
+<li><strong>只有在第1代超出预算时才会检查第1代中的对象</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>托管堆与代</strong></p>
+<ul>
+<li>3代托管堆<ul>
+<li>托管堆只支持三代：第0代、第1代和第2代，没有第3代。</li>
+</ul>
+</li>
+<li>代与预算<ul>
+<li>CLR初始化时，会为每一代选择预算；</li>
+</ul>
+</li>
+<li>CLR 的垃圾回收器是自调节的<ul>
+<li>垃圾回收器会在执行垃圾回收的过程中了解应用程序的行为；<ul>
+<li>假定应用程序构造了许多对象，但每个对象用的时间都很短。在这种情况下，对第0代的垃圾回收会回收大量内存；</li>
+<li>事实上，第0代的所有对象都可能被回收；</li>
+</ul>
+</li>
+<li><strong>当GC发现回收0代后存活下来的对象很少，就可能减少第0代的预算，反之增加预算</strong>。这种启发式的算法对第1代以及第2代通用适用；</li>
+<li>每当垃圾回收进行后，会检查存活下来的对象多少，进而增大或减小这些代的预算；</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-垃圾回收触发条件"><a href="#3-垃圾回收触发条件" class="headerlink" title="3 垃圾回收触发条件"></a>3 垃圾回收触发条件</h1><p><strong>垃圾回收可以有以下几种触发条件</strong></p>
+<ol>
+<li>CLR检测垃圾回收超出代的预算；</li>
+<li>代码显示调用System.GC的静态方法Collect；</li>
+<li>Windows报告低内存情况；</li>
+<li>CLR卸载AppDomain；</li>
+<li>CLR关闭；</li>
+</ol>
+<p><strong>强制垃圾回收</strong><br>System.GC类型允许应用程序对垃圾回收器进行一些直接控制。可以用Collect进行强制垃圾回收，但大部分情况下不推荐。</p>
+<div class="highlight-container" data-rel="Csharp"><figure class="iseeu highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Collect</span>(<span class="params">Int32 generation,GCCollectionMode mode,Boolean blocking</span>)</span>;</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>generation<ul>
+<li>表示回收第几代的垃圾</li>
+</ul>
+</li>
+<li>GCCollectionMode<ul>
+<li>Default：不传递任何符号名称；</li>
+<li>Forced：强制回收指定的代(以及低于它的所有代)；</li>
+<li>Optimized：只有在能释放大量内存或者能减少碎片化的前提下，才执行回收（强制执行Collect时，尽可能使用这种模式）；</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-1-监视垃圾回收内存使用"><a href="#3-1-监视垃圾回收内存使用" class="headerlink" title="3.1 监视垃圾回收内存使用"></a>3.1 监视垃圾回收内存使用</h2><p><strong>监视用方法</strong></p>
+<div class="highlight-container" data-rel="Csharp"><figure class="iseeu highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Int32 <span class="title">CollectionCount</span>(<span class="params">Int32 generation</span>)</span>;</span><br><span class="line"><span class="function">Int64 <span class="title">GetTotalMemory</span>(<span class="params">Boolean forceFullCollection</span>)</span>;</span><br></pre></td></tr></table></figure></div>
+<h1 id="4-大对象"><a href="#4-大对象" class="headerlink" title="4 大对象"></a>4 大对象</h1><p><strong>什么是大对象</strong><br>在CLR当中，将对象分为大对象和小对象，大于85000字节的对象是大对象；</p>
+<p><strong>大对象特点</strong></p>
+<ul>
+<li>大对象在进程地址空间其他地方分配；</li>
+<li>目前的GC不压缩大对象；</li>
+<li>大对象总是第2代的，不可能为第0、1代；</li>
+</ul>
+<h1 id="5-垃圾回收模式"><a href="#5-垃圾回收模式" class="headerlink" title="5 垃圾回收模式"></a>5 垃圾回收模式</h1><p><strong>两种基本的GC模式</strong></p>
+<ul>
+<li>工作站模式<ul>
+<li>该模式针对客户端应用程序优化GC；</li>
+<li><strong>CLR默认以工作站模式运行</strong></li>
+<li>GC造成的延时很低，应用程序的线程挂起时间短，并且GC假定机器上运行的其他应用程序都不会消耗太多的CPU资源；</li>
+</ul>
+</li>
+<li>服务器模式<ul>
+<li>该模式针对服务器端应用程序优化GC；</li>
+<li>被优化的主要是吞吐量和资源利用。GC假定机器上没有运行其他应用程序，并假定机器的所有CPU都可用来辅助完成GC；</li>
+<li>该模式造成托管堆被拆分成几个区域，每个CPU一个；</li>
+<li>开始垃圾回收时，垃圾回收器在每个CPU上都运行一个特殊线程，每个线程都和其他线程并发回收它自己的区域；</li>
+<li>这个功能要求应用程序在多CPU计算机上运行使线程能真正地同时工作，从而获得性能的提升。</li>
+</ul>
+</li>
+</ul>
+<p><strong>切换工作模式</strong><br>GCLatencyMode定义四种模式：</p>
+<ol>
+<li>Batch：服务器GC模式的默认值，关闭并发GC；</li>
+<li>Interactive：工作站GC模式的默认值，打开并发GC；</li>
+<li>LowLatency：此模式时，GC将全力避免第2代垃圾的回收。更容易抛出内存溢出异常；</li>
+<li>SustainedLowLatency；</li>
+</ol>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-08-29 10:01:37</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-11-29 18:23:23
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/08/4f75acad116f.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/CSharp/">#CSharp</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">#垃圾回收</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/08/62011fb26306.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">AI时代个人生存指南</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/08/3dac16a26c48.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【Game Engine】P1：引擎事件系统</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【CSharp系列】托管堆与垃圾回收（2）-- 基于代的垃圾回收算法</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%81%87%E8%AE%BE"><span class="nav-text">1 垃圾回收的基本假设</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">2 垃圾回收算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%A0%86%E4%B8%8E%E7%AC%AC0%E4%BB%A3%E5%AF%B9%E8%B1%A1"><span class="nav-text">2.1 初始化堆与第0代对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E4%BB%8E%E7%AC%AC0%E4%BB%A3%E5%AF%B9%E8%B1%A1%E5%88%B0%E7%AC%AC1%E4%BB%A3%E5%AF%B9%E8%B1%A1"><span class="nav-text">2.2 从第0代对象到第1代对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E4%BB%8E%E7%AC%AC1%E4%BB%A3%E5%AF%B9%E8%B1%A1%E5%88%B0%E7%AC%AC2%E4%BB%A3%E5%AF%B9%E8%B1%A1"><span class="nav-text">2.3 从第1代对象到第2代对象</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6"><span class="nav-text">3 垃圾回收触发条件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E7%9B%91%E8%A7%86%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="nav-text">3.1 监视垃圾回收内存使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%A4%A7%E5%AF%B9%E8%B1%A1"><span class="nav-text">4 大对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%A8%A1%E5%BC%8F"><span class="nav-text">5 垃圾回收模式</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

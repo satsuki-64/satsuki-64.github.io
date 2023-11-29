@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Satsuki">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://satsuki-64.github.io/2023/11/f8de20dc35f5.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="指令调度：Instruction Scheduling">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【编译器设计】Chapter 5：指令调度">
+<meta property="og:url" content="https://satsuki-64.github.io/2023/11/f8de20dc35f5.html">
+<meta property="og:site_name" content="Satsuki的博客">
+<meta property="og:description" content="指令调度：Instruction Scheduling">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231107183111.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231107185412.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231107191906.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231108140926.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231108142607.png">
+<meta property="og:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231108154940.png">
+<meta property="article:published_time" content="2023-11-07T10:20:46.000Z">
+<meta property="article:modified_time" content="2023-11-29T10:23:23.369Z">
+<meta property="article:author" content="Satsuki">
+<meta property="article:tag" content="编译原理">
+<meta property="article:tag" content="编译器设计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://satsuki-64.github.io/image/Pasted%20image%2020231107183111.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon-32x32-next%20(2).png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next%20(2).png">
+    <meta name="theme-color" content="#ADADAD">
+    <link rel="shortcut icon" href="/images/favicon-32x32-next%20(2).png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            分类: 编译原理 -
+        
+        Satsuki的博客
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"satsuki-64.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#ADADAD","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1200px","sidebar_width":"210px","hover":{"shadow":false,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/newImage.jpg","dark":"/images/newImage.jpg"},"title":"Satsuki的博客","subtitle":{"text":["向着黄昏与自由迁徙"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":8000,"starting_delay":500,"backing_delay":1500,"loop":false,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.9rem","subtitle_size":"2.0rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"links":{"github":"https://github.com/satsuki-64","instagram":null,"zhihu":null,"twitter":null,"email":"15079296601@163.com","bilibili":"https://space.bilibili.com/1472895664"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.4.4","navbar":{"auto_hide":true,"color":{"left":"#000000","right":"#000000","transparency":25},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"path":"/tags/"}},"categories":{"Categories":{"path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"向着黄昏与自由迁徙","links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":100},"tags":{"enable":true,"limit":200}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="https://satsuki-64.github.io/">
+                
+                Satsuki的博客
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        首页
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer w-full absolute top-0 left-0 bg-background-color">
+        <ul class="drawer-navbar-list flex flex-col justify-start items-center">
+            
+                
+                    <li class="drawer-navbar-item text-base my-1.5 flex justify-center items-center">
+                        <a class="rounded-3xl py-1.5 px-5 hover:border hover:!text-primary active:!text-primary group " 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                首页
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">【编译器设计】Chapter 5：指令调度</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Satsuki</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-11-07 18:20:46</span>
+        <span class="mobile">2023-11-07 18:20:46</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-11-29 18:23:23</span>
+            <span class="mobile">2023-11-29 18:23:23</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%99%A8%E8%AE%BE%E8%AE%A1/">编译器设计</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8%E8%AE%BE%E8%AE%A1/">编译器设计</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>994 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>4 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body">
+            <p>指令调度：Instruction Scheduling</p>
+<span id="more"></span>
+<h2 id="5-1-基本概念"><a href="#5-1-基本概念" class="headerlink" title="5.1 基本概念"></a>5.1 基本概念</h2><p><strong>指令调度与编译器阶段</strong><br>指令调度属于编译器的后端（BE）阶段；</p>
+<ul>
+<li>在寄存器分配的前后，各自会有一次指令调度的过程<ul>
+<li>很多寄存器有这样的设计；</li>
+</ul>
+</li>
+<li>Pre Pass<ul>
+<li>寄存器分配之前</li>
+<li>此时的优化更加自由</li>
+</ul>
+</li>
+<li>Post Pass<ul>
+<li>寄存器分配之后</li>
+<li>拥有更少的自由；但是有其自己的优点；</li>
+</ul>
+</li>
+</ul>
+<p><strong>编译过程图示</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231107183111.png"
+                     
+                ></p>
+<p><strong>寄存器分配前后的指令数量</strong></p>
+<ul>
+<li>分配之前<ul>
+<li>n 个指令</li>
+</ul>
+</li>
+<li>分配之后<ul>
+<li>n + m 条指令</li>
+<li>m 为 spill 插入的 store 和 load；</li>
+</ul>
+</li>
+</ul>
+<p><strong>指令调度的核心目的</strong></p>
+<h2 id="5-2-指令生命周期与调度"><a href="#5-2-指令生命周期与调度" class="headerlink" title="5.2 指令生命周期与调度"></a>5.2 指令生命周期与调度</h2><h3 id="5-2-1-基本假设与指令示例"><a href="#5-2-1-基本假设与指令示例" class="headerlink" title="5.2.1 基本假设与指令示例"></a>5.2.1 基本假设与指令示例</h3><p><strong>基本假设</strong></p>
+<ul>
+<li>指令代码|生命周期<ul>
+<li>load 的 latency &#x3D; 3 cycles;</li>
+<li>store 的 latency &#x3D; 4 cycles;</li>
+<li>other 的 latency &#x3D; 1 cycles;</li>
+</ul>
+</li>
+<li>assume -&gt; a single -issue processor;<ul>
+<li>单处理器</li>
+</ul>
+</li>
+</ul>
+<p><strong>编译器的抽象机器模型</strong></p>
+<ul>
+<li>编译器需要知道它的机器模型<ul>
+<li>machine model -&gt; 决定代码生成以及执行的效率；</li>
+</ul>
+</li>
+<li>因此可能会出现：一条指令的代价是在：n - m 之间；<ul>
+<li>取决于它的机器平台；</li>
+</ul>
+</li>
+</ul>
+<p><strong>待优化代码（原顺序代码）</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">A：loadI 5 -&gt; r1</span><br><span class="line">B：load</span><br><span class="line">C：add r1,r2 -&gt; r3</span><br><span class="line">D：loadI f -&gt; r4</span><br><span class="line">E：load y -&gt; r5</span><br><span class="line">F：mult r4,r5 -&gt; r6</span><br><span class="line">G：add r3,r6 -&gt; r7</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="5-2-2-待优化代码与依赖分析"><a href="#5-2-2-待优化代码与依赖分析" class="headerlink" title="5.2.2 待优化代码与依赖分析"></a>5.2.2 待优化代码与依赖分析</h3><p><strong>待优化代码与依赖图</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231107185412.png"
+                     
+                ></p>
+<ul>
+<li>原本的 Order 需要的 cycles：14</li>
+</ul>
+<p><strong>list 调度</strong><br>list 调度，就是从一直 track 当前的 ready list ，根据目前 ready list 当中的 CP ，来调度一条指令；</p>
+<ul>
+<li>ready list：当前准备执行的指令<ul>
+<li>比如：ABDE 一开始就进入 ready list；</li>
+</ul>
+</li>
+<li>CP（Critical Path Distance）<ul>
+<li>CP of instrcution x is the length of the longest path from X -&gt; a leaf instrcution ;</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-2-3-优化后代码以及优化过程"><a href="#5-2-3-优化后代码以及优化过程" class="headerlink" title="5.2.3 优化后代码以及优化过程"></a>5.2.3 优化后代码以及优化过程</h3><p><strong>优化后代码以及优化过程</strong></p>
+<ul>
+<li>红色的字体为 Critical Path Distance</li>
+<li>Instruction 为当前执行的一条指令；</li>
+<li>当前的优化为：CP list scheduling ;<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231107191906.png"
+                     
+                ></li>
+<li>优化后的 Order 需要的 cycles：8</li>
+</ul>
+<p><strong>优化与 BB</strong><br>以上优化都是基于 BasicBlock 的局部寄存器优化，而不是面向 Global 的；</p>
+<h2 id="5-3-全局寄存器优化"><a href="#5-3-全局寄存器优化" class="headerlink" title="5.3 全局寄存器优化"></a>5.3 全局寄存器优化</h2><h3 id="5-3-1-全局寄存器优化问题"><a href="#5-3-1-全局寄存器优化问题" class="headerlink" title="5.3.1 全局寄存器优化问题"></a>5.3.1 全局寄存器优化问题</h3><p><strong>问题一：优化后指令与 if 分支</strong><br>可能会出现，I 指令在 BB1 当中被优化到 BB2 中之后，当 BB3进行使用时，发现此指令 I 还没有被定义（因为是在 BB2 中）；<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231108140926.png"
+                     
+                ></p>
+<h2 id="5-4-指令调度的代码实现"><a href="#5-4-指令调度的代码实现" class="headerlink" title="5.4 指令调度的代码实现"></a>5.4 指令调度的代码实现</h2><p><strong>指令 struct</strong></p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">Instrcution</span> </span><br><span class="line">&#123;</span><br><span class="line">	depthCount;</span><br><span class="line">	criticalPath;</span><br><span class="line">	latency;</span><br><span class="line">	cycle; <span class="comment">//执行此指令需要花费的指令周期</span></span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Adj List</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231108142607.png"
+                     
+                ></p>
+<h3 id="5-4-2-指令调度的代码"><a href="#5-4-2-指令调度的代码" class="headerlink" title="5.4.2 指令调度的代码"></a>5.4.2 指令调度的代码</h3><p><strong>list Sched 代码</strong></p>
+<div class="highlight-container" data-rel="C#"><figure class="iseeu highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">listSched</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// R 表示当前的ReadyList</span></span><br><span class="line">	<span class="comment">// R 是一个优先级队列</span></span><br><span class="line">	<span class="comment">// A 表示当前的ActiveList</span></span><br><span class="line">	<span class="comment">// A 是一个unorderList</span></span><br><span class="line">	create a ready list R <span class="number">4</span> an active list A;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//O(V+E)；根据Adj List中，每个节点出现的次数，计算当前每个节点的深度</span></span><br><span class="line">	compute depthCount <span class="keyword">for</span> each node;</span><br><span class="line"></span><br><span class="line">	currentCycle = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 初始化深度为0的节点，加入到ReadyList当中</span></span><br><span class="line">	<span class="comment">// 渐进复杂度：O(vlogv)</span></span><br><span class="line">	<span class="keyword">for</span> each instrcution op</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> op.depthCount == <span class="number">0</span></span><br><span class="line">			R.Add(op);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span>( R || A <span class="keyword">is</span> <span class="keyword">not</span> empty) <span class="comment">// O(V)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> R <span class="keyword">is</span> <span class="keyword">not</span> empty </span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//取出当前CP最大的数</span></span><br><span class="line">			op = R.ExtractMax() <span class="comment">// O(vlogv)</span></span><br><span class="line">			op.cycle = currentCycle;</span><br><span class="line"></span><br><span class="line">			A.Add(op);</span><br><span class="line">		&#125;</span><br><span class="line">		currentCycle++;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// O(E + vlogv); 因为不清楚E和vlogv的大小关系，所以两者都保留</span></span><br><span class="line">		<span class="comment">//检查哪个指令已经被完成执行</span></span><br><span class="line">		<span class="keyword">if</span> each instrcution op <span class="keyword">in</span> A</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// 当前指令已经大于现在的最大指令，因此肯定</span></span><br><span class="line">			<span class="keyword">if</span> (op.cycle + op.latency) == currentCycle  <span class="comment">// 时间复杂度：O(MaxLatency * V*) = O(V)</span></span><br><span class="line">			&#123;</span><br><span class="line">				A.<span class="keyword">remove</span>(op);</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">for</span> each successor s of op </span><br><span class="line">				&#123;</span><br><span class="line">					<span class="comment">//表示节点的一个依赖项已经去除，因此s节点的depthCount对算法重要</span></span><br><span class="line">					s.depthCount--; <span class="comment">// O(E)</span></span><br><span class="line">					</span><br><span class="line">					<span class="comment">//当前s的深度已经为0时，表示已经没有依赖项，可以被添加到readylist中</span></span><br><span class="line">					<span class="keyword">if</span> s.depthCount == o</span><br><span class="line">					&#123;</span><br><span class="line">						R.Add(s);  <span class="comment">// O(vlogv)</span></span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Assume：优先队列是一个 Heap</strong></p>
+<ul>
+<li>Instrcution  &#x2F; Add <ul>
+<li>O ( log n )</li>
+</ul>
+</li>
+<li>ExtractMax<ul>
+<li>O ( log n )<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../../../image/Pasted%20image%2020231108154940.png"
+                     
+                ></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【编译器设计】Chapter 5：指令调度</li>
+        <li><strong>作者:</strong> Satsuki</li>
+        <li><strong>创建于
+                :</strong> 2023-11-07 18:20:46</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-11-29 18:23:23
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://satsuki-64.github.io/2023/11/f8de20dc35f5.html
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+            本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 进行许可。
+            
+
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">#编译原理</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8%E8%AE%BE%E8%AE%A1/">#编译器设计</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/11/abc75631f7d0.html"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【CSharp系列】Lecture 4：计算限制的异步操作（2） -- Task 任务</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/11/386de06e2d13.html"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">【编译器设计】Chapter 3：简单代码生成</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">【编译器设计】Chapter 5：指令调度</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">5.1 基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%8C%87%E4%BB%A4%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E8%B0%83%E5%BA%A6"><span class="nav-text">5.2 指令生命周期与调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1-%E5%9F%BA%E6%9C%AC%E5%81%87%E8%AE%BE%E4%B8%8E%E6%8C%87%E4%BB%A4%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.2.1 基本假设与指令示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-2-%E5%BE%85%E4%BC%98%E5%8C%96%E4%BB%A3%E7%A0%81%E4%B8%8E%E4%BE%9D%E8%B5%96%E5%88%86%E6%9E%90"><span class="nav-text">5.2.2 待优化代码与依赖分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-3-%E4%BC%98%E5%8C%96%E5%90%8E%E4%BB%A3%E7%A0%81%E4%BB%A5%E5%8F%8A%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B"><span class="nav-text">5.2.3 优化后代码以及优化过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%85%A8%E5%B1%80%E5%AF%84%E5%AD%98%E5%99%A8%E4%BC%98%E5%8C%96"><span class="nav-text">5.3 全局寄存器优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E5%85%A8%E5%B1%80%E5%AF%84%E5%AD%98%E5%99%A8%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.3.1 全局寄存器优化问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E6%8C%87%E4%BB%A4%E8%B0%83%E5%BA%A6%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-text">5.4 指令调度的代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-2-%E6%8C%87%E4%BB%A4%E8%B0%83%E5%BA%A6%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-text">5.4.2 指令调度的代码</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Satsuki</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.4.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex justify-center items-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.hooks.on("page:view", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

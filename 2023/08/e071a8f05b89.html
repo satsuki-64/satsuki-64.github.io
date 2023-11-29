@@ -26,7 +26,7 @@
 <meta property="og:description" content="很多代码当中都会有include其他库的代码，可以把这部分代码全部写在一个.h文件当中，并统一的为项目添加。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-08-30T15:37:57.000Z">
-<meta property="article:modified_time" content="2023-09-24T10:38:01.507Z">
+<meta property="article:modified_time" content="2023-10-08T17:06:08.244Z">
 <meta property="article:author" content="Satsuki">
 <meta property="article:tag" content="编译">
 <meta property="article:tag" content="游戏引擎">
@@ -238,8 +238,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2023-09-24 18:38:01</span>
-            <span class="mobile">2023-09-24 18:38:01</span>
+            <span class="desktop">2023-10-09 01:06:08</span>
+            <span class="mobile">2023-10-09 01:06:08</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -295,7 +295,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>274 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>320 字</span>
         </span>
     
     
@@ -326,6 +326,18 @@
 
 <h2 id="2-2-将预编译头内容加入到-premake"><a href="#2-2-将预编译头内容加入到-premake" class="headerlink" title="2.2 将预编译头内容加入到 premake"></a>2.2 将预编译头内容加入到 premake</h2><p>加入到Premake中<br>需要把内容加入到premake当中：</p>
 <div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">project <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    location <span class="string">&quot;Satsuki&quot;</span></span><br><span class="line"></span><br><span class="line">    kind <span class="string">&quot;SharedLib&quot;</span></span><br><span class="line"></span><br><span class="line">    language <span class="string">&quot;C++&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">targetdir</span> (<span class="string">&quot;bin/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">objdir</span> (<span class="string">&quot;bin-int/&quot;</span>..outputdir..<span class="string">&quot;/%&#123;prj.name&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    pchheader <span class="string">&quot;skpch.h&quot;</span></span><br><span class="line"></span><br><span class="line">    pchsource <span class="string">&quot;Satsuki/src/skpch&quot;</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    files</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.h&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src/**.cpp&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    includedirs</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/src&quot;</span>,</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;%&#123;prj.name&#125;/vendor/spdlog/include&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<p>using UnityEngine;</p>
+<p>public class ExampleScript_7_2_2_2 : MonoBehaviour<br>{<br>    public GameObject testObj;<br>    public Vector3 targetPos &#x3D; new Vector3(2, 2, 0);</p>
+<pre><code>void Update()
+&#123;
+    // 每秒钟围绕着(2, 2, 0)位置点旋转10m
+    testObj.transform.RotateAround(targetPos, Vector3.up, 10 * Time.deltaTime);
+&#125;
+</code></pre>
+<p>}</p>
+
         </div>
 
         
@@ -339,7 +351,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2023-09-24 18:38:01
+                    :</strong> 2023-10-09 01:06:08
             </li>
         
         <li>
